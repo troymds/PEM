@@ -1,0 +1,294 @@
+//
+//  MeController.m
+//  PEM
+//
+//  Created by jch on 14-8-13.
+//  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
+//
+
+#import "MeController.h"
+#import "DescriptionController.h"
+#import "CategoryController.h"
+#import "AreaController.h"
+
+@interface MeController ()
+
+@end
+
+@implementation MeController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.title = @"发布";
+    _isSupply = YES;
+    self.view.backgroundColor =[UIColor whiteColor];
+    [self addBtn];
+    _dataArray = [[NSMutableArray alloc] init];
+    _dataArray = [[NSMutableArray alloc] init];
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 69+40, self.view.frame.size.width, self.view.frame.size.height-40-69)];
+    [self.view addSubview:_scrollView];
+    [self addData];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(10,0, self.view.frame.size.width-20, 400) style:UITableViewStylePlain];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    
+    [_scrollView addSubview:_tableView];
+    [_scrollView setContentSize:CGSizeMake(self.view.frame.size.width, 520)];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(60, 420, self.view.frame.size.width-60*2, 40);
+    [button setTitle:@"发布" forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    button.backgroundColor = [UIColor orangeColor];
+    button.tag = 3001;
+    [button addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_scrollView addSubview:button];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+    tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
+}
+
+
+- (void)keyboardWillShow{
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)keyboardWillHide{
+    [self.view removeGestureRecognizer:tap];
+}
+
+- (void)tapDown{
+    for (UIView *subView in _tableView.subviews) {
+        if ([subView isKindOfClass:[UITextField class]]) {
+            NSLog(@"点击进入");
+            UITextField *textField = (UITextField *)subView;
+            [textField resignFirstResponder];
+        }
+    }
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+
+- (void)addData{
+    if ([_dataArray count]!=0) {
+        [_dataArray removeAllObjects];
+    }
+    if (_isSupply) {
+        for (int i = 0; i < 3; i++) {
+            NSArray *arr;
+            if (i ==0 ) {
+                arr = [NSArray arrayWithObjects:@"分类",@"区域",@"价格", nil];
+            }else if(i == 1){
+                arr = [NSArray arrayWithObjects:@"图片",@"描述",@"标题", nil];
+            }else{
+                arr = [NSArray arrayWithObjects:@"起定标准",@"联系人",@"电话", nil];
+            }
+            [_dataArray addObject:arr];
+        }
+    }else{
+        for (int i = 0; i < 3; i++) {
+            NSArray *arr;
+            if (i == 0) {
+                arr = [NSArray arrayWithObjects:@"分类",@"标题",@"描述", nil];
+            }else if(i == 1){
+                arr = [NSArray arrayWithObjects:@"联系人",@"手机号", nil];
+            }else{
+                arr = [NSArray arrayWithObjects:@"标签", nil];
+            }
+            [_dataArray addObject:arr];
+        }
+    }
+}
+
+- (void)addBtn{
+    CGFloat width = self.view.frame.size.width/2;
+    NSArray *arr = [NSArray arrayWithObjects:@"发布供应",@"发布求购",nil];
+    for (int i = 0; i<2; i++) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn setTitle:[arr objectAtIndex:i] forState:UIControlStateNormal];
+        
+        if (i == 0) {
+            btn.selected = YES;
+        }
+        btn.tag = 2000+i;
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor orangeColor] forState:UIControlStateSelected];
+        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        btn.frame = CGRectMake(width*i, 69, width, 40);
+        [self.view addSubview:btn];
+    }
+
+}
+
+- (void)btnClick:(UIButton *)btn{
+    for (UIView *subView in self.view.subviews) {
+        if ([subView isKindOfClass:[UIButton class]]) {
+            UIButton *button = (UIButton *)subView;
+            if (btn.tag == button.tag) {
+                if (button.tag ==2000||button.tag ==2001) {
+                    button.selected = YES;
+                }
+            }else{
+                if (btn.tag == 2000||btn.tag ==2001) {
+                    button.selected = NO;
+                }
+            }
+        }
+    }
+    switch (btn.tag) {
+        case 2000:
+            _isSupply = YES;
+            [self addData];
+            [_tableView reloadData];
+            break;
+        case 2001:
+            _isSupply = NO;
+            [self addData];
+            [_tableView reloadData];
+            break;
+        case 3001:
+            
+            break;
+        default:
+            break;
+    }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [[_dataArray objectAtIndex:section] count];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [_dataArray count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *cellName = @"cellName";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+    }
+    for (UIView *subView in cell.contentView.subviews) {
+        [subView removeFromSuperview];
+    }
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, 80, 20)];
+    label.text = [[_dataArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    label.textColor = [UIColor blackColor];
+    [cell.contentView addSubview:label];
+    if (_isSupply) {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        if (indexPath.section == 0) {
+            if (indexPath.row == 0||indexPath.row == 1) {
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }else{
+                UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(90, 10, cell.contentView.frame.size.width-90-50, 20)];
+                textField.delegate = self;
+                [cell.contentView addSubview:textField];
+                UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(cell.contentView.frame.size.width-40, 10, 30, 20)];
+                priceLabel.text =@"元";
+                [cell.contentView addSubview:priceLabel];
+            }
+        }else if(indexPath.section == 1){
+            if (indexPath.row == 0||indexPath.row ==1) {
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+        }
+    }else{
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        if (indexPath.section == 0) {
+            if (indexPath.row == 0||indexPath.row==2) {
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+        }else if(indexPath.section == 2){
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 10;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 40;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (_isSupply) {
+        if (indexPath.section == 0) {
+            if (indexPath.row==0) {
+                CategoryController *categoryController = [[CategoryController alloc] init];
+                [self.navigationController pushViewController:categoryController animated:YES];
+            }else if(indexPath.row==1){
+                AreaController *areaController = [[AreaController alloc] init];
+                [self.navigationController pushViewController:areaController animated:YES];
+            }
+        }
+        if (indexPath.section==1) {
+            if (indexPath.row == 0) {
+                _actionSheet = [[ProActionSheet alloc] init];
+                _actionSheet.tag = 9999;
+                _actionSheet.delegate =self;
+                [_actionSheet showView];
+            }else if(indexPath.row ==1){
+                DescriptionController *dc = [[DescriptionController alloc] init];
+                [self.navigationController pushViewController:dc animated:YES];
+            }
+        }
+    }
+}
+
+- (void)buttonClicked:(UIButton *)btn{
+    switch (btn.tag-4000) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            [_actionSheet dismissView];
+            break;
+        default:
+            break;
+    }
+}
+
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

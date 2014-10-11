@@ -1,0 +1,22 @@
+//
+//  MeController.h
+//  PEM
+//
+//  Created by jch on 14-8-13.
+//  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ProActionSheet.h"
+
+@interface MeController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,ProActionSheetDelegate>
+{
+    UITableView *_tableView;
+    UIScrollView *_scrollView;
+    NSMutableArray *_dataArray;
+    BOOL _isSupply;
+    UITapGestureRecognizer *tap;
+    ProActionSheet *_actionSheet;
+}
+
+@end
