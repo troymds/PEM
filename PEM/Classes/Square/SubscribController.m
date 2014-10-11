@@ -362,7 +362,7 @@
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 20)];
             label.textAlignment = NSTextAlignmentCenter;
             label.backgroundColor = [UIColor blackColor];
-            label.text = [NSString stringWithFormat:@"您最多只能订阅%d个标签",_maxNum];
+            label.text = [NSString stringWithFormat:@"您最多只能订阅%ld个标签",_maxNum];
             CGPoint center = CGPointMake(kWidth/2,kHeight/2);
             label.textColor = [UIColor whiteColor];
             label.center = center;

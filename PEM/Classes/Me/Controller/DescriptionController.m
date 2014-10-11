@@ -72,14 +72,6 @@
     }
     
     [self.view addSubview:_textView];
-    _button = [UIButton buttonWithType:UIButtonTypeCustom];
-    _button.frame = CGRectMake(20, 270, kWidth-20*2, 35);
-    [_button setTitle:@"确 定" forState:UIControlStateNormal];
-    [_button setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [_button setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
-    [_button addTarget:self action:@selector(btnDown) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_button];
-
 }
 
 - (void)login{
@@ -109,27 +101,6 @@
         isEidt = YES;
     }
     _textView.textColor = [UIColor blackColor];
-}
-
-- (void)btnDown{
-    if (isEidt) {
-        if (![_textView.text isEqualToString:@""]) {
-            if (_isSupply) {
-                if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
-                    [self.delegate sendValueFromViewController:self value:_textView.text isDemand:NO];
-                }
-            }else{
-                if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
-                    [self.delegate sendValueFromViewController:self value:_textView.text isDemand:YES];
-                }
-            }
-            [self.navigationController popViewControllerAnimated:YES];
-        }else{
-            [RemindView showViewWithTitle:@"请输入产品详细情况" location:MIDDLE];
-        }
-    }else{
-        [RemindView showViewWithTitle:@"请输入产品详细情况" location:MIDDLE];
-    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{

@@ -14,7 +14,6 @@
 - (void)buttonClicked:(UIButton *)btn;
 
 @end
-
 @interface ProActionSheet : UIView
 {
     UIView *_bgView;

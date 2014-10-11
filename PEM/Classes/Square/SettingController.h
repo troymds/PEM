@@ -10,23 +10,10 @@
 #import "SetImageView.h"
 #import "VersionUpdateView.h"
 
-@class SettingController;
-
-@protocol settingDelegate <NSObject>
-
-@optional
-
-- (void)exitLogin:(SettingController *)settingController;
-
-@end
-
 @interface SettingController : UIViewController<ProImageViewDelegate,versionViewDelegate>
 {
     UIScrollView *_scrollview;
     NSString *_url;
 }
-
-
-@property (nonatomic,weak) id<settingDelegate> delegate;
 
 @end

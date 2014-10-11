@@ -110,7 +110,7 @@
 }
 -(void)goBackFalseClick{
     DemandController *demand =[[DemandController alloc]init];
-  
+  demand.title = @"编辑求购信息";
     demand.info_id = demandIndex;
     [self.navigationController pushViewController:demand animated:YES];
 }

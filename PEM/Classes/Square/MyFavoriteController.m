@@ -78,7 +78,10 @@
             [params setObject:lastid forKey:@"lastid"];
         }
     }
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
     [HttpTool postWithPath:@"getWishlist" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]){
             
@@ -117,6 +120,7 @@
         }
         [_tableView reloadData];
     } failure:^(NSError *error){
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSLog(@"%@",error);
     }];
 }
@@ -150,10 +154,16 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     MyFavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
     xiangqingViewController *detailVC = [[xiangqingViewController alloc] init];
+    detailVC.delegate = self;
     detailVC.supplyIndex = item.info_id;
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 
+
+- (void)reloadData{
+    isRefresh = YES;
+    [self loadData];
+}
 
 - (void)didReceiveMemoryWarning
 {

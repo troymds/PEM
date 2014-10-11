@@ -15,7 +15,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,10,250, 20)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,10,kWidth-40-80-20, 20)];
         _nameLabel.backgroundColor = [UIColor clearColor];
         _nameLabel.font = [UIFont systemFontOfSize:14];
         _nameLabel.textColor = HexRGB(0x3a3a3a);
@@ -36,8 +36,9 @@
         _timeLabel.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:_timeLabel];
         
-        _resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(kWidth-40-60,10,60,20)];
+        _resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(kWidth-40-80,10,80,20)];
         _resultLabel.backgroundColor = [UIColor clearColor];
+        _resultLabel.textAlignment = NSTextAlignmentRight;
         _resultLabel.font = [UIFont systemFontOfSize:14];
         [self.contentView addSubview:_resultLabel];
         

@@ -143,6 +143,7 @@
     _phoneView = [[SetCellView alloc] initWithFrame:CGRectMake(0, 160, kWidth-42, 40)];
     _phoneView.titleLabel.text = @"企业电话";
     _phoneView.textField.delegate = self;
+    _areaView.textField.keyboardType = UIKeyboardTypePhonePad;
     _phoneView.textField.tag = PHONE_TYPE;
     [bgView addSubview:_phoneView];
 
@@ -172,12 +173,7 @@
 //选择省份城市
 - (void)areaBtnClick:(UIButton *)btn
 {
-    [_nameView.textField resignFirstResponder];
-    [_areaView.textField resignFirstResponder];
-    [_websiteView.textField resignFirstResponder];
-    [_emailView.textField resignFirstResponder];
-    [_phoneView.textField resignFirstResponder];
-    
+    [activeField resignFirstResponder];
     if (btn.tag == 2000) {
         ProvinceController *vc = [[ProvinceController alloc] init];
         vc.delegate = self;
@@ -242,14 +238,22 @@
     return YES;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField.tag == PHONE_TYPE) {
+        NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789-\n"] invertedSet];
+        NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+        BOOL basic = [string isEqualToString:filtered];
+        if (!basic) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    
-    [_nameView.textField resignFirstResponder];
-    [_areaView.textField resignFirstResponder];
-    [_websiteView.textField resignFirstResponder];
-    [_emailView.textField resignFirstResponder];
-    [_phoneView.textField resignFirstResponder];
+    [activeField resignFirstResponder];
 }
 
 - (void)buttonClick{
@@ -295,7 +299,6 @@
         //如果有图片  则上传图片url
         [param setObject:_imgStr forKey:@"image"];
     }
-    NSLog(@"cityId:%@   provinceId:%@",_cityId,_provinceId);
     [HttpTool postWithPath:@"updateCompanyInfo" params:param success:^(id JSON){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
@@ -337,6 +340,7 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
+    activeField = textField;
     switch (textField.tag) {
         case NAME_TYPE:
         {
@@ -451,25 +455,16 @@
 }
 
 - (BOOL)checkOut{
-    if (_nameView.textField.text.length == 0) {
-        [RemindView showViewWithTitle:@"请填写企业名称" location:MIDDLE];
-        return NO;
-    }
-    if (_areaView.textField.text.length == 0) {
-        [RemindView showViewWithTitle:@"请填写企业地址" location:MIDDLE];
-        return NO;
-    }
-    if (!(provinceName&&provinceName.length!=0)){
-        [RemindView showViewWithTitle:@"请选择省份" location:MIDDLE];
-        return NO;
-    }
-    if (!(cityName&&cityName.length!=0)) {
-        [RemindView showViewWithTitle:@"请选择城市" location:MIDDLE];
-        return NO;
-    }
+    //企业邮箱必添  其他可选
     if (_emailView.textField.text.length == 0) {
         [RemindView showViewWithTitle:@"请填写企业邮箱" location:MIDDLE];
         return NO;
+    }
+    if (_phoneView.textField.text.length!=0) {
+        if (![self isValidPhoneNum:_phoneView.textField.text]) {
+            [RemindView showViewWithTitle:@"请填写正确的号码格式" location:MIDDLE];
+            return NO;
+        }
     }
     if (![self isValidateEmail:_emailView.textField.text]) {
         [RemindView showViewWithTitle:@"邮箱格式不正确" location:MIDDLE];
@@ -489,6 +484,12 @@
     
     return [emailTest evaluateWithObject:email];
     
+}
+
+- (BOOL)isValidPhoneNum:(NSString *)phoneNum{
+    NSString *phoneRegex  =  @"((0\\d{2,3}-\\d{7,8})|(^((13[0-9])|(15[^4,\\D])|(18[0,0-9]))\\d{8}))$";
+    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",phoneRegex];
+    return [phoneTest evaluateWithObject:phoneNum];
 }
 
 #pragma mark UIImagePickerControllerDelegate

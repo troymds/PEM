@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ReloadDataDelegate.h"
 
 @interface xiangqingViewController : UIViewController<UIWebViewDelegate>
 {
@@ -21,4 +22,7 @@
 @property(nonatomic,strong)UIView *backWebView;
 @property (nonatomic, weak) NSString *supplyWishlistid;
 @property(nonatomic,strong)NSMutableArray *wishlistidArray;
+@property (nonatomic,weak) id <ReloadDataDelegate> delegate;
+
+
 @end

@@ -38,6 +38,8 @@
     
     BOOL isModifyImg;            //判断是否修改了图片 没有修改则不用再次上传
     BOOL isExistImg;           //判断企业设置中头像是否存在 使用默认头像则表示不存在
+    
+    UITextField *activeField;    //当前处于编辑状态的输入框
 }
 
 @property (nonatomic,strong) ProImageView *iconImage;

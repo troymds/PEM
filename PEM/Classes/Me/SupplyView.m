@@ -9,7 +9,7 @@
 #import "SupplyView.h"
 #import "AdaptationSize.h"
 
-#define kAlphaNum @"0123456789\n"
+#define kAlphaNum @"0123456789-\n"
 
 @implementation SupplyView
 
@@ -198,6 +198,7 @@
         _phoneNumView.nameLabel.frame =CGRectMake(0,0,80,35);
         _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 0, _phoneNumView.frame.size.width-90, 35)];
         _phoneNumTextField.tag = PHONENUM_TYPE;
+        _phoneNumTextField.keyboardType = UIKeyboardTypePhonePad;
         _phoneNumTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _phoneNumTextField.delegate = self;
         [_phoneNumView addSubview:_phoneNumTextField];

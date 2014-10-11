@@ -58,7 +58,7 @@
     remindView.backgroundColor = HexRGB(0xe9f0f5);
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,180, 20)];
     label.textAlignment = NSTextAlignmentCenter;
-    label.text = @"没有发布求购信息!";
+    label.text = @"没有求购信息!";
     label.center = remindView.center;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(kWidth/2-40,label.frame.origin.y+label.frame.size.height+20,80,35);
@@ -113,7 +113,11 @@
             [params setObject:lastid forKey:@"lastid"];
         }
     }
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
     [HttpTool postWithPath:@"getDemandInfoList" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]){
             if (isRefresh) {
@@ -142,6 +146,7 @@
             [MJFootView endRefreshing];
         }
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSLog(@"%@",error);
     }];
 }
@@ -171,7 +176,7 @@
         cell.resultLabel.text = @"待审核";
         cell.resultLabel.textColor = HexRGB(0xff7300);
     }else if([item.verify_result isEqualToString:@"2"]){
-        cell.resultLabel.text = @"未审核";
+        cell.resultLabel.text = @"审核未通过";
         cell.resultLabel.textColor = HexRGB(0x808080);
         
     }
@@ -215,15 +220,25 @@
 {
     MyPurchaseItem *item = [_dataArray objectAtIndex:indexPath.row];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",item.uid,@"infoid", nil];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"正在删除...";
+
     [HttpTool postWithPath:@"deleteInfo" params:params success:^(id JSON){
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         if ([[[result objectForKey:@"response"] objectForKey:@"msg"] isEqualToString:@"ok"]) {
             [_dataArray removeObjectAtIndex:delIndex.row];
             [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+            if ([_dataArray count] == 0) {
+                remindView.hidden = NO;
+            }
+
         }else{
             NSLog(@"删除失败");
         }
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSLog(@"%@",error);
     }];
 }
@@ -232,15 +247,25 @@
 - (void)buttonClicked:(UIButton *)btn{
     MyPurchaseItem *item = [_dataArray objectAtIndex:delIndex.row];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",item.uid,@"infoid", nil];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"正在删除...";
+
     [HttpTool postWithPath:@"deleteInfo" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         if ([[[result objectForKey:@"response"] objectForKey:@"msg"] isEqualToString:@"ok"]) {
             [_dataArray removeObjectAtIndex:delIndex.row];
             [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:delIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+            if ([_dataArray count] == 0) {
+                remindView.hidden = NO;
+            }
+
         }else{
             NSLog(@"删除失败");
         }
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSLog(@"%@",error);
     }];
 }

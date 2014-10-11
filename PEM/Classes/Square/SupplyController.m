@@ -169,8 +169,6 @@
     }
 }
 
-
-
 - (void)loadData
 {
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",_info_id,@"info_id", nil];
@@ -223,6 +221,8 @@
     
     //图片
     [_supplyView.headImage setImageWithURL:[NSURL URLWithString:item.image]];
+    headImage = _supplyView.headImage.image;
+    
     _supplyView.isExistImg = YES;
     [_supplyView reloadView];
     _scrollView.contentSize = CGSizeMake(kWidth,_supplyView.frame.size.height);
@@ -427,8 +427,7 @@
 
 -(BOOL)isValidateMobile:(NSString *)mobile
 {
-    //手机号以13， 15，18开头，八个 \d 数字字符
-    NSString *phoneRegex = @"^((13[0-9])|(15[^4,\\D])|(18[0,0-9]))\\d{8}$";
+    NSString *phoneRegex  =  @"((0\\d{2,3}-\\d{7,8})|(^((13[0-9])|(15[^4,\\D])|(18[0,0-9]))\\d{8}))$";
     NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",phoneRegex];
     return [phoneTest evaluateWithObject:mobile];
 }

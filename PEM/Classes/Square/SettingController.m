@@ -48,91 +48,91 @@
 
 - (void)addView{
     
-    UIView *bgView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 70)];
+    UIView *bgView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 78)];
     bgView1.backgroundColor = HexRGB(0xffffff);
     [self.view addSubview:bgView1];
     for (int i = 1 ; i < 3; i++) {
-        UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 35*i,kWidth, 0.5)];
+        UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 39*i,kWidth, 0.5)];
         [bgView1 addSubview:lineView1];
         if (i == 1) {
             lineView1.backgroundColor = HexRGB(0xefeded);
         }else {
             lineView1.backgroundColor = HexRGB(0xcccccc);
-            lineView1.frame = CGRectMake(0, 35*i, kWidth, 0.5);
+            lineView1.frame = CGRectMake(0, 39*i, kWidth, 0.5);
         }
     }
     
-    SetImageView *setView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 35)];
+    SetImageView *setView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 39)];
     setView.titleLabel.text = @"企业设置";
     setView.tag = SET_TYPE;
     setView.delegate = self;
     [bgView1 addSubview:setView];
     
-    UIImageView *soreView1 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-40, 11, 7, 13)];
+    UIImageView *soreView1 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-36-7, 13, 7, 13)];
     soreView1.image =[UIImage imageNamed:@"next.png"];
     [setView addSubview:soreView1];
     
     
-    SetImageView *aboutView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 35, kWidth, 35)];
+    SetImageView *aboutView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 39, kWidth, 39)];
     aboutView.titleLabel.text = @"关于我们";
     aboutView.tag = ABOUT_TYPE;
     aboutView.delegate = self;
     [bgView1 addSubview:aboutView];
     
-    UIImageView *soreView2 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-40, 11, 7, 13)];
+    UIImageView *soreView2 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-36-7, 13, 7, 13)];
     soreView2.image =[UIImage imageNamed:@"next.png"];
     [aboutView addSubview:soreView2];
 
     
     
-    SetImageView *uppdateView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 85, kWidth, 35)];
+    SetImageView *uppdateView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 93, kWidth, 39)];
     uppdateView.titleLabel.text = @"检查更新";
     uppdateView.tag = UPPDATE_TYPE;
     uppdateView.delegate = self;
     uppdateView.backgroundColor = HexRGB(0xffffff);
     [self.view addSubview:uppdateView];
     for (int i = 0; i < 2; i++) {
-        UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 35*i,kWidth, 0.5)];
+        UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 39*i,kWidth, 0.5)];
         [bgView1 addSubview:lineView1];
         lineView1.backgroundColor = HexRGB(0xcccccc);
         [uppdateView addSubview:lineView1];
     }
     
-    UIView *bgView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 135, kWidth, 70)];
+    UIView *bgView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 147, kWidth, 78)];
     bgView2.backgroundColor = HexRGB(0xffffff);
     [self.view addSubview:bgView2];
     
     for (int i = 0 ; i < 3; i++){
-        UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 35*i,kWidth, 0.5)];
+        UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 39*i,kWidth, 0.5)];
         [bgView2 addSubview:lineView1];
         if (i == 1) {
             lineView1.backgroundColor = HexRGB(0xefeded);
         }else {
             lineView1.backgroundColor = HexRGB(0xcccccc);
-            lineView1.frame = CGRectMake(0, 35*i, kWidth, 0.5);
+            lineView1.frame = CGRectMake(0, 39*i, kWidth, 0.5);
         }
     }
 
     
-    SetImageView *delView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 35)];
+    SetImageView *delView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 39)];
     delView.titleLabel.text = @"清除缓存";
     delView.tag = DELEDATE_TYPE;
     delView.delegate = self;
     [bgView2 addSubview:delView];
     
     
-    SetImageView *feedbackView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 35, kWidth, 35)];
+    SetImageView *feedbackView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 39, kWidth, 39)];
     feedbackView.titleLabel.text = @"意见反馈";
     feedbackView.tag = FEEDBACK_TYPE;
     feedbackView.delegate = self;
     [bgView2 addSubview:feedbackView];
     
-    UIImageView *soreView3 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-40, 11, 7, 13)];
+    UIImageView *soreView3 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-36-7, 13, 7, 13)];
     soreView3.image =[UIImage imageNamed:@"next.png"];
     [feedbackView addSubview:soreView3];
 
     
-    SetImageView *loginbackView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 220, kWidth, 35)];
+    SetImageView *loginbackView = [[SetImageView alloc] initWithFrame:CGRectMake(0, 240, kWidth, 39)];
     loginbackView.titleLabel.text = @"退出登录";
     loginbackView.backgroundColor = HexRGB(0xffffff);
     loginbackView.tag = LOGINBACK_TYPE;
@@ -140,7 +140,7 @@
     [self.view addSubview:loginbackView];
     
     for (int i = 0; i < 2; i++) {
-        UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 35*i,kWidth, 0.5)];
+        UIView *lineView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 39*i,kWidth, 0.5)];
         [bgView1 addSubview:lineView1];
         lineView1.backgroundColor = HexRGB(0xcccccc);
         [loginbackView addSubview:lineView1];
@@ -252,9 +252,13 @@
             [SystemConfig sharedInstance].company_id = nil;
             [SystemConfig sharedInstance].viptype = nil;
             [SystemConfig sharedInstance].companyInfo = nil;
-            if ([self.delegate respondsToSelector:@selector(exitLogin:)]){
-                [self.delegate exitLogin:self];
-            }
+            
+            LoginController *login = [[LoginController alloc] init];
+            NSArray *arr = self.navigationController.viewControllers;
+            NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
+            [array insertObject:login atIndex:1];
+            self.navigationController.viewControllers = array;
+            [self.navigationController popViewControllerAnimated:YES];
         }
             break;
         default:

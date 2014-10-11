@@ -46,6 +46,8 @@
     UIImage *headImage;                   //产品图片
     NSString *imageUrl;                  //图像url
     BOOL isShowTD;
+    
+    UITextField *activeField;         //当前编辑的输入框
 
 }
 

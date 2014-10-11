@@ -42,10 +42,12 @@
 
 - (void)loadData{
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
     [HttpTool postWithPath:@"getCallRecord" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]) {
-            NSLog(@"%@",result);
             NSArray *arr = [result objectForKey:@"response"];
             for (NSDictionary *dic in arr) {
                 if ([[dic objectForKey:@"type"] intValue] !=0) {
@@ -65,6 +67,7 @@
             [self.view addSubview:view];
         }
     } failure:^(NSError *error){
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSLog(@"%@",error);
     }];
 }
@@ -142,7 +145,6 @@
         xqVC.supplyIndex = item.info_id;
         [self.navigationController pushViewController:xqVC animated:YES];
     }
-    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

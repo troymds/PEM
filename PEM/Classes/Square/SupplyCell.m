@@ -43,8 +43,9 @@
         _timeLabel.textColor = HexRGB(0x808080);
         [self.contentView addSubview:_timeLabel];
         
-        _resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(kWidth-40-60, 35, 60,20)];
+        _resultLabel = [[UILabel alloc] initWithFrame:CGRectMake(kWidth-40-100, 35, 100,20)];
         _resultLabel.backgroundColor = [UIColor clearColor];
+        _resultLabel.textAlignment = NSTextAlignmentRight;
         _resultLabel.font = [UIFont systemFontOfSize:14];
         [self.contentView addSubview:_resultLabel];
         

@@ -7,6 +7,7 @@
 //
 
 #import "DeleteView.h"
+#import "AdaptationSize.h"
 
 #define DELETE_TYPE 4000
 #define CANCEL_TYPE 4001
@@ -34,36 +35,43 @@
         view.backgroundColor = [UIColor blackColor];
         view.alpha = 0.5;
         [self addSubview:view];
-        bgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 171, 91)];
+        
+        CGSize size = [AdaptationSize getSizeFromString:title Font:[UIFont systemFontOfSize:16] withHight:CGFLOAT_MAX withWidth:180];
+        
+        bgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0,200,20+size.height+70+1)];
         bgView.userInteractionEnabled = YES;
         bgView.center = self.center;
         bgView.backgroundColor = [UIColor whiteColor];
         [self addSubview:bgView];
-        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,18, 171, 20)];
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,10, 180, size.height)];
+        titleLabel.numberOfLines = 0;
+        titleLabel.font = [UIFont systemFontOfSize:16];
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.text = title;
         titleLabel.textColor = HexRGB(0x3a3a3a);
         [bgView addSubview:titleLabel];
         
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(10, 40, 150, 0.4)];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,20+size.height,200, 0.5)];
         line.backgroundColor = HexRGB(0x808080);
         [bgView addSubview:line];
         
         delBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        delBtn.frame = CGRectMake(20, 49, 55, 24);
+        delBtn.frame = CGRectMake(0,20+size.height,200,35);
         delBtn.tag = DELETE_TYPE;
         [delBtn setTitle:@"删除" forState:UIControlStateNormal];
-        [delBtn setTitleColor:HexRGB(0xffffff) forState:UIControlStateNormal];
-        [delBtn setBackgroundImage:[UIImage imageNamed:@"home_login.png"] forState:UIControlStateNormal];
+        [delBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
         [delBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:delBtn];
         
+        UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake(0,20+size.height+35,200, 0.5)];
+        line1.backgroundColor = HexRGB(0x808080);
+        [bgView addSubview:line1];
+
         cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        cancelBtn.frame = CGRectMake(95, 49, 55, 24);
+        cancelBtn.frame = CGRectMake(0,20+size.height+35,200, 35);
         cancelBtn.tag = CANCEL_TYPE;
-        [cancelBtn setTitleColor:HexRGB(0xffffff) forState:UIControlStateNormal];
-        cancelBtn.backgroundColor = [UIColor grayColor];
+        [cancelBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
         [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [cancelBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:cancelBtn];

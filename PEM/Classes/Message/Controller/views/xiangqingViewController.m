@@ -162,7 +162,7 @@
 }
 -(void)goBackFalseClick{
     SupplyController *supply =[[SupplyController alloc]init];
-   
+   supply.title = @"编辑供应信息";
     supply.info_id =supplyIndex;
     [self.navigationController pushViewController:supply animated:YES];
     
@@ -327,6 +327,11 @@
 
             if ([supWishlist.code isEqualToString:@"100"]) {
                 [RemindView showViewWithTitle:@"取消收藏成功！" location:BELLOW];
+                
+                //如果是从我的收藏页面进来的  取消收藏时刷新我的收藏页面
+                if ([self.delegate respondsToSelector:@selector(reloadData)]) {
+                    [self.delegate reloadData];
+                }
             }else{
                 [RemindView showViewWithTitle:@"取消收藏失败！" location:BELLOW];
 
@@ -348,6 +353,12 @@
             } companyID:[SystemConfig sharedInstance].company_id infoID:supplyIndex CategoryFailure:^(NSError *error) {
                 
             }];
+            
+            //如果是从我的收藏页面进来的  收藏成功刷新我的收藏页面
+            if ([self.delegate respondsToSelector:@selector(reloadData)]) {
+                [self.delegate reloadData];
+            }
+
             [RemindView showViewWithTitle:@"收藏成功！" location:BELLOW];
             
         }

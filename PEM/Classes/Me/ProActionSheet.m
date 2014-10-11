@@ -54,8 +54,9 @@
     CGRect frame = [[UIScreen mainScreen] bounds];
     [UIView animateWithDuration:0.3 animations:^{
         _bgView.frame =CGRectMake(0, frame.size.height, frame.size.width, 200);
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
     }];
-    [self removeFromSuperview];
 }
 
 

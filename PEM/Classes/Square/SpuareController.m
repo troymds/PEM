@@ -161,7 +161,6 @@
                 case SET_TYPE:
                 {
                     SettingController *sc = [[SettingController alloc] init];
-                    sc.delegate = self;
                     [self.navigationController pushViewController:sc animated:YES];
                 }
                     break;
@@ -177,14 +176,6 @@
             }
         }
     }
-}
-
-
-- (void)exitLogin:(SettingController *)settingController{
-    [settingController.navigationController popViewControllerAnimated:NO];
-    LoginController *loginVC = [[LoginController alloc] init];
-    loginVC.pushType = DIRECT_TYPE;
-    [self.navigationController pushViewController:loginVC animated:YES];
 }
 
 

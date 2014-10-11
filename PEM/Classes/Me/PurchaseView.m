@@ -135,6 +135,7 @@
 
         _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(90, 0, _phoneNumView.frame.size.width-80, 40)];
         _phoneNumTextField.tag = PC_PHONENUM_TYPE;
+        _phoneNumTextField.keyboardType = UIKeyboardTypePhonePad;
         _phoneNumTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _phoneNumTextField.placeholder = @"请输入正确的手机号码";
         _phoneNumTextField.delegate = self;
@@ -208,11 +209,10 @@
             break;
         case PC_PHONENUM_TYPE:
         {
-            cs = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789\n"] invertedSet];
+            cs = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789-\n"] invertedSet];
             NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
             basic = [string isEqualToString:filtered];
-            NSUInteger length = textField.text.length;
-            if (!basic||(length >= 12 && string.length > 0)){
+            if (!basic){
                 return NO;
             }
 

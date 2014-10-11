@@ -218,26 +218,30 @@
         }
             break;
         case 2001:
-            if (![SystemConfig sharedInstance].viptype||[[SystemConfig sharedInstance].viptype isEqualToString:@"0"]){
+        {
+        /*    if (![SystemConfig sharedInstance].viptype||[[SystemConfig sharedInstance].viptype isEqualToString:@"0"]){
 //                CGRect frame = [UIScreen mainScreen].bounds;
 //                _upPowerView = [[UpPowerView alloc] initWithFrame:frame];
 //                _upPowerView.delegate = self;
 //                [_upPowerView showView];
-                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"尊敬的普通会员" withMessage:@"您好！您目前所处等级没有权限上传3D图片，请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
+                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"尊敬的普通会员" withMessage:@"您好！您目前所处等级没有权限发布供应信息,请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
                 [_upTDView showView];
-            }else{
+            }else{       */
                 _isPurchase = NO;
                     [UIView animateWithDuration:0.5 animations:^{
                         _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
                         _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
                         sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
                     }];
-            }
+//            }
+        }
                 break;
             default:
                 break;
     }
 }
+
+
 #pragma  mark supplyView_delegate
 - (void)buttonClicked:(UIButton *)btn{
     switch (btn.tag-4000) {
@@ -373,6 +377,7 @@
         case 9000:
         {
             CategoryController *category = [[CategoryController alloc] init];
+            [activeField resignFirstResponder];
             category.delegate = self;
             category.isSupply = YES;
             [self.navigationController pushViewController:category animated:YES];
@@ -382,12 +387,14 @@
         case 9001:
         {
             AreaController *area = [[AreaController alloc] init];
+            [activeField resignFirstResponder];
             area.delegate = self;
             [self.navigationController pushViewController:area animated:YES];
         }
             break;
         case 9002:
         {
+            [activeField resignFirstResponder];
             CGRect frame = [UIScreen mainScreen].bounds;
             _actionSheet = [[ProActionSheet alloc] initWithFrame:frame];
             _actionSheet.delegate = self;
@@ -397,6 +404,7 @@
         case 9003:
         {
             DescriptionController *vc = [[DescriptionController alloc] init];
+            [activeField resignFirstResponder];
             vc.delegate = self;
             vc.isSupply = YES;
             if (supplyDes.length!=0){
@@ -408,6 +416,7 @@
         case 10000:
         {
             CategoryController *category = [[CategoryController alloc] init];
+            [activeField resignFirstResponder];
             category.delegate = self;
             category.isSupply = NO;
             [self.navigationController pushViewController:category animated:YES];
@@ -417,6 +426,7 @@
         case 10001:
         {
             DescriptionController *vc = [[DescriptionController alloc] init];
+            [activeField resignFirstResponder];
             vc.delegate = self;
             vc.isSupply = NO;
             if (demandDes&&demandDes.length!=0) {
@@ -428,6 +438,7 @@
         case 10002:
         {
             HotTagsController *hotVC = [[HotTagsController alloc] init];
+            [activeField resignFirstResponder];
             hotVC.delegate = self;
             hotVC.tagArray = tagsArray;
             [self.navigationController pushViewController:hotVC animated:YES];
@@ -501,11 +512,10 @@
     }
     return YES;
 }
-
+//判断电话是否合法 固定号码 或手机号
 -(BOOL)isValidateMobile:(NSString *)mobile
 {
-    //手机号以13， 15，18开头，八个 \d 数字字符
-    NSString *phoneRegex = @"^((13[0-9])|(15[^4,\\D])|(18[0,0-9]))\\d{8}$";
+    NSString *phoneRegex  =  @"((0\\d{2,3}-\\d{7,8})|(^((13[0-9])|(15[^4,\\D])|(18[0,0-9]))\\d{8}))$";
     NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",phoneRegex];
     return [phoneTest evaluateWithObject:mobile];
 }
@@ -560,6 +570,7 @@
 }
 
 - (void)textFieldBeganEditting:(UITextField *)textField{
+    activeField = textField;
     if (_iPhone4) {
         if (textField.tag == PC_PURCHASE_TYPE) {
             if (_purchaseScrollView.contentOffset.y < 90) {

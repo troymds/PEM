@@ -13,7 +13,7 @@
 
 
 
-@interface SpuareController : UIViewController<HeaderViewDelegate,UIScrollViewDelegate,SquareDelegate,settingDelegate>
+@interface SpuareController : UIViewController<HeaderViewDelegate,UIScrollViewDelegate,SquareDelegate>
 {
     UIScrollView *_scrollView;
     HeaderView *_headView;

@@ -8,8 +8,9 @@
 
 #import "BaseController.h"
 #import "MJRefresh.h"
+#import "ReloadDataDelegate.h"
 
-@interface MyFavoriteController : BaseController<MJRefreshBaseViewDelegate>
+@interface MyFavoriteController : BaseController<MJRefreshBaseViewDelegate,ReloadDataDelegate>
 {
     MJRefreshHeaderView *MJHeadView;
     MJRefreshFooterView *MJFootView;

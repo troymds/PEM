@@ -15,7 +15,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 7, 100, 20)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20,10, 100, 20)];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = HexRGB(0x666666);
         [self addSubview:_titleLabel];
