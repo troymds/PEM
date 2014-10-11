@@ -73,6 +73,7 @@
     [self addShowNoDataView];
 
     [self addRefreshViews];
+    
 //    像素
     
     linBackView =[[UIView alloc]init];
@@ -82,17 +83,20 @@
     [self addLeftSegment];
     [self addRigthSegment];
     [supplyTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-        if (statues.count < 0) {
-            dataLabel.hidden = NO;
-            _tableView.hidden = YES;
-        }else if (statues.count>0){
+        if (statues.count > 0) {
+            
             _tableView.hidden = NO;
             dataLabel.hidden = YES;
+        }else
+        {if(statues.count==0){
+            dataLabel.hidden = NO;
+            _tableView.hidden = YES;
+            
         }
-        else if(statues.count==0){
+        else {
             [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
         }
-        
+        }
         [_CateSupplyArray addObjectsFromArray:statues];
         
         [_tableView reloadData];
@@ -108,15 +112,20 @@
     
     
     [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
-        if (statues.count < 0) {
-            dataLabel.hidden = NO;
-            _tableView.hidden = YES;
-        }else if (statues.count>0){
+
+        if (statues.count > 0) {
             _tableView.hidden = NO;
             dataLabel.hidden = YES;
+        }else
+        {if(statues.count==0){
+            dataLabel.hidden = NO;
+            _tableView.hidden = YES;
+            
+           
         }
-        else if(statues.count==0){
+        else {
             [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+        }
         }
         [_CateDemandArray addObjectsFromArray:statues];
         [_tableView reloadData];
@@ -168,20 +177,22 @@
     hud.dimBackground = YES;
     
     [supplyTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-        if (statues.count < 0) {
-            dataLabel.hidden = NO;
-            _tableView.hidden = YES;
-        }else if (statues.count>0){
-            _tableView.hidden = NO;
+        if (statues.count > 0) {
             dataLabel.hidden = YES;
+            _tableView.hidden = NO;
+        }else
+        {if (statues.count==0){
+            _tableView.hidden = YES;
+            dataLabel.hidden = NO;
         }
-        else if(statues.count==0){
+        else {
             [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+        }
         }
 
         [_CateSupplyArray addObjectsFromArray:statues];
 
-                        [_tableView reloadData];
+        [_tableView reloadData];
         [refreshView endRefreshing];
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -195,15 +206,17 @@
     
     
     [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
-        if (statues.count < 0) {
-            dataLabel.hidden = NO;
-            _tableView.hidden = YES;
-        }else if (statues.count>0){
-            _tableView.hidden = NO;
+        if (statues.count > 0) {
             dataLabel.hidden = YES;
+            _tableView.hidden = NO;
+        }else
+        {if (statues.count==0){
+            _tableView.hidden = YES;
+            dataLabel.hidden = NO;
         }
-        else if(statues.count==0){
+        else{
             [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+        }
         }
         [_CateDemandArray addObjectsFromArray:statues];
         [_tableView reloadData];
@@ -225,7 +238,7 @@
     //   左边 选项
     _leftBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_leftBtn];
-    _leftBtn.frame =CGRectMake(50, 0, 100, 30);
+    _leftBtn.frame =CGRectMake(kWidth/5, 0, 100, 30);
     [_leftBtn setTitle:@"供应信息" forState:UIControlStateNormal];
     
     [_leftBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -242,7 +255,7 @@
 
   }
 -(void)leftSegment{
-    leftBackView =[[UIView alloc]initWithFrame:CGRectMake(15, 15, 140, 100)];
+    leftBackView =[[UIView alloc]initWithFrame:CGRectMake(kWidth/9, 15, 140, 100)];
     [self.view addSubview:leftBackView];
     [self.view bringSubviewToFront:leftBackView];
     UIImageView *kuangImage =[[UIImageView alloc]init];
@@ -276,7 +289,7 @@
     //   右边 选项
     _rigthBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_rigthBtn];
-    _rigthBtn.frame =CGRectMake(160, 0, 140, 30);
+    _rigthBtn.frame =CGRectMake(kWidth/2, 0, 140, 30);
     [_rigthBtn setTitle:@" 浏 览 量" forState:UIControlStateNormal];
     [_rigthBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     _rigthBtn.selected = YES;
@@ -306,7 +319,7 @@
     
 }
 -(void)rightSegment{
-    rightBackViw =[[UIView alloc]initWithFrame:CGRectMake(170, 15, 100, 100)];
+    rightBackViw =[[UIView alloc]initWithFrame:CGRectMake(kWidth/2, 15, 100, 100)];
     [self.view addSubview:rightBackViw];
     
     [self.view bringSubviewToFront:rightBackViw];
@@ -321,7 +334,7 @@
     lin.backgroundColor =HexRGB(0xefeded);
     [rightImage addSubview:lin];
 
-    NSArray *supply =@[@" 浏 览 量",@" 价 格 "];
+    NSArray *supply =@[@" 浏 览 量",@"价   格"];
 
 
     for (int r=0; r<2; r++)
@@ -346,7 +359,7 @@
 
 
 -(void)rightSegmentDemand{
-    rightBackViewDemand =[[UIView alloc]initWithFrame:CGRectMake(170, 15, 100, 100)];
+    rightBackViewDemand =[[UIView alloc]initWithFrame:CGRectMake(kWidth/2, 15, 100, 100)];
     [self.view addSubview:rightBackViewDemand];
     
     [self.view bringSubviewToFront:rightBackViewDemand];
@@ -626,12 +639,21 @@
             cell =[[findDemandCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         }
         
-        yyDemandModel *d =_CateDemandArray [indexPath.row];
-        cell.dateLabel.text =d.demandDate;
-        cell.demand_numLabel.text =[NSString stringWithFormat:@"求购数量:%@",d.buy_num];
-        cell.nameLabel.text =d.name;
-        cell.contentLabel.text = d.Introduction;
-        cell.read_numLabel.text = [NSString stringWithFormat:@"浏览量%@次",d.read_num];
+        if (_CateDemandArray.count>=0) {
+            yyDemandModel *d =_CateDemandArray [indexPath.row];
+            cell.dateLabel.text =d.demandDate;
+            cell.demand_numLabel.text =[NSString stringWithFormat:@"求购数量:%@",d.buy_num];
+            cell.nameLabel.text =d.name;
+            cell.contentLabel.text = d.Introduction;
+            cell.read_numLabel.text = [NSString stringWithFormat:@"浏览量%@次",d.read_num];
+            dataLabel.hidden = YES;
+            _tableView.hidden = NO;
+        }else{
+            dataLabel.hidden = NO;
+            _tableView.hidden = YES;
+            
+        }
+        
               return cell;
 
     }else{
@@ -643,7 +665,8 @@
         }
         
 
-        
+        if (_CateSupplyArray.count>=0) {
+
         yySupplyModel *s =_CateSupplyArray [indexPath.row];
 
         cell.companyLabel.text =s.company;
@@ -652,7 +675,12 @@
         [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"loading.png"]];
         cell.supply_numLabel.text =[NSString stringWithFormat:@"%@起批",s.min_supply_num];
         cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
-
+            dataLabel.hidden = YES;
+            _tableView.hidden = NO;
+        }else {
+            dataLabel.hidden = NO;
+            _tableView.hidden = YES;
+        }
       return cell;
         
     }

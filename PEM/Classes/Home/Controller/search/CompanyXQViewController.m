@@ -255,12 +255,12 @@
     if (_companyHomeArray.count>0)
     {
         comHomeModel *comHomeModel =[[_companyHomeArray objectAtIndex:0]objectAtIndex:0];
-        
         CGFloat keyContent =[comHomeModel.mainRun sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT) ].height;
         CGFloat content =[comHomeModel.introduction sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT)].height;
         CGFloat nameCompanyw =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, 50)].width;
         CGFloat nameCompanyy =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, 50)].height;
-        CGFloat urlHeight =[comHomeModel.website sizeWithFont:[UIFont systemFontOfSize:PxFont(15)] constrainedToSize:CGSizeMake(165, 40)].height;
+        CGFloat urlHeight =[comHomeModel.website sizeWithFont:[UIFont systemFontOfSize:PxFont(17)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
+        
         
         _companyHomeScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
         [companyHom addSubview:_companyHomeScrollView];
@@ -294,22 +294,30 @@
         [_companyHomeScrollView addSubview:_nameCompany];
         
         //vip
-        UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(130+nameCompanyw, 8, 10, 10)];
+        UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(10+nameCompanyw, nameCompanyy-20, 45, 20)];
+        
+        if (nameCompanyw>179) {
+            
+            _companyImgVip.frame =CGRectMake(nameCompanyw-180+45, nameCompanyy-20, 45, 20);
+        }
+        
         if ([comHomeModel.viptype isEqualToString:@"1"]) {
-            NSLog(@"%@",comHomeModel.viptype);
-            [_companyImgVip setImageWithURL:[NSURL URLWithString:comHomeModel.viptype] placeholderImage:[UIImage imageNamed:@"Vip1.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
+            _companyImgVip.image =[UIImage imageNamed:@"vip_2_member.png"];
         }
         else  if ([comHomeModel.viptype isEqualToString:@"2"]) {
-            [_companyImgVip setImageWithURL:[NSURL URLWithString:comHomeModel.viptype] placeholderImage:[UIImage imageNamed:@"Vip2.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
+            _companyImgVip.image =[UIImage imageNamed:@"vip_3_member.png"];
+            
         } else if([comHomeModel.viptype isEqualToString:@"3"]) {
-            [_companyImgVip setImageWithURL:[NSURL URLWithString:comHomeModel.viptype] placeholderImage:[UIImage imageNamed:@"Vip3.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
-        }else{
-            [_companyImgVip setImageWithURL:[NSURL URLWithString:nil] ];
+            _companyImgVip.image =[UIImage imageNamed:@"vip_4_member.png"];
+            
+        }else if([comHomeModel.viptype isEqualToString:@"0"]){
+            
+            _companyImgVip.image =[UIImage imageNamed:@"vip_1_member.png"];
         }
         
         
         
-        [_companyHomeScrollView addSubview:_companyImgVip];
+        [_nameCompany addSubview:_companyImgVip];
         
         
         //地址
@@ -321,7 +329,6 @@
         //    网址
         UILabel * _urlLabel = [[UILabel alloc] initWithFrame:CGRectMake(130, 25+nameCompanyy, 180, urlHeight)];
         _urlLabel.font =[UIFont systemFontOfSize:PxFont(15)];
-        
         _urlLabel.numberOfLines = 2;
         _urlLabel.text =[NSString stringWithFormat:@"网址:%@",comHomeModel.website];
         [_companyHomeScrollView addSubview:_urlLabel];
