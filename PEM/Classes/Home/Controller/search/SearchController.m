@@ -632,9 +632,12 @@
                 [cell.imageCompany setImageWithURL:[NSURL URLWithString:c.image] placeholderImage:[UIImage imageNamed:@"loading.png"]];
                 cell.businessLabel.text =c.business;
                 noDataBgView.hidden = YES;
+                _resultTableView.hidden = NO;
             }else
             {
                 noDataBgView.hidden = NO;
+                _resultTableView.hidden = YES;
+
             }
             
             return cell;
@@ -655,9 +658,13 @@
                 cell.nameLabel.text =d.name;
                 cell.read_numLabel.text = [NSString stringWithFormat:@"浏览量%@次",d.read_num];
                 noDataBgView.hidden = YES;
+                _resultTableView.hidden = NO;
+
             }else
             {
                 noDataBgView.hidden = NO;
+                _resultTableView.hidden = YES;
+
             }
             return cell;
             
@@ -682,9 +689,13 @@
                 cell.supply_numLabel.text =[NSString stringWithFormat:@"%@件起批",s.min_supply_num];
                 cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
                 noDataBgView.hidden = YES;
+                _resultTableView.hidden = NO;
+
             }else
             {
                 noDataBgView.hidden = NO;
+                _resultTableView.hidden = YES;
+
             }
             
             return cell;
@@ -803,8 +814,9 @@
 
 -(void)searchBtn:(UIButton *)sear
 {
-    //sear.tag = _selectBtn.tag;
-    
+    [_demandArray removeAllObjects];
+    [_supllyArray removeAllObjects];
+    [_compangyArray removeAllObjects];    [_resultTableView reloadData];
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (_currentKeyString.length>0)
     {
