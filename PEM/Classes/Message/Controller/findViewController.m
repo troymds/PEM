@@ -142,6 +142,11 @@
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
 {
+    // 1.下拉刷新
+    MJRefreshHeaderView *header = [MJRefreshHeaderView header];
+    header.scrollView = _tableView;
+    header.delegate = self;
+
     // 2.上拉加载更多
     MJRefreshFooterView *footer = [MJRefreshFooterView footer];
     footer.scrollView = _tableView;
@@ -152,8 +157,14 @@
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
         // 下拉刷新
+    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+        // 上拉加载更多
         [self loadViewStatuses:refreshView];
-       
+    } else {
+        // 下拉刷新
+        [self loadViewStatuses:refreshView];
+    }
+    
     
 }
 
@@ -241,7 +252,7 @@
     _leftBtn.frame =CGRectMake(kWidth/5, 0, 100, 30);
     [_leftBtn setTitle:@"供应信息" forState:UIControlStateNormal];
     
-    [_leftBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_leftBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
     _leftBtn.selected = YES;
     _leftBtn.titleLabel.font =[UIFont systemFontOfSize:14];
     [_leftBtn addTarget:self action:@selector(leftXuankaBtn:) forControlEvents:UIControlEventTouchUpInside];
@@ -250,8 +261,8 @@
 
      [_leftBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
    
-    _leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -_leftBtn.titleLabel.bounds.size.width-70, 0, 0);
-    _leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-70);
+    _leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -49, 0, 0);
+    _leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-86);
 
   }
 -(void)leftSegment{
@@ -290,15 +301,15 @@
     _rigthBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_rigthBtn];
     _rigthBtn.frame =CGRectMake(kWidth/2, 0, 140, 30);
-    [_rigthBtn setTitle:@" 浏 览 量" forState:UIControlStateNormal];
-    [_rigthBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_rigthBtn setTitle:@"浏览量" forState:UIControlStateNormal];
+    [_rigthBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
     _rigthBtn.selected = YES;
     _rigthBtn.titleLabel.font =[UIFont systemFontOfSize:14];
     [_rigthBtn addTarget:self action:@selector(rightXuanka:) forControlEvents:UIControlEventTouchUpInside];
     [_rigthBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
     [_rigthBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateSelected];
-    _rigthBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -_rigthBtn.titleLabel.bounds.size.width-70, 0, 0);
-    _rigthBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-70);
+    _rigthBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
+    _rigthBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
     
 }
 
@@ -307,15 +318,15 @@
     _rightBtnDemand =[UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_rightBtnDemand];
     _rightBtnDemand.frame =CGRectMake(160, 0, 140, 30);
-    [_rightBtnDemand setTitle:@" 浏 览 量" forState:UIControlStateNormal];
-    [_rightBtnDemand setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_rightBtnDemand setTitle:@"浏览量" forState:UIControlStateNormal];
+    [_rightBtnDemand setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
     _rightBtnDemand.selected = YES;
     _rightBtnDemand.titleLabel.font =[UIFont systemFontOfSize:14];
     [_rightBtnDemand addTarget:self action:@selector(rightXuankaDemand:) forControlEvents:UIControlEventTouchUpInside];
     [_rightBtnDemand setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
     [_rightBtnDemand setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateSelected];
-    _rightBtnDemand.titleEdgeInsets = UIEdgeInsetsMake(0, -_rightBtnDemand.titleLabel.bounds.size.width-70, 0, 0);
-    _rightBtnDemand.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-70);
+    _rightBtnDemand.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
+    _rightBtnDemand.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
     
 }
 -(void)rightSegment{
@@ -334,7 +345,7 @@
     lin.backgroundColor =HexRGB(0xefeded);
     [rightImage addSubview:lin];
 
-    NSArray *supply =@[@" 浏 览 量",@"价   格"];
+    NSArray *supply =@[@"浏览量",@"价   格"];
 
 
     for (int r=0; r<2; r++)
@@ -374,7 +385,7 @@
     lin.backgroundColor =HexRGB(0xefeded);
     [rightImage addSubview:lin];
     
-    NSArray *demand =@[@" 浏 览 量",@"发布时间"];
+    NSArray *demand =@[@"浏览量",@"时   间"];
     
     
     for (int r=0; r<2; r++)
@@ -409,13 +420,16 @@
 #pragma mark --选择卡
 -(void)leftXuankaBtn:(UIButton *)leftbtn
 {
-    
+
     
     leftbtn.selected=!leftbtn.selected;
+
     if (leftbtn.selected ==NO) {
         [self leftSegment];
+
     }else{
         [leftBackView removeFromSuperview];
+
     }
     
     
@@ -467,6 +481,10 @@
     [leftBackView removeFromSuperview];
     NSString *currentTitle = sender.currentTitle;
     [_leftBtn setTitle:currentTitle forState:UIControlStateNormal];
+    [_leftBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
+    [_leftBtn setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
+    [_leftBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
+
     
     
     
@@ -487,7 +505,10 @@
     [rightBackViw removeFromSuperview];
     NSString *currentTitle = sender.currentTitle;
     [_rigthBtn setTitle:currentTitle forState:UIControlStateNormal];
-    
+    [_rigthBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
+    [_rigthBtn setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
+    [_rigthBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
+
     
     if (sender.tag ==50) {
         // 显示指示器
@@ -546,7 +567,11 @@
     [rightBackViewDemand removeFromSuperview];
     NSString *currentTitle = demand.currentTitle;
     [_rightBtnDemand setTitle:currentTitle forState:UIControlStateNormal];
+    [_rightBtnDemand setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
+    [_rightBtnDemand setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
+    [_rightBtnDemand setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
     
+
     
     if (demand.tag ==60) {
         //    // 显示指示器
@@ -639,7 +664,7 @@
             cell =[[findDemandCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         }
         
-        if (_CateDemandArray.count>=0) {
+        if (_CateDemandArray.count>0) {
             yyDemandModel *d =_CateDemandArray [indexPath.row];
             cell.dateLabel.text =d.demandDate;
             cell.demand_numLabel.text =[NSString stringWithFormat:@"求购数量:%@",d.buy_num];
@@ -665,14 +690,14 @@
         }
         
 
-        if (_CateSupplyArray.count>=0) {
+        if (_CateSupplyArray.count>0) {
 
         yySupplyModel *s =_CateSupplyArray [indexPath.row];
 
         cell.companyLabel.text =s.company;
         cell.nameLabel.text =s.name;
         cell.read_numLabel.text =[NSString stringWithFormat:@"浏览量%@次",s.read_num];
-        [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"loading.png"]];
+        [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
         cell.supply_numLabel.text =[NSString stringWithFormat:@"%@起批",s.min_supply_num];
         cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
             dataLabel.hidden = YES;

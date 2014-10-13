@@ -49,7 +49,7 @@
     UILabel *recordLabel;
     UILabel *dataLabel;
     UIView *noDataBgView;
-    
+    UIButton *cansleButton;//删除搜索字体
     MJRefreshBaseView *_refreshView;
     
     NSString *_currentKeyString;
@@ -104,6 +104,8 @@
     
     [self addShowNoRecordView];
     [self addShowNoDataView];
+    
+    
 }
 - (void)addShowNoRecordView
 {
@@ -283,7 +285,7 @@
             }
             
             [self tableReloadData];
-        } lastID:0? 0:[NSString stringWithFormat:@"%d",[_demandArray count]-0] failure:^(NSError *error) {
+        } lastID:0? 0:[NSString stringWithFormat:@"%lu",[_demandArray count]-0] failure:^(NSError *error) {
             
         }];
         
@@ -315,7 +317,7 @@
             }
             [self tableReloadData];
             
-        } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%d",[_compangyArray count]-0]
+        } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%lu",[_compangyArray count]-0]
                               failureBlock:^(NSError *error) {
                               }];
     }else
@@ -336,7 +338,7 @@
             [self tableReloadData];
             
             
-        } lasiID:0? 0:[NSString stringWithFormat:@"%d",[_compangyArray count]-0] failure:^(NSError *error) {
+        } lasiID:0? 0:[NSString stringWithFormat:@"%lu",[_compangyArray count]-0] failure:^(NSError *error) {
             
         }];
     }
@@ -375,23 +377,23 @@
     _selectBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     [_searchImage addSubview:_selectBtn];
     _selectBtn.frame =CGRectMake(0, 0, 60, 30);
-    [_selectBtn setTitle:@"供 应" forState:UIControlStateNormal];
+    [_selectBtn setTitle:@"供应" forState:UIControlStateNormal];
+    [_selectBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
+    [_selectBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateSelected];
     
-    [_selectBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateNormal];
+    [_selectBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
     _selectBtn.selected = YES;
     _selectBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
-    [_selectBtn setImage:[UIImage imageNamed:@"lansejiantou_selected.png"] forState:UIControlStateNormal];
-    [_selectBtn setImage:[UIImage imageNamed:@"lansejiantou.png"] forState:UIControlStateSelected];
-    _selectBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -_selectBtn.titleLabel.bounds.size.width-25, 0, 0);
+    _selectBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
     _selectBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-65);
     
     _searchTextField =[[UITextField alloc]init];
-    _searchTextField.frame =CGRectMake(63, 0, 100, 30);
+    _searchTextField.frame =CGRectMake(63, 0, 165, 30);
     [_searchImage addSubview:_searchTextField];
     [_selectBtn addTarget:self action:@selector(xuankaBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     _searchTextField.delegate = self;
-    
+    _searchTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     //    放大镜
     _searBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     
@@ -404,16 +406,9 @@
     [_searBtn addTarget:self action:@selector(searchBtn:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *canselButton = [[UIBarButtonItem alloc]initWithCustomView:_searBtn];
     self.navigationItem.rightBarButtonItem = canselButton;
-    //    左、右边导航按钮
-    UIButton *cansleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [cansleButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal   ];
-    [cansleButton setImage:[UIImage imageNamed:@"nav_delete_btn.png"] forState:UIControlStateNormal];
-    cansleButton.frame =CGRectMake(200, 5, 23, 23);
-    [_searchImage addSubview:cansleButton];
-    cansleButton.titleLabel.font =[UIFont systemFontOfSize:16];
-    [cansleButton addTarget:self action:@selector(offButton:) forControlEvents:UIControlEventTouchUpInside];
     
 }
+
 
 -(void)xuangxiangka
 {
@@ -431,6 +426,7 @@
     
     [_recTableView reloadData];
     if (_searchArray.count>0)
+        
     {
         recordLabel.hidden = YES;
     }else{
@@ -685,7 +681,7 @@
                 cell.companyLabel.text =s.company;
                 cell.nameLabel.text =s.name;
                 cell.read_numLabel.text =[NSString stringWithFormat:@"浏览量%@次",s.read_num];
-                [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"loading.png"]];
+                [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
                 cell.supply_numLabel.text =[NSString stringWithFormat:@"%@件起批",s.min_supply_num];
                 cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
                 noDataBgView.hidden = YES;
@@ -810,6 +806,7 @@
     }
     
     _searBtn.selected = YES;
+   
 }
 
 -(void)searchBtn:(UIButton *)sear
@@ -910,12 +907,17 @@
     _searchTextField.text = nil;
     NSString *currentTitle = sender.currentTitle;
     [_selectBtn setTitle:currentTitle forState:UIControlStateNormal];
+    [_selectBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
+    [_selectBtn setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
+    [_selectBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
     _selectBtn.tag = sender.tag;
     
     //[_resultTableView reloadData];
     
     sender.selected =YES;
+
     
+
 }
 
 -(void)clearBtnClick:(UIButton *)clear
@@ -931,13 +933,12 @@
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
--(void)offButton:(UIButton *)off
-{
-    _searchTextField.text = nil;
-}
+
 #pragma mark textField delegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
+    
+    
     return YES;
 }
 

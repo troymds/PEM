@@ -14,6 +14,7 @@
 #import "gategoryListTool.h"
 #import "gategoryModel.h"
 #import "MainController.h"
+#import "UIImageView+WebCache.h"
 @interface MessageController ()
 {
     UIScrollView *_scrollView;
@@ -43,17 +44,21 @@
     self.view.backgroundColor =HexRGB(0xe9f0f5);
     _categoryArray = [[NSMutableArray alloc]init];
     
-    UIImageView * _searchImage =[[UIImageView alloc]init];
-    _searchImage.frame =CGRectMake(0, 0, 91, 20);
+    UIButton * _searchImage =[UIButton buttonWithType:UIButtonTypeCustom];
+    _searchImage.frame =CGRectMake(0, 0, 180, 30);
     [self.view addSubview:_searchImage];
     self.navigationItem.titleView =_searchImage;
-    _searchImage.userInteractionEnabled = YES;
-    _searchImage.image =[UIImage imageNamed:@"nav_BigLogo.png"];
+    [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateNormal];
+    [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
+    //    _searchImage.userInteractionEnabled = YES;
+    //    _searchImage.image =[UIImage imageNamed:@"nav_searchhome.png"];
     
-    UITapGestureRecognizer *singleTap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(logoImage)];
-    [_searchImage addGestureRecognizer:singleTap1];
     
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_searchhome.png" highlightedSearch:@"nav_searchhome.png" target:(self) action:@selector(searchBarBtn)];
+    
+    
+    
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(lo)];
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:@selector(logoImage)];
     self.view.userInteractionEnabled = YES;
 
 
@@ -66,7 +71,9 @@
 }
 
 
-
+-(void)lo{
+    
+}
 -(void)logoImage{
     [UIApplication sharedApplication].statusBarHidden =NO;
     self.view.window.rootViewController =[[MainController alloc]init];
@@ -98,7 +105,7 @@
     _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width, _categoryArray.count/3*(66+30)+10);
     _scrollView.showsHorizontalScrollIndicator=NO;
     _scrollView.showsVerticalScrollIndicator=NO;
-    _scrollView.backgroundColor =HexRGB(0xe9f0f5);
+    _scrollView.backgroundColor =[UIColor whiteColor];
 
     [self.view addSubview:_scrollView];
 }
@@ -116,12 +123,13 @@
 
         UIButton *button =[UIButton buttonWithType:UIButtonTypeCustom];
         
-        button.frame = CGRectMake(25+but%3*(70+40), 10+but/3*(60+35), 50, 50);
+        button.frame = CGRectMake(0+but%3*(70+40), 0+but/3*(60+35), kWidth/3+2, 96);
         button.tag =but+100;
         [_scrollView addSubview:button];
-        [button setBackgroundImage:[UIImage imageNamed:[NSString stringWithFormat:@"find_Image%d.png",but]] forState:UIControlStateNormal];
-        UIImage *cageImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:cagegoryModel.imageGategpry]]];
-        [button setImage:cageImage forState:UIControlStateNormal];
+        [button setBackgroundImage:[UIImage imageNamed:@"dibuhengtiao.png"] forState:UIControlStateHighlighted];
+//        [button setBackgroundImage:[UIImage imageNamed:[NSString stringWithFormat:@"find_Image%d.png",but]] forState:UIControlStateNormal];
+//        UIImage *cageImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:cagegoryModel.imageGategpry]]];
+//        [button setImage:cageImage forState:UIControlStateNormal];
         UIButton *titleBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [titleBtn setTitle:cagegoryModel.nameGategory forState:UIControlStateNormal];
         [_scrollView addSubview:titleBtn];
@@ -136,7 +144,16 @@
 
         titleBtn.tag =button.tag;
 
+        UIImageView *findImage =[[UIImageView alloc]init];
+        findImage.frame =CGRectMake(25+but%3*(70+40), 10+but/3*(60+35), 50, 50);
+        [_scrollView addSubview:findImage];
+        findImage.tag = [cagegoryModel.idType intValue]+1000;
+        titleBtn.tag =findImage.tag;
+        findImage.userInteractionEnabled = NO;
         
+        [findImage setImageWithURL:[NSURL URLWithString:cagegoryModel.imageGategpry]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
+        
+
     }
     
     
@@ -152,14 +169,14 @@
     for (int l=0; l<_categoryArray.count/4+1; l++) {
         UIView *linex =[[UIView alloc]init];
         linex.backgroundColor =HexRGB(0xe6e3e4);
-        linex.frame =CGRectMake(0,2+95+l%9*(50+45) , 320, 1);
+        linex.frame =CGRectMake(0,95+l%9*(50+45) , 320, 1);
         [_scrollView addSubview:linex];
     }
     for (int i = 0; i<2; i++) {
         UIView *liney =[[UIView alloc]init];
         liney.backgroundColor =HexRGB(0xe6e3e4);
 
-        liney.frame =CGRectMake(105+i%3*(70+37),8 , 1, _categoryArray.count/3*(64+30));
+        liney.frame =CGRectMake(kWidth/3+2+i%3*(75+35),8 , 1, _categoryArray.count/3*(58+30));
         [_scrollView addSubview:liney];
     }
 
@@ -169,7 +186,7 @@
    
         findViewController *menu = [[findViewController alloc] init];
         menu.titleLabel =sender.titleLabel.text;
-        NSString *strId =[NSString stringWithFormat:@"%ld",sender.tag-1000];
+        NSString *strId =[NSString stringWithFormat:@"%d",sender.tag-1000];
         menu.cateIndex =strId;
 
 

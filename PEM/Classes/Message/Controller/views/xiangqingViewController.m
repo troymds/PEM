@@ -193,7 +193,7 @@
     
     
     if (xqModel.url_3d ==nil) {
-        [hearImage setImageWithURL:[NSURL URLWithString:xqModel.imageGetInfo] placeholderImage:[UIImage imageNamed:@"loading.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
+        [hearImage setImageWithURL:[NSURL URLWithString:xqModel.imageGetInfo] placeholderImage:[UIImage imageNamed:@"load_big.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
 
     }else{
         
@@ -292,7 +292,7 @@
     goCompany.frame = CGRectMake(240, 0, 70, 44);
     [goCompany setTitle:@"进入公司" forState:UIControlStateNormal];
     [goCompany setImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"] forState:UIControlStateNormal];
-    goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -goCompany.titleLabel.bounds.size.width-50, 0, 0);
+    goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
     goCompany.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
     [goCompany addTarget:self action:@selector(goCompanyClick:) forControlEvents:UIControlEventTouchUpInside];
 
