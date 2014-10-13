@@ -215,7 +215,7 @@
     goCompany.frame = CGRectMake(240, 40, 70, 40);
     [goCompany setTitle:@"进入公司" forState:UIControlStateNormal];
     [goCompany setImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"] forState:UIControlStateNormal];
-    goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -goCompany.titleLabel.bounds.size.width-25, 0, 0);
+    goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
     goCompany.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
     [goCompany addTarget:self action:@selector(gotoCompanyClick:) forControlEvents:UIControlEventTouchUpInside];
 

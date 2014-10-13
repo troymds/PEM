@@ -259,6 +259,9 @@
         CGFloat content =[comHomeModel.introduction sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT)].height;
         CGFloat nameCompanyw =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, 50)].width;
         CGFloat nameCompanyy =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, 50)].height;
+        CGFloat nameCompanww =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(MAXFLOAT, 50)].width;
+
+        
         CGFloat urlHeight =[comHomeModel.website sizeWithFont:[UIFont systemFontOfSize:PxFont(17)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
         
         
@@ -287,32 +290,32 @@
         [_companyImage setImageWithURL:[NSURL URLWithString:comHomeModel.image] placeholderImage:[UIImage imageNamed:@"loading.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
         [_companyHomeScrollView addSubview:_companyImage];
         //名字
-        UILabel* _nameCompany = [[UILabel alloc] initWithFrame:CGRectMake(130, 6, nameCompanyw, nameCompanyy)];
+        UILabel* _nameCompany = [[UILabel alloc] initWithFrame:CGRectMake(130, 6, 180, nameCompanyy)];
         _nameCompany.text = comHomeModel.name;
         _nameCompany.numberOfLines = 2;
         _nameCompany.font =[UIFont systemFontOfSize:PxFont(20)];
         [_companyHomeScrollView addSubview:_nameCompany];
         
         //vip
-        UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(10+nameCompanyw, nameCompanyy-20, 45, 20)];
-        
-        if (nameCompanyw>179) {
+        UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(10+nameCompanyw, nameCompanyy-20, 18, 25)];
+        NSLog(@"%f",nameCompanyw);
+        if (nameCompanyw==180) {
             
-            _companyImgVip.frame =CGRectMake(nameCompanyw-180+45, nameCompanyy-20, 45, 20);
+            _companyImgVip.frame =CGRectMake(nameCompanww-180+10, 18, 18, 25);
         }
-        
+      
         if ([comHomeModel.viptype isEqualToString:@"1"]) {
-            _companyImgVip.image =[UIImage imageNamed:@"vip_2_member.png"];
+            _companyImgVip.image =[UIImage imageNamed:@"Vip1.png"];
         }
         else  if ([comHomeModel.viptype isEqualToString:@"2"]) {
-            _companyImgVip.image =[UIImage imageNamed:@"vip_3_member.png"];
+            _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
             
         } else if([comHomeModel.viptype isEqualToString:@"3"]) {
-            _companyImgVip.image =[UIImage imageNamed:@"vip_4_member.png"];
+            _companyImgVip.image =[UIImage imageNamed:@"Vip3.png"];
             
         }else if([comHomeModel.viptype isEqualToString:@"0"]){
             
-            _companyImgVip.image =[UIImage imageNamed:@"vip_1_member.png"];
+            _companyImgVip.image =[UIImage imageNamed:@"Vip4.png"];
         }
         
         
