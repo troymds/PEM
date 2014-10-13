@@ -94,6 +94,8 @@
                     [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%d",vipType];
                     CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].companyInfo = item;
+                    
+                    [self getVipInfo:[NSString stringWithFormat:@"%d",company_id]];
                 }
             }failure:^(NSError *error){
                 NSLog(@"%@",error);
@@ -105,6 +107,26 @@
 //    self.window.rootViewController = [[MainController alloc]init];
     return YES;
 }
+
+
+//获取用户VIP信息
+- (void)getVipInfo:(NSString *)company_id
+{
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
+    [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if ([[dic objectForKey:@"code"] intValue] ==100) {
+            NSDictionary *data = [dic objectForKey:@"data"];
+            VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+            [SystemConfig sharedInstance].vipInfo = vipInfo;
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {

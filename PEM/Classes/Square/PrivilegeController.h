@@ -9,19 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "PriHeadView.h"
 #import "PriImageView.h"
-#import "PrivilegeViewDelegete.h"
-#import "VisitorView.h"
-#import "NomalVipView.h"
-#import "VipView.h"
-#import "VVipView.h"
 
-@interface PrivilegeController : UIViewController<ProImageViewDelegate,PrivilegeViewDelegete>
+@interface PrivilegeController : UIViewController<ProImageViewDelegate>
 {
     PriHeadView *_headView;
     UIScrollView *_scrollView;
-    VisitorView *_visitorView;
-    NomalVipView *_nomalVipView;
-    VipView *_vipView;
-    VVipView *_vvipView;
+    UIImageView *rightImg;
+    UIButton *upPowerBtn;
+    
+    NSString *updateType;    //升级会员类型
 }
 @end

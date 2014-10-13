@@ -10,6 +10,7 @@
 #import "CompanyInfoItem.h"
 #import "MySupplyItem.h"
 #import "MyPurchaseItem.h"
+#import "VipInfoItem.h"
 
 @interface SystemConfig : NSObject
 
@@ -17,7 +18,8 @@
 @property (nonatomic,assign) BOOL isUserLogin;       //是否登录
 @property (nonatomic,copy) NSString *viptype;       //会员类型
 @property (nonatomic,copy) NSString *company_id;    //登录后的公司ID
-@property (nonatomic,retain) CompanyInfoItem *companyInfo;
+@property (nonatomic,strong) CompanyInfoItem *companyInfo;    //登录用户公司基本信息
+@property (nonatomic,strong) VipInfoItem *vipInfo;   //vip用户相关信息
 
 + (SystemConfig *)sharedInstance;
 

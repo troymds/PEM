@@ -97,6 +97,8 @@
     _iconImage = [[ProImageView alloc] initWithFrame:CGRectMake(_iconSetView.frame.size.width-38-78, 10, 78, 78)];
     _iconImage.image = [UIImage imageNamed:@"company_default.png"];
     _iconImage.tag = ICON_TYPE;
+    _iconImage.layer.cornerRadius = _iconImage.frame.size.width/2;
+    _iconImage.layer.masksToBounds = YES;
     _iconImage.delegate = self;
     [_iconSetView addSubview:_iconImage];
     [_scrollView addSubview:_iconSetView];

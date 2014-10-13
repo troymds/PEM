@@ -12,7 +12,7 @@
 
 @property (nonatomic,strong) UIImageView *iconImg;
 
-@property (nonatomic,strong) UILabel *descripLabel;
+@property (nonatomic,strong) UILabel *nameLabel;
 
 @property (nonatomic,strong) UILabel *typeLabel;
 

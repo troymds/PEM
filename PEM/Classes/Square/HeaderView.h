@@ -28,6 +28,11 @@
 @property (nonatomic,strong) UILabel *purchaseLabel;
 @property (nonatomic,strong) UILabel *favoriteLabel;
 @property (nonatomic,strong) UILabel *messageLabel;
+@property (nonatomic,strong) UIImageView *markImg;
+@property (nonatomic,strong) UILabel *experienceLabel;
+
 @property (nonatomic,weak) id <HeaderViewDelegate> delegate;
+
+- (void)setName:(NSString *)name;
 
 @end

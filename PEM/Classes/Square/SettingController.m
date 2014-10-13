@@ -248,17 +248,9 @@
             break;
         case LOGINBACK_TYPE:
         {
-            [SystemConfig sharedInstance].isUserLogin = NO;
-            [SystemConfig sharedInstance].company_id = nil;
-            [SystemConfig sharedInstance].viptype = nil;
-            [SystemConfig sharedInstance].companyInfo = nil;
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"确认退出当前账号?" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认退出", nil];
+            [alertView show];
             
-            LoginController *login = [[LoginController alloc] init];
-            NSArray *arr = self.navigationController.viewControllers;
-            NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
-            [array insertObject:login atIndex:1];
-            self.navigationController.viewControllers = array;
-            [self.navigationController popViewControllerAnimated:YES];
         }
             break;
         default:
@@ -266,13 +258,31 @@
     }
 }
 
+#pragma mark -alertView_delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [SystemConfig sharedInstance].isUserLogin = NO;
+        [SystemConfig sharedInstance].company_id = nil;
+        [SystemConfig sharedInstance].viptype = nil;
+        [SystemConfig sharedInstance].companyInfo = nil;
+        [SystemConfig sharedInstance].vipInfo = nil;
+        
+        LoginController *login = [[LoginController alloc] init];
+        NSArray *arr = self.navigationController.viewControllers;
+        NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
+        [array insertObject:login atIndex:1];
+        self.navigationController.viewControllers = array;
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
 
 -(void)clearCacheSuccess
 {
     [RemindView showViewWithTitle:@"缓存已清空" location:MIDDLE];
 }
 
-
+//版本更新
 - (void)versionButtonClicked:(UIButton *)btn{
     openURL(_url);
 }

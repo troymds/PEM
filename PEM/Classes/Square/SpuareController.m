@@ -48,7 +48,7 @@
         if (item.image&&item.image.length!=0){
             [_headView.headerImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"user_default.png"]];
         }
-        _headView.nameLabel.text = item.company_name;
+        [_headView setName:item.company_name];
         _headView.nameLabel.hidden = NO;
         _headView.registerBtn.hidden = YES;
         
@@ -77,6 +77,7 @@
         _headView.messageLabel.text = @"0";
         _headView.nameLabel.hidden = YES;
         _headView.registerBtn.hidden = NO;
+        _headView.markImg.image = nil;
     }
 }
 

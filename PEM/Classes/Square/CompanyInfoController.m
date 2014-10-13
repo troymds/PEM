@@ -129,28 +129,32 @@
     _websiteView.infoLabel.text = item.website;
     _emailView.infoLabel.text = item.email;
     _phoneView.infoLabel.text = item.company_tel;
-    switch ([[SystemConfig sharedInstance].viptype integerValue]) {
-        case 0:
-        {
-            _vipTypeLabel.text = @"等级:普通会员";
-        }
-        break;
-        case 1:
-        {
-            _vipTypeLabel.text = @"等级:VIP";
-
-        }
-        break;
-        case 2:
-        {
-            _vipTypeLabel.text = @"等级:VVIP";
-        }
-        break;
-            
-        default:
-        break;
+    if ([SystemConfig sharedInstance].vipInfo) {
+        _vipTypeLabel.text = [NSString stringWithFormat:@"等级:%@",[SystemConfig sharedInstance].vipInfo.vip_name];
+    }else{
+        [self getVipInfo];
     }
  }
+
+- (void)getVipInfo
+{
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+    [HttpTool postWithPath:@"getCompanyVipInfo" params:param success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if ([[dic objectForKey:@"code"] intValue] ==100) {
+            NSDictionary *data = [dic objectForKey:@"data"];
+            VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+            [SystemConfig sharedInstance].vipInfo = vipInfo;
+            
+            _vipTypeLabel.text = [NSString stringWithFormat:@"等级:%@",[SystemConfig sharedInstance].vipInfo.vip_name];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+
+}
 
 - (void)didReceiveMemoryWarning
 {

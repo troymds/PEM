@@ -15,6 +15,7 @@
 #import "RegisterContrller.h"
 #import "FindSecretController.h"
 #import "CompanyInfoItem.h"
+#import "VipInfoItem.h"
 
 
 #define LOGIN_TYPE 3000
@@ -172,37 +173,25 @@
                 NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
                 if ([code isEqualToString:@"100"]){
                     
-                    
                     [[NSUserDefaults standardUserDefaults] setObject:_userNameField.text forKey:@"userName"];
                     [[NSUserDefaults standardUserDefaults] setObject:_secretField.text forKey:@"secret"];
                     
-                    
                     NSDictionary *data = [dic objectForKey:@"data"];
+                    
                     [SystemConfig sharedInstance].isUserLogin = YES;
-                    NSInteger company_id = [[data objectForKey:@"company_id"] integerValue];
-                    [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%ld",(long)company_id];
+                    int company_id = [[data objectForKey:@"company_id"] intValue];
+                    [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
                     NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
                     [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
                     
                     CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].companyInfo = item;
                     
-                    
-                    //判断从哪里跳到的登录界面 从而跳转到到相应页面
-                    if ([self.pushType isEqualToString:DIRECT_TYPE]){
-                        [self.navigationController popViewControllerAnimated:YES];
-                    }else if([self.pushType isEqualToString:SETTING_TYPE]){
-                        CompanySetController *setVC = [[CompanySetController alloc] init];
-                        [self.navigationController pushViewController:setVC animated:YES];
-                    }else if([self.pushType isEqualToString:UPDATE_TYPE]){
-                        PrivilegeController *priVC = (PrivilegeController *)[self.navigationController.viewControllers objectAtIndex:1];
-                        [self.navigationController popToViewController:priVC animated:YES];
-                    }else if ([self.pushType isEqualToString:MENU_TYPE]){
-                        [self.navigationController popToRootViewControllerAnimated:YES];
+                    NSString *companyId = [NSString stringWithFormat:@"%d",[[data objectForKey:@"company_id"] intValue]];
+
+                    [self getVipInfo:companyId];
+            
                     }else{
-                        [self.navigationController popToRootViewControllerAnimated:YES];
-                    }
-                }else{
                     [RemindView showViewWithTitle:@"用户名或密码错误" location:BELLOW];
                 }
                 
@@ -218,6 +207,56 @@
         RegisterContrller *rc = [[RegisterContrller alloc] init];
         [self.navigationController pushViewController:rc animated:YES];
     }
+}
+
+
+- (void)getVipInfo:(NSString *)company_id
+{
+    //获取用户VIP信息
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"登录中...";
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
+    [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",result);
+
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if ([[dic objectForKey:@"code"] intValue] ==100) {
+            NSDictionary *data = [dic objectForKey:@"data"];
+            VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+            [SystemConfig sharedInstance].vipInfo = vipInfo;
+            
+            [self loginSucess];
+            
+        }else{
+            [self loginSucess];
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSLog(@"%@",error);
+    }];
+
+}
+
+//登录成功后页面跳转处理
+- (void)loginSucess
+{
+    //判断从哪里跳到的登录界面 从而跳转到到相应页面
+    if ([self.pushType isEqualToString:DIRECT_TYPE]){
+        [self.navigationController popViewControllerAnimated:YES];
+    }else if([self.pushType isEqualToString:SETTING_TYPE]){
+        CompanySetController *setVC = [[CompanySetController alloc] init];
+        [self.navigationController pushViewController:setVC animated:YES];
+    }else if([self.pushType isEqualToString:UPDATE_TYPE]){
+        PrivilegeController *priVC = (PrivilegeController *)[self.navigationController.viewControllers objectAtIndex:1];
+        [self.navigationController popToViewController:priVC animated:YES];
+    }else if ([self.pushType isEqualToString:MENU_TYPE]){
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }else{
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+
 }
 
 - (BOOL)checkOut{

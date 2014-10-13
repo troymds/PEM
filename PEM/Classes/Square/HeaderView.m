@@ -7,6 +7,8 @@
 //
 
 #import "HeaderView.h"
+#import "AdaptationSize.h"
+#import "SystemConfig.h"
 
 @implementation HeaderView
 
@@ -38,11 +40,15 @@
         [_registerBtn addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
         [_bgView addSubview:_registerBtn];
         
-        CGRect rect = CGRectMake(0, _registerBtn.frame.origin.y, kWidth, 27.5);
+        CGRect rect = CGRectMake(0, _registerBtn.frame.origin.y, 0, 27.5);
         _nameLabel = [[UILabel alloc] initWithFrame:rect];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
+        _nameLabel.font = [UIFont systemFontOfSize:16];
         _nameLabel.hidden = YES;
         [_bgView addSubview:_nameLabel];
+        
+        _markImg = [[UIImageView alloc] init];
+        [self addSubview:_markImg];
         
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, frame.size.height-40, frame.size.width, 40)];
         view.backgroundColor = [UIColor clearColor];
@@ -103,6 +109,45 @@
         
     }
     return self;
+}
+
+
+- (void)setName:(NSString *)name
+{
+    if (name.length!=0) {
+        _nameLabel.text = name;
+        CGSize size = [AdaptationSize getSizeFromString:name Font:[UIFont systemFontOfSize:16] withHight:27.5 withWidth:CGFLOAT_MAX];
+        _nameLabel.frame =CGRectMake(kWidth/2-size.width/2,_registerBtn.frame.origin.y,size.width,27.5);
+        _markImg.frame = CGRectMake(_nameLabel.frame.origin.x+_nameLabel.frame.size.width+20,_nameLabel.frame.origin.y,19, 25);
+        switch ([[SystemConfig sharedInstance].viptype intValue]) {
+            case 1:
+            {
+                _markImg.image = [UIImage imageNamed:@"vip_1_member.png"];
+            }
+                break;
+            case 2:
+            {
+                _markImg.image = [UIImage imageNamed:@"vip_2_member.png"];
+
+            }
+                break;
+            case 3:
+            {
+                _markImg.image = [UIImage imageNamed:@"vip_3_member.png"];
+
+            }
+                break;
+            case 4:
+            {
+                _markImg.image = [UIImage imageNamed:@"vip_4_member.png"];
+
+            }
+                break;
+
+            default:
+                break;
+        }
+    }
 }
 
 

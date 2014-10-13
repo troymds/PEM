@@ -14,14 +14,12 @@
     UIView *selectedView;
     UILabel *nomalLabel;
     UILabel *selectedLabel;
-    UIImageView *nomalImageView;
-    UIImageView *selectedImageView;
 }
 
 @property (nonatomic,assign) BOOL isSelected;
 
 
-- (void)setIconNomalImg:(UIImage *)nomalImg selectedImg:(UIImage *)seletedImg withTitle:(NSString *)title;
+- (void)setVipName:(NSString *)name;
 
 
 @end

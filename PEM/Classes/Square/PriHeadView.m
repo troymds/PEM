@@ -22,10 +22,10 @@
         _iconImg.layer.cornerRadius = 40;
         [self addSubview:_iconImg];
         
-        _descripLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 30, 160, 20)];
-        _descripLabel.backgroundColor = [UIColor clearColor];
-        _descripLabel.textColor = HexRGB(0x3a3a3a);
-        [self addSubview:_descripLabel];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 30, 200, 20)];
+        _nameLabel.backgroundColor = [UIColor clearColor];
+        _nameLabel.textColor = HexRGB(0x3a3a3a);
+        [self addSubview:_nameLabel];
         
         _typeLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 62, 160, 20)];
         _typeLabel.backgroundColor = [UIColor clearColor];

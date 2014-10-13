@@ -83,13 +83,13 @@
     [HttpTool postWithPath:@"getWishlist" params:params success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        if (isRefresh) {
+            if (_dataArray.count!=0) {
+                [_dataArray removeAllObjects];
+            }
+        }
         if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]){
             
-            if (isRefresh) {
-                if (_dataArray.count!=0) {
-                    [_dataArray removeAllObjects];
-                }
-            }
             NSArray *arr = [result objectForKey:@"response"];
             for (NSDictionary *dic in arr) {
                 MyFavoriteItem *item = [[MyFavoriteItem alloc] initWithDictionary:dic];
@@ -102,12 +102,13 @@
                 view.backgroundColor = HexRGB(0xe9f0f5);
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
                 label.textAlignment = NSTextAlignmentCenter;
-                label.text = @"没有数据!";
+                label.text = @"没有收藏!";
                 label.center = view.center;
                 [view addSubview:label];
                 [self.view addSubview:view];
             }else{
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                
             }
         }
         if (isLoad) {

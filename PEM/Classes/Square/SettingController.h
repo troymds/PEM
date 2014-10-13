@@ -10,7 +10,7 @@
 #import "SetImageView.h"
 #import "VersionUpdateView.h"
 
-@interface SettingController : UIViewController<ProImageViewDelegate,versionViewDelegate>
+@interface SettingController : UIViewController<ProImageViewDelegate,versionViewDelegate,UIAlertViewDelegate>
 {
     UIScrollView *_scrollview;
     NSString *_url;

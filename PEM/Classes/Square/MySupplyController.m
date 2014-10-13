@@ -187,7 +187,7 @@
     MySupplyItem *item = [_dataArray objectAtIndex:indexPath.row];
     cell.nameLabel.text = item.name;
     cell.priceLabel.text = [NSString stringWithFormat:@"%@元/每%@",item.price,item.unit];
-    cell.standardLabel.text = [NSString stringWithFormat:@"%@%@起供应",item.unit,item.min_supply_num];
+    cell.standardLabel.text = [NSString stringWithFormat:@"%@%@起供应",item.min_supply_num,item.unit];
     NSString *date = [item.date substringWithRange:NSMakeRange(0,10)];
     cell.timeLabel.text = date;
     

@@ -105,7 +105,10 @@
         case LOGIN_TYPE:
         {
             NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:_loginView.userField.text,@"phonenum",_loginView.passwordField.text,@"password", nil];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.labelText = @"登录中...";
             [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                 NSDictionary *dic = [result objectForKey:@"response"];
                 NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
@@ -123,12 +126,13 @@
                     CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].companyInfo = item;
                     
-                    [_loginView dismissView];
-
+                    [self getVipInfo:[NSString stringWithFormat:@"%d",company_id]];
+                    
                 }else{
                     [RemindView showViewWithTitle:@"用户名或密码错误" location:MIDDLE];
                 }
             }failure:^(NSError *error){
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 NSLog(@"%@",error);
             }];
         }
@@ -446,8 +450,8 @@
             break;
         case 3003:
         {
-            if ([[SystemConfig sharedInstance].viptype isEqualToString:@"2"]) {
-                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"尊敬的普通会员" withMessage:@"您好！您目前所处等级没有权限上传3D图片，请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
+            if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
+                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好！您目前所处等级没有权限上传3D图片,请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
                 _upTDView.delegate = self;
                 [_upTDView showView];
             }else{
@@ -748,6 +752,33 @@
             _supplyScrollView.contentOffset = _supplyOffset;
         }];
     }
+}
+
+
+- (void)getVipInfo:(NSString *)company_id
+{
+    //获取用户VIP信息
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"登录中...";
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
+    [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if ([[dic objectForKey:@"code"] intValue] ==100) {
+            NSDictionary *data = [dic objectForKey:@"data"];
+            VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+            [SystemConfig sharedInstance].vipInfo = vipInfo;
+            
+            [_loginView dismissView];
+        }else{
+            [_loginView dismissView];
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSLog(@"%@",error);
+    }];
+    
 }
 
 

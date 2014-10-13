@@ -142,7 +142,6 @@
     [HttpTool postWithPath:@"getMyTagList" params:param success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         if ([[dic objectForKey:@"code"] intValue] == 100) {
             if ([[dic objectForKey:@"data"] isKindOfClass:[NSNull class]]) {
@@ -370,7 +369,6 @@
             [UIView animateWithDuration:2.0 animations:^{
                 label.alpha = 0;
             }];
-            
         }
         if (_currentCount < _maxNum) {
             NSInteger distace = 5;   //button文字离边框的距离
