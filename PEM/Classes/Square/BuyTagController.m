@@ -31,12 +31,11 @@
     
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     [self.view addSubview:_scrollView];
-    _scrollView.backgroundColor = HexRGB(0xe9f0f5);
+    _scrollView.backgroundColor = HexRGB(0xffffff);
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
-    _scrollView.backgroundColor = HexRGB(0xe9f0f5);
     [_scrollView setContentSize:CGSizeMake(kWidth, kHeight-64)];
-
+    [self addNavBarButton];
     [self addView];
     // Do any additional setup after loading the view.
 }
@@ -73,7 +72,7 @@
     
     
     UILabel *addTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(45,29,160, 16)];
-    addTagLabel.text = @"新增标签:";
+    addTagLabel.text = @"购买标签:";
     addTagLabel.textColor = HexRGB(0x3a3a3a);
     addTagLabel.font = [UIFont systemFontOfSize:PxFont(24)];
     [bottomView addSubview:addTagLabel];
@@ -81,7 +80,7 @@
     
     addField = [[UITextField alloc] initWithFrame:CGRectMake(20,63, kWidth-40, 35)];
     addField.delegate = self;
-    addField.placeholder = @"请输入您要添加的新标签";
+    addField.placeholder = @"请输入您要购买的标签";
     addField.layer.borderColor = HexRGB(0xced2d8).CGColor;
     addField.layer.borderWidth = 1.0f;
     [bottomView addSubview:addField];
@@ -95,6 +94,24 @@
     [addBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     [addBtn addTarget:self action:@selector(subButtonDown:) forControlEvents:UIControlEventTouchUpInside];
     [bottomView addSubview:addBtn];
+    
+}
+- (void)addNavBarButton{
+    // 创建按钮
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    // 设置普通背景图片
+    [btn setTitle:@"购买" forState:UIControlStateNormal];
+    [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    // 设置尺寸
+    btn.frame = CGRectMake(10, 10,52, 24);
+    [btn addTarget:self action:@selector(rightBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
+    self.navigationItem.rightBarButtonItem = item;
+}
+
+- (void)rightBtnClick
+{
     
 }
 

@@ -79,7 +79,7 @@
     
     self.hotSupplyArray =[[NSMutableArray alloc]initWithCapacity:0];
     [self addBackScrollView];//    背景
-//    [self loadNewData];
+    [self loadNewData];
     
     
 }

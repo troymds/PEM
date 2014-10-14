@@ -54,10 +54,9 @@
     
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     [self.view addSubview:_scrollView];
-    _scrollView.backgroundColor = HexRGB(0xe9f0f5);
+    _scrollView.backgroundColor = HexRGB(0xffffff);
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
-    _scrollView.backgroundColor = HexRGB(0xe9f0f5);
     [_scrollView setContentSize:CGSizeMake(kWidth, kHeight-64)];
     
     [self addNavBarButton];
@@ -141,7 +140,7 @@
             }else if(code ==101){
                 [RemindView showViewWithTitle:@"保存失败" location:MIDDLE];
             }else if(code ==102){
-                [RemindView showViewWithTitle:@"保存成功" location:MIDDLE];
+                [RemindView showViewWithTitle:[dic objectForKey:@"msg"] location:MIDDLE];
             }
         } failure:^(NSError *error) {
             NSLog(@"%@",error);
@@ -161,6 +160,7 @@
         NSDictionary *dic = [result objectForKey:@"response"];
         if ([[dic objectForKey:@"code"] intValue] == 100) {
             if ([[dic objectForKey:@"data"] isKindOfClass:[NSNull class]]) {
+                remindLabel.hidden = NO;
                 if ([SystemConfig sharedInstance].vipInfo) {
                     _maxNum = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
                 }
@@ -385,8 +385,8 @@
 
 //添加按钮
 - (void)addBtnWithTitle:(NSString *)text withId:(NSString *)uid withMessage:(BOOL)hasMessage messgaeNum:(NSString *)num{
+    remindLabel.hidden = YES;
     if (text.length!=0) {
-        if (_currentCount < _maxNum) {
             NSInteger distace = 5;   //button文字离边框的距离
             if (text.length!=0){
                 //20显示文字的高度
@@ -419,7 +419,6 @@
                 [_allTagArray addObject:btn];
                 [self moveBottomView];
                 _currentCount++;
-            }
         }
     }
 }
