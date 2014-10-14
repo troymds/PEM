@@ -169,6 +169,7 @@
             [HttpTool postWithPath:@"login" params:params success:^(id JSON) {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSLog(@"%@",result);
                 NSDictionary *dic = [result objectForKey:@"response"];
                 NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
                 if ([code isEqualToString:@"100"]){

@@ -19,15 +19,21 @@
         }else{
             _address = [dic objectForKey:@"address"];
         }
-        int city_id = [[dic objectForKey:@"city_id"] intValue];
-        _city_id = [NSString stringWithFormat:@"%d",city_id];
+        if ([[dic objectForKey:@"city_id"] isKindOfClass:[NSNull class]]) {
+            
+        }else{
+            int city_id = [[dic objectForKey:@"city_id"] intValue];
+            _city_id = [NSString stringWithFormat:@"%d",city_id];
+        }
         if ([[dic objectForKey:@"city_name"] isKindOfClass:[NSNull class]]) {
             _city_name = @"";
         }else{
             _city_name = [dic objectForKey:@"city_name"];
         }
-        int company_id = [[dic objectForKey:@"company_id"] intValue];
-        _company_id = [NSString stringWithFormat:@"%d",company_id];
+        if ([[dic objectForKey:@"company_id"] isKindOfClass:[NSNull class]]) {
+            int company_id = [[dic objectForKey:@"company_id"] intValue];
+            _company_id = [NSString stringWithFormat:@"%d",company_id];
+        }
         
         if ([[dic objectForKey:@"company_name"] isKindOfClass:[NSNull class]]) {
             _company_name = @"";
@@ -52,12 +58,18 @@
         }else{
             _image = [dic objectForKey:@"image"];
         }
-        
-        _is_lock = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"is_lock"] intValue]];
-        
-        int province_id = [[dic objectForKey:@"province_id"] intValue];
-        _province_id = [NSString stringWithFormat:@"%d",province_id];
-        
+        if ([[dic objectForKey:@"is_lock"] isKindOfClass:[NSNull class]]) {
+            
+        }else{
+            int is_lock = [[dic objectForKey:@"is_lock"] intValue];
+            _is_lock = [NSString stringWithFormat:@"%d",is_lock];
+        }
+        if ([[dic objectForKey:@"province_id"] isKindOfClass:[NSNull class]]) {
+            
+        }else{
+            int province_id = [[dic objectForKey:@"province_id"] intValue];
+            _province_id = [NSString stringWithFormat:@"%d",province_id];
+        }
         if ([[dic objectForKey:@"province_name"] isKindOfClass:[NSNull class]]) {
             _province_name = @"";
         }else{
