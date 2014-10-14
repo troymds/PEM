@@ -223,21 +223,33 @@
             break;
         case 2001:
         {
-        /*    if (![SystemConfig sharedInstance].viptype||[[SystemConfig sharedInstance].viptype isEqualToString:@"0"]){
-//                CGRect frame = [UIScreen mainScreen].bounds;
-//                _upPowerView = [[UpPowerView alloc] initWithFrame:frame];
-//                _upPowerView.delegate = self;
-//                [_upPowerView showView];
-                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"尊敬的普通会员" withMessage:@"您好！您目前所处等级没有权限发布供应信息,请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
-                [_upTDView showView];
-            }else{       */
+            if ([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]) {
+                MyActionSheetView *upTDView  =[[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您的体验会员已到期,若想发布供应信息,请先升级" delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                [upTDView showView];
+            }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]){
+                if ([SystemConfig sharedInstance].vipInfo) {
+                    if ([[SystemConfig sharedInstance].vipInfo.supply_num isEqualToString:@"0"]) {
+                        MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您的10条发布供应信息已使用完毕,若想发布更多,请先升级" delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                        [actionView showView];
+                    }else{
+                        _isPurchase = NO;
+                        [UIView animateWithDuration:0.5 animations:^{
+                            _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
+                            _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
+                            sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
+                        }];
+                    }
+                }else{
+                    [self getVipInfo:[SystemConfig sharedInstance].company_id];
+                }
+            }else{
                 _isPurchase = NO;
-                    [UIView animateWithDuration:0.5 animations:^{
-                        _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
-                        _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
-                        sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
-                    }];
-//            }
+                [UIView animateWithDuration:0.5 animations:^{
+                    _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
+                    _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
+                    sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
+                }];
+            }
         }
                 break;
             default:
@@ -759,7 +771,7 @@
 {
     //获取用户VIP信息
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"登录中...";
+    hud.dimBackground = NO;
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -769,7 +781,6 @@
             NSDictionary *data = [dic objectForKey:@"data"];
             VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
             [SystemConfig sharedInstance].vipInfo = vipInfo;
-            
             [_loginView dismissView];
         }else{
             [_loginView dismissView];

@@ -23,7 +23,6 @@
 #import "UIImageView+WebCache.h"
 #import "HttpTool.h"
 #import "BaseNumItem.h"
-#import "CompanyInfoItem.h"
 #import "UMSocial.h"
 
 @interface SpuareController ()
@@ -115,12 +114,12 @@
         PrivilegeController *pvc = [[PrivilegeController alloc] init];
         [self.navigationController pushViewController:pvc animated:YES];
     }else if(btn.tag == SHARE_TYPE){
-//        [UMSocialSnsService presentSnsIconSheetView:self
-//                                             appKey:nil
-//                                          shareText:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                         shareImage:nil
-//                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToTencent,UMShareToRenren,UMShareToQzone,UMShareToSms,nil]
-//                                           delegate:nil];
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                            appKey:nil
+                                          shareText:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
+                                         shareImage:nil
+                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina,UMShareToTencent,UMShareToRenren,UMShareToQzone,UMShareToSms,nil]
+                                           delegate:nil];
 
     }else{
         if (![SystemConfig sharedInstance].isUserLogin){

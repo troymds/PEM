@@ -12,6 +12,7 @@
 #import "TagItem.h"
 #import "TagListController.h"
 #import "RemindView.h"
+#import "BuyTagController.h"
 
 
 
@@ -37,14 +38,6 @@
     self.view.backgroundColor = HexRGB(0xffffff);
     // Do any additional setup after loading the view.
     
-    NSInteger viptype = [[SystemConfig sharedInstance].viptype intValue];
-    if (viptype == 0) {
-        _maxNum = 3;
-    }else if(viptype ==1){
-        _maxNum = 23;
-    }else{
-        _maxNum = NSIntegerMax;
-    }
     
     space = 20;
     bottomSpace = kHeight-64-149;
@@ -72,6 +65,29 @@
     [self addView];
     
     tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
+}
+
+
+//获取用户VIP信息
+- (void)getVipInfo
+{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.dimBackground = NO;
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",nil];
+    [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if ([[dic objectForKey:@"code"] intValue] ==100) {
+            NSDictionary *data = [dic objectForKey:@"data"];
+            VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+            [SystemConfig sharedInstance].vipInfo = vipInfo;
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSLog(@"%@",error);
+    }];
+    
 }
 
 
@@ -125,7 +141,7 @@
             }else if(code ==101){
                 [RemindView showViewWithTitle:@"保存失败" location:MIDDLE];
             }else if(code ==102){
-                [RemindView showViewWithTitle:@"保存的标签已存在" location:MIDDLE];
+                [RemindView showViewWithTitle:@"保存成功" location:MIDDLE];
             }
         } failure:^(NSError *error) {
             NSLog(@"%@",error);
@@ -145,9 +161,15 @@
         NSDictionary *dic = [result objectForKey:@"response"];
         if ([[dic objectForKey:@"code"] intValue] == 100) {
             if ([[dic objectForKey:@"data"] isKindOfClass:[NSNull class]]) {
-                NSLog(@"没有数据");
+                if ([SystemConfig sharedInstance].vipInfo) {
+                    _maxNum = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
+                }
             }else{
                 NSArray *dataArr = [dic objectForKey:@"data"];
+                
+                int num = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
+                _maxNum = [dataArr count] + num;
+                
                 NSMutableArray *arr = [NSMutableArray array];
                 for (NSDictionary *dic in dataArr){
                     TagItem *item = [[TagItem alloc] initWithDictionary:dic];
@@ -328,48 +350,42 @@
         }
 
     }else if(btn.tag ==1001){
-        if (_currentCount!=0){
-            NSInteger count = 0;
-            for (UIView *subView in _scrollView.subviews) {
-                if ([subView isKindOfClass:[SubTagButton class]]) {
-                    SubTagButton *btn = (SubTagButton *)subView;
-                    if ([btn.title isEqualToString:addField.text]) {
-                        break;
-                    }
-                    count++;
-                }
-            }
-            if (count < _currentCount){
-                [RemindView showViewWithTitle:@"该标签已存在" location:MIDDLE];
-            }else{
-                [self addBtnWithTitle:addField.text withId:nil withMessage:NO messgaeNum:nil];
-                addField.text = @"";
-            }
-
+        if (addField.text.length==0) {
+            [RemindView showViewWithTitle:@"请输入要添加的标签" location:MIDDLE];
         }else{
-            [self addBtnWithTitle:addField.text withId:nil withMessage:NO messgaeNum:nil];
-            addField.text = @"";
+            if (_currentCount < _maxNum) {
+                if (_currentCount!=0){
+                    NSInteger count = 0;
+                    for (UIView *subView in _scrollView.subviews) {
+                        if ([subView isKindOfClass:[SubTagButton class]]) {
+                            SubTagButton *btn = (SubTagButton *)subView;
+                            if ([btn.title isEqualToString:addField.text]) {
+                                break;
+                            }
+                            count++;
+                        }
+                    }
+                    if (count < _currentCount){
+                        [RemindView showViewWithTitle:@"该标签已存在" location:MIDDLE];
+                    }else{
+                        [self addBtnWithTitle:addField.text withId:nil withMessage:NO messgaeNum:nil];
+                        addField.text = @"";
+                    }
+                }else{
+                    [self addBtnWithTitle:addField.text withId:nil withMessage:NO messgaeNum:nil];
+                    addField.text = @"";
+                }
+            }else{
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签,想订阅更多标签,请单独购买",_maxNum] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"单独购买", nil];
+                [alertView show];
+            }
         }
     }
 }
 
-
 //添加按钮
 - (void)addBtnWithTitle:(NSString *)text withId:(NSString *)uid withMessage:(BOOL)hasMessage messgaeNum:(NSString *)num{
     if (text.length!=0) {
-        if (_currentCount == _maxNum) {
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 20)];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.backgroundColor = [UIColor blackColor];
-            label.text = [NSString stringWithFormat:@"您最多只能订阅%ld个标签",_maxNum];
-            CGPoint center = CGPointMake(kWidth/2,kHeight/2);
-            label.textColor = [UIColor whiteColor];
-            label.center = center;
-            [[UIApplication sharedApplication].keyWindow addSubview:label];
-            [UIView animateWithDuration:2.0 animations:^{
-                label.alpha = 0;
-            }];
-        }
         if (_currentCount < _maxNum) {
             NSInteger distace = 5;   //button文字离边框的距离
             if (text.length!=0){
@@ -402,9 +418,18 @@
                 [_scrollView addSubview:btn];
                 [_allTagArray addObject:btn];
                 [self moveBottomView];
+                _currentCount++;
             }
-            _currentCount++;
         }
+    }
+}
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        BuyTagController *tagVc = [[BuyTagController alloc] init];
+        [self.navigationController pushViewController:tagVc animated:YES];
     }
 }
 

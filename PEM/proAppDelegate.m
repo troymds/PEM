@@ -13,6 +13,7 @@
 #import "SystemConfig.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "HttpTool.h"
+#import "UMSocial.h"
 
 @implementation proAppDelegate
 
@@ -102,7 +103,8 @@
             }];
         }
     }
-
+    
+    [UMSocialData setAppKey:UMAPPKEY];
     [self.window makeKeyAndVisible];
 //    self.window.rootViewController = [[MainController alloc]init];
     return YES;
@@ -115,6 +117,7 @@
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         if ([[dic objectForKey:@"code"] intValue] ==100) {
             NSDictionary *data = [dic objectForKey:@"data"];

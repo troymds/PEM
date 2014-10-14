@@ -14,6 +14,7 @@
 @property (nonatomic,copy) NSString *keywords_num;
 @property (nonatomic,copy) NSString *supply_num;
 @property (nonatomic,copy) NSString *tag_num;
+@property (nonatomic,copy) NSString *try_date;
 @property (nonatomic,copy) NSString *vip_date;
 @property (nonatomic,copy) NSString *vip_name;
 @property (nonatomic,copy) NSString *vip_type;

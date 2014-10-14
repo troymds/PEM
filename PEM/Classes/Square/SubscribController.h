@@ -10,7 +10,7 @@
 #import "SubTagButton.h"
 
 
-@interface SubscribController : UIViewController<UITextFieldDelegate,ProImageViewDelegate>
+@interface SubscribController : UIViewController<UITextFieldDelegate,ProImageViewDelegate,UIAlertViewDelegate>
 {
     NSMutableArray *_dataArray;
     UITextField *addField;
@@ -37,5 +37,7 @@
     BOOL isKeyboardShow;      //判断键盘是否在页面上出现
     
     NSInteger bottomSpace;     //_scrollView底下空白高度
+    
+    int tag_num;     //剩余可订阅标签个数
 }
 @end

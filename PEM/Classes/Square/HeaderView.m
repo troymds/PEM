@@ -120,26 +120,35 @@
         _nameLabel.frame =CGRectMake(kWidth/2-size.width/2,_registerBtn.frame.origin.y,size.width,27.5);
         _markImg.frame = CGRectMake(_nameLabel.frame.origin.x+_nameLabel.frame.size.width+20,_nameLabel.frame.origin.y,19, 25);
         switch ([[SystemConfig sharedInstance].viptype intValue]) {
+            case 0:
+            {
+                if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
+                    _markImg.image = [UIImage imageNamed:@"vip5.png"];
+                }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]){
+                    _markImg.image = [UIImage imageNamed:@"vip5_0.png"];
+                }
+            }
+                break;
             case 1:
             {
-                _markImg.image = [UIImage imageNamed:@"vip_1_member.png"];
+                _markImg.image = [UIImage imageNamed:@"vip4.png"];
             }
                 break;
             case 2:
             {
-                _markImg.image = [UIImage imageNamed:@"vip_2_member.png"];
+                _markImg.image = [UIImage imageNamed:@"vip3.png"];
 
             }
                 break;
             case 3:
             {
-                _markImg.image = [UIImage imageNamed:@"vip_3_member.png"];
+                _markImg.image = [UIImage imageNamed:@"vip2.png"];
 
             }
                 break;
             case 4:
             {
-                _markImg.image = [UIImage imageNamed:@"vip_4_member.png"];
+                _markImg.image = [UIImage imageNamed:@"vip1.png"];
 
             }
                 break;

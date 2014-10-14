@@ -249,7 +249,7 @@
     switch (image.tag) {
         case 1000:
         {
-            rightImg.image = [UIImage imageNamed:@"visitor.png"];
+            rightImg.image = [UIImage imageNamed:@"vip_visitor.png"];
             rightImg.frame = CGRectMake(22,24,234,128);
             upPowerBtn.hidden = YES;
             if (rightImg.frame.origin.y < _scrollView.frame.size.height) {
