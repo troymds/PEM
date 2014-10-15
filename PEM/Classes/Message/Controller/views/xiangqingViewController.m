@@ -334,23 +334,23 @@
     //vip
     UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(nameCompanyw+20,10, 18, 25)];
     
-    if ([[SystemConfig sharedInstance].viptype isEqualToString:@"1"]) {
+    if ([xqModel.vip_type isEqualToString:@"1"]) {
         _companyImgVip.image =[UIImage imageNamed:@"Vip4.png"];
     }
-    else  if ([[SystemConfig sharedInstance].viptype isEqualToString:@"2"]) {
+    else  if ([xqModel.vip_type isEqualToString:@"2"]) {
         _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
         
-    } else if([[SystemConfig sharedInstance].viptype isEqualToString:@"3"]) {
+    } else if([xqModel.vip_type isEqualToString:@"3"]) {
         _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
         
-    }else if([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]){
+    }else if([xqModel.vip_type isEqualToString:@"0"]){
         
         _companyImgVip.image =[UIImage imageNamed:@"Vip1.png"];
     }
-    else if([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]){
+    else if([xqModel.vip_type isEqualToString:@"0"]){
         
         _companyImgVip.image =[UIImage imageNamed:@"Vip5.png"];
-    }else if([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]){
+    }else if([xqModel.vip_type isEqualToString:@"-1"]){
         
         _companyImgVip.image =[UIImage imageNamed:@"Vip6.png"];
     }

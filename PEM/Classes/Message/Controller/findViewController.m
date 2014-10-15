@@ -19,6 +19,7 @@
 #import "HttpTool.h"
 #import "hotOrderMoedl.h"
 #import "RemindView.h"
+#import "UIImageView+WebCache.h"
 @interface findViewController ()<MJRefreshBaseViewDelegate>
 {
     UIButton *_leftBtn;
@@ -106,7 +107,7 @@
         
         
         
-    } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%lu",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+    } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
         
     }];
     
@@ -131,7 +132,7 @@
         [_tableView reloadData];
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
-    } DemandId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%lu",[_CateDemandArray count]-0] DemandFailure:^(NSError *error) {
+    } DemandId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] DemandFailure:^(NSError *error) {
         
     }];
     
@@ -249,7 +250,7 @@
     //   左边 选项
     _leftBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_leftBtn];
-    _leftBtn.frame =CGRectMake(kWidth/5, 0, 100, 30);
+    _leftBtn.frame =CGRectMake(0, 0, kWidth/2, 30);
     [_leftBtn setTitle:@"供应信息" forState:UIControlStateNormal];
     
     [_leftBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
@@ -261,16 +262,16 @@
 
      [_leftBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
    
-    _leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -49, 0, 0);
-    _leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-86);
+    _leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
+    _leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-120);
 
   }
 -(void)leftSegment{
-    leftBackView =[[UIView alloc]initWithFrame:CGRectMake(kWidth/9, 15, 140, 100)];
+    leftBackView =[[UIView alloc]initWithFrame:CGRectMake(kWidth/7, 30, 95, 50)];
     [self.view addSubview:leftBackView];
     [self.view bringSubviewToFront:leftBackView];
     UIImageView *kuangImage =[[UIImageView alloc]init];
-    kuangImage.frame = CGRectMake(0, -20, 130, 110);
+    kuangImage.frame = CGRectMake(-15, -37, 130, 110);
     kuangImage.image =[UIImage imageNamed:@"xialakuang.png"];
     [leftBackView addSubview:kuangImage];
     kuangImage.userInteractionEnabled = YES;
@@ -300,7 +301,7 @@
     //   右边 选项
     _rigthBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_rigthBtn];
-    _rigthBtn.frame =CGRectMake(kWidth/2, 0, 140, 30);
+    _rigthBtn.frame =CGRectMake(kWidth/2, 0, kWidth/2, 30);
     [_rigthBtn setTitle:@"浏览量" forState:UIControlStateNormal];
     [_rigthBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
     _rigthBtn.selected = YES;
@@ -308,8 +309,8 @@
     [_rigthBtn addTarget:self action:@selector(rightXuanka:) forControlEvents:UIControlEventTouchUpInside];
     [_rigthBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
     [_rigthBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateSelected];
-    _rigthBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
-    _rigthBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
+    _rigthBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -80, 0, 0);
+    _rigthBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-30);
     
 }
 
@@ -330,12 +331,12 @@
     
 }
 -(void)rightSegment{
-    rightBackViw =[[UIView alloc]initWithFrame:CGRectMake(kWidth/2, 15, 100, 100)];
+    rightBackViw =[[UIView alloc]initWithFrame:CGRectMake(kWidth/2+15, 30, 95, 50)];
     [self.view addSubview:rightBackViw];
     
     [self.view bringSubviewToFront:rightBackViw];
     UIImageView *rightImage =[[UIImageView alloc]init];
-    rightImage.frame = CGRectMake(0, -20, 130, 110);
+    rightImage.frame = CGRectMake(-15, -37, 130, 110);
     rightImage.image =[UIImage imageNamed:@"xialakuang.png"];
     [rightBackViw addSubview:rightImage];
     rightImage.userInteractionEnabled = YES;
@@ -370,12 +371,12 @@
 
 
 -(void)rightSegmentDemand{
-    rightBackViewDemand =[[UIView alloc]initWithFrame:CGRectMake(kWidth/2, 15, 100, 100)];
+    rightBackViewDemand =[[UIView alloc]initWithFrame:CGRectMake(kWidth/2+15, 30, 95, 50)];
     [self.view addSubview:rightBackViewDemand];
     
     [self.view bringSubviewToFront:rightBackViewDemand];
     UIImageView *rightImage =[[UIImageView alloc]init];
-    rightImage.frame = CGRectMake(0, -20, 130, 110);
+    rightImage.frame = CGRectMake(-15, -37, 130, 110);
     rightImage.image =[UIImage imageNamed:@"xialakuang.png"];
     [rightBackViewDemand addSubview:rightImage];
     rightImage.userInteractionEnabled = YES;
@@ -405,7 +406,19 @@
     
     
 }
+#pragma mark addBigButton手势触摸
+-(void)addBigButton{
+   bigbutton =[UIButton buttonWithType:UIButtonTypeCustom];
+    bigbutton.frame = CGRectMake(0, 30, kWidth, kHeight-30);
 
+    bigbutton.backgroundColor =[UIColor whiteColor];
+    bigbutton.alpha =0.1;
+    bigbutton.selected = YES;
+    [self.view addSubview:bigbutton];
+    [bigbutton addTarget:self action:@selector(bigButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+}
 -(void)addTableView{
     _tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, kWidth, kHeight-100) style:UITableViewStylePlain];
     _tableView.delegate =self;
@@ -425,31 +438,85 @@
     leftbtn.selected=!leftbtn.selected;
 
     if (leftbtn.selected ==NO) {
+        [self addBigButton];
+        _rightBtnDemand.selected = YES;
+        _rigthBtn.selected = YES;
+        [rightBackViw removeFromSuperview];
+        [rightBackViewDemand removeFromSuperview];
         [self leftSegment];
 
     }else{
+        [bigbutton removeFromSuperview];
+
         [leftBackView removeFromSuperview];
 
     }
     
     
 }
+
+-(void)bigButtonClick:(UIButton *)bigSender{
+    if (bigSender.selected==YES) {
+        NSLog(@"%hhd",_rigthBtn.selected);
+
+        _leftBtn.selected = YES;
+        _rigthBtn.selected = YES;
+        _rightBtnDemand.selected = YES;
+        [bigbutton removeFromSuperview];
+        
+        [leftBackView removeFromSuperview];
+        [rightBackViw removeFromSuperview];
+        [rightBackViewDemand removeFromSuperview];
+
+    }else{
+        _leftBtn.selected = NO;
+        _rightBtnDemand.selected = NO;
+        _rightBtnDemand.selected = NO;
+        [bigbutton removeFromSuperview];
+        
+        [leftBackView removeFromSuperview];
+        [rightBackViw removeFromSuperview];
+        [rightBackViewDemand removeFromSuperview];
+
+
+    }
+    
+    
+
+}
 -(void)rightXuanka:(UIButton *)rightBtn{
     rightBtn.selected = !rightBtn.selected;
     if (rightBtn.selected ==NO) {
+        _leftBtn.selected =YES;
+        [bigbutton removeFromSuperview];
+        [leftBackView removeFromSuperview];
+        [self addBigButton];
         [self rightSegment];
 
 
+
     }else{
+
         [rightBackViw removeFromSuperview];
+        [bigbutton removeFromSuperview];
     }
 }
 -(void)rightXuankaDemand:(UIButton *)demand{
     demand.selected = !demand.selected;
     if (demand.selected ==NO) {
+        _leftBtn.selected = YES;
+
+        [bigbutton removeFromSuperview];
+        [leftBackView removeFromSuperview];
+        [self addBigButton];
         [self rightSegmentDemand];
+
+       
+
     }else{
         [rightBackViewDemand removeFromSuperview];
+        [bigbutton removeFromSuperview];
+       
     }
 
 }
@@ -457,14 +524,24 @@
     
     
     if (sender.tag ==11) {
+        
+        [_rigthBtn removeFromSuperview];
+        [_rightBtnDemand removeFromSuperview];
+
         [self addRigthSegmentDemand];
         [_rigthBtn removeFromSuperview];
         [rightBackViw removeFromSuperview];
+        [bigbutton removeFromSuperview];
+        
+
     }else{
         [_rigthBtn removeFromSuperview];
+        [_rightBtnDemand removeFromSuperview];
        [self addRigthSegment];
         [_rightBtnDemand removeFromSuperview];
         [rightBackViewDemand removeFromSuperview];
+        [bigbutton removeFromSuperview];
+
     }
     
    _selectedFind.tag = sender.tag;
@@ -491,7 +568,7 @@
     
 }
 
--(void)rightSegmentBtnClick:(UIButton *)sender //loadViewStatuses:(MJRefreshBaseView *)refreshView
+-(void)rightSegmentBtnClick:(UIButton *)sender
 {
     
     _supplyBtnPice.tag = sender.tag;
@@ -499,10 +576,17 @@
     sender.selected =!sender.selected;
     if (sender.selected==YES) {
         _rigthBtn.selected = YES;
-    }else{
+        _leftBtn.selected = YES;
+        [bigbutton removeFromSuperview];
+            }
+    else{
         _rigthBtn.selected = NO;
+        [bigbutton removeFromSuperview];
+
+
     }
     [rightBackViw removeFromSuperview];
+
     NSString *currentTitle = sender.currentTitle;
     [_rigthBtn setTitle:currentTitle forState:UIControlStateNormal];
     [_rigthBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
@@ -511,19 +595,20 @@
 
     
     if (sender.tag ==50) {
-        // 显示指示器
+        NSLog(@"%ld",(long)sender.tag);
+//        // 显示指示器
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.labelText = @"正在加载中...";
         hud.dimBackground = YES;
 
         [_CateSupplyArray removeAllObjects];
-        
+        [_tableView reloadData];
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
             
             [_CateSupplyArray addObjectsFromArray:statues];
             [_tableView reloadData];
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        }cateId:cateIndex supplyHot:@"read_num" lastID:0?0:[NSString stringWithFormat:@"%lu",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+        }cateId:cateIndex supplyHot:@"read_num" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
             
         }];
 
@@ -535,6 +620,7 @@
         hud.dimBackground = YES;
 
         [_CateSupplyArray removeAllObjects];
+        [_tableView reloadData];
 
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
             
@@ -545,7 +631,7 @@
             
             
             
-        }cateId:cateIndex supplyHot:@"price" lastID:0?0:[NSString stringWithFormat:@"%lu",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+        }cateId:cateIndex supplyHot:@"price" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
             
         }];
         
@@ -561,10 +647,15 @@
     demand.selected =!demand.selected;
     if (demand.selected==YES) {
         _rightBtnDemand.selected = YES;
+        [bigbutton removeFromSuperview];
+        [rightBackViewDemand removeFromSuperview];
+
     }else{
         _rightBtnDemand.selected = NO;
+        [bigbutton removeFromSuperview];
+//        [rightBackViewDemand removeFromSuperview];
+
     }
-    [rightBackViewDemand removeFromSuperview];
     NSString *currentTitle = demand.currentTitle;
     [_rightBtnDemand setTitle:currentTitle forState:UIControlStateNormal];
     [_rightBtnDemand setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
@@ -580,6 +671,7 @@
         hud.dimBackground = YES;
 
         [_CateDemandArray removeAllObjects];
+        [_tableView reloadData];
 
             [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
            
@@ -601,6 +693,7 @@
         hud.labelText = @"正在加载中...";
         hud.dimBackground = YES;
         [_CateDemandArray removeAllObjects];
+        [_tableView reloadData];
 
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
             

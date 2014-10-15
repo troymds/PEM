@@ -25,7 +25,7 @@
         
         self.name = dic[@"name"];
         self.tel = dic[@"tel"];
-        self.viptype = dic[@"viptype"];
+        self.viptype = dic[@"vip_type"];
         
         self.website = dic[@"website"];
         self.infoarray = dic[@"infoarray"];

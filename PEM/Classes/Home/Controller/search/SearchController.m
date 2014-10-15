@@ -24,6 +24,7 @@
 #import "qiugouXQ.h"
 #import "SearchModel.h"
 #import "SearchTool.h"
+#import "UIImageView+WebCache.h"
 @interface SearchController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UIImageView *_searchImage ;
@@ -38,26 +39,23 @@
     
     UITableView *_resultTableView;
     UIView *_resultBgView;
-    NSMutableArray *_provideArray;
     
     CGFloat _tableViewHeight;
     NSMutableArray *_supllyArray;
     NSMutableArray *_demandArray;
     NSMutableArray *_compangyArray;
-    UIImageView *kuangImag;
     
     UILabel *recordLabel;
     UILabel *dataLabel;
     UIView *noDataBgView;
-    UIButton *cansleButton;//删除搜索字体
     MJRefreshBaseView *_refreshView;
     
     NSString *_currentKeyString;
 }
-@property (nonatomic) NSMutableArray *searchArray;
 
-@property (nonatomic , retain)NSMutableArray *tempListArray;
-@property (nonatomic , retain)NSString *saveTempKeyword;
+@property (nonatomic,retain) NSMutableArray *searchSupplyArray;
+@property (nonatomic,retain) NSMutableArray *searchDemandArray;
+@property (nonatomic,retain) NSMutableArray *searchComanyArray;
 
 @end
 
@@ -67,32 +65,65 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
+    
     _supllyArray = [[NSMutableArray array]init];
     _demandArray = [[NSMutableArray array]init];
     _compangyArray = [[NSMutableArray array]init];
     
-    _searchModelArray =[[NSMutableArray alloc]initWithCapacity:0 ];
     
-    _searchArray = [[NSMutableArray alloc] initWithCapacity:0];
-    _provideArray = [[NSMutableArray alloc] init];
+    _searchSupplyArray = [[NSMutableArray alloc] initWithCapacity:0];
+    _searchComanyArray = [[NSMutableArray alloc] initWithCapacity:0];
+    _searchDemandArray = [[NSMutableArray alloc] initWithCapacity:0];
+
+
+    
     _selectXuanka =[[UIButton alloc]init];
     _selectedBtnImage=[[UIButton alloc]init];
     
     
+    
     if ([[NSFileManager defaultManager] fileExistsAtPath:[SaveTempDataTool getFilePath]])
     {
-        if (_searchArray.count>0)
-        {
-            [_searchArray removeAllObjects];
-        }
-        for(NSString *tempStr in [SaveTempDataTool unarchiveClass])
-        {
-            SearchResultModel *resultModel = [[SearchResultModel alloc] init];
-            resultModel.searchKeyword = tempStr;
-            [_searchArray insertObject:resultModel atIndex:_searchArray.count];
+        
+        
+        if (_selectBtn.tag ==201) {
+            if (_searchComanyArray.count>0)
+            {
+                [_searchComanyArray removeAllObjects];
+            }
+            for(NSString *tempStr in [SaveTempDataTool unarchiveClass])
+            {
+                SearchResultModel *resultModel = [[SearchResultModel alloc] init];
+                resultModel.searchKeyword = tempStr;
+                [_searchComanyArray insertObject:resultModel atIndex:_searchComanyArray.count];
+            }
+        }else if (_selectBtn.tag == 202){
+            if (_searchDemandArray.count>0)
+            {
+                [_searchDemandArray removeAllObjects];
+            }
+            for(NSString *tempStr in [SaveTempDataTool unarchiveClass])
+            {
+                SearchResultModel *resultModel = [[SearchResultModel alloc] init];
+                resultModel.searchKeyword = tempStr;
+                [_searchDemandArray insertObject:resultModel atIndex:_searchDemandArray.count];
+            }
+        }else{
+            if (_searchSupplyArray.count>0)
+            {
+                [_searchSupplyArray removeAllObjects];
+            }
+            for(NSString *tempStr in [SaveTempDataTool unarchiveClass])
+            {
+                SearchResultModel *resultModel = [[SearchResultModel alloc] init];
+                resultModel.searchKeyword = tempStr;
+                [_searchSupplyArray insertObject:resultModel atIndex:_searchSupplyArray.count];
+
+            }
+ 
         }
         
-        //[SaveTempDataTool removeFilePath];
+        
     }
     
     [self addbutton];
@@ -113,12 +144,28 @@
     recordLabel.textAlignment = NSTextAlignmentCenter;
     recordLabel.backgroundColor = [UIColor clearColor];
     recordLabel.text = @"没有历史记录！";
-    
-    if (_searchArray.count > 0)
-    {
-        recordLabel.hidden = YES;
+    if (_selectBtn.tag ==201) {
+        if (_searchSupplyArray.count > 0)
+        {
+            recordLabel.hidden = YES;
+        }else{
+            recordLabel.hidden = NO;
+        }
+    }else if (_selectBtn.tag == 202){
+        if (_searchSupplyArray.count > 0)
+        {
+            recordLabel.hidden = YES;
+        }else{
+            recordLabel.hidden = NO;
+        }
     }else{
-        recordLabel.hidden = NO;}
+        if (_searchSupplyArray.count > 0)
+        {
+            recordLabel.hidden = YES;
+        }else{
+            recordLabel.hidden = NO;
+        }
+    }
     recordLabel.enabled = NO;
     [_bgView addSubview:recordLabel];
 }
@@ -285,7 +332,7 @@
             }
             
             [self tableReloadData];
-        } lastID:0? 0:[NSString stringWithFormat:@"%lu",[_demandArray count]-0] failure:^(NSError *error) {
+        } lastID:0? 0:[NSString stringWithFormat:@"%u",[_demandArray count]-0] failure:^(NSError *error) {
             
         }];
         
@@ -317,7 +364,7 @@
             }
             [self tableReloadData];
             
-        } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%lu",[_compangyArray count]-0]
+        } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0]
                               failureBlock:^(NSError *error) {
                               }];
     }else
@@ -394,6 +441,9 @@
     
     _searchTextField.delegate = self;
     _searchTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    
+    
+   
     //    放大镜
     _searBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     
@@ -414,18 +464,12 @@
 {
     self.view = _bgView;
     
-    kuangImag =[[UIImageView alloc]init];
-    kuangImag.frame = CGRectMake(7, 28, 78, 10);
-    kuangImag.image =[UIImage imageNamed:@"xialakuang1.png"];
-    [_searchImage addSubview:kuangImag];
     
-    
-    _backViw =[[UIView alloc]initWithFrame:CGRectMake(70, 5, 100, 90)];
-    
+    _backViw =[[UIView alloc]initWithFrame:CGRectMake(50, 3, 70, 60)];
     [_bgView addSubview:_backViw];
     
     [_recTableView reloadData];
-    if (_searchArray.count>0)
+    if (_searchSupplyArray.count>0)
         
     {
         recordLabel.hidden = YES;
@@ -434,7 +478,7 @@
     }
     
     UIImageView *kuangImage =[[UIImageView alloc]init];
-    kuangImage.frame = CGRectMake(-30, -50, 100, 138);
+    kuangImage.frame = CGRectMake(-12, -48, 100, 138);
     kuangImage.image =[UIImage imageNamed:@"xialakuang.png"];
     [_backViw addSubview:kuangImage];
     kuangImage.userInteractionEnabled = YES;
@@ -479,10 +523,11 @@
     
     if (self.view == _bgView)
     {
-        if (_searchArray.count > 0)
+        if (_searchSupplyArray.count > 0)
         {
-            SearchResultModel *searchResult = [_searchArray objectAtIndex:indexPath.row-1];
+            SearchResultModel *searchResult = [_searchSupplyArray objectAtIndex:indexPath.row-1];
             _searchTextField.text = searchResult.searchKeyword;
+            
         }
     }
     
@@ -525,9 +570,9 @@
 {
     if (self.view == _bgView)
     {
-        if (_searchArray.count > 0)
+        if (_searchSupplyArray.count > 0)
         {
-            return [_searchArray count]+1 ;
+            return [_searchSupplyArray count]+1 ;
         }else{ return 0;}
         
     }else{
@@ -578,7 +623,18 @@
         }
         if (indexPath.row == 0)
         {
+            history =[UIButton buttonWithType:UIButtonTypeCustom];
+            history.frame = CGRectMake(0, 0, kWidth, 44);
+            [history setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+            [history setTitle:@"  搜索历史" forState:UIControlStateNormal];
+            history.titleLabel.font =[UIFont systemFontOfSize:PxFont(22)];
+            history.titleEdgeInsets =UIEdgeInsetsMake(0, -150, 0, 0);
+            history.imageEdgeInsets = UIEdgeInsetsMake(0, -150, 0, 0);
+            [history setImage:[UIImage imageNamed:@"home_history.png"] forState:UIControlStateNormal];
+            history.tag = 10000;
+            [cell addSubview:history];
             
+
             for (UIView *view in [cell subviews])
             {
                 
@@ -588,25 +644,19 @@
                 }
             }
             
-            history =[UIButton buttonWithType:UIButtonTypeCustom];
-            [cell addSubview:history];
-            //cell.contentView.tag = 10001;
-            [history setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
-            [history setTitle:@"  搜索历史" forState:UIControlStateNormal];
-            history.titleLabel.font =[UIFont systemFontOfSize:PxFont(22)];
-            [history setImage:[UIImage imageNamed:@"home_history.png"] forState:UIControlStateNormal];
-            history.tag = 10000;
-            history.frame = CGRectMake(-140, 0, 450, 44);
-            history.hidden = YES;
+            
         }
         else if(indexPath.row > 0)
         {
             
-            if (_searchArray.count>0)
+            if (_searchSupplyArray.count>0)
             {
                 history.hidden = NO;
-                SearchResultModel *resultModel =  [_searchArray objectAtIndex:indexPath.row-1];
+                SearchResultModel *resultModel =  [_searchSupplyArray objectAtIndex:indexPath.row-1];
                 cell.textLabel.text = resultModel.searchKeyword;
+            }
+            else{
+                history.hidden =YES;
             }
         }
         return cell;
@@ -717,7 +767,7 @@
         [clearBtn addTarget:self action:@selector(clearBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [clearView addSubview:clearBtn];
         
-        if (_searchArray.count > 0)
+        if (_searchSupplyArray.count > 0)
         {
             clearView.hidden = NO;
         }else{
@@ -753,7 +803,8 @@
         
         return viewForHeader;
         
-    }else
+    }
+    else
     {
         UIView *viewHistory = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 173)];
         UIImageView *historyImge =[[UIImageView alloc]initWithFrame:CGRectMake(24, 10, 25, 25)];
@@ -776,19 +827,36 @@
     }
     return 0;
 }
+#pragma mark ------背景button
+-(void)addBigButton{
+    bigBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    bigBtn.frame = CGRectMake(0, 0, kWidth, kHeight);
+    bigBtn.backgroundColor =[UIColor whiteColor];
+    bigBtn.alpha =0.1;
+    [self.view addSubview:bigBtn];
+    
+    [bigBtn addTarget:self action:@selector(bigBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+}
+-(void)bigBtnClick:(UIButton *)big{
+    _selectBtn.selected = YES;
 
-
+    [bigBtn removeFromSuperview];
+    [_backViw removeFromSuperview];
+}
+#pragma mark-----xuanka选卡
 -(void)xuankaBtn:(UIButton *)xuan
 {
     xuan.selected=!xuan.selected;
     _selectXuanka.selected = xuan.selected;
     if (xuan.selected==NO)
     {
+        [self addBigButton];
         [self xuangxiangka];
     }else
     {
+        [bigBtn removeFromSuperview];
         [_backViw removeFromSuperview];
-        [kuangImag removeFromSuperview];
     }
     
 }
@@ -798,7 +866,7 @@
     self.view = _bgView;
     [_recTableView reloadData];
     
-    if (_searchArray.count>0)
+    if (_searchSupplyArray.count>0)
     {
         recordLabel.hidden = YES;
     }else{
@@ -806,6 +874,7 @@
     }
     
     _searBtn.selected = YES;
+    [self bigBtnClick:(UIButton *)textField];
    
 }
 
@@ -813,19 +882,21 @@
 {
     [_demandArray removeAllObjects];
     [_supllyArray removeAllObjects];
-    [_compangyArray removeAllObjects];    [_resultTableView reloadData];
+    [_compangyArray removeAllObjects];
+    [_resultTableView reloadData];
+    [_recTableView reloadData];
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (_currentKeyString.length>0)
     {
         // 如果有重复关键字，保留最新的。
-        if (_searchArray.count>0)
+        if (_searchSupplyArray.count>0)
         {
-            for (int i = 0;i<_searchArray.count;i++)
+            for (int i = 0;i<_searchSupplyArray.count;i++)
             {
-                SearchResultModel *resultMod = [_searchArray objectAtIndex:i];
+                SearchResultModel *resultMod = [_searchSupplyArray objectAtIndex:i];
                 if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
                 {
-                    [_searchArray removeObjectAtIndex:i];
+                    [_searchSupplyArray removeObjectAtIndex:i];
                 }
             }
         }
@@ -833,21 +904,18 @@
         
         SearchResultModel *resultModel = [[SearchResultModel alloc] init];
         resultModel.searchKeyword = _currentKeyString;
-        if (_searchArray.count == 7)
+        if (_searchSupplyArray.count == 7)
         {
-            [_searchArray removeLastObject];
+            [_searchSupplyArray removeLastObject];
         }
-        [_searchArray insertObject:resultModel atIndex:0];
+        [_searchSupplyArray insertObject:resultModel atIndex:0];
         [self saveTempSearchWord];
         
         
     }
-    [_backViw removeFromSuperview];
-    
     self.view = _resultBgView;
     
-    
-    _searBtn.selected = YES;
+    [self bigBtnClick:sear];
     
     [_searchTextField resignFirstResponder];
     
@@ -876,7 +944,7 @@
 
 - (void)saveTempSearchWord
 {
-    [SaveTempDataTool archiveClass:_searchArray];
+    [SaveTempDataTool archiveClass:_searchSupplyArray];
 }
 
 - (void)sortSelectedBtn:(UIButton *)sender
@@ -900,9 +968,8 @@
         [_selectedBtnImage setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     
-    //self.view = _resultBgView;
     [_backViw removeFromSuperview];
-    [kuangImag removeFromSuperview];
+    [bigBtn removeFromSuperview];
     [_searchTextField resignFirstResponder];
     _searchTextField.text = nil;
     NSString *currentTitle = sender.currentTitle;
@@ -912,7 +979,6 @@
     [_selectBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
     _selectBtn.tag = sender.tag;
     
-    //[_resultTableView reloadData];
     
     sender.selected =YES;
 
@@ -922,9 +988,9 @@
 
 -(void)clearBtnClick:(UIButton *)clear
 {
-    [_searchArray removeAllObjects];
+    [_searchSupplyArray removeAllObjects];
     [_recTableView reloadData];
-    [SaveTempDataTool archiveClass:_searchArray];
+    [SaveTempDataTool archiveClass:_searchSupplyArray];
     _searchTextField.text = nil;
     
     recordLabel.hidden = NO;
@@ -937,7 +1003,6 @@
 #pragma mark textField delegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
-    
     
     return YES;
 }

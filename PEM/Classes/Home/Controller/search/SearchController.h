@@ -14,11 +14,11 @@
     UIButton *_selectXuanka;
     
     UIView *clearView;
-    
+    UIButton *bigBtn ;
     UIButton *history;
 }
-@property(nonatomic,strong)UITableView *tableView;
 @property(nonatomic,strong)NSMutableArray *supllyArray;
 @property(nonatomic,strong)NSMutableArray *demandArray;
-@property(nonatomic,strong)NSMutableArray *searchModelArray;
+@property(nonatomic,strong)NSMutableArray *compangyArray;
+
 @end

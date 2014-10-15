@@ -9,12 +9,13 @@
 #import "XQgetInfoDetailModel.h"
 #import "HttpTool.h"
 @implementation XQgetInfoDetailModel
-@synthesize idType,description,company_id,company_name,info_id,buy_num,imageGetInfo,titleGetInfo,create_time,contacts,phone_num,region,url_3d,price,min_sell_num,inwishlist,read_num,category_id,verify_result,verify_reason,verify_time;
+@synthesize idType,description,company_id,company_name,info_id,buy_num,imageGetInfo,titleGetInfo,create_time,contacts,phone_num,region,url_3d,price,min_sell_num,inwishlist,read_num,category_id,verify_result,verify_reason,verify_time,vip_type;
 @synthesize wishlistid;
 - (instancetype)initWithDictionaryForGategory:(NSDictionary *)dict{
     if ([super self])
     {
-        
+        self.vip_type = dict[@"vip_type"];
+
         self.idType = dict[@"type"];
         self.buy_num =dict[@"buy_num"];
         self.company_id = dict[@"company_id"];

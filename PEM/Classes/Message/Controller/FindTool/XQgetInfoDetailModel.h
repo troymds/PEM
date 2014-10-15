@@ -10,6 +10,8 @@
 
 @interface XQgetInfoDetailModel : NSObject
 #pragma mark----supply Demand
+@property (nonatomic, copy) NSString *vip_type;   //
+
 @property (nonatomic, copy) NSString *idType;   //信息 id
 @property (nonatomic, copy) NSString *info_id;   //供应还是求购
 @property (nonatomic, copy) NSString *imageGetInfo;//图片地址

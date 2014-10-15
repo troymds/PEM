@@ -21,12 +21,14 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
+        if ([array isKindOfClass:[NSNull class]])
+        {}else{
 
          for (NSDictionary *dict in array) {
         yySupplyModel *s =[[yySupplyModel alloc] initWithDictionaryForSupply:dict];
         [statuses addObject:s];
          }
-               success(statuses);
+        }      success(statuses);
         
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
