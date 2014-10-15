@@ -377,7 +377,7 @@
 {
     
     
-    for (int c=0; c<8; c++) {
+    for (int c=0; c<7; c++) {
         
         UIButton *CategoryButt =[UIButton buttonWithType:UIButtonTypeCustom];
         CategoryButt.frame =CGRectMake(20+c%4*(50+25), 152+c/4*(40+40), 50,50);

@@ -84,6 +84,7 @@
             NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:userName,@"phonenum",passWord,@"password", nil];
             [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSLog(@"%@",result);
                 NSDictionary *dic = [result objectForKey:@"response"];
                 NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
                 if ([code isEqualToString:@"100"]){
