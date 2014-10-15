@@ -20,7 +20,7 @@
             _address = [dic objectForKey:@"address"];
         }
         if ([[dic objectForKey:@"city_id"] isKindOfClass:[NSNull class]]) {
-            
+            _city_id = @"-1";
         }else{
             int city_id = [[dic objectForKey:@"city_id"] intValue];
             _city_id = [NSString stringWithFormat:@"%d",city_id];
@@ -31,6 +31,8 @@
             _city_name = [dic objectForKey:@"city_name"];
         }
         if ([[dic objectForKey:@"company_id"] isKindOfClass:[NSNull class]]) {
+            _company_id = @"-1";
+        }else{
             int company_id = [[dic objectForKey:@"company_id"] intValue];
             _company_id = [NSString stringWithFormat:@"%d",company_id];
         }
@@ -59,13 +61,13 @@
             _image = [dic objectForKey:@"image"];
         }
         if ([[dic objectForKey:@"is_lock"] isKindOfClass:[NSNull class]]) {
-            
+            _is_lock = @"-2";
         }else{
             int is_lock = [[dic objectForKey:@"is_lock"] intValue];
             _is_lock = [NSString stringWithFormat:@"%d",is_lock];
         }
         if ([[dic objectForKey:@"province_id"] isKindOfClass:[NSNull class]]) {
-            
+            _province_id = @"-1";
         }else{
             int province_id = [[dic objectForKey:@"province_id"] intValue];
             _province_id = [NSString stringWithFormat:@"%d",province_id];

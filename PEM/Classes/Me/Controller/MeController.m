@@ -464,9 +464,15 @@
         {
             if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
                 _upTDView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好！您目前所处等级没有权限上传3D图片,请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
-                _upTDView.delegate = self;
+                _upTDView.tag =1000;
                 [_upTDView showView];
             }else{
+                int display_3d_num = [[SystemConfig sharedInstance].vipInfo.display_3d_num intValue];
+                if (display_3d_num == 0) {
+                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您不能进行3D展示或3D展示数量已用完,要进行3D展示,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
+                    actionSheet.tag = 1001;
+                    [actionSheet showView];
+                }
                 btn.selected = !btn.selected;
                 if (btn.selected) {
                     isShowTD = YES;
@@ -849,10 +855,14 @@
 }
 
 
-- (void)actionSheetButtonClicked
+- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView
 {
-    PrivilegeController *priVC = [[PrivilegeController alloc] init];
-    [self.navigationController pushViewController:priVC animated:YES];
+    if (actionSheetView.tag ==1001) {
+        
+    }else{
+        PrivilegeController *priVC = [[PrivilegeController alloc] init];
+        [self.navigationController pushViewController:priVC animated:YES];
+    }
 }
 
 

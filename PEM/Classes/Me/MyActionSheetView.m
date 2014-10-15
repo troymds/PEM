@@ -91,8 +91,8 @@
 - (void)actionButtonDown:(UIButton *)button
 {
     if (button.tag == 0) {
-        if ([self.delegate respondsToSelector:@selector(actionSheetButtonClicked)]) {
-            [self.delegate actionSheetButtonClicked];
+        if ([self.delegate respondsToSelector:@selector(actionSheetButtonClicked:)]) {
+            [self.delegate actionSheetButtonClicked:self];
         }
     }
     [self removeFromSuperview];

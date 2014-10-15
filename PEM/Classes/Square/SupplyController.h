@@ -14,8 +14,9 @@
 #import "CategoryItem.h"
 #import "SendValueDelegate.h"
 #import "ReloadDataDelegate.h"
+#import "MyActionSheetView.h"
 
-@interface SupplyController : UIViewController<PublishViewDelegate,ProActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,ProImageViewDelegate,SendValueDelegate,UIAlertViewDelegate,ReloadDataDelegate>
+@interface SupplyController : UIViewController<PublishViewDelegate,ProActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,ProImageViewDelegate,SendValueDelegate,UIAlertViewDelegate,ReloadDataDelegate,MyActionSheetViewDelegate>
 {
     UIScrollView *_scrollView;
     SupplyView *_supplyView;
