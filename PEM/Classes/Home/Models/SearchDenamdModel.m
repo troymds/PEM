@@ -1,16 +1,15 @@
 //
-//  SearchResultModel.m
+//  SearchDenamdModel.m
 //  PEM
 //
-//  Created by house365 on 14-8-30.
+//  Created by YY on 14-10-15.
 //  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
 //
 
-#import "SearchResultModel.h"
+#import "SearchDenamdModel.h"
 
-@implementation SearchResultModel
-
-@synthesize searchKeyword=_searchKeyword ;
+@implementation SearchDenamdModel
+@synthesize searchKeyword = _searchKeyword;
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -20,6 +19,5 @@
 {
     return [aDecoder decodeObjectForKey:@"keyword"];
 }
-
 
 @end

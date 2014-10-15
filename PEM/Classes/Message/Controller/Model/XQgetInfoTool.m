@@ -22,7 +22,6 @@
     [HttpTool postWithPath:@"getInfoDetail" params:dic success:^(id JSON) {
     NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];        
         NSMutableArray *statuses =[NSMutableArray array];
-
         NSDictionary *array =[d[@"response"]objectForKey:@"data"];
         XQgetInfoDetailModel *s =[[XQgetInfoDetailModel alloc] initWithDictionaryForGategory:array];
             [statuses addObject:s];
