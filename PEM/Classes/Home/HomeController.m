@@ -25,6 +25,8 @@
 #import "supplyTool.h"
 #import "adsModel.h"
 #import "CompanyXQViewController.h"
+#import "MessageController.h"
+#import "QRCodeViewController.h"
 @interface HomeController ()<UIScrollViewDelegate>
 {
     UIScrollView *_backScrollView;
@@ -63,7 +65,7 @@
     [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
     
         
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(lo)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(zbarSdk:)];
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:@selector(lo)];
     self.view.userInteractionEnabled = YES;
     
@@ -86,6 +88,25 @@
 -(void)lo{
     
 }
+-(void)zbarSdk:(UIButton *)sdk{
+    QRCodeViewController *qrcode =[[QRCodeViewController alloc]init];
+    [self.navigationController pushViewController:qrcode animated:YES];
+    
+//    ZBarReaderViewController *reader = [ZBarReaderViewController new];
+//    reader.readerDelegate = self;
+//    reader.supportedOrientationsMask = ZBarOrientationMaskAll;
+//    
+//    ZBarImageScanner *scanner = reader.scanner;
+//    
+//    [scanner setSymbology: ZBAR_I25
+//                   config: ZBAR_CFG_ENABLE
+//                       to: 0];
+//    
+//    [self presentModalViewController: reader
+//                            animated: YES];
+    
+}
+
 #pragma mark 加载微博数据
 - (void)loadNewData
 {
@@ -410,8 +431,29 @@
         [findImage setImageWithURL:[NSURL URLWithString:hotCategoryModel.image]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
         
     }
-}
+    
+    UIButton *moreBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    moreBtn.frame =CGRectMake(245, 232, 50, 50);
+    [_backScrollView addSubview:moreBtn];
+   
+    [moreBtn setImage:[UIImage imageNamed:@"more_btn.png"] forState:UIControlStateNormal];
+    
+    UIButton *moreTitle =[UIButton buttonWithType:UIButtonTypeCustom];
+    moreTitle.frame =CGRectMake(246, 280, 50, 30);
+    [_backScrollView addSubview:moreTitle];
+    [moreTitle setTitle:@"更多" forState:UIControlStateNormal];
+    [moreTitle setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
+    moreTitle.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
+    [moreBtn addTarget:self action:@selector(moreBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [moreTitle addTarget:self action:@selector(moreBtnClick) forControlEvents:UIControlEventTouchUpInside];
 
+
+    
+}
+-(void)moreBtnClick{
+    MessageController *message =[[MessageController alloc]init];
+    [self.navigationController pushViewController:message animated:YES];
+}
 
 
 #pragma mark 添加三条广告

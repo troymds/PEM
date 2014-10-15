@@ -14,8 +14,16 @@
     float webheight;
     UIWebView *_gyWebView;
     NSString *_wishlist_id;
+    
+    UIButton *collectBtn;
+    UIButton *phonBtn;
+    UIView *li;
+    
+    //标题
+    UILabel *nameLable;
 }
 @property (nonatomic, weak) NSString *supplyIndex;
+@property(nonatomic,weak)NSString *company_Id;
 @property(nonatomic,strong)NSMutableArray *XQArray;
 @property(nonatomic,strong) UILabel *phoneLabel;
 @property(nonatomic,strong)UIImageView *hearImage;

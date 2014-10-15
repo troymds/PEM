@@ -30,7 +30,7 @@
 @end
 
 @implementation xiangqingViewController
-@synthesize supplyIndex,XQArray,phoneLabel,hearImage;
+@synthesize supplyIndex,XQArray,phoneLabel,hearImage,company_Id;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -172,9 +172,15 @@
 -(void)addAabstract{
 #pragma mark计算宽高
     XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
-
-    CGFloat nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(125, 60)].height;
-    
+    CGFloat nameWeight;
+    if ([[SystemConfig sharedInstance].company_id isEqualToString:xqModel.company_id]) {
+        
+        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(300, 60)].height;
+        
+    }else{
+        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(125, 60)].height;
+        
+    }
 
     _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
     _backScrollView.userInteractionEnabled=YES;
@@ -205,7 +211,8 @@
     
 #pragma mark-----收藏
     
-    UIButton *collectBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+    
+     collectBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     [_backScrollView addSubview:collectBtn];
     [collectBtn setImage:[UIImage imageNamed:@"home_favorite.png"] forState:UIControlStateNormal];
     [collectBtn setImage:[UIImage imageNamed:@"xunjia_selecte2.png"] forState:UIControlStateSelected];
@@ -216,27 +223,34 @@
     
     
     
-    UIButton *phonBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+     phonBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     [_backScrollView addSubview:phonBtn];
     [phonBtn setImage:[UIImage imageNamed:@"xunji1.png"] forState:UIControlStateNormal];
     [phonBtn setImage:[UIImage imageNamed:@"xunjia_selecte1.png"] forState:UIControlStateHighlighted];
 
     phonBtn.frame =CGRectMake(240, 200, 35, 35);
     [phonBtn addTarget:self action:@selector(bodaBtn:) forControlEvents:UIControlEventTouchUpInside];
+  
+       
     
+    
+    
+
      //标题
-    UILabel *nameLable =[[UILabel alloc]init];
+    nameLable =[[UILabel alloc]init];
     nameLable.text = xqModel.titleGetInfo;
-    nameLable.frame =CGRectMake(10,185, 220, nameWeight);
     nameLable.numberOfLines = 3;
     nameLable.font =[UIFont systemFontOfSize:15];
+
     [_backScrollView addSubview:nameLable];
     nameLable.textColor =HexRGB(0x3a3a3a);
-
-
-    //价格
     
-
+    
+    
+    
+    
+   
+    //价格
     UILabel *picLabel =[[UILabel alloc]init];
     picLabel.text =[NSString stringWithFormat:@"￥%@",xqModel.price];
     picLabel.textColor =HexRGB(0xff7300);
@@ -245,15 +259,35 @@
     picLabel.font =[UIFont systemFontOfSize:PxFont(30)];
 
 //    起价
-    UILabel *linLabel =[[UILabel alloc]init];
-    linLabel.text =[NSString stringWithFormat:@"%@起供应       浏览%@次        %@",xqModel.min_sell_num,xqModel.read_num,xqModel.region];
-
-    linLabel.frame =CGRectMake(10,225+nameWeight, 300, 20);
-    [_backScrollView addSubview:linLabel];
-
-    linLabel.font =[UIFont systemFontOfSize:10];
-    linLabel.textColor =HexRGB(0x666666);
-
+    for (int l=0; l<3; l++) {
+        NSArray *labelArray =@[[NSString stringWithFormat:@"%@起供应",xqModel.min_sell_num],[NSString stringWithFormat:@"浏览%@次",xqModel.read_num],[NSString stringWithFormat:@"%@",xqModel.region]];
+        UILabel *linLabel =[[UILabel alloc]init];
+        linLabel.text =labelArray[l];
+        
+        
+        linLabel.frame =CGRectMake(10+l%3*((kWidth-20)/3),225+nameWeight, (kWidth-20)/3, 20);
+        [_backScrollView addSubview:linLabel];
+        
+        linLabel.font =[UIFont systemFontOfSize:10];
+        linLabel.textColor =HexRGB(0x666666);
+    }
+    
+//线条
+    
+    for (int i =0; i<2; i++) {
+        UIView *line=[[UIView alloc]init];
+        line.frame =CGRectMake(0, 220+nameWeight+i%3*(30), 320, 1);
+        [_backScrollView addSubview:line];
+        line.alpha = 0.5;
+        line.backgroundColor =[UIColor lightGrayColor];
+    }
+    
+    
+     li =[[UIView alloc]init];
+    li.frame =CGRectMake(230, 200, 1, 10+nameWeight);
+    [_backScrollView addSubview:li];
+    li.backgroundColor =[UIColor lightGrayColor];
+    li.alpha = 0.5;
     
     UILabel *xinagq =[[UILabel alloc]init];
     xinagq.text =@"【产品详情】";
@@ -281,6 +315,7 @@
     
     UILabel *nameCopany =[[UILabel alloc]init];
     nameCopany.text = xqModel.company_name;
+    CGFloat nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(16)] constrainedToSize:CGSizeMake(210, 30)].width;
     [forImage addSubview:nameCopany];
     nameCopany.frame =CGRectMake(18, 0, 210, 44);
     nameCopany.font =[UIFont systemFontOfSize:PxFont(16)];
@@ -295,6 +330,54 @@
     goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
     goCompany.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
     [goCompany addTarget:self action:@selector(goCompanyClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    //vip
+    UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(nameCompanyw+20,10, 18, 25)];
+    
+    if ([[SystemConfig sharedInstance].viptype isEqualToString:@"1"]) {
+        _companyImgVip.image =[UIImage imageNamed:@"Vip4.png"];
+    }
+    else  if ([[SystemConfig sharedInstance].viptype isEqualToString:@"2"]) {
+        _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
+        
+    } else if([[SystemConfig sharedInstance].viptype isEqualToString:@"3"]) {
+        _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
+        
+    }else if([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]){
+        
+        _companyImgVip.image =[UIImage imageNamed:@"Vip1.png"];
+    }
+    else if([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]){
+        
+        _companyImgVip.image =[UIImage imageNamed:@"Vip5.png"];
+    }else if([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]){
+        
+        _companyImgVip.image =[UIImage imageNamed:@"Vip6.png"];
+    }
+    
+  
+    
+    [forImage addSubview:_companyImgVip];
+
+    if ([[SystemConfig sharedInstance].company_id isEqualToString:xqModel.company_id]) {
+        
+        collectBtn.hidden =YES;
+        phonBtn.hidden = YES;
+        li.hidden = YES;
+
+        nameLable.frame =CGRectMake(10,185, 300, nameWeight);
+        
+        NSLog(@"%f",nameWeight);
+        
+    }else{
+        collectBtn.hidden =NO;
+        phonBtn.hidden = NO;
+        li.hidden = NO;
+
+        nameLable.frame =CGRectMake(10,185, 220, nameWeight);
+        
+        
+    }
 
   }
 #pragma mark webView
