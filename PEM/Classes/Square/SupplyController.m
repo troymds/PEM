@@ -320,11 +320,23 @@
             break;
         case 3003:
         {
-            btn.selected = !btn.selected;
-            if (btn.selected) {
-                isShowTD = YES;
+            if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
+                MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好！您目前所处等级没有权限上传3D图片,请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
+                actionView.tag =1000;
+                [actionView showView];
             }else{
-                isShowTD = NO;
+                int display_3d_num = [[SystemConfig sharedInstance].vipInfo.display_3d_num intValue];
+                if (display_3d_num == 0) {
+                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您不能进行3D展示或3D展示数量已用完,要进行3D展示,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
+                    actionSheet.tag = 1001;
+                    [actionSheet showView];
+                }
+                btn.selected = !btn.selected;
+                if (btn.selected) {
+                    isShowTD = YES;
+                }else{
+                    isShowTD = NO;
+                }
             }
             _supplyView.isHide = !_supplyView.isHide;
             [_scrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];

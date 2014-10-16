@@ -48,9 +48,6 @@
     _dataArray =[NSMutableArray array];
     _allTagArray = [[NSMutableArray alloc] initWithCapacity:0];
     
-    remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 50, kWidth-40, 20)];
-    remindLabel.backgroundColor = [UIColor clearColor];
-    remindLabel.text = @"暂无收藏的标签";
     
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     [self.view addSubview:_scrollView];
@@ -58,6 +55,14 @@
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
     [_scrollView setContentSize:CGSizeMake(kWidth, kHeight-64)];
+    
+    remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 50, kWidth-40, 20)];
+    remindLabel.backgroundColor = [UIColor clearColor];
+    remindLabel.text = @"暂无收藏的标签";
+    remindLabel.textColor = HexRGB(0x3a3a3a);
+    remindLabel.hidden = YES;
+    [_scrollView addSubview:remindLabel];
+
     
     [self addNavBarButton];
     [self loadData];
@@ -100,7 +105,7 @@
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     
     // 设置普通背景图片
-    [btn setTitle:@"保 存" forState:UIControlStateNormal];
+    [btn setTitle:@"保存" forState:UIControlStateNormal];
     [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
     // 设置尺寸
     btn.frame = CGRectMake(10, 10,52, 24);

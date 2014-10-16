@@ -58,7 +58,7 @@
         [view addSubview:view1];
         
         [_bgView addSubview:view];
-        NSArray *array = [NSArray arrayWithObjects:@"供应",@"求购",@"收藏",@"消息", nil];
+        NSArray *array = [NSArray arrayWithObjects:@"供应",@"求购",@"收藏",@"订阅", nil];
         CGFloat wid = frame.size.width/[array count];
         for (int i = 0; i < [array count]; i++) {
             UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(wid*i, 20, wid, 16)];

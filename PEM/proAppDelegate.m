@@ -13,7 +13,14 @@
 #import "SystemConfig.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 #import "HttpTool.h"
-#import "UMSocial.h"
+#import <ShareSDK/ShareSDK.h>
+#import <TencentOpenAPI/QQApi.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentOAuth.h>
+#import "WeiboSDK.h"
+#import "WeiboApi.h"
+#import "WXApi.h"
+#import <RennSDK/RennSDK.h>
 
 @implementation proAppDelegate
 
@@ -84,6 +91,7 @@
             NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:userName,@"phonenum",passWord,@"password", nil];
             [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSLog(@"%@",result);
                 NSDictionary *dic = [result objectForKey:@"response"];
                 NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
                 if ([code isEqualToString:@"100"]){
@@ -104,7 +112,42 @@
         }
     }
     
-    [UMSocialData setAppKey:UMAPPKEY];
+    [ShareSDK registerApp:shareAppKey];
+    //添加QQ应用
+    [ShareSDK connectQQWithQZoneAppKey:QQAPPKEY qqApiInterfaceCls:[QQApiInterface class] tencentOAuthCls:[TencentOAuth class]];
+    
+    //添加QQ空间应用
+    [ShareSDK connectQZoneWithAppKey:@"100371282" appSecret:@"aed9b0303e3ed1e27bae87c33761161d" qqApiInterfaceCls:[QQApiInterface class] tencentOAuthCls:[TencentOAuth class]];
+    
+    //添加新浪微博应用 注册网址 http://open.weibo.com
+    [ShareSDK connectSinaWeiboWithAppKey:SinaAppKey
+                               appSecret:SinaAppSecret
+                             redirectUri:@"http://www.sharesdk.cn"];
+    
+    //当使用新浪微博客户端分享的时候需要按照下面的方法来初始化新浪的平台
+    [ShareSDK  connectSinaWeiboWithAppKey:SinaAppKey
+                                appSecret:SinaAppSecret
+                              redirectUri:@"http://www.sharesdk.cn"
+                              weiboSDKCls:[WeiboSDK class]];
+    
+    //添加腾讯微博应用 注册网址 http://dev.t.qq.com
+    [ShareSDK connectTencentWeiboWithAppKey:TencentAppKey
+                                  appSecret:TencentAppSecret
+                                redirectUri:@"http://www.sharesdk.cn"
+                                   wbApiCls:[WeiboApi class]];
+
+    //添加微信应用 注册网址 http://open.weixin.qq.com
+    [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885"
+                           wechatCls:[WXApi class]];
+
+    //添加人人网应用 注册网址  http://dev.renren.com
+    [ShareSDK connectRenRenWithAppId:RenrenAppId
+                              appKey:RenrenAppKey
+                           appSecret:RenrenAppSecret
+                   renrenClientClass:[RennClient class]];
+    //短信分享
+    [ShareSDK connectSMS];
+    
     [self.window makeKeyAndVisible];
 //    self.window.rootViewController = [[MainController alloc]init];
     return YES;

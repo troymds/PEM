@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class MyActionSheetView;
 @protocol MyActionSheetViewDelegate <NSObject>
 
 @optional
 
-- (void)actionSheetButtonClicked;
+- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView;
 
 @end
 
