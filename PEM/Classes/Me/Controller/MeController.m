@@ -223,33 +223,35 @@
             break;
         case 2001:
         {
-            if ([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]) {
-                MyActionSheetView *upTDView  =[[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您的体验会员已到期,若想发布供应信息,请先升级" delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                [upTDView showView];
-            }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]){
-                if ([SystemConfig sharedInstance].vipInfo) {
-                    if ([[SystemConfig sharedInstance].vipInfo.supply_num isEqualToString:@"0"]) {
-                        MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您的10条发布供应信息已使用完毕,若想发布更多,请先升级" delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                        [actionView showView];
+            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+            [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                if ([result objectForKey:@"response"]) {
+                    NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
+                    if ([code intValue] ==100) {
+                        int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
+                        if (data == 0) {
+                            //不能发布信息
+                            NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
+                            MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                            [actionView showView];
+                        }else if(data == 1){
+                            //可以发布信息
+                            _isPurchase = NO;
+                            [UIView animateWithDuration:0.5 animations:^{
+                                _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
+                                _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
+                                sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
+                            }];
+
+                        }
                     }else{
-                        _isPurchase = NO;
-                        [UIView animateWithDuration:0.5 animations:^{
-                            _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
-                            _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
-                            sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
-                        }];
+                        
                     }
-                }else{
-                    [self getVipInfo:[SystemConfig sharedInstance].company_id];
                 }
-            }else{
-                _isPurchase = NO;
-                [UIView animateWithDuration:0.5 animations:^{
-                    _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
-                    _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
-                    sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
-                }];
-            }
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
         }
                 break;
             default:
@@ -468,19 +470,20 @@
                 [_upTDView showView];
             }else{
                 int display_3d_num = [[SystemConfig sharedInstance].vipInfo.display_3d_num intValue];
-                if (display_3d_num == 0) {
-                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您不能进行3D展示或3D展示数量已用完,要进行3D展示,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
+                if (display_3d_num <= 0) {
+                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您还不能上传3D图片或上传3D图片数量已用完,要上传3D图片,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
                     actionSheet.tag = 1001;
                     [actionSheet showView];
-                }
-                btn.selected = !btn.selected;
-                if (btn.selected) {
-                    isShowTD = YES;
                 }else{
-                    isShowTD = NO;
+                    btn.selected = !btn.selected;
+                    if (btn.selected) {
+                        isShowTD = YES;
+                    }else{
+                        isShowTD = NO;
+                    }
+                    _supplyView.isHide = !_supplyView.isHide;
+                    [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
                 }
-                _supplyView.isHide = !_supplyView.isHide;
-                [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
             }
         }
             break;

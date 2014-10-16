@@ -326,16 +326,18 @@
                 [actionView showView];
             }else{
                 int display_3d_num = [[SystemConfig sharedInstance].vipInfo.display_3d_num intValue];
-                if (display_3d_num == 0) {
-                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您不能进行3D展示或3D展示数量已用完,要进行3D展示,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
+                if (display_3d_num <= 0) {
+                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您还不能上传3D图片或上传3D图片数量已用完,要上传3D图片,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
                     actionSheet.tag = 1001;
                     [actionSheet showView];
-                }
-                btn.selected = !btn.selected;
-                if (btn.selected) {
-                    isShowTD = YES;
                 }else{
-                    isShowTD = NO;
+                    btn.selected = !btn.selected;
+                    if (btn.selected) {
+                        isShowTD = YES;
+                    }else{
+                        isShowTD = NO;
+                    }
+                    _supplyView.isHide = !_supplyView.isHide;
                 }
             }
             _supplyView.isHide = !_supplyView.isHide;

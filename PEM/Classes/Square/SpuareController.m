@@ -23,7 +23,7 @@
 #import "UIImageView+WebCache.h"
 #import "HttpTool.h"
 #import "BaseNumItem.h"
-//#import <ShareSDK/ShareSDK.h>
+#import <ShareSDK/ShareSDK.h>
 
 @interface SpuareController ()
 
@@ -114,39 +114,33 @@
         PrivilegeController *pvc = [[PrivilegeController alloc] init];
         [self.navigationController pushViewController:pvc animated:YES];
     }else if(btn.tag == SHARE_TYPE){
-//        [UMSocialSnsService presentSnsIconSheetView:self
-//                                            appKey:nil
-//                                          shareText:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                         shareImage:nil
-//                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina,UMShareToTencent,UMShareToRenren,UMShareToQzone,UMShareToSms,nil]
-//                                           delegate:nil];
-//        NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"ShareSDK"  ofType:@"jpg"];
+         NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"ShareSDK"  ofType:@"jpg"];
         
-        //构造分享内容
-//        id<ISSContent> publishContent = [ShareSDK content:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                           defaultContent:@""
-//                                                    image:[ShareSDK imageWithPath:imagePath]
-//                                                    title:@""
-//                                                      url:@"www.ebingoo.com"
-//                                              description:nil
-//                                                mediaType:SSPublishContentMediaTypeNews];
-//        
-//        [ShareSDK showShareActionSheet:nil
-//                             shareList:nil
-//                               content:publishContent
-//                         statusBarTips:YES
-//                           authOptions:nil
-//                          shareOptions: nil
-//                                result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-//                                    if (state == SSResponseStateSuccess)
-//                                    {
-//                                        NSLog(@"分享成功");
-//                                    }
-//                                    else if (state == SSResponseStateFail)
-//                                    {
-//                                        NSLog(NSLocalizedString(@"TEXT_SHARE_FAI", @"发布失败!error code == %d, error code == %@"), [error errorCode], [error errorDescription]);
-//                                    }
-//                                }];
+//        构造分享内容
+        id<ISSContent> publishContent = [ShareSDK content:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
+                                           defaultContent:@""
+                                                    image:[ShareSDK imageWithPath:imagePath]
+                                                    title:@""
+                                                      url:@"www.ebingoo.com"
+                                              description:nil
+                                                mediaType:SSPublishContentMediaTypeNews];
+        
+        [ShareSDK showShareActionSheet:nil
+                             shareList:nil
+                               content:publishContent
+                         statusBarTips:YES
+                           authOptions:nil
+                          shareOptions: nil
+                                result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+                                    if (state == SSResponseStateSuccess)
+                                    {
+                                        NSLog(@"分享成功");
+                                    }
+                                    else if (state == SSResponseStateFail)
+                                    {
+                                        NSLog(NSLocalizedString(@"TEXT_SHARE_FAI", @"发布失败!error code == %d, error code == %@"), [error errorCode], [error errorDescription]);
+                                    }
+                                }];
     }else{
         if (![SystemConfig sharedInstance].isUserLogin){
             LoginController *loginVC = [[LoginController alloc] init];
