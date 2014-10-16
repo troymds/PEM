@@ -99,9 +99,12 @@
 
 }
 
+
+//登陆框按钮点击
 #pragma mark loginView_delegate
 - (void)btnDown:(UIButton *)btn{
     switch (btn.tag){
+        //登陆
         case LOGIN_TYPE:
         {
             NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:_loginView.userField.text,@"phonenum",_loginView.passwordField.text,@"password", nil];
@@ -119,14 +122,22 @@
 
                     NSDictionary *data = [dic objectForKey:@"data"];
                     [SystemConfig sharedInstance].isUserLogin = YES;
-                    int company_id = [[data objectForKey:@"company_id"] intValue];
-                    [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
-                    int vipType = [[data objectForKey:@"viptype"] intValue];
-                    [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%d",vipType];
+                    if (isNull(data, @"company_id")){
+                        [SystemConfig sharedInstance].company_id = @"-1";
+                    }else{
+                        int company_id = [[data objectForKey:@"company_id"] intValue];
+                        [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                    }
+                    if (isNull(data, @"viptype")) {
+                        [SystemConfig sharedInstance].viptype = @"-3";
+                    }else{
+                        NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
+                        [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                    }
                     CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].companyInfo = item;
                     
-                    [self getVipInfo:[NSString stringWithFormat:@"%d",company_id]];
+                    [self getVipInfo:[SystemConfig sharedInstance].company_id];
                     
                 }else{
                     [RemindView showViewWithTitle:@"用户名或密码错误" location:MIDDLE];
@@ -137,12 +148,14 @@
             }];
         }
             break;
+        //寻找密码
         case FIND_TYPE:
         {
             FindSecretController *fsc = [[FindSecretController alloc] init];
             [self.navigationController pushViewController:fsc animated:YES];
         }
             break;
+        //注册
         case REGIST_TYPE:
         {
             RegisterContrller *rsc = [[RegisterContrller alloc] init];
@@ -155,7 +168,7 @@
     }
 }
 
-
+//点击登陆框周围跳转到首页
 - (void)tapDown
 {
     if ([self.delegate respondsToSelector:@selector(changeController)]) {
@@ -163,7 +176,7 @@
     }
 }
 
-
+//添加发布求购、发布供应按钮
 - (void)addBtn{
     CGFloat width = self.view.frame.size.width/2;
     NSArray *arr = [NSArray arrayWithObjects:@"发布求购",@"发布供应",nil];
@@ -191,8 +204,11 @@
     sliderLine.backgroundColor = HexRGB(0x18b0e7);
     [self.view addSubview:sliderLine];
 }
+
+
 //发布求购、发布供应按钮点击触发
 - (void)btnClick:(UIButton *)btn{
+    int vipType = [[SystemConfig sharedInstance].viptype intValue];
     if (btn.tag == 2001&&(![SystemConfig sharedInstance].viptype||[[SystemConfig sharedInstance].viptype isEqualToString:@"0"])) {
         btn.selected = NO;
     }else
@@ -223,6 +239,7 @@
             break;
         case 2001:
         {
+            //判断是否可以发布供应信息
             NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
             [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];

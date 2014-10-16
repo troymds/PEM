@@ -83,35 +83,10 @@
     [SystemConfig sharedInstance].uuidStr = retrieveuuid;
     
     //自动登录
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"userName"]) {
-        NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"secret"]) {
-            NSString *passWord = [[NSUserDefaults standardUserDefaults] objectForKey:@"secret"];
-            
-            NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:userName,@"phonenum",passWord,@"password", nil];
-            [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
-                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                NSLog(@"%@",result);
-                NSDictionary *dic = [result objectForKey:@"response"];
-                NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
-                if ([code isEqualToString:@"100"]){
-                    NSDictionary *data = [dic objectForKey:@"data"];
-                    [SystemConfig sharedInstance].isUserLogin = YES;
-                    int company_id = [[data objectForKey:@"company_id"] intValue];
-                    [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
-                    int vipType = [[data objectForKey:@"viptype"] intValue];
-                    [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%d",vipType];
-                    CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
-                    [SystemConfig sharedInstance].companyInfo = item;
-                    
-                    [self getVipInfo:[NSString stringWithFormat:@"%d",company_id]];
-                }
-            }failure:^(NSError *error){
-                NSLog(@"%@",error);
-            }];
-        }
-    }
+    [self autoLogin];
     
+    
+    //分享
     [ShareSDK registerApp:shareAppKey];
 
     //添加新浪微博应用 注册网址 http://open.weibo.com
@@ -123,12 +98,6 @@
                                 appSecret:@"38a4f8204cc784f81f9f0daaf31e02e3"
                               redirectUri:@"http://www.sharesdk.cn"
                               weiboSDKCls:[WeiboSDK class]];
-    
-    //添加腾讯微博应用 注册网址 http://dev.t.qq.com
-//    [ShareSDK connectTencentWeiboWithAppKey:@"801307650"
-//                                  appSecret:@"ae36f4ee3946e1cbb98d6965b0b2ff5c"
-//                                redirectUri:@"http://www.sharesdk.cn"
-//                                   wbApiCls:[WeiboApi class]];
     
     //添加QQ空间应用  注册网址  http://connect.qq.com/intro/login/
     [ShareSDK connectQZoneWithAppKey:@"100371282"
@@ -145,44 +114,55 @@
     [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885"
                            wechatCls:[WXApi class]];
     
-//    //添加QQ应用
-//    [ShareSDK connectQQWithQZoneAppKey:QQAPPKEY qqApiInterfaceCls:[QQApiInterface class] tencentOAuthCls:[TencentOAuth class]];
-//    
-//    //添加QQ空间应用
-//    [ShareSDK connectQZoneWithAppKey:@"100371282" appSecret:@"aed9b0303e3ed1e27bae87c33761161d" qqApiInterfaceCls:[QQApiInterface class] tencentOAuthCls:[TencentOAuth class]];
-//    
-//    //添加新浪微博应用 注册网址 http://open.weibo.com
-//    [ShareSDK connectSinaWeiboWithAppKey:SinaAppKey
-//                               appSecret:SinaAppSecret
-//                             redirectUri:@"http://www.sharesdk.cn"];
-//    
-//    //当使用新浪微博客户端分享的时候需要按照下面的方法来初始化新浪的平台
-//    [ShareSDK  connectSinaWeiboWithAppKey:SinaAppKey
-//                                appSecret:SinaAppSecret
-//                              redirectUri:@"http://www.sharesdk.cn"
-//                              weiboSDKCls:[WeiboSDK class]];
-//    
-//    //添加腾讯微博应用 注册网址 http://dev.t.qq.com
-//    [ShareSDK connectTencentWeiboWithAppKey:TencentAppKey
-//                                  appSecret:TencentAppSecret
-//                                redirectUri:@"http://www.sharesdk.cn"
-//                                   wbApiCls:[WeiboApi class]];
-//
-//    //添加微信应用 注册网址 http://open.weixin.qq.com
-//    [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885"
-//                           wechatCls:[WXApi class]];
-//
-//    //添加人人网应用 注册网址  http://dev.renren.com
-//    [ShareSDK connectRenRenWithAppId:RenrenAppId
-//                              appKey:RenrenAppKey
-//                           appSecret:RenrenAppSecret
-//                   renrenClientClass:[RennClient class]];
     //短信分享
     [ShareSDK connectSMS];
     
     [self.window makeKeyAndVisible];
-//    self.window.rootViewController = [[MainController alloc]init];
+    
     return YES;
+}
+
+
+//自动登录
+- (void)autoLogin
+{
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"userName"]) {
+        NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"secret"]) {
+            NSString *passWord = [[NSUserDefaults standardUserDefaults] objectForKey:@"secret"];
+            
+            NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:userName,@"phonenum",passWord,@"password", nil];
+            [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSDictionary *dic = [result objectForKey:@"response"];
+                NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
+                if ([code isEqualToString:@"100"]){
+                    NSDictionary *data = [dic objectForKey:@"data"];
+                    
+                    [SystemConfig sharedInstance].isUserLogin = YES;
+                    if (isNull(data, @"company_id")){
+                        [SystemConfig sharedInstance].company_id = @"-1";
+                    }else{
+                        int company_id = [[data objectForKey:@"company_id"] intValue];
+                        [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                    }
+                    if (isNull(data, @"viptype")) {
+                        [SystemConfig sharedInstance].viptype = @"-3";
+                    }else{
+                        NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
+                        [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                    }
+                    CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
+                    [SystemConfig sharedInstance].companyInfo = item;
+                    
+                    [self getVipInfo:[SystemConfig sharedInstance].viptype];
+                }
+            }failure:^(NSError *error){
+                NSLog(@"%@",error);
+            }];
+        }
+    }
+
 }
 
 

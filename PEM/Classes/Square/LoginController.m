@@ -44,8 +44,6 @@
     self.view.backgroundColor = HexRGB(0xffffff);
     [self addView];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registerSuccess) name:@"registerSuccess" object:nil];
-
     // Do any additional setup after loading the view.
 }
 
@@ -132,11 +130,6 @@
     [self.view addSubview:registerBtn];
 }
 
-- (void)registerSuccess
-{
-    [RemindView showViewWithTitle:@"注册成功" location:MIDDLE];
-}
-
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     for (UIView *subView in self.view.subviews) {
         if ([subView isKindOfClass:[UITextField class]]) {
@@ -169,7 +162,6 @@
             [HttpTool postWithPath:@"login" params:params success:^(id JSON) {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                NSLog(@"%@",result);
                 NSDictionary *dic = [result objectForKey:@"response"];
                 NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
                 if ([code isEqualToString:@"100"]){
@@ -180,10 +172,18 @@
                     NSDictionary *data = [dic objectForKey:@"data"];
                     
                     [SystemConfig sharedInstance].isUserLogin = YES;
-                    int company_id = [[data objectForKey:@"company_id"] intValue];
-                    [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
-                    NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
-                    [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                    if (isNull(data, @"company_id")){
+                        [SystemConfig sharedInstance].company_id = @"-1";
+                    }else{
+                        int company_id = [[data objectForKey:@"company_id"] intValue];
+                        [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                    }
+                    if (isNull(data, @"viptype")) {
+                        [SystemConfig sharedInstance].viptype = @"-3";
+                    }else{
+                        NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
+                        [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                    }
                     
                     CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].companyInfo = item;
@@ -197,6 +197,8 @@
                 }
                 
             } failure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                 NSLog(@"%@",error);
             }];
 

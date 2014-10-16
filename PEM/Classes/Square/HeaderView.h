@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ProImageView.h"
+#import "ProLabel.h"
 
 @protocol HeaderViewDelegate <NSObject>
 
@@ -21,9 +23,9 @@
 
 
 @property (nonatomic,strong) UIImageView *bgView;
-@property (nonatomic,strong) UIImageView *headerImage;
+@property (nonatomic,strong) ProImageView *headerImage;
 @property (nonatomic,strong) UIButton *registerBtn;
-@property (nonatomic,strong) UILabel *nameLabel;
+@property (nonatomic,strong) ProLabel *nameLabel;
 @property (nonatomic,strong) UILabel *supplayLabel;
 @property (nonatomic,strong) UILabel *purchaseLabel;
 @property (nonatomic,strong) UILabel *favoriteLabel;

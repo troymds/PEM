@@ -306,6 +306,7 @@
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
         if ([[dic objectForKey:@"code"] intValue] == 100){
+            [RemindView showViewWithTitle:@"设置成功" location:BELLOW];
             if ([SystemConfig sharedInstance].companyInfo){
                 //设置成功后更新单例中的企业数据
                 [SystemConfig sharedInstance].companyInfo.image = _imgStr;
@@ -320,13 +321,11 @@
                 [SystemConfig sharedInstance].companyInfo.email = _emailView.textField.text;
             }
             if ([self.pushType isEqualToString:DERECT_SET_TYPE]){
-                [RemindView showViewWithTitle:@"设置成功" location:BELLOW];
             }else  if([self.pushType isEqualToString:PUBLISH_TYPE]){
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }else{
                 //注册成功  跳转到登陆页面
                 UIViewController *vc = [self.navigationController.viewControllers objectAtIndex:1];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"registerSuccess" object:nil];
                 [self.navigationController popToViewController:vc animated:YES];
             }
         }else if([[dic objectForKey:@"code"] intValue] == 101){
@@ -336,6 +335,8 @@
         }
         
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         NSLog(@"%@",error);
     }];
 

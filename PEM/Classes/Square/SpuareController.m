@@ -45,7 +45,7 @@
         //登录状态 显示企业头像等信息
         CompanyInfoItem *item = [SystemConfig sharedInstance].companyInfo;
         if (item.image&&item.image.length!=0){
-            [_headView.headerImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"user_default.png"]];
+            [_headView.headerImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"company_default.png"]];
         }
         [_headView setName:item.company_name];
         _headView.nameLabel.hidden = NO;
@@ -69,7 +69,7 @@
             NSLog(@"error:%@",error);
         }];
     }else{
-        _headView.headerImage.image = [UIImage imageNamed:@"user_default.png"];
+        _headView.headerImage.image = [UIImage imageNamed:@"company_default.png"];
         _headView.supplayLabel.text = @"0";
         _headView.purchaseLabel.text = @"0";
         _headView.favoriteLabel.text = @"0";
@@ -95,7 +95,9 @@
     _scrollView.showsVerticalScrollIndicator = NO;
     _headView = [[HeaderView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 182)];
     _headView.bgView.image = [UIImage imageNamed:@"individual_bg.png"];
-    _headView.headerImage.image = [UIImage imageNamed:@"user_default.png"];
+    _headView.headerImage.image = [UIImage imageNamed:@"company_default.png"];
+    _headView.headerImage.delegate = self;
+    _headView.nameLabel.delegate = self;
     _headView.delegate = self;
     [_scrollView addSubview:_headView];
     _squareView = [[Square alloc] initWithFrame:CGRectMake(0,_headView.frame.size.height, kWidth, 396)];
@@ -106,7 +108,21 @@
     
 }
 
+//点击头像触发
+#pragma mark ---proImageView_delegate
+- (void)imageClicked:(ProImageView *)image
+{
+    CompanySetController *csc = [[CompanySetController alloc] init];
+    [self.navigationController pushViewController:csc animated:YES];
+}
 
+//点击用户名触发
+#pragma mark  prolabel_delegate  
+- (void)proLabelClick:(ProLabel *)label
+{
+    CompanySetController *scs = [[CompanySetController alloc] init];
+    [self.navigationController pushViewController:scs animated:YES];
+}
 
 #pragma mark Square delegate
 - (void)buttonClicked:(UIButton *)btn{

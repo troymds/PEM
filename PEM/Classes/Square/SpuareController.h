@@ -10,10 +10,11 @@
 #import "HeaderView.h"
 #import "Square.h"
 #import "SettingController.h"
+#include "HeaderView.h"
 
 
 
-@interface SpuareController : UIViewController<HeaderViewDelegate,UIScrollViewDelegate,SquareDelegate>
+@interface SpuareController : UIViewController<HeaderViewDelegate,UIScrollViewDelegate,SquareDelegate,ProImageViewDelegate,ProLabelDelegate>
 {
     UIScrollView *_scrollView;
     HeaderView *_headView;
