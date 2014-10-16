@@ -302,6 +302,7 @@
 		55D2FB5119C01BD500248CAF /* home_Jump_Black_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55D2FB5019C01BD500248CAF /* home_Jump_Black_btn@2x.png */; };
 		55D2FB5719C02FC300248CAF /* demandCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2FB5619C02FC300248CAF /* demandCell.m */; };
 		55D2FB5A19C0309500248CAF /* supplyViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2FB5919C0309500248CAF /* supplyViewCell.m */; };
+		55D332E619EF47CF009C80E0 /* line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55D332E519EF47CF009C80E0 /* line@2x.png */; };
 		55D350A619C27AC700BFD8F3 /* gategoryListTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D350A519C27AC700BFD8F3 /* gategoryListTool.m */; };
 		55D350A919C27B9400BFD8F3 /* gategoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D350A819C27B9400BFD8F3 /* gategoryModel.m */; };
 		55D350AC19C2DC0200BFD8F3 /* lansejiantou_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 55D350AA19C2DC0200BFD8F3 /* lansejiantou_selected.png */; };
@@ -882,6 +883,7 @@
 		55D2FB5619C02FC300248CAF /* demandCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = demandCell.m; sourceTree = "<group>"; };
 		55D2FB5819C0309500248CAF /* supplyViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = supplyViewCell.h; sourceTree = "<group>"; };
 		55D2FB5919C0309500248CAF /* supplyViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = supplyViewCell.m; sourceTree = "<group>"; };
+		55D332E519EF47CF009C80E0 /* line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line@2x.png"; sourceTree = "<group>"; };
 		55D350A419C27AC700BFD8F3 /* gategoryListTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gategoryListTool.h; sourceTree = "<group>"; };
 		55D350A519C27AC700BFD8F3 /* gategoryListTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = gategoryListTool.m; sourceTree = "<group>"; };
 		55D350A719C27B9400BFD8F3 /* gategoryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gategoryModel.h; sourceTree = "<group>"; };
@@ -1898,6 +1900,7 @@
 		55B5E39E19E8E11F00594E29 /* fail */ = {
 			isa = PBXGroup;
 			children = (
+				55D332E519EF47CF009C80E0 /* line@2x.png */,
 				5588E26D19EE084B0095D362 /* pick_bg@2x.png */,
 				5588E26E19EE084B0095D362 /* title1@2x.png */,
 				55B4972519EBA424005013A6 /* find_fail.png */,
@@ -2584,6 +2587,7 @@
 				04A3BC8D19C05C8D00B2217B /* login_ok_pre@2x.png in Resources */,
 				55B5E3A719E8E11F00594E29 /* load_big.png in Resources */,
 				55DA328819ADB8C400A5A3CE /* souuotiao.png in Resources */,
+				55D332E619EF47CF009C80E0 /* line@2x.png in Resources */,
 				550A2F0A19B5C4A400331F5E /* tab_product_pre@2x.png in Resources */,
 				04B5F05D19ECE33900CE68A4 /* UMSCommentInputControlleriPad.xib in Resources */,
 				55DA327719ADB8C400A5A3CE /* lansejiantou.png in Resources */,
