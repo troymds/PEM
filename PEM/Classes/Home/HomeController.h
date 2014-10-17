@@ -23,5 +23,4 @@
 @property (strong,nonatomic)UIPageControl *pageControl;
 @property (strong, nonatomic)UITextField *text;
 @property(nonatomic,strong)NSMutableArray *adsImage;
-
 @end

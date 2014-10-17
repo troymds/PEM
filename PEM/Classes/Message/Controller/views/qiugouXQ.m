@@ -217,7 +217,7 @@
     [goCompany setImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"] forState:UIControlStateNormal];
     goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
     goCompany.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
-    [goCompany addTarget:self action:@selector(gotoCompanyClick:) forControlEvents:UIControlEventTouchUpInside];
+    [goCompany addTarget:self action:@selector(gotoCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 
 
 
@@ -267,14 +267,24 @@
 
     
 }
--(void)gotoCompanyClick:(UIButton *)go{
-    CompanyXQViewController *xqVC = [CompanyXQViewController alloc];
+-(void)gotoCompanyBtnClick:(UIButton *)go{
+    
+    CompanyXQViewController *xqVC = [[CompanyXQViewController alloc]init];
     
     XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
-    xqVC.companyName =comID.company_name;
+    xqVC.companyName = comID.company_name;
     xqVC.companyID =comID.company_id;
     
     [self.navigationController pushViewController:xqVC animated:YES];
+
+//    CompanyXQViewController *xqVC = [[CompanyXQViewController alloc]init];
+//    
+//    XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
+//    xqVC.companyName =comID.company_name;
+//    xqVC.companyID =comID.company_id;
+//    NSLog(@"sssssssss%@",xqVC.companyID);
+//
+//    [self.navigationController pushViewController:xqVC animated:YES];
     
 }
 @end

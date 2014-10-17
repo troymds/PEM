@@ -36,7 +36,7 @@
         
         
         businessLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 30, 230, 40)];
-        businessLabel.text = @"起购产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品产品";
+        businessLabel.text = @"产品产品产品";
         businessLabel.numberOfLines = 0;
         businessLabel.font =[UIFont systemFontOfSize:PxFont(16)];
         [self addSubview:businessLabel];

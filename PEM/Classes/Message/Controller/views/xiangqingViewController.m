@@ -307,7 +307,7 @@
     //底部
     UIButton  *forImage =[UIButton buttonWithType:UIButtonTypeCustom];
     forImage.frame =CGRectMake(0, self.view.frame.size.height-44, 320, 44);
-    [forImage addTarget:self action:@selector(goCompanyClick:) forControlEvents:UIControlEventTouchUpInside];
+    [forImage addTarget:self action:@selector(goCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:forImage];
     forImage.backgroundColor =backGroundColor;
@@ -329,7 +329,7 @@
     [goCompany setImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"] forState:UIControlStateNormal];
     goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
     goCompany.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
-    [goCompany addTarget:self action:@selector(goCompanyClick:) forControlEvents:UIControlEventTouchUpInside];
+    [goCompany addTarget:self action:@selector(goCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     
     //vip
     UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(nameCompanyw+20,10, 18, 25)];
@@ -384,9 +384,9 @@
 
 
 
--(void)goCompanyClick:(UIButton *)go{
+-(void)goCompanyBtnClick:(UIButton *)go{
     
-    CompanyXQViewController *xqVC = [CompanyXQViewController alloc];
+    CompanyXQViewController *xqVC = [[CompanyXQViewController alloc]init];
     
     XQgetInfoDetailModel *comID =[[XQArray objectAtIndex:0]objectAtIndex:0];
     xqVC.companyName = comID.company_name;

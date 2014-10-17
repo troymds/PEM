@@ -22,7 +22,7 @@
         _try_date = [NSString stringWithFormat:@"%d",[[dic objectForKey:@""] intValue]];
         _vip_date = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"vip_date"] intValue]];
         _vip_name = [dic objectForKey:@"vip_name"];
-        _vip_type = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"vip_type"] intValue]];
+//        _vip_type = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"vip_type"] intValue]];
         _wap_url = [dic objectForKey:@"wap_url"];
     }
     return self;

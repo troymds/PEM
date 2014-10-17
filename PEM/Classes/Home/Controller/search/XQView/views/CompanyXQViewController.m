@@ -27,7 +27,6 @@
 #import "qiugouXQ.h"
 #import "xiangqingViewController.h"
 #import "MJRefresh.h"
-#import "RemindView.h"
 @interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UIButton *_selectedBtn;
@@ -38,7 +37,7 @@
     UIButton *_chooseSelected;
     
     UIView *chooseBackView;
-    UILabel *dataLabel;
+    
     NSMutableArray *_conditionArray;
     MJRefreshBaseView *_refreshView;
 }
@@ -66,6 +65,7 @@
     self.title=_companyName;
     
     [self addRefreshViews];
+    [self loadViewStatusesHome];
     [self addCompanyButton];
     
     UIView *lin =[[UIView alloc]init];
@@ -82,8 +82,8 @@
     _selectedBtn = [[UIButton alloc]init];
     
     [self addCompanyConditionTableView];
+    //[self addCompanyHome];
     [self addChooseBtn];
-    [self addShowNoDataView];
 }
 
 
@@ -123,25 +123,7 @@
     {
         //    公司首页
         [XQgetInfoTool statusesWithSuccessNew:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
             [_companyHomeArray addObject:statues];
-            NSLog(@"ooooo44%@",_companyHomeArray);
-
-            if (_companyNEWArray.count>0)
-            {
-                NSLog(@"4444444444%lu",(unsigned long)_companyNEWArray.count);
-                _conditionTableView.hidden = NO;
-                dataLabel.hidden = YES;
-                [self tableReloadData];
-            }else
-            {            NSLog(@"11111111%lu",(unsigned long)_companyNEWArray.count);
-                
-                dataLabel.hidden = NO;
-                _conditionTableView.hidden = YES;
-                
-            }
-
             comHomeModel *statuModel =[statues objectAtIndex:0];
             
             if ([statuModel.infoarray isKindOfClass:[NSNull class]]){
@@ -155,6 +137,7 @@
                 }
             }
             [self addCompanyHome];
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         } newFailure:^(NSError *error) {
             
         } NewCompanyid:companyID];
@@ -175,69 +158,48 @@
         if (_selectedBtn.tag == 20)
         {
             [self supplyRequest];
-            
         }else if(_selectedBtn.tag == 21)
         {
             [self companyRequest];
-            if (_companyNEWArray.count ==0) {
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-                
-            }
         }else if(_selectedBtn.tag == 22)
         {
             [self demandRequest];
-            if (_companySupplyArray.count ==0) {
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-                
-            }if (_companyDemandArray.count ==0) {
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-                
-            }
         }
     }else{
         [refreshLoading endRefreshing];
         return;
     }
-      
+    //[refreshLoading endRefreshing];
+    
     _refreshView = refreshLoading;
 }
-- (void)addShowNoDataView
-{
-    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, 320, 44)];
-    dataLabel.textAlignment = NSTextAlignmentCenter;
-    dataLabel.backgroundColor = [UIColor clearColor];
-    dataLabel.text = @"没有数据！";
-    dataLabel.enabled = NO;
-    [conditionView addSubview:dataLabel];
-    
-    dataLabel.hidden = YES;
-    
-}
+
 - (void)supplyRequest
 {
     //供求
     [supplyTool CompanyStatusesWithSuccesscategory:^(NSArray *statues) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+        
         if (_companySupplyArray.count > 0)
         {
             [_companySupplyArray removeAllObjects];
         }
         [_companySupplyArray addObjectsFromArray:statues];
         
+        //[_conditionTableView reloadData];
         [self tableReloadData];
     } CompanyId:companyID CompanyFailure:^(NSError *error) {
         
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
     }];
     
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
 }
 - (void)demandRequest
 {
     [demandTool DemandCompanyStatusesWithSuccess:^(NSArray *statues) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+        
         if (_companyDemandArray.count>0)
         {
             [_companyDemandArray removeAllObjects];
@@ -246,32 +208,32 @@
         
         [self tableReloadData];
     } DemandCompanyFailure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
     } DemandCompanyId:companyID];
     
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
 }
 - (void)companyRequest
 {
     //    公司企业
     [comPanyNEWTool statusesWithSuccessNew:^(NSArray *statues) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [_companyNEWArray addObjectsFromArray:statues];
-
         
-
-
-
         if (_companyNEWArray.count > 0)
         {
             [_companyNEWArray removeAllObjects];
         }
-        
+        [_companyNEWArray addObjectsFromArray:statues];
+//        [_conditionTableView reloadData];
+        [self tableReloadData];
     } NewFailure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
     } CompanyID:companyID ];
     
     
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
 }
 
@@ -310,7 +272,7 @@
 
         }
         
-        CGFloat urlHeight =[comHomeModel.website sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
+        CGFloat urlHeight =[comHomeModel.website sizeWithFont:[UIFont systemFontOfSize:PxFont(17)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
         
         
         _companyHomeScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
@@ -510,7 +472,7 @@
 -(void)addCompanyConditionTableView
 {
     conditionView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, kHeight-30)];
-    conditionView.backgroundColor =[UIColor whiteColor];
+    conditionView.backgroundColor =[UIColor greenColor];
     
     
     [self.view addSubview:conditionView];

@@ -20,6 +20,4 @@
 #import "SVProgressHUD.h"
 #import "Ebingocfg.h"
 #import "MBProgressHUD.h"
-
-
 #endif
