@@ -14,4 +14,6 @@
 @property (nonatomic, strong)UIImageView *imageCompany;//图片
 
 @property (nonatomic, strong)UILabel *businessLabel;//内容
+@property (nonatomic, strong)UIImageView *vipType;//内容
+
 @end

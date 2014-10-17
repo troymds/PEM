@@ -169,7 +169,6 @@
         [refreshLoading endRefreshing];
         return;
     }
-    //[refreshLoading endRefreshing];
     
     _refreshView = refreshLoading;
 }
@@ -185,7 +184,6 @@
         }
         [_companySupplyArray addObjectsFromArray:statues];
         
-        //[_conditionTableView reloadData];
         [self tableReloadData];
     } CompanyId:companyID CompanyFailure:^(NSError *error) {
         
@@ -225,7 +223,6 @@
             [_companyNEWArray removeAllObjects];
         }
         [_companyNEWArray addObjectsFromArray:statues];
-//        [_conditionTableView reloadData];
         [self tableReloadData];
     } NewFailure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -255,7 +252,7 @@
     if (_companyHomeArray.count>0)
     {
         CGFloat nameCompanyy ;
-
+        
         comHomeModel *comHomeModel =[[_companyHomeArray objectAtIndex:0]objectAtIndex:0];
         CGFloat keyContent =[comHomeModel.mainRun sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT) ].height;
         CGFloat content =[comHomeModel.introduction sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT)].height;
@@ -277,7 +274,7 @@
         
         _companyHomeScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
         [companyHom addSubview:_companyHomeScrollView];
-        _companyHomeScrollView.contentSize = CGSizeMake(kWidth, content+keyContent+comArr.count*40+330);
+        _companyHomeScrollView.contentSize = CGSizeMake(kWidth, content+keyContent+comArr.count*45+330);
         _companyHomeScrollView.showsVerticalScrollIndicator=NO;
         _companyHomeScrollView.userInteractionEnabled = YES;
         for (int li=0; li<3; li++) {
@@ -367,6 +364,7 @@
         NSArray *array =@[@"【主营范围】",@"【公司简介】",@"【近期供求】",];
         for (int s =0; s<3; s++) {
             UILabel *titleLabel =[[UILabel alloc]init];
+            titleLabel.backgroundColor =[UIColor clearColor];
             titleLabel.textColor = HexRGB(0x3a3a3a);
             titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
             [_companyHomeScrollView addSubview:titleLabel];

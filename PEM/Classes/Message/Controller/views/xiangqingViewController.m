@@ -259,18 +259,14 @@
     picLabel.font =[UIFont systemFontOfSize:PxFont(30)];
 
 //    起价
-    for (int l=0; l<3; l++) {
-        NSArray *labelArray =@[[NSString stringWithFormat:@"%@起供应",xqModel.min_sell_num],[NSString stringWithFormat:@"浏览%@次",xqModel.read_num],[NSString stringWithFormat:@"%@",xqModel.region]];
         UILabel *linLabel =[[UILabel alloc]init];
-        linLabel.text =labelArray[l];
-        
-        
-        linLabel.frame =CGRectMake(10+l%3*((kWidth-20)/3),225+nameWeight, (kWidth-20)/3, 20);
+        linLabel.text =[NSString stringWithFormat:@"%@起供应    浏览%@次    %@",xqModel.min_sell_num,xqModel.read_num,xqModel.region];
+    
+        linLabel.frame =CGRectMake(10,225+nameWeight, kWidth-20, 20);
         [_backScrollView addSubview:linLabel];
         
         linLabel.font =[UIFont systemFontOfSize:10];
         linLabel.textColor =HexRGB(0x666666);
-    }
     
 //线条
     
@@ -315,6 +311,7 @@
     
     UILabel *nameCopany =[[UILabel alloc]init];
     nameCopany.text = xqModel.company_name;
+    nameCopany.backgroundColor =[UIColor clearColor];
     CGFloat nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(16)] constrainedToSize:CGSizeMake(210, 30)].width;
     [forImage addSubview:nameCopany];
     nameCopany.frame =CGRectMake(18, 0, 210, 44);

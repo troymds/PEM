@@ -43,6 +43,7 @@
         self.description = dict[@"ios_wap_url"];
         
         self.company_name = dict[@"company_name"];
+        
         self.verify_time = dict[@"verify_time"];
         self.verify_result = dict[@"verify_result"];
         self.verify_reason = dict[@"verify_reason"];

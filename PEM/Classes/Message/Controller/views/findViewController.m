@@ -395,6 +395,7 @@
     
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     [self.view addSubview:_tableView];
 }
@@ -747,7 +748,12 @@
             _tableView.hidden = YES;
             
         }
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,71, kWidth-20, 1)];
+        lineView.backgroundColor = HexRGB(0xd5d5d5);
+        [cell.contentView addSubview:lineView];
         
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
               return cell;
 
     }else{
@@ -775,6 +781,15 @@
             dataLabel.hidden = NO;
             _tableView.hidden = YES;
         }
+        
+        
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,71, kWidth-20, 1)];
+        lineView.backgroundColor = HexRGB(0xd5d5d5);
+        [cell.contentView addSubview:lineView];
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
       return cell;
         
     }

@@ -21,13 +21,15 @@
         NSMutableArray *statuses =[NSMutableArray array];
         
         NSDictionary *array =d[@"response"];
+        if ([array isKindOfClass:[NSNull class]]) {
+        }{
         for (NSDictionary *dict in array) {
             yyCompanyModel *s =[[yyCompanyModel alloc] initWithDictionaryForCompany:dict];
             
             [statuses addObject:s];
         }
         success(statuses);
-        
+    }
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

@@ -9,29 +9,32 @@
 #import "companyTableViewCell.h"
 
 @implementation companyTableViewCell
-@synthesize nameLabel,regionLabel,imageCompany,businessLabel;
+@synthesize nameLabel,regionLabel,imageCompany,businessLabel,vipType;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         imageCompany = [[UIImageView alloc] initWithFrame:CGRectMake(10, 13, 60, 60)];
         imageCompany.image =[UIImage imageNamed:@"ad1.png"];
-        //这里的self 指的是某一个单元格对象
         [self addSubview:imageCompany];
-        
+        vipType = [[UIImageView alloc] initWithFrame:CGRectMake(10, 13, 60, 60)];
+        vipType.image =[UIImage imageNamed:@"ad1.png"];
+        [self addSubview:imageCompany];
         
         nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 10, 195, 20)];
         nameLabel.text = @"产品产品产品产品";
         nameLabel.font =[UIFont systemFontOfSize:PxFont(18)];
         [self addSubview:nameLabel];
         
-        
+        vipType = [[UIImageView alloc] initWithFrame:CGRectMake(280, 11, 13, 18)];
+        vipType.image =[UIImage imageNamed:@"Vip1.png"];
+        [self addSubview:vipType];
+
         regionLabel = [[UILabel alloc] initWithFrame:CGRectMake(265, 10, 42, 20)];
         regionLabel.text = @"江苏";
         regionLabel.numberOfLines = 0;
         regionLabel.font =[UIFont systemFontOfSize:PxFont(14)];
         [self addSubview:regionLabel];
-        regionLabel.lineBreakMode=UILineBreakModeClip;
         
         
         

@@ -115,8 +115,6 @@
 		04AF26E419E8B17C001B29CB /* HotTagsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26DB19E8B17C001B29CB /* HotTagsController.m */; };
 		04AF26E519E8B17C001B29CB /* ProvinceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26DD19E8B17C001B29CB /* ProvinceController.m */; };
 		04AF26E619E8B17C001B29CB /* CityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26DF19E8B17C001B29CB /* CityController.m */; };
-		04B5F02419ECC44600CE68A4 /* vip5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B5F02319ECC44600CE68A4 /* vip5@2x.png */; };
-		04B5F02619ECC44A00CE68A4 /* vip5_0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B5F02519ECC44A00CE68A4 /* vip5_0@2x.png */; };
 		04C5043619F0A3C8008F36AD /* provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043519F0A3C8008F36AD /* provinces.plist */; };
 		04D2CEC819EE46BD0016862F /* MailConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D2CEA219EE46BD0016862F /* MailConnection.framework */; };
 		04D2CEC919EE46BD0016862F /* QQConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D2CEA319EE46BD0016862F /* QQConnection.framework */; };
@@ -210,10 +208,6 @@
 		559DFF7619EFA95B0065194B /* findViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 559DFF7519EFA95B0065194B /* findViewController.m */; };
 		55B3C69819C6E4E300D04CE3 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55B3C69719C6E4E300D04CE3 /* CoreText.framework */; };
 		55B3C69A19C6E4EF00D04CE3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55B3C69919C6E4EF00D04CE3 /* QuartzCore.framework */; };
-		55B4971D19EB60A5005013A6 /* Vip1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4971919EB60A5005013A6 /* Vip1@2x.png */; };
-		55B4971E19EB60A5005013A6 /* Vip2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4971A19EB60A5005013A6 /* Vip2@2x.png */; };
-		55B4971F19EB60A5005013A6 /* Vip3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4971B19EB60A5005013A6 /* Vip3@2x.png */; };
-		55B4972019EB60A5005013A6 /* Vip4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4971C19EB60A5005013A6 /* Vip4@2x.png */; };
 		55B4972319EB7206005013A6 /* down_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4972119EB7206005013A6 /* down_pre@2x.png */; };
 		55B4972419EB7206005013A6 /* up_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4972219EB7206005013A6 /* up_pre@2x.png */; };
 		55B4972719EBA424005013A6 /* find_fail.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4972519EBA424005013A6 /* find_fail.png */; };
@@ -607,8 +601,6 @@
 		04B5F01D19ECAA4300CE68A4 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		04B5F01F19ECAA5500CE68A4 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		04B5F02119ECAAF000CE68A4 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		04B5F02319ECC44600CE68A4 /* vip5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip5@2x.png"; sourceTree = "<group>"; };
-		04B5F02519ECC44A00CE68A4 /* vip5_0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip5_0@2x.png"; sourceTree = "<group>"; };
 		04C5043519F0A3C8008F36AD /* provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = provinces.plist; sourceTree = "<group>"; };
 		04D2CEA219EE46BD0016862F /* MailConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MailConnection.framework; sourceTree = "<group>"; };
 		04D2CEA319EE46BD0016862F /* QQConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QQConnection.framework; sourceTree = "<group>"; };
@@ -730,10 +722,6 @@
 		559DFF7519EFA95B0065194B /* findViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = findViewController.m; sourceTree = "<group>"; };
 		55B3C69719C6E4E300D04CE3 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		55B3C69919C6E4EF00D04CE3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		55B4971919EB60A5005013A6 /* Vip1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip1@2x.png"; sourceTree = "<group>"; };
-		55B4971A19EB60A5005013A6 /* Vip2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip2@2x.png"; sourceTree = "<group>"; };
-		55B4971B19EB60A5005013A6 /* Vip3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip3@2x.png"; sourceTree = "<group>"; };
-		55B4971C19EB60A5005013A6 /* Vip4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip4@2x.png"; sourceTree = "<group>"; };
 		55B4972119EB7206005013A6 /* down_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "down_pre@2x.png"; sourceTree = "<group>"; };
 		55B4972219EB7206005013A6 /* up_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "up_pre@2x.png"; sourceTree = "<group>"; };
 		55B4972519EBA424005013A6 /* find_fail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = find_fail.png; sourceTree = "<group>"; };
@@ -1908,12 +1896,6 @@
 		55C3F2E619B93B61006331FA /* find */ = {
 			isa = PBXGroup;
 			children = (
-				55B4971919EB60A5005013A6 /* Vip1@2x.png */,
-				55B4971A19EB60A5005013A6 /* Vip2@2x.png */,
-				55B4971B19EB60A5005013A6 /* Vip3@2x.png */,
-				55B4971C19EB60A5005013A6 /* Vip4@2x.png */,
-				04B5F02319ECC44600CE68A4 /* vip5@2x.png */,
-				04B5F02519ECC44A00CE68A4 /* vip5_0@2x.png */,
 				55E6CD0D19BEF906007C85BB /* find */,
 				55C3F2FE19B93B62006331FA /* home_filter_btn@2x.png */,
 				55C3F2FF19B93B62006331FA /* home_filter_btn_pre@2x.png */,
@@ -2437,7 +2419,6 @@
 				550A2F0B19B5C4A400331F5E /* tab_release@2x.png in Resources */,
 				55D16CA919B6A0F7003B805A /* tab_release_pre.png in Resources */,
 				55E8C0F419D3A66A003F1685 /* privilege@2x.png in Resources */,
-				04B5F02419ECC44600CE68A4 /* vip5@2x.png in Resources */,
 				04A93AA319B70D17007542A7 /* home_Jump_blue_btn.png in Resources */,
 				04A3BC5919C05C0500B2217B /* nav_setting@2x.png in Resources */,
 				55D350AC19C2DC0200BFD8F3 /* lansejiantou_selected.png in Resources */,
@@ -2473,14 +2454,12 @@
 				552BA1DD19E4D7B700AA53CB /* new_tex5@2x.jpg in Resources */,
 				55E6CD0619BED97E007C85BB /* deleteBtn@2x.png in Resources */,
 				55E6CD0719BED97E007C85BB /* home_history@2x.png in Resources */,
-				04B5F02619ECC44A00CE68A4 /* vip5_0@2x.png in Resources */,
 				04A3BC5B19C05C0C00B2217B /* home_display_btn@2x.png in Resources */,
 				04A3BC7E19C05C5A00B2217B /* visitor_pre@2x.png in Resources */,
 				55DA327819ADB8C400A5A3CE /* lansejiantou@2x.png in Resources */,
 				55E8C0F319D3A66A003F1685 /* favorite@2x.png in Resources */,
 				04AADCFE19EBCF1700801D2B /* vip_0_info@2x.png in Resources */,
 				55DA328919ADB8C400A5A3CE /* xialakuang.png in Resources */,
-				55B4971D19EB60A5005013A6 /* Vip1@2x.png in Resources */,
 				04EE097819D056000064B27C /* on@2x.png in Resources */,
 				55E8C0F119D3A66A003F1685 /* companyInfo@2x.png in Resources */,
 				55D16CD019B701D1003B805A /* nav_return.png in Resources */,
@@ -2500,7 +2479,6 @@
 				55C3F31719B93B62006331FA /* home_filter_btn@2x.png in Resources */,
 				55B4972419EB7206005013A6 /* up_pre@2x.png in Resources */,
 				550A2F0D19B5C4A400331F5E /* tab_user@2x.png in Resources */,
-				55B4971E19EB60A5005013A6 /* Vip2@2x.png in Resources */,
 				55E8C0F819D3A66A003F1685 /* subscription@2x.png in Resources */,
 				55B682BD19D029BC0068308D /* company2@2x.png in Resources */,
 				55E8C0F519D3A66A003F1685 /* hotTags@2x.png in Resources */,
@@ -2509,7 +2487,6 @@
 				55D350B319C2EDA700BFD8F3 /* xialakuang1@2x.png in Resources */,
 				55D16CA719B6A0F7003B805A /* tab_product_pre.png in Resources */,
 				55B6420519D26804004F9C66 /* title3@2x.png in Resources */,
-				55B4972019EB60A5005013A6 /* Vip4@2x.png in Resources */,
 				554E1FC119D18FDA0024879C /* nav_search_btn_pre@2x.png in Resources */,
 				04A3BC7B19C05C5A00B2217B /* nomal@2x.png in Resources */,
 				55B921C719D51C8F00A5CF84 /* Icon.png in Resources */,
@@ -2551,7 +2528,6 @@
 				55D2FB4C19BFEF5200248CAF /* bg_homeCodition.png in Resources */,
 				55E8C0FB19D3A66A003F1685 /* finish_pre@2x.png in Resources */,
 				552BA1DB19E4D7B700AA53CB /* new_login_pre@2x.png in Resources */,
-				55B4971F19EB60A5005013A6 /* Vip3@2x.png in Resources */,
 				55DA328619ADB8C400A5A3CE /* SHSJT_up@2x.png in Resources */,
 				554E1FC519D194140024879C /* nav_under_btnselected@2x.png in Resources */,
 				55DA327E19ADB8C400A5A3CE /* qingchulishijilu@2x.png in Resources */,
