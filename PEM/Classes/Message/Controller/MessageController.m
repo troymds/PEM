@@ -176,7 +176,7 @@
         UIView *liney =[[UIView alloc]init];
         liney.backgroundColor =HexRGB(0xe6e3e4);
 
-        liney.frame =CGRectMake(kWidth/3+2+i%3*(75+35),8 , 1, _categoryArray.count/3*(58+30));
+        liney.frame =CGRectMake(kWidth/3+2+i%3*(75+35),8 , 1, _categoryArray.count/3*(63+30));
         [_scrollView addSubview:liney];
     }
 

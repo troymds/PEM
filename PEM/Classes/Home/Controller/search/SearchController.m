@@ -25,6 +25,7 @@
 #import "SearchModel.h"
 #import "SearchTool.h"
 #import "UIImageView+WebCache.h"
+#import "RemindView.h"
 @interface SearchController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UIImageView *_searchImage ;
@@ -188,7 +189,7 @@
 
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
-{
+{   
     // 1.下拉刷新
     MJRefreshHeaderView *header = [MJRefreshHeaderView header];
     header.scrollView = _resultTableView;
@@ -204,6 +205,7 @@
 #pragma mark 刷新代理方法
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
+
     if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
         // 上拉加载更多
         [self loadViewStatuses:refreshView];
@@ -213,7 +215,7 @@
     }
 }
 -(void)loadViewStatuses:(MJRefreshBaseView *)refreshView{
-    
+
     
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
@@ -227,16 +229,29 @@
     {
         if (_selectBtn.tag ==202) {
             [self companyRequest];
-        }else if(_selectBtn.tag == 201)
+            if (_compangyArray.count ==0) {
+                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+
+            }
+        }
+        else if(_selectBtn.tag == 201)
         {
             [self demandRequest];
+            if (_demandArray.count ==0) {
+                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                
+            }
         }else
         {
             [self supplyRequest];
+            if (_supllyArray.count ==0) {
+                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                
+            }
+            
         }
     }
     
-    //[refreshView endRefreshing];
     _refreshView = refreshView;
 }
 - (void)supplyRequest
@@ -249,7 +264,8 @@
     if (_currentKeyString.length>0)
     {
         [SearchTool searchWithSupplySuccessBlock:^(NSArray *search) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (search.count<=0)
             {
                 noDataBgView.hidden = NO;
@@ -263,12 +279,13 @@
             [self tableReloadData];
             
         } SupplywithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0]  SupplyfailureBlock:^(NSError *error) {
-            NSLog(@"hah");
         }];
         
     }else
     {
         [supplyTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (statues.count<=0)
             {
                 noDataBgView.hidden = NO;
@@ -287,7 +304,6 @@
         
     }
     
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
     
 }
@@ -300,7 +316,8 @@
     if (_searchTextField.text.length>0)
     {
         [SearchTool searchWithDemandSuccessBlock:^(NSArray *search) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (search.count<=0)
             {
                 noDataBgView.hidden = NO;
@@ -320,6 +337,8 @@
     }else
     {
         [demandTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (statues.count<=0)
             {
                 noDataBgView.hidden = NO;
@@ -337,7 +356,6 @@
         }];
         
     }
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
 }
 - (void)companyRequest
@@ -351,7 +369,8 @@
     {
         
         [SearchTool searchWithSuccessBlock:^(NSArray *search) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (search.count<=0)
             {
                 noDataBgView.hidden = NO;
@@ -370,7 +389,8 @@
     }else
     {
         [companyTool statusesWithSuccess:^(NSArray *statues) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             if (statues.count<=0)
             {
                 noDataBgView.hidden = NO;
@@ -385,11 +405,10 @@
             [self tableReloadData];
             
             
-        } lasiID:0? 0:[NSString stringWithFormat:@"%lu",[_compangyArray count]-0] failure:^(NSError *error) {
+        } lasiID:0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0] failure:^(NSError *error) {
             
         }];
     }
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
 }
 
