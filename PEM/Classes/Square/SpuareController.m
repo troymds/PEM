@@ -47,7 +47,13 @@
         if (item.image&&item.image.length!=0){
             [_headView.headerImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"company_default.png"]];
         }
-        [_headView setName:item.company_name];
+        NSString *name;
+        if (item.company_name.length==0) {
+            name = @"未设置用户名";
+        }else{
+            name = item.company_name;
+        }
+        [_headView setName:name];
         _headView.nameLabel.hidden = NO;
         _headView.registerBtn.hidden = YES;
         

@@ -184,38 +184,28 @@
             break;
         case UPPDATE_TYPE:
         {
-//            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"ios",@"os", nil];
-//            [HttpTool postWithPath:@"getNewestVersion" params:param success:^(id JSON) {
-//                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-//                NSDictionary *dic = [result objectForKey:@"response"];
-//                if (dic) {
-//                    NSString *key = (NSString *)kCFBundleVersionKey;
-//                    NSString *version = [NSBundle mainBundle].infoDictionary[key];
-//                    NSString *current = [dic objectForKey:@"version"];
-//                    if ([current isEqualToString:version]) {
-//                        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
-//                        label.textAlignment = NSTextAlignmentCenter;
-//                        label.text = @"您当前已是最新版本";
-//                        CGPoint center = CGPointMake(kWidth/2, kHeight/2);
-//                        label.textColor = [UIColor blackColor];
-//                        label.center = center;
-//                        [[UIApplication sharedApplication].keyWindow addSubview:label];
-//                        [UIView animateWithDuration:3.0 animations:^{
-//                            label.alpha = 0;
-//                        }];
-//                    }else{
-//                        _url = [dic objectForKey:@"url"];
-//                        CGRect frame = [UIScreen mainScreen].bounds;
-//                        VersionUpdateView *updateView = [[VersionUpdateView alloc] initWithFrame:frame];
-//                        updateView.delegate = self;
-//                        [updateView showView];
-//                    }
-//                }
-//            } failure:^(NSError *error) {
-//                NSLog(@"%@",error);
-//            }];
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"版本更新" message:@"您当前已是最新版本" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
-            [alertView show];
+            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"ios",@"os", nil];
+            [HttpTool postWithPath:@"getNewestVersion" params:param success:^(id JSON) {
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSDictionary *dic = [result objectForKey:@"response"];
+                if (dic) {
+                    NSString *key = (NSString *)kCFBundleVersionKey;
+                    NSString *version = [NSBundle mainBundle].infoDictionary[key];
+                    NSString *current = [dic objectForKey:@"version_code"];
+                    if ([current isEqualToString:version]) {
+                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"版本更新" message:@"您当前已是最新版本" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
+                        alertView.tag = 1000;
+                        [alertView show];
+                    }else{
+                        _url = [dic objectForKey:@"url"];
+                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"检测到新版本" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"立即升级", nil];
+                        alertView.tag = 1001;
+                        [alertView show];
+                    }
+                }
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
         }
             break;
         case DELEDATE_TYPE:
@@ -249,6 +239,7 @@
         case LOGINBACK_TYPE:
         {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"确认退出当前账号?" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认退出", nil];
+            alertView.tag = 1002;
             [alertView show];
             
         }
@@ -261,19 +252,24 @@
 #pragma mark -alertView_delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1) {
-        [SystemConfig sharedInstance].isUserLogin = NO;
-        [SystemConfig sharedInstance].company_id = nil;
-        [SystemConfig sharedInstance].viptype = nil;
-        [SystemConfig sharedInstance].companyInfo = nil;
-        [SystemConfig sharedInstance].vipInfo = nil;
-        
-        LoginController *login = [[LoginController alloc] init];
-        NSArray *arr = self.navigationController.viewControllers;
-        NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
-        [array insertObject:login atIndex:1];
-        self.navigationController.viewControllers = array;
-        [self.navigationController popViewControllerAnimated:YES];
+    if (alertView.tag == 1002) {
+        if (buttonIndex == 1) {
+            [SystemConfig sharedInstance].isUserLogin = NO;
+            [SystemConfig sharedInstance].company_id = nil;
+            [SystemConfig sharedInstance].viptype = nil;
+            [SystemConfig sharedInstance].companyInfo = nil;
+            [SystemConfig sharedInstance].vipInfo = nil;
+            
+            LoginController *login = [[LoginController alloc] init];
+            NSArray *arr = self.navigationController.viewControllers;
+            NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
+            [array insertObject:login atIndex:1];
+            self.navigationController.viewControllers = array;
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }else if(alertView.tag == 1001){
+        //版本更新
+        openURL(_url);
     }
 }
 
@@ -281,12 +277,6 @@
 {
     [RemindView showViewWithTitle:@"缓存已清空" location:MIDDLE];
 }
-
-//版本更新
-- (void)versionButtonClicked:(UIButton *)btn{
-    openURL(_url);
-}
-
 
 - (void)didReceiveMemoryWarning
 {

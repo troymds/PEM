@@ -218,9 +218,6 @@
     goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
     goCompany.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
     [goCompany addTarget:self action:@selector(gotoCompanyClick:) forControlEvents:UIControlEventTouchUpInside];
-
-
-
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView{

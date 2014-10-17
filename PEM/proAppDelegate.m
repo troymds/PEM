@@ -164,7 +164,6 @@
 //获取用户VIP信息
 - (void)getVipInfo:(NSString *)company_id
 {
-    NSLog(@"%@",company_id);
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];

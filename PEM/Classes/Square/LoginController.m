@@ -222,18 +222,16 @@
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",result);
-
         NSDictionary *dic = [result objectForKey:@"response"];
-        if ([[dic objectForKey:@"code"] intValue] ==100) {
-            NSDictionary *data = [dic objectForKey:@"data"];
-            VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-            [SystemConfig sharedInstance].vipInfo = vipInfo;
-            
-            [self loginSucess];
-            
-        }else{
-            [self loginSucess];
+        if (!isNull(result, @"response")) {
+            if ([[dic objectForKey:@"code"] intValue] ==100) {
+                NSDictionary *data = [dic objectForKey:@"data"];
+                VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                [SystemConfig sharedInstance].vipInfo = vipInfo;
+                [self loginSucess];
+            }else{
+                [self loginSucess];
+            }
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
