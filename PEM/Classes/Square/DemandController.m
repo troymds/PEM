@@ -133,23 +133,20 @@
                 }else{
                     tags = @"";
                 }
+                NSMutableDictionary *param = [NSMutableDictionary dictionary];
+                [param setValue:[SystemConfig sharedInstance].company_id forKey:@"company_id"];
+                [param setValue:demandCateItem.uid forKey:@"category_id"];
+                [param setObject:_demandView.titleTextField.text forKey:@"title"];
+                [param setValue:demandDes forKey:@"description"];
+                [param setValue:_demandView.phoneNumTextField.text forKey:@"contacts_phone"];
+                [param setValue:_demandView.linkManTextField.text forKey:@"contacts"];
+                [param setValue:tags forKey:@"tags"];
+                [param setValue:@"1" forKey:@"type"];
+                [param setValue:_demandView.purchaseNumField.text forKey:@"buy_num"];
+                [param setValue:_demandView.unitField.text forKey:@"unit"];
+                [param setValue:_info_id forKey:@"info_id"];
                 
-                NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",demandCateItem.uid,@"category_id",demandDes,@"description",_demandView.phoneNumTextField.text,@"contacts_phone",_demandView.linkManTextField.text,@"contacts",tags,@"tags",@"1",@"type",_demandView.purchaseNumField.text,@"buy_num",_demandView.unitField.text,@"unit",_info_id,@"info_id",_demandView.titleTextField.text,@"title",nil];
-                
-                NSLog(@"%@",[params objectForKey:@"company_id"]);
-                NSLog(@"%@",[params objectForKey:@"category_id"]);
-                NSLog(@"%@",[params objectForKey:@"title"]);
-                NSLog(@"%@",[params objectForKey:@"description"]);
-                NSLog(@"%@",[params objectForKey:@"contacts_phone"]);
-                NSLog(@"%@",[params objectForKey:@"contacts"]);
-                NSLog(@"%@",[params objectForKey:@"tags"]);
-                NSLog(@"%@",[params objectForKey:@"type"]);
-                NSLog(@"%@",[params objectForKey:@"buy_num"]);
-                NSLog(@"%@",[params objectForKey:@"unit"]);
-                NSLog(@"%@",[params objectForKey:@"info_id"]);
-
-                
-                [HttpTool postWithPath:@"saveInfo" params:params  success:^(id JSON){
+                [HttpTool postWithPath:@"saveInfo" params:param  success:^(id JSON){
                     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                     NSDictionary *dic = [result objectForKey:@"response"];
                     if ([[dic objectForKey:@"code"] intValue] == 100){

@@ -143,11 +143,11 @@
             NSDictionary *dic = [result objectForKey:@"response"];
             NSInteger code = [[dic objectForKey:@"code"] integerValue];
             if (code == 100) {
-                [RemindView showViewWithTitle:@"保存成功" location:MIDDLE];
+                [RemindView showViewWithTitle:@"保存成功" location:TOP];
             }else if(code ==101){
-                [RemindView showViewWithTitle:@"保存失败" location:MIDDLE];
+                [RemindView showViewWithTitle:@"保存失败" location:TOP];
             }else if(code ==102){
-                [RemindView showViewWithTitle:[dic objectForKey:@"msg"] location:MIDDLE];
+                [RemindView showViewWithTitle:[dic objectForKey:@"msg"] location:TOP];
             }
         } failure:^(NSError *error) {
             NSLog(@"%@",error);

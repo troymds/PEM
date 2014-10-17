@@ -42,6 +42,7 @@
         
         CGRect rect = CGRectMake(0, _registerBtn.frame.origin.y, 0, 27.5);
         _nameLabel = [[ProLabel alloc] initWithFrame:rect];
+        _nameLabel.backgroundColor = [UIColor clearColor];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
         _nameLabel.font = [UIFont systemFontOfSize:16];
         _nameLabel.hidden = YES;
@@ -120,35 +121,36 @@
         _nameLabel.frame =CGRectMake(kWidth/2-size.width/2,_registerBtn.frame.origin.y,size.width,27.5);
         _markImg.frame = CGRectMake(_nameLabel.frame.origin.x+_nameLabel.frame.size.width+5,_nameLabel.frame.origin.y,19, 25);
         switch ([[SystemConfig sharedInstance].viptype intValue]) {
+            case -1:
+            {
+                _markImg.image = [UIImage imageNamed:@"Vip6.png"];
+            }
+                break;
             case 0:
             {
-                if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
-                    _markImg.image = [UIImage imageNamed:@"vip5.png"];
-                }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]){
-                    _markImg.image = [UIImage imageNamed:@"vip5_0.png"];
-                }
+                _markImg.image = [UIImage imageNamed:@"Vip5.png"];
             }
                 break;
             case 1:
             {
-                _markImg.image = [UIImage imageNamed:@"vip4.png"];
+                _markImg.image = [UIImage imageNamed:@"Vip4.png"];
             }
                 break;
             case 2:
             {
-                _markImg.image = [UIImage imageNamed:@"vip3.png"];
+                _markImg.image = [UIImage imageNamed:@"Vip3.png"];
 
             }
                 break;
             case 3:
             {
-                _markImg.image = [UIImage imageNamed:@"vip2.png"];
+                _markImg.image = [UIImage imageNamed:@"Vip2.png"];
 
             }
                 break;
             case 4:
             {
-                _markImg.image = [UIImage imageNamed:@"vip1.png"];
+                _markImg.image = [UIImage imageNamed:@"Vip1.png"];
 
             }
                 break;

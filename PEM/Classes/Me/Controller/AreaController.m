@@ -31,7 +31,7 @@
     self.view.backgroundColor = HexRGB(0xffffff);
     _dataArray = [[NSMutableArray alloc] init];
     _provinceArray = [[NSMutableArray alloc] init];
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"provineces" ofType:@"plist"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"provinces" ofType:@"plist"];
     NSArray *data = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
     for (NSDictionary *dic in data){
         NSString *strProvince = [dic objectForKey:@"name"];
@@ -112,12 +112,15 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (titleArray.count==0) {
-        return 0;
+        return [_dataArray count];
     }
     return [[_dataArray objectAtIndex:section] count];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if (titleArray.count==0) {
+        return 1;
+    }
     return [titleArray count];
 }
 
@@ -127,7 +130,7 @@
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
     }
-    if (titleArray.count == 1) {
+    if (titleArray.count == 0) {
         cell.detailTextLabel.text= [_dataArray objectAtIndex:indexPath.row];
     }else{
         cell.detailTextLabel.text = [[_dataArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
@@ -148,7 +151,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *str;
-    if (titleArray.count == 1) {
+    if (titleArray.count == 0) {
         str = [_dataArray objectAtIndex:indexPath.row];
 
     }else{

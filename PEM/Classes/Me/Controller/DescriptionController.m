@@ -41,7 +41,7 @@
     [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
     // 设置尺寸
     btn.frame = CGRectMake(10, 10,52, 24);
-    [btn addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
+    [btn addTarget:self action:@selector(finish) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
     self.navigationItem.rightBarButtonItem = item;
 
@@ -74,19 +74,23 @@
     [self.view addSubview:_textView];
 }
 
-- (void)login{
+- (void)finish{
     if (isEidt) {
         if (![_textView.text isEqualToString:@""]) {
-            if (_isSupply) {
-                if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
-                    [self.delegate sendValueFromViewController:self value:_textView.text isDemand:NO];
-                }
+            if (_textView.text.length<10) {
+                [RemindView showViewWithTitle:@"描述信息最少为10字" location:MIDDLE];
             }else{
-                if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
-                    [self.delegate sendValueFromViewController:self value:_textView.text isDemand:YES];
+                if (_isSupply) {
+                    if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
+                        [self.delegate sendValueFromViewController:self value:_textView.text isDemand:NO];
+                    }
+                }else{
+                    if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
+                        [self.delegate sendValueFromViewController:self value:_textView.text isDemand:YES];
+                    }
                 }
+                [self.navigationController popViewControllerAnimated:YES];
             }
-            [self.navigationController popViewControllerAnimated:YES];
         }else{
             [RemindView showViewWithTitle:@"请输入产品详细情况" location:MIDDLE];
         }

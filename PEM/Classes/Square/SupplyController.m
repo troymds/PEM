@@ -338,10 +338,9 @@
                         isShowTD = NO;
                     }
                     _supplyView.isHide = !_supplyView.isHide;
+                    [_scrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
                 }
             }
-            _supplyView.isHide = !_supplyView.isHide;
-            [_scrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
         }
             break;
         case 3004:
@@ -470,7 +469,6 @@
         }
             break;
         case 2:
-            
             break;
         default:
             break;

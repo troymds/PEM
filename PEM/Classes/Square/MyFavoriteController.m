@@ -99,7 +99,7 @@
         }else{
             if (_dataArray.count ==0){
                 UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
-                view.backgroundColor = HexRGB(0xe9f0f5);
+                view.backgroundColor = HexRGB(0xffffff);
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
                 label.textAlignment = NSTextAlignmentCenter;
                 label.text = @"没有收藏!";

@@ -140,11 +140,11 @@
         
 //        构造分享内容
         id<ISSContent> publishContent = [ShareSDK content:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-                                           defaultContent:@""
+                                           defaultContent:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
                                                     image:[ShareSDK imageWithPath:imagePath]
-                                                    title:@""
+                                                    title:@"Ebingoo"
                                                       url:@"www.ebingoo.com"
-                                              description:nil
+                                              description:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
                                                 mediaType:SSPublishContentMediaTypeNews];
         
         [ShareSDK showShareActionSheet:nil
@@ -156,7 +156,8 @@
                                 result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
                                     if (state == SSResponseStateSuccess)
                                     {
-                                        NSLog(@"分享成功");
+                                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功!" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                                        [alertView show];
                                     }
                                     else if (state == SSResponseStateFail)
                                     {
