@@ -64,7 +64,6 @@
     [HttpTool postWithPath:@"getInfoDetail" params:param success:^(id JSON){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         if ([[dic objectForKey:@"code"] intValue] ==100) {
             NSDictionary *data = [dic objectForKey:@"data"];
@@ -128,8 +127,29 @@
             //发布求购信息
             //判断上传数据是否完整
             if ([self checkPurchaseData]){
-                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",demandCateItem.uid,@"category_id",_demandView.titleTextField.text,@"title",demandDes,@"description",_demandView.phoneNumTextField.text,@"contacts_phone",_demandView.linkManTextField.text,@"contacts",_demandView.markLabel.text,@"tags",@"1",@"type",_demandView.unitField.text,@"unit",_info_id,@"info_id",_demandView.purchaseNumField.text,@"buy_num",nil];
-                [HttpTool postWithPath:@"saveInfo" params:param  success:^(id JSON){
+                NSString *tags;
+                if (_demandView.markLabel.text) {
+                    tags = _demandView.markLabel.text;
+                }else{
+                    tags = @"";
+                }
+                
+                NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",demandCateItem.uid,@"category_id",demandDes,@"description",_demandView.phoneNumTextField.text,@"contacts_phone",_demandView.linkManTextField.text,@"contacts",tags,@"tags",@"1",@"type",_demandView.purchaseNumField.text,@"buy_num",_demandView.unitField.text,@"unit",_info_id,@"info_id",_demandView.titleTextField.text,@"title",nil];
+                
+                NSLog(@"%@",[params objectForKey:@"company_id"]);
+                NSLog(@"%@",[params objectForKey:@"category_id"]);
+                NSLog(@"%@",[params objectForKey:@"title"]);
+                NSLog(@"%@",[params objectForKey:@"description"]);
+                NSLog(@"%@",[params objectForKey:@"contacts_phone"]);
+                NSLog(@"%@",[params objectForKey:@"contacts"]);
+                NSLog(@"%@",[params objectForKey:@"tags"]);
+                NSLog(@"%@",[params objectForKey:@"type"]);
+                NSLog(@"%@",[params objectForKey:@"buy_num"]);
+                NSLog(@"%@",[params objectForKey:@"unit"]);
+                NSLog(@"%@",[params objectForKey:@"info_id"]);
+
+                
+                [HttpTool postWithPath:@"saveInfo" params:params  success:^(id JSON){
                     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                     NSDictionary *dic = [result objectForKey:@"response"];
                     if ([[dic objectForKey:@"code"] intValue] == 100){

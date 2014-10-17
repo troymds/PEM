@@ -836,13 +836,15 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        if ([[dic objectForKey:@"code"] intValue] ==100) {
-            NSDictionary *data = [dic objectForKey:@"data"];
-            VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-            [SystemConfig sharedInstance].vipInfo = vipInfo;
-            [_loginView dismissView];
-        }else{
-            [_loginView dismissView];
+        if (!isNull(result, @"response")) {
+            if ([[dic objectForKey:@"code"] intValue] ==100) {
+                NSDictionary *data = [dic objectForKey:@"data"];
+                VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                [SystemConfig sharedInstance].vipInfo = vipInfo;
+                [_loginView dismissView];
+            }else{
+                [_loginView dismissView];
+            }
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

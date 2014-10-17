@@ -8,9 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "SetImageView.h"
-#import "VersionUpdateView.h"
 
-@interface SettingController : UIViewController<ProImageViewDelegate,versionViewDelegate,UIAlertViewDelegate>
+@interface SettingController : UIViewController<ProImageViewDelegate,UIAlertViewDelegate>
 {
     UIScrollView *_scrollview;
     NSString *_url;
