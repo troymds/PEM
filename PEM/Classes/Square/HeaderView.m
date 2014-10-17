@@ -118,7 +118,7 @@
         _nameLabel.text = name;
         CGSize size = [AdaptationSize getSizeFromString:name Font:[UIFont systemFontOfSize:16] withHight:27.5 withWidth:CGFLOAT_MAX];
         _nameLabel.frame =CGRectMake(kWidth/2-size.width/2,_registerBtn.frame.origin.y,size.width,27.5);
-        _markImg.frame = CGRectMake(_nameLabel.frame.origin.x+_nameLabel.frame.size.width+20,_nameLabel.frame.origin.y,19, 25);
+        _markImg.frame = CGRectMake(_nameLabel.frame.origin.x+_nameLabel.frame.size.width+5,_nameLabel.frame.origin.y,19, 25);
         switch ([[SystemConfig sharedInstance].viptype intValue]) {
             case 0:
             {

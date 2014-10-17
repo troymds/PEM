@@ -31,10 +31,10 @@
     self.view.backgroundColor = HexRGB(0xffffff);
     _dataArray = [[NSMutableArray alloc] init];
     _provinceArray = [[NSMutableArray alloc] init];
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"Provineces" ofType:@"plist"];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"provineces" ofType:@"plist"];
     NSArray *data = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
     for (NSDictionary *dic in data){
-        NSString *strProvince = [dic objectForKey:@"ProvinceName"];
+        NSString *strProvince = [dic objectForKey:@"name"];
         [_provinceArray addObject:strProvince];
     }
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0,kWidth,kHeight-64) style:UITableViewStylePlain];
@@ -53,7 +53,6 @@
     }else{
         //不允许定位操作  显示出所有省份
         [_dataArray addObjectsFromArray:_provinceArray];
-        titleArray = [NSArray arrayWithObjects:@"所有省份", nil];
         [_tableView reloadData];
     }
 }
@@ -64,7 +63,6 @@
     NSLog(@"locError:%@",error);
     //定位失败   显示所有省份
     [_dataArray addObjectsFromArray:_provinceArray];
-    titleArray = [NSArray arrayWithObjects:@"所有省份", nil];
     [_tableView reloadData];
 }
 
@@ -83,7 +81,7 @@
         }
         [_dataArray addObject:array];
         [_dataArray addObject:arr];
-        titleArray = [NSArray arrayWithObjects:@"当前省份",@"其他省份", nil];
+        titleArray = [NSArray arrayWithObjects:@"当前地区",@"其他地区", nil];
         [_tableView reloadData];
     }];
     [_currentLocation stopUpdatingLocation];
@@ -104,7 +102,7 @@
         }
         [_dataArray addObject:array];
         [_dataArray addObject:arr];
-        titleArray = [NSArray arrayWithObjects:@"当前省份",@"其他省份", nil];
+        titleArray = [NSArray arrayWithObjects:@"当前地区",@"其他地区", nil];
         [_tableView reloadData];
     }];
     [_currentLocation stopUpdatingLocation];
@@ -113,8 +111,8 @@
 #pragma mark tableView delegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (titleArray.count==1) {
-        return [_dataArray count];
+    if (titleArray.count==0) {
+        return 0;
     }
     return [[_dataArray objectAtIndex:section] count];
 }

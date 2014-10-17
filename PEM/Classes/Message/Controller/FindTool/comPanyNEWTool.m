@@ -37,31 +37,31 @@
     
     
 }
-+ (void)NEWstatusesWithSuccessNew:(StatusSuccessBlock)success NewFailure:(StatusFailureBlock)failure NEWCompanyID:(NSString *)comid{
-    
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:comid,@"newsid" ,nil];
-    [HttpTool postWithPath:@"getNewsWapUrl" params:dic success:^(id JSON) {
-        NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSMutableArray *statuses =[NSMutableArray array];
-        
-        NSDictionary *array =d[@"response"];
-//        if (![array isKindOfClass:[NSNull class]]){
-//            for (NSDictionary *dict in array) {
-//                
-//                comContent   *s =[[comContent alloc] initWithDictionaryForComapny:dict];
-//                
-//                [statuses addObject:s];
-//            }
-//            
-//        }
-//        success(statuses);
+//+ (void)NEWstatusesWithSuccessNew:(StatusSuccessBlock)success NewFailure:(StatusFailureBlock)failure NEWCompanyID:(NSString *)comid{
+//    
+//    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:comid,@"newsid" ,nil];
+//    [HttpTool postWithPath:@"getNewsWapUrl" params:dic success:^(id JSON) {
+//        NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+//        NSMutableArray *statuses =[NSMutableArray array];
 //        
-    } failure:^(NSError *error) {
-        if (failure==nil)return ; {
-            failure(error);
-        }
-    }];
-
-}
+//        NSDictionary *array =d[@"response"];
+////        if (![array isKindOfClass:[NSNull class]]){
+////            for (NSDictionary *dict in array) {
+////                
+////                comContent   *s =[[comContent alloc] initWithDictionaryForComapny:dict];
+////                
+////                [statuses addObject:s];
+////            }
+////            
+////        }
+////        success(statuses);
+////        
+//    } failure:^(NSError *error) {
+//        if (failure==nil)return ; {
+//            failure(error);
+//        }
+//    }];
+//
+//}
 
 @end

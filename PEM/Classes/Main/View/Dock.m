@@ -29,7 +29,7 @@
     [item addTarget:self action:@selector(itemClick:) forControlEvents:UIControlEventTouchDown];
     // 2.添加item
     [self addSubview:item];
-    int count = self.subviews.count;
+    NSUInteger count = self.subviews.count;
     // 默认选中第一个item
     if (count == 1) {
         [self itemClick:item];

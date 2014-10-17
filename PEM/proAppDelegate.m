@@ -18,9 +18,7 @@
 #import <TencentOpenAPI/QQApiInterface.h>
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "WeiboSDK.h"
-#import "WeiboApi.h"
 #import "WXApi.h"
-#import <RennSDK/RennSDK.h>
 
 @implementation proAppDelegate
 

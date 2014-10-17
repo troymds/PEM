@@ -186,7 +186,7 @@
    
         findViewController *menu = [[findViewController alloc] init];
         menu.titleLabel =sender.titleLabel.text;
-        NSString *strId =[NSString stringWithFormat:@"%d",sender.tag-1000];
+        NSString *strId =[NSString stringWithFormat:@"%ld",sender.tag-1000];
         menu.cateIndex =strId;
 
 
