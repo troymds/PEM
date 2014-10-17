@@ -86,7 +86,7 @@ typedef void (^BeginRefreshingBlock)(MJRefreshBaseView *refreshView);
 // 结束刷新
 - (void)endRefreshing;
 // 结束使用、释放资源
-- (void)free;
+//- (void)free;
 
 // 交给子类去实现
 - (void)setState:(RefreshState)state;

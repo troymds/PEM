@@ -271,14 +271,14 @@
 // pagecontrol 选择器的方法
 - (void)turnPage
 {
-    int page = pageControl.currentPage; // 获取当前的page
+    NSInteger page = pageControl.currentPage; // 获取当前的page
     [self.scrollView scrollRectToVisible:CGRectMake(320*(page+1),0,320,118) animated:NO]; // 触摸pagecontroller那个点点 往后翻一页 +1
     
 }
 // 定时器 绑定的方法
 - (void)runTimePage
 {
-    int page = pageControl.currentPage; // 获取当前的page
+    NSInteger page = pageControl.currentPage; // 获取当前的page
     page++;
     page = page > 2 ? 0 : page ;
     pageControl.currentPage = page;
@@ -588,7 +588,7 @@
     findViewController *find =[[findViewController alloc]init];
     find.titleLabel =cate.titleLabel.text;
     
-    NSString *strId =[NSString stringWithFormat:@"%d",cate.tag-100];
+    NSString *strId =[NSString stringWithFormat:@"%ld",cate.tag-100];
     find.cateIndex = strId;
     [self.navigationController pushViewController:find animated:YES];
     

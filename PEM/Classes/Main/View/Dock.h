@@ -17,5 +17,5 @@
 // 代理
 @property (nonatomic, weak) id<DockDelegate> delegate;
 
-@property (nonatomic, assign) int selectedIndex;
+@property (nonatomic, assign) NSInteger selectedIndex;
 @end

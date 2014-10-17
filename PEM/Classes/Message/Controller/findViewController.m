@@ -111,7 +111,7 @@
         
         
         
-    } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+    } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%lu",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
         
     }];
 
