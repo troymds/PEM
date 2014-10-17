@@ -696,6 +696,29 @@
                 cell.regionLabel.text = c.region;
                 [cell.imageCompany setImageWithURL:[NSURL URLWithString:c.image] placeholderImage:[UIImage imageNamed:@"loading.png"]];
                 cell.businessLabel.text =c.business;
+                
+                
+                if ([c.rank isEqualToString:@"1"]) {
+                    cell.vipType.image  =[UIImage imageNamed:@"Vip4.png"];
+                }
+                else  if ([c.rank isEqualToString:@"2"]) {
+                   cell.vipType.image  =[UIImage imageNamed:@"Vip2.png"];
+                    
+                } else if([c.rank isEqualToString:@"3"]) {
+                   cell.vipType.image =[UIImage imageNamed:@"Vip2.png"];
+                    
+                }else if([c.rank isEqualToString:@"0"]){
+                    
+                   cell.vipType.image  =[UIImage imageNamed:@"Vip1.png"];
+                }
+                else if([c.rank isEqualToString:@"0"]){
+                    
+                   cell.vipType.image =[UIImage imageNamed:@"Vip5.png"];
+                }else if([c.rank isEqualToString:@"-1"]){
+                    
+                    cell.vipType.image  =[UIImage imageNamed:@"Vip6.png"];
+                }
+
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
             }else

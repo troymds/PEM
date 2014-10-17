@@ -33,7 +33,7 @@
     UIImageView *_smallImgView;
     BOOL stop;
     
-    NSMutableArray *_hotImageArray;//热门分类  （八个图片）
+    NSMutableArray *_hotImageArray;//热门分类  七个图片）
     NSMutableArray *_tadyNumArray;//今日新增
     NSMutableArray *_hotDemandArray;//热门求购
     NSMutableArray *_hotSupplyArray;//热门供应
@@ -52,6 +52,7 @@
 @synthesize tadyNumArray=_tadyNumArray;
 @synthesize hotDemandArray=_hotDemandArray;
 @synthesize hotSupplyArray=_hotSupplyArray;
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -92,20 +93,9 @@
     QRCodeViewController *qrcode =[[QRCodeViewController alloc]init];
     [self.navigationController pushViewController:qrcode animated:YES];
     
-//    ZBarReaderViewController *reader = [ZBarReaderViewController new];
-//    reader.readerDelegate = self;
-//    reader.supportedOrientationsMask = ZBarOrientationMaskAll;
-//    
-//    ZBarImageScanner *scanner = reader.scanner;
-//    
-//    [scanner setSymbology: ZBAR_I25
-//                   config: ZBAR_CFG_ENABLE
-//                       to: 0];
-//    
-//    [self presentModalViewController: reader
-//                            animated: YES];
-    
+
 }
+#pragma mark -=---判断网络是否连接
 
 #pragma mark 加载微博数据
 - (void)loadNewData

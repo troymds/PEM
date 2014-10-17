@@ -83,11 +83,19 @@
     [self.view addSubview:linBackView];
     [self addLeftSegment];
     [self addRigthSegment];
-    // 显示指示器
+    [self addMBprogressView];
+    [self loadSupplyDataResoult];
+
+
+}
+#pragma  mark ------显示指示器
+-(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"正在加载中...";
     hud.dimBackground = YES;
 
+}
+-(void)loadSupplyDataResoult{
     [supplyTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if (statues.count > 0) {
@@ -104,12 +112,10 @@
         [_CateSupplyArray addObjectsFromArray:statues];
         
         [_tableView reloadData];
-       } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+    } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
         
     }];
     
-    
-
 
 }
 
@@ -156,10 +162,7 @@
 
 -(void)loadViewStatuses:(MJRefreshBaseView *)refreshView{
     
-    // 显示指示器
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
+    [self addMBprogressView];
     
     [supplyTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
 
@@ -392,6 +395,7 @@
     
     _tableView.showsHorizontalScrollIndicator = NO;
     _tableView.showsVerticalScrollIndicator = NO;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     [self.view addSubview:_tableView];
 }
@@ -486,9 +490,8 @@
 }
 -(void)leftSegmentBtnClick:(UIButton *)sender{
     
-    
+
     if (sender.tag ==11) {
-        
         [_rigthBtn removeFromSuperview];
         [_rightBtnDemand removeFromSuperview];
 
@@ -496,30 +499,37 @@
         [_rigthBtn removeFromSuperview];
         [rightBackViw removeFromSuperview];
         [bigbutton removeFromSuperview];
+        [_CateSupplyArray removeAllObjects];
+        [_tableView reloadData];
+
         [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
-                    [_CateSupplyArray removeAllObjects];
-                    [_tableView reloadData];
+//            NSLog(@"%lu",(unsigned long)statues.count);
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+            
             if (statues.count ==0) {
-
+                
                 dataLabel.hidden = NO;
                 _tableView.hidden = YES;
             }else{
-
+                
                 _tableView.hidden = NO;
                 dataLabel.hidden = YES;
             }[_CateDemandArray addObjectsFromArray:statues];
             [_tableView reloadData];
 
+           
+
         } DemandId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] DemandFailure:^(NSError *error) {
             
         }];
     }else{
+
+        [self loadSupplyDataResoult];
+
         [_rigthBtn removeFromSuperview];
         [_rightBtnDemand removeFromSuperview];
-       [self addRigthSegment];
+        [self addRigthSegment];
         [_rightBtnDemand removeFromSuperview];
         [rightBackViewDemand removeFromSuperview];
         [bigbutton removeFromSuperview];
@@ -575,13 +585,10 @@
     [_rigthBtn setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
     [_rigthBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
 
-    // 显示指示器
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
+    [self addMBprogressView];
 
     if (sender.tag ==50) {
-      
+
         [_CateSupplyArray removeAllObjects];
         [_tableView reloadData];
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
@@ -620,6 +627,7 @@
 
 -(void)rightSegmentDemandBtnClick:(UIButton *)demand{
     
+    [self addMBprogressView];
 
     demand.selected =!demand.selected;
     if (demand.selected==YES) {
@@ -638,13 +646,9 @@
     [_rightBtnDemand setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
     [_rightBtnDemand setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
     
-    // 显示指示器
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
     
     if (demand.tag ==60) {
-       
+
         [_CateDemandArray removeAllObjects];
         [_tableView reloadData];
 
@@ -663,7 +667,7 @@
         }];
 
     }else{
-      
+
         [_CateDemandArray removeAllObjects];
         [_tableView reloadData];
 
@@ -729,8 +733,8 @@
         if (!cell) {
             cell =[[findDemandCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
         }
-        
         if (_CateDemandArray.count>0) {
+
             yyDemandModel *d =_CateDemandArray [indexPath.row];
             cell.dateLabel.text =d.demandDate;
             cell.demand_numLabel.text =[NSString stringWithFormat:@"求购数量:%@",d.buy_num];
@@ -744,7 +748,12 @@
             _tableView.hidden = YES;
             
         }
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,71, kWidth-20, 1)];
+        lineView.backgroundColor = HexRGB(0xd5d5d5);
+        [cell.contentView addSubview:lineView];
         
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
               return cell;
 
     }else{
@@ -772,6 +781,15 @@
             dataLabel.hidden = NO;
             _tableView.hidden = YES;
         }
+        
+        
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,71, kWidth-20, 1)];
+        lineView.backgroundColor = HexRGB(0xd5d5d5);
+        [cell.contentView addSubview:lineView];
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
       return cell;
         
     }

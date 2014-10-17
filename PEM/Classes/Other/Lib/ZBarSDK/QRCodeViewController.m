@@ -48,7 +48,7 @@
     upOrdown = NO;
     num =0;
     _line = [[UIImageView alloc] initWithFrame:CGRectMake(50, 110, 220, 2)];
-    _line.image = [UIImage imageNamed:@"line.png"];
+    _line.image = [UIImage imageNamed:@"line_sdk.png"];
     [self.view addSubview:_line];
     
     timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];

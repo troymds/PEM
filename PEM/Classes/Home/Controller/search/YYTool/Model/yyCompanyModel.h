@@ -16,6 +16,7 @@
 
 @property (nonatomic, strong)NSString *rank;//企业等级
 @property (nonatomic, strong)NSString *business;//主营业务
+
 - (instancetype)initWithDictionaryForCompany:(NSDictionary *)dict;
 
 @end

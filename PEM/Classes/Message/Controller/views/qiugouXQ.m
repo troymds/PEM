@@ -210,6 +210,8 @@
     l.backgroundColor =[UIColor whiteColor];
     UIButton *goCompany =[UIButton buttonWithType:UIButtonTypeCustom];
     [backView addSubview:goCompany];
+
+    
     goCompany.titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
     [goCompany setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     goCompany.frame = CGRectMake(240, 40, 70, 40);
@@ -217,13 +219,15 @@
     [goCompany setImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"] forState:UIControlStateNormal];
     goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
     goCompany.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
-    [goCompany addTarget:self action:@selector(gotoCompanyClick:) forControlEvents:UIControlEventTouchUpInside];
+    [goCompany addTarget:self action:@selector(gotoCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+
+
+
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     
     float demandWebheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
-    NSLog(@"%f",demandWebheight);
     _backScrollView.contentSize = CGSizeMake(320,demandWebheight+160);
     demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 120, 320, demandWebheight)];
     
@@ -240,7 +244,6 @@
     
     if (![SystemConfig sharedInstance].viptype) {
     
-        NSLog(@"%@",[SystemConfig sharedInstance].viptype);
     
     UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"温馨提示:" message:@"目前只有VIP及以上用户可以一键拨号，请升级!" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消", nil];
         [alert show];
@@ -264,13 +267,11 @@
 
     
 }
--(void)gotoCompanyClick:(UIButton *)go{
-    CompanyXQViewController *xqVC = [CompanyXQViewController alloc];
+-(void)gotoCompanyBtnClick:(UIButton *)goCompany{
+    CompanyXQViewController *xqVC = [[CompanyXQViewController alloc]init];
     
     XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
-    xqVC.companyName =comID.company_name;
     xqVC.companyID =comID.company_id;
-    
     [self.navigationController pushViewController:xqVC animated:YES];
     
 }
