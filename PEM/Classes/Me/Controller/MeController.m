@@ -208,7 +208,41 @@
 
 //发布求购、发布供应按钮点击触发
 - (void)btnClick:(UIButton *)btn{
-    int vipType = [[SystemConfig sharedInstance].viptype intValue];
+//    int vipType = [[SystemConfig sharedInstance].viptype intValue];
+//    if (btn.tag == 2001) {
+//        if (vipType <=0) {
+//            //判断是否可以发布供应信息
+//            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+//            [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
+//                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+//                if ([result objectForKey:@"response"]) {
+//                    NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
+//                    if ([code intValue] ==100) {
+//                        int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
+//                        if (data == 0) {
+//                            //不能发布信息
+//                            NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
+//                            MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+//                            [actionView showView];
+//                        }else if(data == 1){
+//                            //可以发布信息
+//                            _isPurchase = NO;
+//                            [UIView animateWithDuration:0.5 animations:^{
+//                                _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
+//                                _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
+//                                sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
+//                            }];
+//                            
+//                        }
+//                    }else{
+//                        
+//                    }
+//                }
+//            } failure:^(NSError *error) {
+//                NSLog(@"%@",error);
+//            }];
+//        }
+//    }
     if (btn.tag == 2001&&(![SystemConfig sharedInstance].viptype||[[SystemConfig sharedInstance].viptype isEqualToString:@"0"])) {
         btn.selected = NO;
     }else
@@ -275,7 +309,6 @@
                 break;
     }
 }
-
 
 #pragma  mark supplyView_delegate
 - (void)buttonClicked:(UIButton *)btn{

@@ -6,11 +6,6 @@
 //  Copyright (c) 2013年 itcast. All rights reserved.
 //
 
-
-
-
-
-
 #pragma mark 这个类只用在MoreController
 @interface LogutBtn : UIButton
 @end

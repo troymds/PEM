@@ -22,9 +22,6 @@
 
 @implementation proAppDelegate
 
-
-
-
 -(BOOL)prefersStatusBarHidden{
     return NO;
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
@@ -167,15 +164,17 @@
 //获取用户VIP信息
 - (void)getVipInfo:(NSString *)company_id
 {
+    NSLog(@"%@",company_id);
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
-        if ([[dic objectForKey:@"code"] intValue] ==100) {
-            NSDictionary *data = [dic objectForKey:@"data"];
-            VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-            [SystemConfig sharedInstance].vipInfo = vipInfo;
+        if (!isNull(result, @"response")) {
+            if ([[dic objectForKey:@"code"] intValue] ==100) {
+                NSDictionary *data = [dic objectForKey:@"data"];
+                VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                [SystemConfig sharedInstance].vipInfo = vipInfo;
+            }
         }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
