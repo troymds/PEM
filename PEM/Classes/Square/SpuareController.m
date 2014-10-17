@@ -23,7 +23,7 @@
 #import "UIImageView+WebCache.h"
 #import "HttpTool.h"
 #import "BaseNumItem.h"
-//#import <ShareSDK/ShareSDK.h>
+#import <ShareSDK/ShareSDK.h>
 
 @interface SpuareController ()
 
@@ -45,7 +45,7 @@
         //登录状态 显示企业头像等信息
         CompanyInfoItem *item = [SystemConfig sharedInstance].companyInfo;
         if (item.image&&item.image.length!=0){
-            [_headView.headerImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"user_default.png"]];
+            [_headView.headerImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"company_default.png"]];
         }
         [_headView setName:item.company_name];
         _headView.nameLabel.hidden = NO;
@@ -69,7 +69,7 @@
             NSLog(@"error:%@",error);
         }];
     }else{
-        _headView.headerImage.image = [UIImage imageNamed:@"user_default.png"];
+        _headView.headerImage.image = [UIImage imageNamed:@"company_default.png"];
         _headView.supplayLabel.text = @"0";
         _headView.purchaseLabel.text = @"0";
         _headView.favoriteLabel.text = @"0";
@@ -95,7 +95,9 @@
     _scrollView.showsVerticalScrollIndicator = NO;
     _headView = [[HeaderView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 182)];
     _headView.bgView.image = [UIImage imageNamed:@"individual_bg.png"];
-    _headView.headerImage.image = [UIImage imageNamed:@"user_default.png"];
+    _headView.headerImage.image = [UIImage imageNamed:@"company_default.png"];
+    _headView.headerImage.delegate = self;
+    _headView.nameLabel.delegate = self;
     _headView.delegate = self;
     [_scrollView addSubview:_headView];
     _squareView = [[Square alloc] initWithFrame:CGRectMake(0,_headView.frame.size.height, kWidth, 396)];
@@ -106,7 +108,21 @@
     
 }
 
+//点击头像触发
+#pragma mark ---proImageView_delegate
+- (void)imageClicked:(ProImageView *)image
+{
+    CompanySetController *csc = [[CompanySetController alloc] init];
+    [self.navigationController pushViewController:csc animated:YES];
+}
 
+//点击用户名触发
+#pragma mark  prolabel_delegate  
+- (void)proLabelClick:(ProLabel *)label
+{
+    CompanySetController *scs = [[CompanySetController alloc] init];
+    [self.navigationController pushViewController:scs animated:YES];
+}
 
 #pragma mark Square delegate
 - (void)buttonClicked:(UIButton *)btn{
@@ -114,39 +130,33 @@
         PrivilegeController *pvc = [[PrivilegeController alloc] init];
         [self.navigationController pushViewController:pvc animated:YES];
     }else if(btn.tag == SHARE_TYPE){
-//        [UMSocialSnsService presentSnsIconSheetView:self
-//                                            appKey:nil
-//                                          shareText:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                         shareImage:nil
-//                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina,UMShareToTencent,UMShareToRenren,UMShareToQzone,UMShareToSms,nil]
-//                                           delegate:nil];
-//        NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"ShareSDK"  ofType:@"jpg"];
+         NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"ShareSDK"  ofType:@"jpg"];
         
-        //构造分享内容
-//        id<ISSContent> publishContent = [ShareSDK content:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                           defaultContent:@""
-//                                                    image:[ShareSDK imageWithPath:imagePath]
-//                                                    title:@""
-//                                                      url:@"www.ebingoo.com"
-//                                              description:nil
-//                                                mediaType:SSPublishContentMediaTypeNews];
-//        
-//        [ShareSDK showShareActionSheet:nil
-//                             shareList:nil
-//                               content:publishContent
-//                         statusBarTips:YES
-//                           authOptions:nil
-//                          shareOptions: nil
-//                                result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-//                                    if (state == SSResponseStateSuccess)
-//                                    {
-//                                        NSLog(@"分享成功");
-//                                    }
-//                                    else if (state == SSResponseStateFail)
-//                                    {
-//                                        NSLog(NSLocalizedString(@"TEXT_SHARE_FAI", @"发布失败!error code == %d, error code == %@"), [error errorCode], [error errorDescription]);
-//                                    }
-//                                }];
+//        构造分享内容
+        id<ISSContent> publishContent = [ShareSDK content:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
+                                           defaultContent:@""
+                                                    image:[ShareSDK imageWithPath:imagePath]
+                                                    title:@""
+                                                      url:@"www.ebingoo.com"
+                                              description:nil
+                                                mediaType:SSPublishContentMediaTypeNews];
+        
+        [ShareSDK showShareActionSheet:nil
+                             shareList:nil
+                               content:publishContent
+                         statusBarTips:YES
+                           authOptions:nil
+                          shareOptions: nil
+                                result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+                                    if (state == SSResponseStateSuccess)
+                                    {
+                                        NSLog(@"分享成功");
+                                    }
+                                    else if (state == SSResponseStateFail)
+                                    {
+                                        NSLog(NSLocalizedString(@"TEXT_SHARE_FAI", @"发布失败!error code == %d, error code == %@"), [error errorCode], [error errorDescription]);
+                                    }
+                                }];
     }else{
         if (![SystemConfig sharedInstance].isUserLogin){
             LoginController *loginVC = [[LoginController alloc] init];

@@ -99,9 +99,12 @@
 
 }
 
+
+//登陆框按钮点击
 #pragma mark loginView_delegate
 - (void)btnDown:(UIButton *)btn{
     switch (btn.tag){
+        //登陆
         case LOGIN_TYPE:
         {
             NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:_loginView.userField.text,@"phonenum",_loginView.passwordField.text,@"password", nil];
@@ -119,14 +122,22 @@
 
                     NSDictionary *data = [dic objectForKey:@"data"];
                     [SystemConfig sharedInstance].isUserLogin = YES;
-                    int company_id = [[data objectForKey:@"company_id"] intValue];
-                    [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
-                    int vipType = [[data objectForKey:@"viptype"] intValue];
-                    [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%d",vipType];
+                    if (isNull(data, @"company_id")){
+                        [SystemConfig sharedInstance].company_id = @"-1";
+                    }else{
+                        int company_id = [[data objectForKey:@"company_id"] intValue];
+                        [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                    }
+                    if (isNull(data, @"viptype")) {
+                        [SystemConfig sharedInstance].viptype = @"-3";
+                    }else{
+                        NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
+                        [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                    }
                     CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].companyInfo = item;
                     
-                    [self getVipInfo:[NSString stringWithFormat:@"%d",company_id]];
+                    [self getVipInfo:[SystemConfig sharedInstance].company_id];
                     
                 }else{
                     [RemindView showViewWithTitle:@"用户名或密码错误" location:MIDDLE];
@@ -137,12 +148,14 @@
             }];
         }
             break;
+        //寻找密码
         case FIND_TYPE:
         {
             FindSecretController *fsc = [[FindSecretController alloc] init];
             [self.navigationController pushViewController:fsc animated:YES];
         }
             break;
+        //注册
         case REGIST_TYPE:
         {
             RegisterContrller *rsc = [[RegisterContrller alloc] init];
@@ -155,7 +168,7 @@
     }
 }
 
-
+//点击登陆框周围跳转到首页
 - (void)tapDown
 {
     if ([self.delegate respondsToSelector:@selector(changeController)]) {
@@ -163,7 +176,7 @@
     }
 }
 
-
+//添加发布求购、发布供应按钮
 - (void)addBtn{
     CGFloat width = self.view.frame.size.width/2;
     NSArray *arr = [NSArray arrayWithObjects:@"发布求购",@"发布供应",nil];
@@ -191,8 +204,11 @@
     sliderLine.backgroundColor = HexRGB(0x18b0e7);
     [self.view addSubview:sliderLine];
 }
+
+
 //发布求购、发布供应按钮点击触发
 - (void)btnClick:(UIButton *)btn{
+    int vipType = [[SystemConfig sharedInstance].viptype intValue];
     if (btn.tag == 2001&&(![SystemConfig sharedInstance].viptype||[[SystemConfig sharedInstance].viptype isEqualToString:@"0"])) {
         btn.selected = NO;
     }else
@@ -223,33 +239,36 @@
             break;
         case 2001:
         {
-            if ([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]) {
-                MyActionSheetView *upTDView  =[[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您的体验会员已到期,若想发布供应信息,请先升级" delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                [upTDView showView];
-            }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]){
-                if ([SystemConfig sharedInstance].vipInfo) {
-                    if ([[SystemConfig sharedInstance].vipInfo.supply_num isEqualToString:@"0"]) {
-                        MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您的10条发布供应信息已使用完毕,若想发布更多,请先升级" delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                        [actionView showView];
+            //判断是否可以发布供应信息
+            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+            [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                if ([result objectForKey:@"response"]) {
+                    NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
+                    if ([code intValue] ==100) {
+                        int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
+                        if (data == 0) {
+                            //不能发布信息
+                            NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
+                            MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                            [actionView showView];
+                        }else if(data == 1){
+                            //可以发布信息
+                            _isPurchase = NO;
+                            [UIView animateWithDuration:0.5 animations:^{
+                                _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
+                                _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
+                                sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
+                            }];
+
+                        }
                     }else{
-                        _isPurchase = NO;
-                        [UIView animateWithDuration:0.5 animations:^{
-                            _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
-                            _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
-                            sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
-                        }];
+                        
                     }
-                }else{
-                    [self getVipInfo:[SystemConfig sharedInstance].company_id];
                 }
-            }else{
-                _isPurchase = NO;
-                [UIView animateWithDuration:0.5 animations:^{
-                    _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
-                    _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
-                    sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
-                }];
-            }
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
         }
                 break;
             default:
@@ -468,19 +487,20 @@
                 [_upTDView showView];
             }else{
                 int display_3d_num = [[SystemConfig sharedInstance].vipInfo.display_3d_num intValue];
-                if (display_3d_num == 0) {
-                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您不能进行3D展示或3D展示数量已用完,要进行3D展示,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
+                if (display_3d_num <= 0) {
+                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您还不能上传3D图片或上传3D图片数量已用完,要上传3D图片,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
                     actionSheet.tag = 1001;
                     [actionSheet showView];
-                }
-                btn.selected = !btn.selected;
-                if (btn.selected) {
-                    isShowTD = YES;
                 }else{
-                    isShowTD = NO;
+                    btn.selected = !btn.selected;
+                    if (btn.selected) {
+                        isShowTD = YES;
+                    }else{
+                        isShowTD = NO;
+                    }
+                    _supplyView.isHide = !_supplyView.isHide;
+                    [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
                 }
-                _supplyView.isHide = !_supplyView.isHide;
-                [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
             }
         }
             break;

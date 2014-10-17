@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0471EA1819ED3AA800060640 /* BuyTagController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0471EA1719ED3AA800060640 /* BuyTagController.m */; };
 		0481D71E19EBDF3000C3278D /* update@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0481D71D19EBDF3000C3278D /* update@2x.png */; };
+		04989E6F19F0107400E407EE /* ProLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04989E6E19F0107400E407EE /* ProLabel.m */; };
 		04A3BC5919C05C0500B2217B /* nav_setting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A3BC5819C05C0500B2217B /* nav_setting@2x.png */; };
 		04A3BC5B19C05C0C00B2217B /* home_display_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A3BC5A19C05C0C00B2217B /* home_display_btn@2x.png */; };
 		04A3BC5D19C05C1C00B2217B /* home_login_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A3BC5C19C05C1C00B2217B /* home_login_pre@2x.png */; };
@@ -422,6 +423,8 @@
 		0471EA1619ED3AA800060640 /* BuyTagController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyTagController.h; sourceTree = "<group>"; };
 		0471EA1719ED3AA800060640 /* BuyTagController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyTagController.m; sourceTree = "<group>"; };
 		0481D71D19EBDF3000C3278D /* update@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "update@2x.png"; sourceTree = "<group>"; };
+		04989E6D19F0107400E407EE /* ProLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProLabel.h; sourceTree = "<group>"; };
+		04989E6E19F0107400E407EE /* ProLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProLabel.m; sourceTree = "<group>"; };
 		04A3BC5819C05C0500B2217B /* nav_setting@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_setting@2x.png"; sourceTree = "<group>"; };
 		04A3BC5A19C05C0C00B2217B /* home_display_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_display_btn@2x.png"; sourceTree = "<group>"; };
 		04A3BC5C19C05C1C00B2217B /* home_login_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_login_pre@2x.png"; sourceTree = "<group>"; };
@@ -1227,6 +1230,8 @@
 				04AF268519E8B13D001B29CB /* SubTagButton.m */,
 				04AF268619E8B13D001B29CB /* RemindView.h */,
 				04AF268719E8B13D001B29CB /* RemindView.m */,
+				04989E6D19F0107400E407EE /* ProLabel.h */,
+				04989E6E19F0107400E407EE /* ProLabel.m */,
 				04AF268819E8B13D001B29CB /* PrivilegeViewDelegete.h */,
 			);
 			name = View;
@@ -2738,6 +2743,7 @@
 				04AF261919E8B0F9001B29CB /* CallRecordItem.m in Sources */,
 				04AF265C19E8B129001B29CB /* AboutController.m in Sources */,
 				F31028F219B1DD7C00CCB1CE /* SearchResultModel.m in Sources */,
+				04989E6F19F0107400E407EE /* ProLabel.m in Sources */,
 				F32AE7F519B774BE00D67E05 /* TodayNumModel.m in Sources */,
 				55E1AFB619A6E1D60095F9C2 /* GroupCell.m in Sources */,
 				55E8C11719D3A6AD003F1685 /* SSKeychainQuery.m in Sources */,

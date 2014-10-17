@@ -21,7 +21,7 @@
         _bgView.userInteractionEnabled = YES;
         [self addSubview:_bgView];
         
-        _headerImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];
+        _headerImage = [[ProImageView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];
         _headerImage.layer.masksToBounds = YES;
         _headerImage.layer.cornerRadius = _headerImage.frame.size.width/2;
         CGPoint p = self.center;
@@ -41,7 +41,7 @@
         [_bgView addSubview:_registerBtn];
         
         CGRect rect = CGRectMake(0, _registerBtn.frame.origin.y, 0, 27.5);
-        _nameLabel = [[UILabel alloc] initWithFrame:rect];
+        _nameLabel = [[ProLabel alloc] initWithFrame:rect];
         _nameLabel.textAlignment = NSTextAlignmentCenter;
         _nameLabel.font = [UIFont systemFontOfSize:16];
         _nameLabel.hidden = YES;

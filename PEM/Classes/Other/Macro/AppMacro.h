@@ -63,6 +63,14 @@
 #define openURL(appScheme) [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appScheme]]
 #endif
 
+
+
+//判断字典dic中键key对应的值是否为空
+#define isNull(dic,key) [[dic objectForKey:key] isKindOfClass:[NSNull class]]?YES:NO
+
+
+
+
 #define SUPPLY_DATA  @"supplyData"
 #define PURCHASE_DATA @"purchaseData"
 
