@@ -213,6 +213,7 @@
 		5588E27F19EE67140095D362 /* SearchCompanyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E27E19EE67140095D362 /* SearchCompanyModel.m */; };
 		5588E28219EE76130095D362 /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E28119EE76130095D362 /* SearchController.m */; };
 		5592B33A19E696A900C0728C /* aboutus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5592B33919E696A900C0728C /* aboutus@2x.png */; };
+		559DFF7619EFA95B0065194B /* findViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 559DFF7519EFA95B0065194B /* findViewController.m */; };
 		55B3C69819C6E4E300D04CE3 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55B3C69719C6E4E300D04CE3 /* CoreText.framework */; };
 		55B3C69A19C6E4EF00D04CE3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55B3C69919C6E4EF00D04CE3 /* QuartzCore.framework */; };
 		55B4971D19EB60A5005013A6 /* Vip1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4971919EB60A5005013A6 /* Vip1@2x.png */; };
@@ -348,7 +349,6 @@
 		55D8975D19AC62DA001EAF9F /* UIScrollView+SVPullToRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D8973919AC62DA001EAF9F /* UIScrollView+SVPullToRefresh.m */; };
 		55D8976C19AC76E0001EAF9F /* MessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D8976B19AC76E0001EAF9F /* MessageController.m */; };
 		55D8977219AC7A41001EAF9F /* WBNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D8977119AC7A41001EAF9F /* WBNavigationController.m */; };
-		55DA31E119AD70D500A5A3CE /* findViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55DA31E019AD70D500A5A3CE /* findViewController.m */; };
 		55DA327719ADB8C400A5A3CE /* lansejiantou.png in Resources */ = {isa = PBXBuildFile; fileRef = 55DA324319ADB8C400A5A3CE /* lansejiantou.png */; };
 		55DA327819ADB8C400A5A3CE /* lansejiantou@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55DA324419ADB8C400A5A3CE /* lansejiantou@2x.png */; };
 		55DA327D19ADB8C400A5A3CE /* qingchulishijilu.png in Resources */ = {isa = PBXBuildFile; fileRef = 55DA324919ADB8C400A5A3CE /* qingchulishijilu.png */; };
@@ -740,6 +740,8 @@
 		5588E28019EE76130095D362 /* SearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchController.h; sourceTree = "<group>"; };
 		5588E28119EE76130095D362 /* SearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchController.m; sourceTree = "<group>"; };
 		5592B33919E696A900C0728C /* aboutus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aboutus@2x.png"; sourceTree = "<group>"; };
+		559DFF7419EFA95B0065194B /* findViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = findViewController.h; sourceTree = "<group>"; };
+		559DFF7519EFA95B0065194B /* findViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = findViewController.m; sourceTree = "<group>"; };
 		55B3C69719C6E4E300D04CE3 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		55B3C69919C6E4EF00D04CE3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		55B4971919EB60A5005013A6 /* Vip1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip1@2x.png"; sourceTree = "<group>"; };
@@ -946,8 +948,6 @@
 		55D8976B19AC76E0001EAF9F /* MessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageController.m; sourceTree = "<group>"; };
 		55D8977019AC7A41001EAF9F /* WBNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBNavigationController.h; sourceTree = "<group>"; };
 		55D8977119AC7A41001EAF9F /* WBNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBNavigationController.m; sourceTree = "<group>"; };
-		55DA31DF19AD70D500A5A3CE /* findViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = findViewController.h; path = ../findViewController.h; sourceTree = "<group>"; };
-		55DA31E019AD70D500A5A3CE /* findViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = findViewController.m; path = ../findViewController.m; sourceTree = "<group>"; };
 		55DA324319ADB8C400A5A3CE /* lansejiantou.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lansejiantou.png; sourceTree = "<group>"; };
 		55DA324419ADB8C400A5A3CE /* lansejiantou@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lansejiantou@2x.png"; sourceTree = "<group>"; };
 		55DA324919ADB8C400A5A3CE /* qingchulishijilu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qingchulishijilu.png; sourceTree = "<group>"; };
@@ -2046,8 +2046,8 @@
 		55D350A319C279BC00BFD8F3 /* views */ = {
 			isa = PBXGroup;
 			children = (
-				55DA31DF19AD70D500A5A3CE /* findViewController.h */,
-				55DA31E019AD70D500A5A3CE /* findViewController.m */,
+				559DFF7419EFA95B0065194B /* findViewController.h */,
+				559DFF7519EFA95B0065194B /* findViewController.m */,
 				55CFB98519C16FCF00FF14F8 /* findDemandCell.h */,
 				55CFB98219C16FB200FF14F8 /* findSupplyCel.h */,
 				55CFB98319C16FB200FF14F8 /* findSupplyCel.m */,
@@ -2747,6 +2747,7 @@
 				04AF262519E8B108001B29CB /* SupplyCell.m in Sources */,
 				04AC7A6819D963C500568926 /* SystemConfig.m in Sources */,
 				55D035B019B8790F000F090F /* supplyTool.m in Sources */,
+				559DFF7619EFA95B0065194B /* findViewController.m in Sources */,
 				5588E26819EE07880095D362 /* Reachability.m in Sources */,
 				04AF261C19E8B0F9001B29CB /* TagInfoItem.m in Sources */,
 				55D035B719B89BAA000F090F /* demandTool.m in Sources */,
@@ -2806,7 +2807,6 @@
 				04AF265619E8B129001B29CB /* LoginController.m in Sources */,
 				55E8C11819D3A6AD003F1685 /* DateManeger.m in Sources */,
 				55CFB98719C16FCF00FF14F8 /* findDemandCell.m in Sources */,
-				55DA31E119AD70D500A5A3CE /* findViewController.m in Sources */,
 				55D035A019B7F6AF000F090F /* HotSupplyModel.m in Sources */,
 				04AF26AC19E8B150001B29CB /* CategoryItem.m in Sources */,
 				5530176D19A3520600E52F07 /* MainController.m in Sources */,
@@ -2897,7 +2897,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "1f5ce2de-2cbe-4a66-a38f-d4a2c4f1a868";
+				PROVISIONING_PROFILE = "f5a5e040-cfb1-4962-839c-5f088a45210d";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2930,7 +2930,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
-				PROVISIONING_PROFILE = "1f5ce2de-2cbe-4a66-a38f-d4a2c4f1a868";
+				PROVISIONING_PROFILE = "f5a5e040-cfb1-4962-839c-5f088a45210d";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

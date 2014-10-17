@@ -63,7 +63,6 @@
             self.edgesForExtendedLayout = UIRectEdgeNone;
         }
     }
-
     self.title = [NSString stringWithFormat:@"%@分类",_titleLabel];
     self.view.backgroundColor =[UIColor whiteColor];
     _selectedFind =[[UIButton alloc]init];
@@ -71,13 +70,13 @@
 
     _CateSupplyArray =[[NSMutableArray alloc]init];
     _CateDemandArray =[[NSMutableArray alloc]init];
-   
-   
-    [self addRefreshViews];
-    
     [self addTableView];
     [self addShowNoDataView];
 
+    [self addRefreshViews];
+    
+//    像素
+    
     linBackView =[[UIView alloc]init];
     linBackView.frame=CGRectMake(0, 0, 320, 30);
     linBackView.backgroundColor =HexRGB(0xe1e9e9);
@@ -88,58 +87,50 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"正在加载中...";
     hud.dimBackground = YES;
+
     [supplyTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if (statues.count > 0) {
-            dataLabel.hidden = YES;
+            
             _tableView.hidden = NO;
-        }else
-        {if (statues.count==0){
-            _tableView.hidden = YES;
+            dataLabel.hidden = YES;
+        }else if(statues.count==0){
             dataLabel.hidden = NO;
+            _tableView.hidden = YES;
+            
         }
-        else {
-            [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-        }
-        }
+        
         
         [_CateSupplyArray addObjectsFromArray:statues];
         
         [_tableView reloadData];
-        
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        
-        
-        
-        
-    } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+       } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
         
     }];
-
+    
+    
 
 
 }
 
-//#pragma mark 集成刷新控件
+#pragma mark 集成刷新控件
 - (void)addRefreshViews
 {
-    NSLog(@"1111111");
-
     // 1.下拉刷新
     MJRefreshHeaderView *header = [MJRefreshHeaderView header];
-    header.scrollView = self.tableView;
+    header.scrollView = _tableView;
     header.delegate = self;
 
     // 2.上拉加载更多
     MJRefreshFooterView *footer = [MJRefreshFooterView footer];
-    footer.scrollView = self.tableView;
+    footer.scrollView = _tableView;
     footer.delegate = self;
 }
 
-//#pragma mark 刷新代理方法
+#pragma mark 刷新代理方法
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    NSLog(@"222222");
-
+        // 下拉刷新
     if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
         // 上拉加载更多
         [self loadViewStatuses:refreshView];
@@ -152,68 +143,8 @@
 }
 
 
--(void)loadViewStatuses:(MJRefreshBaseView *)refreshView{
-    
-    [supplyTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-        if (statues.count > 0) {
-            dataLabel.hidden = YES;
-            _tableView.hidden = NO;
-        }else
-        {if (statues.count==0){
-            _tableView.hidden = YES;
-            dataLabel.hidden = NO;
-        }
-        else {
-            [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-        }
-        }
-
-        [_CateSupplyArray addObjectsFromArray:statues];
-
-        [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
-            
-            if (statues.count > 0) {
-                dataLabel.hidden = YES;
-                _tableView.hidden = NO;
-            }else
-            {if (statues.count==0){
-                _tableView.hidden = YES;
-                dataLabel.hidden = NO;
-            }
-            else{
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-            }
-            }
-            [_CateDemandArray addObjectsFromArray:statues];
-            
-            [_tableView reloadData];
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-        } DemandId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] DemandFailure:^(NSError *error) {
-            
-        }];
-        
-
-        
-        
-       
-
-    } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
-        
-    }];
-    [_tableView reloadData];
-
-    [refreshView endRefreshing];
-
-    
-    
-    
-  
-
-}
 - (void)addShowNoDataView
 {
-    
     dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, 320, 44)];
     dataLabel.textAlignment = NSTextAlignmentCenter;
     dataLabel.backgroundColor = [UIColor clearColor];
@@ -222,6 +153,62 @@
     dataLabel.enabled = NO;
     [self.view addSubview:dataLabel];
 }
+
+-(void)loadViewStatuses:(MJRefreshBaseView *)refreshView{
+    
+    // 显示指示器
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"正在加载中...";
+    hud.dimBackground = YES;
+    
+    [supplyTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+
+        if (statues.count > 0) {
+            dataLabel.hidden = YES;
+            _tableView.hidden = NO;
+        }else
+        {if (statues.count==0){
+          
+      
+            [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+        }
+        }
+
+        [_CateSupplyArray addObjectsFromArray:statues];
+
+        [_tableView reloadData];
+        [refreshView endRefreshing];
+        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    
+    } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+        
+    }];
+    
+    
+    [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        if (statues.count > 0) {
+            dataLabel.hidden = YES;
+            _tableView.hidden = NO;
+        }else
+        {if (statues.count==0){
+        [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+        }
+        }
+        [_CateDemandArray addObjectsFromArray:statues];
+        [_tableView reloadData];
+        [refreshView endRefreshing];
+        
+    } DemandId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] DemandFailure:^(NSError *error) {
+        
+    }];
+    
+    
+  
+
+}
+
 -(void)addLeftSegment
 {
 
@@ -509,9 +496,27 @@
         [_rigthBtn removeFromSuperview];
         [rightBackViw removeFromSuperview];
         [bigbutton removeFromSuperview];
-       
+        [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
+                    [_CateSupplyArray removeAllObjects];
+                    [_tableView reloadData];
+
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+            if (statues.count ==0) {
+
+                dataLabel.hidden = NO;
+                _tableView.hidden = YES;
+            }else{
+
+                _tableView.hidden = NO;
+                dataLabel.hidden = YES;
+            }[_CateDemandArray addObjectsFromArray:statues];
+            [_tableView reloadData];
+
+        } DemandId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] DemandFailure:^(NSError *error) {
+            
+        }];
     }else{
-        
         [_rigthBtn removeFromSuperview];
         [_rightBtnDemand removeFromSuperview];
        [self addRigthSegment];
@@ -570,41 +575,36 @@
     [_rigthBtn setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
     [_rigthBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
 
-    
-    if (sender.tag ==50) {
-        NSLog(@"%ld",(long)sender.tag);
-//        // 显示指示器
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"正在加载中...";
-        hud.dimBackground = YES;
+    // 显示指示器
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"正在加载中...";
+    hud.dimBackground = YES;
 
+    if (sender.tag ==50) {
+      
         [_CateSupplyArray removeAllObjects];
         [_tableView reloadData];
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             [_CateSupplyArray addObjectsFromArray:statues];
             [_tableView reloadData];
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         }cateId:cateIndex supplyHot:@"read_num" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
             
         }];
 
         
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     }else{
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"正在加载中...";
-        hud.dimBackground = YES;
 
         [_CateSupplyArray removeAllObjects];
         [_tableView reloadData];
 
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
                 [_CateSupplyArray addObjectsFromArray:statues];
                 [_tableView reloadData];
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                
+            
             
             
             
@@ -630,7 +630,6 @@
     }else{
         _rightBtnDemand.selected = NO;
         [bigbutton removeFromSuperview];
-//        [rightBackViewDemand removeFromSuperview];
 
     }
     NSString *currentTitle = demand.currentTitle;
@@ -639,19 +638,19 @@
     [_rightBtnDemand setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
     [_rightBtnDemand setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
     
-
+    // 显示指示器
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"正在加载中...";
+    hud.dimBackground = YES;
     
     if (demand.tag ==60) {
-        //    // 显示指示器
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"正在加载中...";
-        hud.dimBackground = YES;
-
+       
         [_CateDemandArray removeAllObjects];
         [_tableView reloadData];
 
             [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-           
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
                 [_CateDemandArray addObjectsFromArray:statues];
 
                 [_tableView reloadData];
@@ -663,20 +662,16 @@
             
         }];
 
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     }else{
-        //    // 显示指示器
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.labelText = @"正在加载中...";
-        hud.dimBackground = YES;
+      
         [_CateDemandArray removeAllObjects];
         [_tableView reloadData];
 
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
                 [_CateDemandArray addObjectsFromArray:statues];
                 [_tableView reloadData];
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
             
             
@@ -722,6 +717,7 @@
     }else{
         return _CateSupplyArray.count;
     }
+    return 0;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
