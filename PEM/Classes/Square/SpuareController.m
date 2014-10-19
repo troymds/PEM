@@ -136,12 +136,12 @@
         PrivilegeController *pvc = [[PrivilegeController alloc] init];
         [self.navigationController pushViewController:pvc animated:YES];
     }else if(btn.tag == SHARE_TYPE){
-         NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"ShareSDK"  ofType:@"jpg"];
+//         NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"ShareSDK"  ofType:@"jpg"];
         
 //        构造分享内容
         id<ISSContent> publishContent = [ShareSDK content:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
                                            defaultContent:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-                                                    image:[ShareSDK imageWithPath:imagePath]
+                                                    image:nil
                                                     title:@"Ebingoo"
                                                       url:@"www.ebingoo.com"
                                               description:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
@@ -156,6 +156,7 @@
                                 result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
                                     if (state == SSResponseStateSuccess)
                                     {
+                                        
                                         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功!" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                                         [alertView show];
                                     }
