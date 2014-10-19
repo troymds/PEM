@@ -20,7 +20,7 @@
         [dic setObject:[SystemConfig sharedInstance].company_id forKey:@"company_id"];
     }
     [HttpTool postWithPath:@"getInfoDetail" params:dic success:^(id JSON) {
-    NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];        
+    NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =[d[@"response"]objectForKey:@"data"];
          if (![array isKindOfClass:[NSNull class]]){

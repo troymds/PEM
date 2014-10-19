@@ -272,7 +272,7 @@
 - (void)turnPage
 {
     NSInteger page = pageControl.currentPage; // 获取当前的page
-    [self.scrollView scrollRectToVisible:CGRectMake(320*(page+1),0,320,118) animated:NO]; // 触摸pagecontroller那个点点 往后翻一页 +1
+    [self.scrollView scrollRectToVisible:CGRectMake(320*(page+1),0,320,118) animated:YES]; // 触摸pagecontroller那个点点 往后翻一页 +1
     
 }
 // 定时器 绑定的方法
@@ -296,8 +296,7 @@
     _backScrollView.contentSize = CGSizeMake(320,960);
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.bounces = NO;
-    _backScrollView.backgroundColor=[UIColor whiteColor];
-    _backScrollView.backgroundColor =HexRGB(0xe9f0f5);
+    _backScrollView.backgroundColor =HexRGB(0xffffff);
     [self.view addSubview:_backScrollView];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 118)];
@@ -307,6 +306,7 @@
     scrollView.userInteractionEnabled = YES;
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.showsVerticalScrollIndicator = NO;
+    scrollView.backgroundColor = HexRGB(0xffffff);
     [_backScrollView addSubview:scrollView];
     
     _backScrollView.showsVerticalScrollIndicator = NO;
