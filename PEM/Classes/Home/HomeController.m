@@ -26,7 +26,7 @@
 #import "adsModel.h"
 #import "CompanyXQViewController.h"
 #import "MessageController.h"
-#import "QRCodeViewController.h"
+#import "QRCodeViewController(1).h"
 @interface HomeController ()<UIScrollViewDelegate>
 {
     UIScrollView *_backScrollView;

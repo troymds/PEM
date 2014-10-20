@@ -11,6 +11,7 @@
 #import "yySupplyModel.h"
 #import "SystemConfig.h"
 #import "supplyCOM.h"
+#import "RemindView.h"
 @implementation supplyTool
 + (void)statusesWithSuccess:(StatusSuccessBlock)success lastID:(NSString * )lastid failure:(StatusFailureBlock)failure
 {
@@ -22,7 +23,9 @@
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
         if ([array isKindOfClass:[NSNull class]])
-        {}else{
+        {
+            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
+        }else{
 
          for (NSDictionary *dict in array) {
         yySupplyModel *s =[[yySupplyModel alloc] initWithDictionaryForSupply:dict];
@@ -49,7 +52,10 @@
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
 
-        if (![array isKindOfClass:[NSNull class]]){
+        if ([array isKindOfClass:[NSNull class]]){
+            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
+
+        }else{
             for (NSDictionary *dict in array) {
                 yySupplyModel *s =[[yySupplyModel alloc] initWithDictionaryForSupply:dict];
                 

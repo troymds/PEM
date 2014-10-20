@@ -6,7 +6,7 @@
 //  Copyright (c) 2014年 chunxi. All rights reserved.
 //
 
-#import "QRCodeViewController.h"
+#import "QRCodeViewController(1).h"
 
 @interface QRCodeViewController ()
 
@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor grayColor];
+    self.view.backgroundColor = [UIColor blackColor];
 	UIButton * scanButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [scanButton setTitle:@"取消" forState:UIControlStateNormal];
     scanButton.frame = CGRectMake(100, 420, 120, 40);
@@ -42,13 +42,13 @@
     
     
     UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 100, 300, 300)];
-    imageView.image = [UIImage imageNamed:@"pick_bg.png"];
+    imageView.image = [UIImage imageNamed:@"pick_bg"];
     [self.view addSubview:imageView];
     
     upOrdown = NO;
     num =0;
     _line = [[UIImageView alloc] initWithFrame:CGRectMake(50, 110, 220, 2)];
-    _line.image = [UIImage imageNamed:@"line_sdk.png"];
+    _line.image = [UIImage imageNamed:@"line.png"];
     [self.view addSubview:_line];
     
     timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
@@ -124,6 +124,7 @@
 #pragma mark AVCaptureMetadataOutputObjectsDelegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
 {
+    NSLog(@"dddddddddd");
     
     NSString *stringValue;
     
@@ -134,17 +135,18 @@
     }
     
     [_session stopRunning];
-    [self dismissViewControllerAnimated:YES completion:^
-     {
-         [timer invalidate];
-         NSLog(@"cap ------ >:%@",stringValue);
-     }];
+    [self dismissViewControllerAnimated:YES completion:^{
+      NSLog(@"cap ------ >:%@",stringValue);
+        
+    }];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
 }
 
 /*

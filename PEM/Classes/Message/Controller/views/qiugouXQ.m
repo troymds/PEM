@@ -193,36 +193,78 @@
     backView.backgroundColor =HexRGB(0xefeded);
 
     [self.view addSubview:backView];
+    
+    
+    
+  
+    
+    UIView *lbackView =[[UIView alloc]init];
+    lbackView.frame =CGRectMake(0, 0, kWidth, 44);
+    lbackView.backgroundColor =[UIColor whiteColor];
+    [backView addSubview:lbackView];
+    
     UIButton *phoneBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     
-    phoneBtn .frame=CGRectMake(80, 0, 150, 40);
-    [phoneBtn setImage:[UIImage imageNamed:@"home_ok_pre.png"] forState:UIControlStateHighlighted];
-
-    [phoneBtn setImage:[UIImage imageNamed:@"home_ok.png"] forState:UIControlStateNormal];
+    phoneBtn .frame=CGRectMake(70, 0, 180, 35);
+    [phoneBtn setImage:[UIImage imageNamed:@"home_phone_pre.png"] forState:UIControlStateHighlighted];
+    
+    [phoneBtn setImage:[UIImage imageNamed:@"home_phone.png"] forState:UIControlStateNormal];
     [phoneBtn addTarget:self action:@selector(phoneBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [backView addSubview:phoneBtn];
-    
-    
-    
+    [lbackView addSubview:phoneBtn];
+
     UIView *l =[[UIView alloc]init];
     [backView addSubview:l];
-    l.frame =CGRectMake(0, 40, 320, 1);
-    l.backgroundColor =[UIColor whiteColor];
+    l.frame =CGRectMake(0, 44, 320, 1);
+    l.backgroundColor =HexRGB(0xe6e3e4);
+    
     UIButton *goCompany =[UIButton buttonWithType:UIButtonTypeCustom];
     [backView addSubview:goCompany];
-
-    
     goCompany.titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
     [goCompany setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    goCompany.frame = CGRectMake(240, 40, 70, 40);
-    [goCompany setTitle:@"进入公司" forState:UIControlStateNormal];
+    goCompany.frame = CGRectMake(280, 40, 40, 44);
     [goCompany setImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"] forState:UIControlStateNormal];
-    goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
-    goCompany.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
+   
     [goCompany addTarget:self action:@selector(gotoCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    //name
+    UILabel *nameCopany =[[UILabel alloc]init];
+//    nameCopany.text = xqModel.company_name;
+    NSLog(@"%@",nameCopany);
+    nameCopany.backgroundColor =[UIColor clearColor];
+//    CGFloat nameCompanyw ;
+//    if (![nameCopany isKindOfClass:[NSNull class]]) {
+//        nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(16)] constrainedToSize:CGSizeMake(MAXFLOAT, 30)].width;
+//
+//    }else{
+//    }
+    [backView addSubview:nameCopany];
+    nameCopany.frame =CGRectMake(20, 40, 210, 44);
+//    nameCopany.font =[UIFont systemFontOfSize:PxFont(16)];
 
-
-
+    //vip
+    UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(20,50, 18, 25)];
+    
+    if ([xqModel.vip_type isEqualToString:@"1"]) {
+        _companyImgVip.image =[UIImage imageNamed:@"Vip4.png"];
+    }
+    else  if ([xqModel.vip_type isEqualToString:@"2"]) {
+        _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
+        
+    } else if([xqModel.vip_type isEqualToString:@"3"]) {
+        _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
+        
+    }else if([xqModel.vip_type isEqualToString:@"0"]){
+        
+        _companyImgVip.image =[UIImage imageNamed:@"Vip1.png"];
+    }
+    else if([xqModel.vip_type isEqualToString:@"0"]){
+        
+        _companyImgVip.image =[UIImage imageNamed:@"Vip5.png"];
+    }else if([xqModel.vip_type isEqualToString:@"-1"]){
+        
+        _companyImgVip.image =[UIImage imageNamed:@"Vip6.png"];
+    }
+    [backView addSubview:_companyImgVip];
+    
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
@@ -268,11 +310,19 @@
     
 }
 -(void)gotoCompanyBtnClick:(UIButton *)goCompany{
+    XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
+    NSLog(@"%@",comID.vip_type);
+
+    if ([comID.vip_type isEqualToString:@"0"]) {
+        
+        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"温馨提示:" message:@"目前只有VIP及以上用户可以进入公司，请升级!" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消", nil];
+        [alert show];
+        
+    }else{
     CompanyXQViewController *xqVC = [[CompanyXQViewController alloc]init];
     
-    XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
     xqVC.companyID =comID.company_id;
     [self.navigationController pushViewController:xqVC animated:YES];
-    
+    }
 }
 @end

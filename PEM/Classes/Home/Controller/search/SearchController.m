@@ -26,6 +26,9 @@
 #import "SearchTool.h"
 #import "UIImageView+WebCache.h"
 #import "RemindView.h"
+#import "SearchCompanyModel.h"
+#import "SearchDenamdModel.h"
+
 @interface SearchController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UIImageView *_searchImage ;
@@ -83,49 +86,10 @@
     
     
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[SaveTempDataTool getFilePath]])
-    {
-        
-        
-        if (_selectBtn.tag ==201) {
-            if (_searchComanyArray.count>0)
-            {
-                [_searchComanyArray removeAllObjects];
-            }
-            for(NSString *tempStr in [SaveTempDataTool unarchiveClass])
-            {
-                SearchResultModel *resultModel = [[SearchResultModel alloc] init];
-                resultModel.searchKeyword = tempStr;
-                [_searchComanyArray insertObject:resultModel atIndex:_searchComanyArray.count];
-            }
-        }else if (_selectBtn.tag == 202){
-            if (_searchDemandArray.count>0)
-            {
-                [_searchDemandArray removeAllObjects];
-            }
-            for(NSString *tempStr in [SaveTempDataTool unarchiveClass])
-            {
-                SearchResultModel *resultModel = [[SearchResultModel alloc] init];
-                resultModel.searchKeyword = tempStr;
-                [_searchDemandArray insertObject:resultModel atIndex:_searchDemandArray.count];
-            }
-        }else{
-            if (_searchSupplyArray.count>0)
-            {
-                [_searchSupplyArray removeAllObjects];
-            }
-            for(NSString *tempStr in [SaveTempDataTool unarchiveClass])
-            {
-                SearchResultModel *resultModel = [[SearchResultModel alloc] init];
-                resultModel.searchKeyword = tempStr;
-                [_searchSupplyArray insertObject:resultModel atIndex:_searchSupplyArray.count];
-
-            }
- 
-        }
-        
-        
-    }
+    currentSelectedBtnTag = 200;
+    
+    [self getSearchResultData];
+    
     
     [self addbutton];
     [self addTableView];            // 搜索记录表
@@ -139,21 +103,80 @@
     
     
 }
+
+
+- (void)getSearchResultData
+{
+    if (currentSelectedBtnTag ==202)
+    {
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[SaveTempDataTool getFilePathWithTag:currentSelectedBtnTag]])
+        {
+            if (_searchComanyArray.count>0)
+            {
+                [_searchComanyArray removeAllObjects];
+            }
+            for(NSString *tempStr in [SaveTempDataTool unarchiveClassWithArrayTag:currentSelectedBtnTag])
+            {
+                SearchCompanyModel *resultModel = [[SearchCompanyModel alloc] init];
+                resultModel.searchKeyword = tempStr;
+                [_searchComanyArray insertObject:resultModel atIndex:_searchComanyArray.count];
+            }
+        }
+        
+    }else if (currentSelectedBtnTag == 201){
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[SaveTempDataTool getFilePathWithTag:currentSelectedBtnTag]])
+        {
+            if (_searchDemandArray.count>0)
+            {
+                [_searchDemandArray removeAllObjects];
+            }
+            for(NSString *tempStr in [SaveTempDataTool unarchiveClassWithArrayTag:currentSelectedBtnTag])
+            {
+                SearchDenamdModel *resultModel = [[SearchDenamdModel alloc] init];
+                resultModel.searchKeyword = tempStr;
+                [_searchDemandArray insertObject:resultModel atIndex:_searchDemandArray.count];
+            }
+        }
+    }else{
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[SaveTempDataTool getFilePathWithTag:currentSelectedBtnTag]])
+        {
+            if (_searchSupplyArray.count>0)
+            {
+                [_searchSupplyArray removeAllObjects];
+            }
+            for(NSString *tempStr in [SaveTempDataTool unarchiveClassWithArrayTag:currentSelectedBtnTag])
+            {
+                SearchResultModel *resultModel = [[SearchResultModel alloc] init];
+                resultModel.searchKeyword = tempStr;
+                [_searchSupplyArray insertObject:resultModel atIndex:_searchSupplyArray.count];
+                
+            }
+        }
+        
+    }
+    
+
+}
+
 - (void)addShowNoRecordView
 {
     recordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 320, 44)];
     recordLabel.textAlignment = NSTextAlignmentCenter;
     recordLabel.backgroundColor = [UIColor clearColor];
     recordLabel.text = @"没有历史记录！";
-    if (_selectBtn.tag ==201) {
-        if (_searchSupplyArray.count > 0)
+    if (currentSelectedBtnTag ==202)
+    {
+        if (_searchComanyArray.count > 0)
         {
             recordLabel.hidden = YES;
         }else{
             recordLabel.hidden = NO;
         }
-    }else if (_selectBtn.tag == 202){
-        if (_searchSupplyArray.count > 0)
+    }else if (currentSelectedBtnTag == 201){
+        if (_searchDemandArray.count > 0)
         {
             recordLabel.hidden = YES;
         }else{
@@ -216,7 +239,6 @@
 }
 -(void)loadViewStatuses:(MJRefreshBaseView *)refreshView{
 
-    
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     // 显示指示器
@@ -227,14 +249,14 @@
     // 获取数据
     if (self.view == _resultBgView)
     {
-        if (_selectBtn.tag ==202) {
+        if (currentSelectedBtnTag ==202) {
             [self companyRequest];
             if (_compangyArray.count ==0) {
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
 
             }
         }
-        else if(_selectBtn.tag == 201)
+        else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
             if (_demandArray.count ==0) {
@@ -368,7 +390,8 @@
     if (_currentKeyString.length > 0)
     {
         
-        [SearchTool searchWithSuccessBlock:^(NSArray *search) {
+        [SearchTool searchWithSuccessBlock:^(NSArray *search)
+        {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
             if (search.count<=0)
@@ -385,8 +408,10 @@
             
         } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0]
                               failureBlock:^(NSError *error) {
+                                  
                               }];
-    }else
+    }
+    else
     {
         [companyTool statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -409,8 +434,9 @@
             
         }];
     }
-    
+ 
 }
+
 
 - (void)tableReloadData
 {
@@ -488,12 +514,39 @@
     [_bgView addSubview:_backViw];
     
     [_recTableView reloadData];
-    if (_searchSupplyArray.count>0)
-        
+    
+    if (currentSelectedBtnTag == 202)
     {
-        recordLabel.hidden = YES;
-    }else{
-        recordLabel.hidden = NO;
+        if (_searchComanyArray.count>0)
+            
+        {
+            recordLabel.hidden = YES;
+        }else{
+            recordLabel.hidden = NO;
+        }
+        
+    }
+    else if (currentSelectedBtnTag == 201)
+    {
+        if (_searchDemandArray.count>0)
+            
+        {
+            recordLabel.hidden = YES;
+        }else{
+            recordLabel.hidden = NO;
+        }
+        
+    }
+    else
+    {
+        if (_searchSupplyArray.count>0)
+            
+        {
+            recordLabel.hidden = YES;
+        }else{
+            recordLabel.hidden = NO;
+        }
+        
     }
     
     UIImageView *kuangImage =[[UIImageView alloc]init];
@@ -542,32 +595,61 @@
     
     if (self.view == _bgView)
     {
-        if (_searchSupplyArray.count > 0)
+        if (currentSelectedBtnTag == 202)
         {
-            SearchResultModel *searchResult = [_searchSupplyArray objectAtIndex:indexPath.row-1];
-            _searchTextField.text = searchResult.searchKeyword;
-            
+            if (_searchComanyArray.count > 0)
+            {
+                SearchCompanyModel *searchResult = [_searchComanyArray objectAtIndex:indexPath.row-1];
+                _searchTextField.text = searchResult.searchKeyword;
+                _currentKeyString = searchResult.searchKeyword;
+            }
         }
+        else if (currentSelectedBtnTag == 201)
+        {
+            if (_searchDemandArray.count > 0)
+            {
+                SearchDenamdModel *searchResult = [_searchDemandArray objectAtIndex:indexPath.row-1];
+                _searchTextField.text = searchResult.searchKeyword;
+                _currentKeyString = searchResult.searchKeyword;
+            }
+        }
+        else
+        {
+            if (_searchSupplyArray.count > 0)
+            {
+                SearchResultModel *searchResult = [_searchSupplyArray objectAtIndex:indexPath.row-1];
+                _searchTextField.text = searchResult.searchKeyword;
+                _currentKeyString = searchResult.searchKeyword;
+            }
+        }
+        
+        
+        
+        
+        [self searchToGo];
+
     }
     
     else
     {
-        if (_selectBtn.tag == 201)
+        if (currentSelectedBtnTag == 202)
         {
-            qiugouXQ *demand =[qiugouXQ alloc];
-            yyDemandModel *dema =[_demandArray objectAtIndex:indexPath.row];
-            demand.demandIndex = dema.demandid;
-            [self.navigationController pushViewController:demand animated:YES];
-        }else if (_selectBtn.tag ==202)
-        {
-            // 从企业数组中取得enterpriseModel
-            
             CompanyXQViewController *xqVC = [CompanyXQViewController alloc];
             yyCompanyModel *comID =[_compangyArray objectAtIndex:indexPath.row];
             xqVC.companyName = comID.name;
             xqVC.companyID =comID.companyid;
             
             [self.navigationController pushViewController:xqVC animated:YES];
+        }else if (currentSelectedBtnTag ==201)
+        {
+            // 从企业数组中取得enterpriseModel
+            
+            
+            qiugouXQ *demand =[qiugouXQ alloc];
+            yyDemandModel *dema =[_demandArray objectAtIndex:indexPath.row];
+            demand.demandIndex = dema.demandid;
+            [self.navigationController pushViewController:demand animated:YES];
+            
         }else
         {
             // 从供应数组中取得provideModel
@@ -578,7 +660,8 @@
         }
     }
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -589,20 +672,40 @@
 {
     if (self.view == _bgView)
     {
-        if (_searchSupplyArray.count > 0)
+        if (currentSelectedBtnTag == 202)
         {
-            return [_searchSupplyArray count]+1 ;
-        }else{ return 0;}
+            if (_searchComanyArray.count > 0)
+            {
+                return [_searchComanyArray count]+1 ;
+            }else{ return 0;}
+        }else if(currentSelectedBtnTag == 201)
+        {
+            if (_searchDemandArray.count > 0)
+            {
+                return [_searchDemandArray count]+1 ;
+            }else{ return 0;}
+        }else
+        {
+            if (_searchSupplyArray.count > 0)
+            {
+                return [_searchSupplyArray count]+1 ;
+            }else{ return 0;}
+        }
         
-    }else{
-        if (_selectBtn.tag==200){
+    }else
+    {
+        if (currentSelectedBtnTag==200)
+        {
             return [_supllyArray count];
         }
-        if (_selectBtn.tag ==201) {
+        if (currentSelectedBtnTag ==201)
+        {
             return [_demandArray count];
-        }else if (_selectBtn.tag ==202) {
+        }else if (currentSelectedBtnTag ==202)
+        {
             return [_compangyArray count];
-        }}
+        }
+    }
     
     return 8;
     
@@ -667,22 +770,49 @@
         }
         else if(indexPath.row > 0)
         {
-            
-            if (_searchSupplyArray.count>0)
+           
+            if (currentSelectedBtnTag ==202)
             {
-                history.hidden = NO;
-                SearchResultModel *resultModel =  [_searchSupplyArray objectAtIndex:indexPath.row-1];
-                cell.textLabel.text = resultModel.searchKeyword;
+                if (_searchComanyArray.count>0)
+                {
+                    history.hidden = NO;
+                    SearchCompanyModel *resultModel =  [_searchComanyArray objectAtIndex:indexPath.row-1];
+                    cell.textLabel.text = resultModel.searchKeyword;
+                }
+                else{
+                    history.hidden =YES;
+                }
+            }else if (currentSelectedBtnTag ==201)
+            {
+                if (_searchDemandArray.count>0)
+                {
+                    history.hidden = NO;
+                    SearchDenamdModel *resultModel =  [_searchDemandArray objectAtIndex:indexPath.row-1];
+                    cell.textLabel.text = resultModel.searchKeyword;
+                }
+                else{
+                    history.hidden =YES;
+                }
+            }else
+            {
+                if (_searchSupplyArray.count>0)
+                {
+                    history.hidden = NO;
+                    SearchResultModel *resultModel =  [_searchSupplyArray objectAtIndex:indexPath.row-1];
+                    cell.textLabel.text = resultModel.searchKeyword;
+                }
+                else{
+                    history.hidden =YES;
+                }
+
             }
-            else{
-                history.hidden =YES;
-            }
+            
         }
         return cell;
         
     }else
     {
-        if (_selectBtn.tag ==202 )
+        if (currentSelectedBtnTag ==202 )
         {
             static NSString *cellIndexfider =@"Cell3";
             companyTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
@@ -731,7 +861,7 @@
             return cell;
             
         }
-        else if(_selectBtn.tag == 201)
+        else if(currentSelectedBtnTag == 201)
         {
             static NSString *cellIndexfider =@"Cell2";
             demandTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
@@ -809,12 +939,36 @@
         [clearBtn addTarget:self action:@selector(clearBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [clearView addSubview:clearBtn];
         
-        if (_searchSupplyArray.count > 0)
+        if (currentSelectedBtnTag == 202)
         {
-            clearView.hidden = NO;
-        }else{
-            clearView.hidden = YES;
+            if (_searchComanyArray.count > 0)
+            {
+                clearView.hidden = NO;
+            }else{
+                clearView.hidden = YES;
+            }
+            
+        }else if (currentSelectedBtnTag == 201)
+        {
+            if (_searchDemandArray.count > 0)
+            {
+                clearView.hidden = NO;
+            }else{
+                clearView.hidden = YES;
+            }
+            
         }
+        else
+        {
+            if (_searchSupplyArray.count > 0)
+            {
+                clearView.hidden = NO;
+            }else{
+                clearView.hidden = YES;
+            }
+            
+        }
+        
         return clearView;
         
     }
@@ -908,16 +1062,40 @@
     self.view = _bgView;
     [_recTableView reloadData];
     
-    if (_searchSupplyArray.count>0)
-    {
-        recordLabel.hidden = YES;
-    }else{
-        recordLabel.hidden = NO;
-    }
+    [self showSearchRecordLabel];
     
-    _searBtn.selected = YES;
     [self bigBtnClick:(UIButton *)textField];
    
+}
+
+- (void)showSearchRecordLabel
+{
+    if (currentSelectedBtnTag ==202)
+    {
+        if (_searchComanyArray.count > 0)
+        {
+            recordLabel.hidden = YES;
+        }else{
+            recordLabel.hidden = NO;
+        }
+    }else if (currentSelectedBtnTag == 201){
+        if (_searchDemandArray.count > 0)
+        {
+            recordLabel.hidden = YES;
+        }else{
+            recordLabel.hidden = NO;
+        }
+    }else{
+        if (_searchSupplyArray.count > 0)
+        {
+            recordLabel.hidden = YES;
+        }else{
+            recordLabel.hidden = NO;
+        }
+    }
+    
+    
+    _searBtn.selected = YES;
 }
 
 -(void)searchBtn:(UIButton *)sear
@@ -925,39 +1103,102 @@
     [_demandArray removeAllObjects];
     [_supllyArray removeAllObjects];
     [_compangyArray removeAllObjects];
+    
     [_resultTableView reloadData];
     [_recTableView reloadData];
+    
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (_currentKeyString.length>0)
     {
         // 如果有重复关键字，保留最新的。
-        if (_searchSupplyArray.count>0)
+        if (currentSelectedBtnTag == 202)
         {
-            for (int i = 0;i<_searchSupplyArray.count;i++)
+            if (_searchComanyArray.count>0)
             {
-                SearchResultModel *resultMod = [_searchSupplyArray objectAtIndex:i];
-                if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                for (int i = 0;i<_searchComanyArray.count;i++)
                 {
-                    [_searchSupplyArray removeObjectAtIndex:i];
+                    SearchCompanyModel *resultMod = [_searchComanyArray objectAtIndex:i];
+                    if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                    {
+                        [_searchComanyArray removeObjectAtIndex:i];
+                    }
                 }
             }
+            
+            
+            SearchCompanyModel *resultModel = [[SearchCompanyModel alloc] init];
+            resultModel.searchKeyword = _currentKeyString;
+            if (_searchComanyArray.count == 7)
+            {
+                [_searchComanyArray removeLastObject];
+            }
+            [_searchComanyArray insertObject:resultModel atIndex:0];
+            [self saveTempSearchWordWithTag:202];
+            
         }
-        
-        
-        SearchResultModel *resultModel = [[SearchResultModel alloc] init];
-        resultModel.searchKeyword = _currentKeyString;
-        if (_searchSupplyArray.count == 7)
+        else if (currentSelectedBtnTag == 201)
         {
-            [_searchSupplyArray removeLastObject];
+            if (_searchDemandArray.count>0)
+            {
+                for (int i = 0;i<_searchDemandArray.count;i++)
+                {
+                    SearchDenamdModel *resultMod = [_searchDemandArray objectAtIndex:i];
+                    if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                    {
+                        [_searchDemandArray removeObjectAtIndex:i];
+                    }
+                }
+            }
+            
+            
+            SearchDenamdModel *resultModel = [[SearchDenamdModel alloc] init];
+            resultModel.searchKeyword = _currentKeyString;
+            if (_searchDemandArray.count == 7)
+            {
+                [_searchDemandArray removeLastObject];
+            }
+            [_searchDemandArray insertObject:resultModel atIndex:0];
+            [self saveTempSearchWordWithTag:201];
+            
         }
-        [_searchSupplyArray insertObject:resultModel atIndex:0];
-        [self saveTempSearchWord];
+        else
+        {
+            if (_searchSupplyArray.count>0)
+            {
+                for (int i = 0;i<_searchSupplyArray.count;i++)
+                {
+                    SearchResultModel *resultMod = [_searchSupplyArray objectAtIndex:i];
+                    if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                    {
+                        [_searchSupplyArray removeObjectAtIndex:i];
+                    }
+                }
+            }
+            
+            
+            SearchResultModel *resultModel = [[SearchResultModel alloc] init];
+            resultModel.searchKeyword = _currentKeyString;
+            if (_searchSupplyArray.count == 7)
+            {
+                [_searchSupplyArray removeLastObject];
+            }
+            [_searchSupplyArray insertObject:resultModel atIndex:0];
+            [self saveTempSearchWordWithTag:200];
+        }
         
         
     }
-    self.view = _resultBgView;
+    //self.view = _resultBgView;
     
     [self bigBtnClick:sear];
+
+    
+    [self searchToGo];
+}
+- (void)searchToGo
+{
+    
+    self.view = _resultBgView;
     
     [_searchTextField resignFirstResponder];
     
@@ -969,10 +1210,10 @@
     
     if (self.view == _resultBgView)
     {
-        if (_selectBtn.tag == 202)
+        if (currentSelectedBtnTag == 202)
         {
             [self companyRequest];
-        }else if(_selectBtn.tag == 201)
+        }else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
         }else
@@ -982,15 +1223,27 @@
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     }
+
 }
 
-- (void)saveTempSearchWord
+- (void)saveTempSearchWordWithTag:(int)arrayTag
 {
-    [SaveTempDataTool archiveClass:_searchSupplyArray];
+    if (arrayTag == 202)
+    {
+        [SaveTempDataTool archiveClass:_searchComanyArray withArrayTag:arrayTag];
+        
+    }else if(arrayTag == 201)
+    {
+        [SaveTempDataTool archiveClass:_searchDemandArray withArrayTag:arrayTag];
+    }else
+    {
+        [SaveTempDataTool archiveClass:_searchSupplyArray withArrayTag:arrayTag];
+    }
 }
 
 - (void)sortSelectedBtn:(UIButton *)sender
 {
+
     _selectXuanka.selected =!_selectXuanka.selected;
     if (sender.selected==YES) {
         _selectBtn.selected = NO;
@@ -1002,7 +1255,8 @@
     {
         
     }
-    else {
+    else
+    {
         _selectedBtnImage.selected = NO;
         [_selectedBtnImage setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         _selectedBtnImage = sender;
@@ -1021,21 +1275,46 @@
     [_selectBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
     _selectBtn.tag = sender.tag;
     
-    
+    currentSelectedBtnTag = sender.tag;
     sender.selected =YES;
 
-    
+    [self getSearchResultData];
+    [_recTableView reloadData];
+    [self showSearchRecordLabel];
+
 
 }
 
 -(void)clearBtnClick:(UIButton *)clear
 {
-    [_searchSupplyArray removeAllObjects];
-    [_recTableView reloadData];
-    [SaveTempDataTool archiveClass:_searchSupplyArray];
-    _searchTextField.text = nil;
-    
-    recordLabel.hidden = NO;
+    if (currentSelectedBtnTag == 202)
+    {
+        [_searchComanyArray removeAllObjects];
+        [_recTableView reloadData];
+        [SaveTempDataTool archiveClass:_searchComanyArray withArrayTag:_searBtn.tag];
+        _searchTextField.text = nil;
+        
+        recordLabel.hidden = NO;
+
+    }else if(currentSelectedBtnTag == 201)
+    {
+        [_searchDemandArray removeAllObjects];
+        [_recTableView reloadData];
+        [SaveTempDataTool archiveClass:_searchDemandArray withArrayTag:_searBtn.tag];
+        _searchTextField.text = nil;
+        
+        recordLabel.hidden = NO;
+
+    }else
+    {
+        [_searchSupplyArray removeAllObjects];
+        [_recTableView reloadData];
+        [SaveTempDataTool archiveClass:_searchSupplyArray withArrayTag:_searBtn.tag];
+        _searchTextField.text = nil;
+        
+        recordLabel.hidden = NO;
+
+    }
 }
 -(void)BackButton
 {

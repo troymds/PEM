@@ -321,12 +321,9 @@
     [forImage addSubview:goCompany];
     goCompany.titleLabel.font =[UIFont systemFontOfSize:PxFont(16)];
     [goCompany setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    goCompany.frame = CGRectMake(240, 0, 70, 44);
-    [goCompany setTitle:@"进入公司" forState:UIControlStateNormal];
+    goCompany.frame = CGRectMake(280, 0, 40, 44);
     [goCompany setImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"] forState:UIControlStateNormal];
-    goCompany.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
-    goCompany.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
-    [goCompany addTarget:self action:@selector(goCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+       [goCompany addTarget:self action:@selector(goCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     
     //vip
     UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(nameCompanyw+20,10, 18, 25)];
