@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "SetImageView.h"
+#import "MyActionSheetView.h"
 
-@interface SettingController : UIViewController<ProImageViewDelegate,UIAlertViewDelegate>
+
+@interface SettingController : UIViewController<ProImageViewDelegate,UIAlertViewDelegate,MyActionSheetViewDelegate>
 {
     UIScrollView *_scrollview;
     NSString *_url;

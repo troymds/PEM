@@ -83,6 +83,7 @@
     [HttpTool postWithPath:@"getWishlist" params:params success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",result);
         if (isRefresh) {
             if (_dataArray.count!=0) {
                 [_dataArray removeAllObjects];
@@ -136,8 +137,9 @@
     MyFavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
     [cell.iconImageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",item.img]] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
     cell.nameLabel.text = item.title;
-    cell.priceLabel.text = [NSString stringWithFormat:@"价格:%@",item.price];
+    cell.priceLabel.text = [NSString stringWithFormat:@"价格:%@元",item.price];
     cell.dateLabel.text = item.collectTimes;
+    cell.timesLabel.text = [NSString stringWithFormat:@"收藏%@次",item.collect_num];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,94, kWidth-20, 1)];
     lineView.backgroundColor = HexRGB(0xd5d5d5);

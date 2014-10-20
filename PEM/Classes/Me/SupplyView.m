@@ -98,28 +98,27 @@
         [self addSubview:bgView2];
         
         _priceView = [[CellView alloc] initWithFrame:CGRectMake(0, 0, width, 35)];
-        _priceView.nameLabel.text = @"价  格";
+        _priceView.nameLabel.text = @"价    格";
         UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(width-10-20, 0, 20, 35)];
         priceLabel.text = @"元";
-        _priceView.lineView.frame = CGRectMake(80,(_priceView.frame.size.height-20)/2, 1, 20);
-        _priceView.nameLabel.frame =CGRectMake(0,0,80,35);
+        _priceView.lineView.frame = CGRectMake(70,(_priceView.frame.size.height-20)/2, 1, 20);
+        _priceView.nameLabel.frame =CGRectMake(5,0,65,35);
         priceLabel.backgroundColor = [UIColor clearColor];
         [_priceView addSubview:priceLabel];
-        _priceTextField = [[UITextField alloc] initWithFrame:CGRectMake(90, 0,width-90, 35)];
+        _priceTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0,width-75-20, 35)];
         _priceTextField.delegate = self;
+        _priceTextField.keyboardType = UIKeyboardTypeNumberPad;
         _priceTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _priceTextField.tag = PRICE_TYPE;
         [_priceView addSubview:_priceTextField];
         [bgView2 addSubview:_priceView];
         
         _unitView = [[CellView alloc] initWithFrame:CGRectMake(0,35, width, 35)];
-        _unitView.lineView.frame = CGRectMake(80,(_unitView.frame.size.height-20)/2, 1, 20);
-        _unitView.nameLabel.text = @"单  位";
-        _unitView.nameLabel.frame =CGRectMake(0,0,80,35);
-        _unitView.lineView.frame = CGRectMake(80,(_unitView.frame.size.height-20)/2, 1, 20);
-        _unitView.nameLabel.frame =CGRectMake(0,0,80,35);
+        _unitView.lineView.frame = CGRectMake(70,(_unitView.frame.size.height-20)/2, 1, 20);
+        _unitView.nameLabel.text = @"单    位";
+        _unitView.nameLabel.frame =CGRectMake(5,0,65,35);
 
-        _unitField = [[UITextField alloc] initWithFrame:CGRectMake(90, 0, _unitView.frame.size.width-90, 35)];
+        _unitField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _unitView.frame.size.width-75, 35)];
         _unitField.tag = UNIT_TYPE;
         _unitField.font = [UIFont systemFontOfSize:PxFont(20)];
         _unitField.placeholder = @"供应物品的计量单位";
@@ -129,25 +128,27 @@
         
         _standardView = [[CellView alloc] initWithFrame:CGRectMake(0,70, width, 35)];
         _standardView.nameLabel.text = @"起定标准";
-        _standardView.lineView.frame = CGRectMake(80,(_standardView.frame.size.height-20)/2, 1, 20);
-        _standardView.nameLabel.frame =CGRectMake(0,0,80,35);
+        _standardView.lineView.frame = CGRectMake(70,(_standardView.frame.size.height-20)/2, 1, 20);
+        _standardView.nameLabel.frame =CGRectMake(5,0,65,35);
         
-        _standardTextField = [[UITextField alloc] initWithFrame:CGRectMake(90, 0, _standardView.frame.size.width-90, 35)];
+        _standardTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _standardView.frame.size.width-75, 35)];
         _standardTextField.tag = STANDARD_TYPE;
+        _standardTextField.keyboardType = UIKeyboardTypeNumberPad;
         _standardTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _standardTextField.delegate = self;
         [_standardView addSubview:_standardTextField];
         [bgView2 addSubview:_standardView];
-
-
         
         _descriptionView = [[CellView alloc] initWithFrame:CGRectMake(0, 105, width, 35)];
-        _descriptionView.nameLabel.text = @"描 述";
-        _descriptionView.lineView.frame = CGRectMake(80,(_descriptionView.frame.size.height-20)/2, 1, 20);
-        _descriptionView.nameLabel.frame =CGRectMake(0,0,80,35);
+        _descriptionView.nameLabel.text = @"描    述";
+        _descriptionView.lineView.frame = CGRectMake(70,(_descriptionView.frame.size.height-20)/2, 1, 20);
+        _descriptionView.nameLabel.frame =CGRectMake(5,0,65,35);
 
-        _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 0,width-90-10-7, 35)];
+        _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 0,width-75-10-7, 35)];
         _descriptionLabel.backgroundColor = [UIColor clearColor];
+        _descriptionLabel.textColor = HexRGB(0x666666);
+        _descriptionLabel.font = [UIFont systemFontOfSize:PxFont(20)];
+        _descriptionLabel.text = @"十字以上";
         [_descriptionView addSubview:_descriptionLabel];
         UIImageView *img4 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"]];
         img4.frame = CGRectMake(width-10-7, 11, 7, 13);
@@ -182,10 +183,11 @@
         
         _linkmanView = [[CellView alloc] initWithFrame:CGRectMake(0,0, width, 35)];
         _linkmanView.nameLabel.text = @"联系人";
-        _linkmanView.lineView.frame = CGRectMake(75,(_linkmanView.frame.size.height-20)/2, 1, 20);
-        _linkmanView.nameLabel.frame =CGRectMake(0,0,80,35);
-        _linkManTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 0, _linkmanView.frame.size.width-80, 35)];
+        _linkmanView.lineView.frame = CGRectMake(55,(_linkmanView.frame.size.height-20)/2, 1, 20);
+        _linkmanView.nameLabel.frame =CGRectMake(5,0,50,35);
+        _linkManTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 0, _linkmanView.frame.size.width-60, 35)];
         _linkManTextField.tag = LINKMAN_TYPE;
+        _linkManTextField.placeholder = @"2-4个字符";
         _linkManTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _linkManTextField.delegate = self;
         [_linkmanView addSubview:_linkManTextField];
@@ -193,12 +195,11 @@
         
         
         _phoneNumView = [[CellView alloc] initWithFrame:CGRectMake(0, 35, width, 35)];
-        _phoneNumView.nameLabel.text = @"电 话";
-        _phoneNumView.lineView.frame = CGRectMake(75,(_phoneNumView.frame.size.height-20)/2, 1, 20);
-        _phoneNumView.nameLabel.frame =CGRectMake(0,0,80,35);
-        _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 0, _phoneNumView.frame.size.width-90, 35)];
+        _phoneNumView.nameLabel.text = @"电   话";
+        _phoneNumView.lineView.frame = CGRectMake(55,(_phoneNumView.frame.size.height-20)/2, 1, 20);
+        _phoneNumView.nameLabel.frame =CGRectMake(5,0,50,35);
+        _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 0, _phoneNumView.frame.size.width-60, 35)];
         _phoneNumTextField.tag = PHONENUM_TYPE;
-        _phoneNumTextField.keyboardType = UIKeyboardTypePhonePad;
         _phoneNumTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _phoneNumTextField.delegate = self;
         [_phoneNumView addSubview:_phoneNumTextField];
@@ -207,9 +208,14 @@
         
         
         _imageView = [[CellView alloc] initWithFrame:CGRectMake(0,70, width, 35)];
-        _imageView.nameLabel.text = @"图  片";
-        _imageView.lineView.frame = CGRectMake(75,(_phoneNumView.frame.size.height-20)/2, 1, 20);
-        _imageView.nameLabel.frame =CGRectMake(0,0,80,35);
+        _imageView.nameLabel.text = @"图   片";
+        _imageView.lineView.frame = CGRectMake(55,(_phoneNumView.frame.size.height-20)/2, 1, 20);
+        _imageView.nameLabel.frame =CGRectMake(5,0,50,35);
+        UILabel *imgLabel = [[UILabel alloc] initWithFrame:CGRectMake(60,0, 60, 35)];
+        imgLabel.font = [UIFont systemFontOfSize:PxFont(20)];
+        imgLabel.text = @"一张";
+        imgLabel.textColor = HexRGB(0x666666);
+        [_imageView addSubview:imgLabel];
         UIImageView *img3 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"]];
         img3.frame = CGRectMake(width-10-7, 11, 7, 13);
         [_imageView addSubview:img3];
@@ -287,8 +293,17 @@
         
         _isHide = YES;
         
+        tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
+        [self addGestureRecognizer:tap];
     }
     return self;
+}
+
+- (void)tapDown
+{
+    if ([self.delegate respondsToSelector:@selector(tapClicked)]) {
+        [self.delegate tapClicked];
+    }
 }
 
 
@@ -320,28 +335,6 @@
     CGRect frame = self.frame;
     frame.size.height = _publishBtn.frame.origin.y+_publishBtn.frame.size.height+20;
     self.frame = frame;
-}
-
-
-- (void)tapDown{
-    for (UIView *subView in self.subviews) {
-        if ([subView isKindOfClass:[UITextField class]]){
-            [subView resignFirstResponder];
-        }else{
-            for (UIView *view in subView.subviews) {
-                if ([view isKindOfClass:[UITextField class]]){
-                    [view resignFirstResponder];
-                }else{
-                    for (UIView *vw in view.subviews) {
-                        if ([vw isKindOfClass:[UITextField class]]){
-                            [vw resignFirstResponder];
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 }
 
 

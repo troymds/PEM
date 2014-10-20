@@ -11,6 +11,7 @@
 @interface MyFavoriteItem : NSObject
 
 @property (nonatomic,copy) NSString *collectTimes;
+@property (nonatomic,copy) NSString *collect_num;
 @property (nonatomic,copy) NSString *uid;
 @property (nonatomic,copy) NSString *title;
 @property (nonatomic,copy) NSString *info_id;

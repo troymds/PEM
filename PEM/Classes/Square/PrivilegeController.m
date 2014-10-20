@@ -37,6 +37,7 @@
     }else{
         [_headView.iconImg setImageWithURL:[NSURL URLWithString:[SystemConfig sharedInstance].companyInfo.image]];
         _headView.nameLabel.text = [SystemConfig sharedInstance].companyInfo.company_name;
+        NSLog(@"-----%@",[SystemConfig sharedInstance].vipInfo.vip_name);
         if ([SystemConfig sharedInstance].vipInfo) {
             _headView.typeLabel.text = [SystemConfig sharedInstance].vipInfo.vip_name;
         }
@@ -62,6 +63,7 @@
     [self.view addSubview:bgView];
 
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(bgView.frame.size.width,bgView.frame.origin.y,kWidth-bgView.frame.size.width,kHeight-_headView.frame.size.height-64)];
+    _scrollView.delegate = self;
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:_scrollView];
@@ -75,48 +77,14 @@
     [upPowerBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [upPowerBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     [_scrollView addSubview:upPowerBtn];
-
-    [self addRightItem];
     
 }
-
-- (void)addRightItem
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    // 创建按钮
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    // 设置普通背景图片
-    [btn setBackgroundImage:[UIImage imageNamed:@"update.png"] forState:UIControlStateNormal];
-    [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
-    // 设置尺寸
-    btn.frame = CGRectMake(10, 10,63, 26);
-    [btn addTarget:self action:@selector(update) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
-    self.navigationItem.rightBarButtonItem = item;
-
-}
-
-
-- (void)update
-{
-    if (![SystemConfig sharedInstance].isUserLogin) {
-        RegisterContrller *rc = [[RegisterContrller alloc] init];
-        rc.pushType = UPDATE_TYPE;
-        [self.navigationController pushViewController:rc animated:YES];
-    }else{
-        NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
-        [HttpTool postWithPath:@"applyVip" params:params success:^(id JSON) {
-            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-            if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100) {
-                [self showRemindView];
-            }
-        } failure:^(NSError *error) {
-            NSLog(@"%@",error);
-        }];
-        
+    if (scrollView.contentOffset.y < 0) {
+        scrollView.contentOffset = CGPointMake(0, 0);
     }
 }
-
 
 //升级按钮
 - (void)btnClick:(UIButton *)btn
@@ -126,7 +94,8 @@
         rc.pushType = UPDATE_TYPE;
         [self.navigationController pushViewController:rc animated:YES];
     }else{
-        NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+        NSLog(@"%@",updateType);
+        NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",updateType,@"apply_type", nil];
         [HttpTool postWithPath:@"applyVip" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100) {
@@ -224,12 +193,8 @@
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,rightImg.frame.origin.y+rightImg.frame.size.height+20)];
             }
         }
-
-
     }
 }
-
-
 
 
 //左边的按钮点击事件
@@ -245,6 +210,7 @@
             }
         }
     }
+    updateType = [NSString stringWithFormat:@"%d",image.tag-1000-1];
     //根据左边的按钮添加右边对应的试图
     switch (image.tag) {
         case 1000:

@@ -18,6 +18,11 @@
         _img = [dic objectForKey:@"img"];
         _price = [dic objectForKey:@"price"];
         _collectTimes = [dic objectForKey:@"collectTimes"];
+        if (isNull(dic, @"collect_num")) {
+            _collect_num = @"0";
+        }else{
+            _collect_num = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"collect_num"] intValue]];
+        }
     }
     return self;
 }

@@ -42,14 +42,14 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     if ([SystemConfig sharedInstance].isUserLogin){
-        //登录状态 显示企业头像等信息
+        //判断是否是登录状态 若是 显示企业头像等信息
         CompanyInfoItem *item = [SystemConfig sharedInstance].companyInfo;
         if (item.image&&item.image.length!=0){
-            [_headView.headerImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"company_default.png"]];
+            [_headView.headerImage setImageWithURL:[NSURL URLWithString:item.image]];
         }
         NSString *name;
         if (item.company_name.length==0) {
-            name = @"未设置用户名";
+            name = @"未设置公司名";
         }else{
             name = item.company_name;
         }

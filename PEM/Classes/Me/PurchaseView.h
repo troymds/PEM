@@ -22,7 +22,7 @@
 
 @interface PurchaseView : UIView<UITextFieldDelegate>
 {
-
+    UITapGestureRecognizer *tap;
 }
 
 @property (nonatomic,strong) CellView *categoryView;

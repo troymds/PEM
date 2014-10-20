@@ -96,8 +96,6 @@
     
 }
 
-
-
 - (void)tapDown{
     [addField resignFirstResponder];
 }

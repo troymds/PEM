@@ -17,4 +17,6 @@
 
 - (void)textFieldEndEditting:(UITextField *)textField;
 
+- (void)tapClicked;
+
 @end
