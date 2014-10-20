@@ -17,8 +17,7 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
 
-        NSDictionary *array =[d[@"response"]objectForKey:@"data"];
-
+        NSDictionary *array =d[@"response"];
         supplyWishlistidModel *s =[[supplyWishlistidModel alloc] initWithDictonary:array];
             
             [statuses addObject:s];

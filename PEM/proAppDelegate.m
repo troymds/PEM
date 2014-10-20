@@ -112,6 +112,9 @@
     //短信分享
     [ShareSDK connectSMS];
     
+    //邮件分享
+    [ShareSDK connectMail];
+    
     [self.window makeKeyAndVisible];
     
     return YES;

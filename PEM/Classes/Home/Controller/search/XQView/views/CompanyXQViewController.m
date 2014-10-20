@@ -53,6 +53,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = HexRGB(0xffffff);
     ChosseSelectedBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     _companySupplyArray =[[NSMutableArray alloc]init];
     _companyDemandArray =[[NSMutableArray alloc]init];
@@ -477,7 +478,7 @@
     
     
     _conditionTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, conditionView.frame.size.height-68) style:UITableViewStylePlain];
-
+    _conditionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [conditionView addSubview:_conditionTableView];
     
     _conditionTableView.delegate =self;
@@ -495,6 +496,7 @@
     height = _conditionTableView.frame.origin.y+_conditionTableView.frame.size.height;
     chooseBackView =[[UIView alloc]initWithFrame:CGRectMake(0, height, 320, self.view.frame.size.height-height)];
     [self.view addSubview:chooseBackView];
+    chooseBackView.hidden = YES;
     chooseBackView.backgroundColor =[UIColor whiteColor];
     UIView *linview =[[UIView alloc]initWithFrame:CGRectMake(0,0, 320, 1)];
     [chooseBackView addSubview:linview];
@@ -598,7 +600,7 @@
         _companyHomeScrollView.hidden = NO;
         
         
-        //chooseBackView.hidden = YES;
+        chooseBackView.hidden = YES;
         
     }else if(company.tag ==21)
     {
@@ -608,7 +610,7 @@
         self.companyHom.hidden = YES;
         
         
-        //chooseBackView.hidden = YES;
+        chooseBackView.hidden = YES;
         _companyHomeScrollView.hidden = YES;
 
         conditionView.hidden = NO;
@@ -738,7 +740,12 @@
             supplyCell.priceLabel.text = [NSString stringWithFormat:@"¥%@元/每件",item.price];
             supplyCell.read_numLabel.text = [NSString stringWithFormat:@"%@件起供应",item.min_supply_num];
             supplyCell.dateLabel.text = item.date;
-            [supplyCell.supplyImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"loading.png"]];
+            [supplyCell.supplyImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
+            line.backgroundColor = HexRGB(0xd5d5d5);
+            [supplyCell.contentView addSubview:line];
+            
+
             supplyCell.selectionStyle = UITableViewCellSelectionStyleNone;
             supplyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             return supplyCell;
@@ -764,7 +771,7 @@
                 cell.contentLabel.text =conNew.description;
             }
         }
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     

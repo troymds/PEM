@@ -18,13 +18,13 @@
         supplyImage = [[UIImageView alloc] initWithFrame:CGRectMake(14, 10, 62, 62)];
         supplyImage.image =[UIImage imageNamed:@"ad1.png"];
         //这里的self 指的是某一个单元格对象
-        [self addSubview:supplyImage];
+        [self.contentView addSubview:supplyImage];
         
         
         nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 7, 160, 20)];
         nameLabel.text = @"产品产品产品产品";
         nameLabel.font =[UIFont systemFontOfSize:PxFont(22)];
-        [self addSubview:nameLabel];
+        [self.contentView addSubview:nameLabel];
         
         dateLabel= [[UILabel alloc] initWithFrame:CGRectMake(250, 7, 60, 40)];
         dateLabel.text = @"09-10";
@@ -32,14 +32,14 @@
         dateLabel.textColor=HexRGB(0x666666);
 
         dateLabel.font =[UIFont systemFontOfSize:PxFont(14)];
-        [self addSubview:dateLabel];
+        [self.contentView addSubview:dateLabel];
         
         
         priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 24, 180, 25)];
         priceLabel.text = @"￥330";
         priceLabel.textColor=HexRGB(0xff7300);
         priceLabel.font =[UIFont systemFontOfSize:PxFont(22)];
-        [self addSubview:priceLabel];
+        [self.contentView addSubview:priceLabel];
         
         
         
@@ -47,13 +47,13 @@
         supply_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 43, 180, 20)];
         supply_numLabel.text = @"浏览量123次";
         supply_numLabel.font =[UIFont systemFontOfSize:PxFont(17)];
-        [self addSubview:supply_numLabel];
+        [self.contentView addSubview:supply_numLabel];
         supply_numLabel.textColor=HexRGB(0x666666);
 
         
         read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 60, 180, 20)];
         read_numLabel.text = @"10件批发期";
-        [self addSubview:read_numLabel];
+        [self.contentView addSubview:read_numLabel];
         read_numLabel.font =[UIFont systemFontOfSize:PxFont(17)];
         read_numLabel.textColor=HexRGB(0x666666);
 

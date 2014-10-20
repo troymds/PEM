@@ -129,6 +129,9 @@
     _websiteView.infoLabel.text = item.website;
     _emailView.infoLabel.text = item.email;
     _phoneView.infoLabel.text = item.company_tel;
+    if ([SystemConfig sharedInstance].companyInfo.image.length!=0) {
+        [_iconImage setImageWithURL:[NSURL URLWithString:[SystemConfig sharedInstance].companyInfo.image]];
+    }
     if ([SystemConfig sharedInstance].vipInfo) {
         _vipTypeLabel.text = [NSString stringWithFormat:@"等级:%@",[SystemConfig sharedInstance].vipInfo.vip_name];
     }else{

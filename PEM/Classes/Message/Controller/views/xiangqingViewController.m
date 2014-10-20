@@ -393,8 +393,7 @@
 #pragma mark 收藏产品信息
 -(void)collectionBtnClick:(UIButton *)collect{
 
-        collect.selected = !collect.selected;
-       if (collect.selected ==NO) {
+       if (collect.selected ==YES) {
  
         [collocetAddToWishlistTool cancleWishlistStatusesWithSuccesscategory:^(NSArray *statues) {
             [_wishlistidArray addObjectsFromArray:statues];
@@ -409,6 +408,9 @@
                 if ([self.delegate respondsToSelector:@selector(reloadData)]) {
                     [self.delegate reloadData];
                 }
+                
+                collect.selected = !collect.selected;
+                
             }else{
                 [RemindView showViewWithTitle:@"取消收藏失败！" location:BELLOW];
 
@@ -426,17 +428,24 @@
             
             
             [collocetAddToWishlistTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+                supplyWishlistidModel *model = [statues objectAtIndex:0];
+                if ([model.code intValue] == 100) {
+                    collect.selected = !collect.selected;
+                    [RemindView showViewWithTitle:@"收藏成功!" location:BELLOW];
+                    
+                    //如果是从我的收藏页面进来的  收藏成功刷新我的收藏页面
+                    if ([self.delegate respondsToSelector:@selector(reloadData)]) {
+                        [self.delegate reloadData];
+                    }
+
+                }else{
+                    [RemindView showViewWithTitle:@"收藏失败!" location:BELLOW];
+                }
+                
                 
             } companyID:[SystemConfig sharedInstance].company_id infoID:supplyIndex CategoryFailure:^(NSError *error) {
                 
             }];
-            
-            //如果是从我的收藏页面进来的  收藏成功刷新我的收藏页面
-            if ([self.delegate respondsToSelector:@selector(reloadData)]) {
-                [self.delegate reloadData];
-            }
-
-            [RemindView showViewWithTitle:@"收藏成功！" location:BELLOW];
             
         }
        }

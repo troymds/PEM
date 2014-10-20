@@ -264,7 +264,7 @@
         case 2000:
         {
             _isPurchase = YES;
-                [UIView animateWithDuration:0.5 animations:^{
+                [UIView animateWithDuration:0.3 animations:^{
                     sliderLine.frame = CGRectMake(0, 38, kWidth/2, 2);
                     _purchaseScrollView.frame = CGRectMake(0,40,kWidth,kHeight-64-40-49);
                     _supplyScrollView.frame = CGRectMake(kWidth, 40, kWidth,kHeight-64-40-49);
@@ -289,7 +289,7 @@
                         }else if(data == 1){
                             //可以发布信息
                             _isPurchase = NO;
-                            [UIView animateWithDuration:0.5 animations:^{
+                            [UIView animateWithDuration:0.3 animations:^{
                                 _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
                                 _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
                                 sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
