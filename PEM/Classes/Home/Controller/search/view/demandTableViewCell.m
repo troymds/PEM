@@ -21,7 +21,7 @@
         [self addSubview:dateLabel];
         
         read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(245, 10, 80, 20)];
-        read_numLabel.text = @"浏览量234次";
+        read_numLabel.text = @"浏览234次";
         
         read_numLabel.font =[UIFont systemFontOfSize:PxFont(14)];
         [self addSubview:read_numLabel];

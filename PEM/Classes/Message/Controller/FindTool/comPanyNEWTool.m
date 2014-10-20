@@ -9,6 +9,7 @@
 #import "comPanyNEWTool.h"
 #import "HttpTool.h"
 #import "comContent.h"
+#import "RemindView.h"
 @implementation comPanyNEWTool
 + (void)statusesWithSuccessNew:(StatusSuccessBlock)success NewFailure:(StatusFailureBlock)failure CompanyID:(NSString *)comid{
     
@@ -17,7 +18,10 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if (![array isKindOfClass:[NSNull class]]){
+        if ([array isKindOfClass:[NSNull class]]){
+            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
+        }
+        else{
             for (NSDictionary *dict in array) {
 
                   comContent   *s =[[comContent alloc] initWithDictionaryForComapny:dict];

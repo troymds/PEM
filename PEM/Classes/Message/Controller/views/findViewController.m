@@ -303,8 +303,8 @@
 
      [_leftBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
    
-    _leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
-    _leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-120);
+    _leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
+    _leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-150);
 
   }
 -(void)leftSegment{
@@ -628,10 +628,6 @@
     [leftBackView removeFromSuperview];
     NSString *currentTitle = sender.currentTitle;
     [_leftBtn setTitle:currentTitle forState:UIControlStateNormal];
-    [_leftBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
-    [_leftBtn setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
-    [_leftBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
-
     
     
     
@@ -659,10 +655,7 @@
 
     NSString *currentTitle = sender.currentTitle;
     [_rigthBtn setTitle:currentTitle forState:UIControlStateNormal];
-    [_rigthBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
-    [_rigthBtn setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
-    [_rigthBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
-
+   
     [self addMBprogressView];
 
     if (sender.tag ==50) {
@@ -721,9 +714,6 @@
     }
     NSString *currentTitle = demand.currentTitle;
     [_rightBtnDemand setTitle:currentTitle forState:UIControlStateNormal];
-    [_rightBtnDemand setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
-    [_rightBtnDemand setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
-    [_rightBtnDemand setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
     
     
     if (demand.tag ==60) {
@@ -819,7 +809,7 @@
             cell.demand_numLabel.text =[NSString stringWithFormat:@"求购数量:%@",d.buy_num];
             cell.nameLabel.text =d.name;
             cell.contentLabel.text = d.Introduction;
-            cell.read_numLabel.text = [NSString stringWithFormat:@"浏览量%@次",d.read_num];
+            cell.read_numLabel.text = [NSString stringWithFormat:@"浏览%@次",d.read_num];
             dataLabel.hidden = YES;
             _tableView.hidden = NO;
         }else{
@@ -850,7 +840,7 @@
 
         cell.companyLabel.text =s.company;
         cell.nameLabel.text =s.name;
-        cell.read_numLabel.text =[NSString stringWithFormat:@"浏览量%@次",s.read_num];
+        cell.read_numLabel.text =[NSString stringWithFormat:@"浏览%@次",s.read_num];
         [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
         cell.supply_numLabel.text =[NSString stringWithFormat:@"%@起批",s.min_supply_num];
         cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];

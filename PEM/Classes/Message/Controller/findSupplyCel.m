@@ -15,12 +15,12 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        supplyImage = [[UIImageView alloc] initWithFrame:CGRectMake(26, 13, 43, 43)];
+        supplyImage = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
         supplyImage.image =[UIImage imageNamed:@"ad1.png"];
         [self addSubview:supplyImage];
         
         
-        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 10, 180, 20)];
+        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 10, 190, 20)];
         nameLabel.text = @"产品产品产品产品";
         nameLabel.font =[UIFont systemFontOfSize:PxFont(22)];
         [self addSubview:nameLabel];
@@ -28,7 +28,7 @@
 
         
         
-        priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 30, 100, 20)];
+        priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 30, 110, 20)];
         priceLabel.text = @"￥123";
         priceLabel.textColor=HexRGB(0xff7300);
         priceLabel.font =[UIFont systemFontOfSize:PxFont(22)];
@@ -41,7 +41,7 @@
         supply_numLabel.textColor=HexRGB(0x666666);
 
         
-        companyLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 48, 180, 20)];
+        companyLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 48, 190, 20)];
         companyLabel.text = @"供应商:普而摩网络技术有限公司";
         [self addSubview:companyLabel];
         companyLabel.font =[UIFont systemFontOfSize:PxFont(14)];

@@ -249,7 +249,9 @@
 		55B7820719F4985600EC9508 /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7820619F4985600EC9508 /* SearchController.m */; };
 		55B7820A19F499A000EC9508 /* SaveTempDataTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7820919F499A000EC9508 /* SaveTempDataTool.m */; };
 		55B7820D19F49A2A00EC9508 /* findViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7820C19F49A2A00EC9508 /* findViewController.m */; };
-		55B7821019F4AC9900EC9508 /* QRCodeViewController(1).m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7820F19F4AC9900EC9508 /* QRCodeViewController(1).m */; };
+		55B7821519F4F17800EC9508 /* DimensionalCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7821219F4F17800EC9508 /* DimensionalCodeViewController.m */; };
+		55B7821619F4F17800EC9508 /* QRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7821419F4F17800EC9508 /* QRCodeViewController.m */; };
+		55B7821819F509D900EC9508 /* back_companypre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B7821719F509D900EC9508 /* back_companypre@2x.png */; };
 		55B86B2B19C6876E008B34AA /* XQgetInfoDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B86B2A19C6876E008B34AA /* XQgetInfoDetailModel.m */; };
 		55B86B2E19C68826008B34AA /* XQgetInfoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B86B2D19C68826008B34AA /* XQgetInfoTool.m */; };
 		55B8B4F419CD220900FF86AD /* comHomeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B8B4F319CD220900FF86AD /* comHomeModel.m */; };
@@ -776,8 +778,11 @@
 		55B7820919F499A000EC9508 /* SaveTempDataTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveTempDataTool.m; sourceTree = "<group>"; };
 		55B7820B19F49A2A00EC9508 /* findViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = findViewController.h; sourceTree = "<group>"; };
 		55B7820C19F49A2A00EC9508 /* findViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = findViewController.m; sourceTree = "<group>"; };
-		55B7820E19F4AC9900EC9508 /* QRCodeViewController(1).h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "QRCodeViewController(1).h"; sourceTree = "<group>"; };
-		55B7820F19F4AC9900EC9508 /* QRCodeViewController(1).m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "QRCodeViewController(1).m"; sourceTree = "<group>"; };
+		55B7821119F4F17800EC9508 /* DimensionalCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DimensionalCodeViewController.h; sourceTree = "<group>"; };
+		55B7821219F4F17800EC9508 /* DimensionalCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DimensionalCodeViewController.m; sourceTree = "<group>"; };
+		55B7821319F4F17800EC9508 /* QRCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeViewController.h; sourceTree = "<group>"; };
+		55B7821419F4F17800EC9508 /* QRCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeViewController.m; sourceTree = "<group>"; };
+		55B7821719F509D900EC9508 /* back_companypre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back_companypre@2x.png"; sourceTree = "<group>"; };
 		55B86B2919C6876E008B34AA /* XQgetInfoDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XQgetInfoDetailModel.h; path = ../FindTool/XQgetInfoDetailModel.h; sourceTree = "<group>"; };
 		55B86B2A19C6876E008B34AA /* XQgetInfoDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XQgetInfoDetailModel.m; path = ../FindTool/XQgetInfoDetailModel.m; sourceTree = "<group>"; };
 		55B86B2C19C68826008B34AA /* XQgetInfoTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XQgetInfoTool.h; path = ../Model/XQgetInfoTool.h; sourceTree = "<group>"; };
@@ -1579,8 +1584,10 @@
 		5588E24619EE07600095D362 /* ZBarSDK */ = {
 			isa = PBXGroup;
 			children = (
-				55B7820E19F4AC9900EC9508 /* QRCodeViewController(1).h */,
-				55B7820F19F4AC9900EC9508 /* QRCodeViewController(1).m */,
+				55B7821119F4F17800EC9508 /* DimensionalCodeViewController.h */,
+				55B7821219F4F17800EC9508 /* DimensionalCodeViewController.m */,
+				55B7821319F4F17800EC9508 /* QRCodeViewController.h */,
+				55B7821419F4F17800EC9508 /* QRCodeViewController.m */,
 			);
 			path = ZBarSDK;
 			sourceTree = "<group>";
@@ -2242,6 +2249,7 @@
 		55E6CCFC19BED97E007C85BB /* searchImages */ = {
 			isa = PBXGroup;
 			children = (
+				55B7821719F509D900EC9508 /* back_companypre@2x.png */,
 				55E6CCFD19BED97E007C85BB /* deleteBtn _selected@2x.png */,
 				55E6CCFE19BED97E007C85BB /* deleteBtn@2x.png */,
 				55E6CCFF19BED97E007C85BB /* home_history@2x.png */,
@@ -2498,6 +2506,7 @@
 				55D350B319C2EDA700BFD8F3 /* xialakuang1@2x.png in Resources */,
 				55D16CA719B6A0F7003B805A /* tab_product_pre.png in Resources */,
 				55B6420519D26804004F9C66 /* title3@2x.png in Resources */,
+				55B7821819F509D900EC9508 /* back_companypre@2x.png in Resources */,
 				554E1FC119D18FDA0024879C /* nav_search_btn_pre@2x.png in Resources */,
 				04A3BC7B19C05C5A00B2217B /* nomal@2x.png in Resources */,
 				55B921C719D51C8F00A5CF84 /* Icon.png in Resources */,
@@ -2688,6 +2697,7 @@
 				F31028F219B1DD7C00CCB1CE /* SearchResultModel.m in Sources */,
 				04989E6F19F0107400E407EE /* ProLabel.m in Sources */,
 				F32AE7F519B774BE00D67E05 /* TodayNumModel.m in Sources */,
+				55B7821619F4F17800EC9508 /* QRCodeViewController.m in Sources */,
 				55E1AFB619A6E1D60095F9C2 /* GroupCell.m in Sources */,
 				55E8C11719D3A6AD003F1685 /* SSKeychainQuery.m in Sources */,
 				55B5D35A199AEEAE002A9750 /* UIBarButtonItem+MJ.m in Sources */,
@@ -2695,7 +2705,6 @@
 				55B5D25A199AEB19002A9750 /* main.m in Sources */,
 				04AF262519E8B108001B29CB /* SupplyCell.m in Sources */,
 				04AC7A6819D963C500568926 /* SystemConfig.m in Sources */,
-				55B7821019F4AC9900EC9508 /* QRCodeViewController(1).m in Sources */,
 				55D035B019B8790F000F090F /* supplyTool.m in Sources */,
 				04AF261C19E8B0F9001B29CB /* TagInfoItem.m in Sources */,
 				55D035B719B89BAA000F090F /* demandTool.m in Sources */,
@@ -2714,6 +2723,7 @@
 				04AF26E319E8B17C001B29CB /* TDImageController.m in Sources */,
 				04AF261719E8B0F9001B29CB /* MyFavoriteItem.m in Sources */,
 				04AA702819C85255002A5009 /* qiugouXQ.m in Sources */,
+				55B7821519F4F17800EC9508 /* DimensionalCodeViewController.m in Sources */,
 				55D2FB4F19BFFF5700248CAF /* comditionController.m in Sources */,
 				04AF26CD19E8B15E001B29CB /* MyActionSheetView.m in Sources */,
 				55D8974519AC62DA001EAF9F /* MJRefreshBaseView.m in Sources */,

@@ -453,6 +453,8 @@
     _resultTableView = [[UITableView alloc]initWithFrame:_resultBgView.bounds style:UITableViewStylePlain];
     _resultTableView.delegate = self;
     _resultTableView.dataSource = self;
+    _resultTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
     [_resultBgView addSubview:_resultTableView];
 }
 
@@ -827,7 +829,8 @@
                 [cell.imageCompany setImageWithURL:[NSURL URLWithString:c.image] placeholderImage:[UIImage imageNamed:@"loading.png"]];
                 cell.businessLabel.text =c.business;
                 
-                
+                CGFloat nameCompanyw =[c.name sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(195, 50)].width;
+                cell.vipType.frame = CGRectMake(80+nameCompanyw, 11, 13, 18);
                 if ([c.rank isEqualToString:@"1"]) {
                     cell.vipType.image  =[UIImage imageNamed:@"Vip4.png"];
                 }
@@ -857,7 +860,11 @@
                 _resultTableView.hidden = YES;
 
             }
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
+            lineView.backgroundColor = HexRGB(0xd5d5d5);
+            [cell.contentView addSubview:lineView];
             
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
             
         }
@@ -874,7 +881,7 @@
                 cell.dateLabel.text =d.demandDate;
                 cell.IntroductionLabel.text =d.Introduction;
                 cell.nameLabel.text =d.name;
-                cell.read_numLabel.text = [NSString stringWithFormat:@"浏览量%@次",d.read_num];
+                cell.read_numLabel.text = [NSString stringWithFormat:@"浏览%@次",d.read_num];
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
 
@@ -884,6 +891,11 @@
                 _resultTableView.hidden = YES;
 
             }
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
+            lineView.backgroundColor = HexRGB(0xd5d5d5);
+            [cell.contentView addSubview:lineView];
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
             
         }else
@@ -902,7 +914,7 @@
                 
                 cell.companyLabel.text =s.company;
                 cell.nameLabel.text =s.name;
-                cell.read_numLabel.text =[NSString stringWithFormat:@"浏览量%@次",s.read_num];
+                cell.read_numLabel.text =[NSString stringWithFormat:@"浏览%@次",s.read_num];
                 [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
                 cell.supply_numLabel.text =[NSString stringWithFormat:@"%@件起批",s.min_supply_num];
                 cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
@@ -915,7 +927,11 @@
                 _resultTableView.hidden = YES;
 
             }
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
+            lineView.backgroundColor = HexRGB(0xd5d5d5);
+            [cell.contentView addSubview:lineView];
             
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
         }
         
@@ -1043,10 +1059,13 @@
 #pragma mark-----xuanka选卡
 -(void)xuankaBtn:(UIButton *)xuan
 {
+    
     xuan.selected=!xuan.selected;
     _selectXuanka.selected = xuan.selected;
     if (xuan.selected==NO)
     {
+        
+       
         [self addBigButton];
         [self xuangxiangka];
     }else
@@ -1267,13 +1286,8 @@
     [_backViw removeFromSuperview];
     [bigBtn removeFromSuperview];
     [_searchTextField resignFirstResponder];
-    _searchTextField.text = nil;
     NSString *currentTitle = sender.currentTitle;
     [_selectBtn setTitle:currentTitle forState:UIControlStateNormal];
-    [_selectBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
-    [_selectBtn setImage:[UIImage imageNamed:@"up_pre.png"] forState:UIControlStateSelected];
-    [_selectBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateNormal];
-    _selectBtn.tag = sender.tag;
     
     currentSelectedBtnTag = sender.tag;
     sender.selected =YES;

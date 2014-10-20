@@ -25,11 +25,14 @@
         nameLabel.text = @"产品产品产品产品";
         nameLabel.font =[UIFont systemFontOfSize:PxFont(22)];
         [self.contentView addSubview:nameLabel];
+        nameLabel.backgroundColor =[UIColor clearColor];
+        
         
         dateLabel= [[UILabel alloc] initWithFrame:CGRectMake(250, 7, 60, 40)];
         dateLabel.text = @"09-10";
         dateLabel.numberOfLines = 1;
         dateLabel.textColor=HexRGB(0x666666);
+        dateLabel.backgroundColor =[UIColor clearColor];
 
         dateLabel.font =[UIFont systemFontOfSize:PxFont(14)];
         [self.contentView addSubview:dateLabel];
@@ -40,15 +43,17 @@
         priceLabel.textColor=HexRGB(0xff7300);
         priceLabel.font =[UIFont systemFontOfSize:PxFont(22)];
         [self.contentView addSubview:priceLabel];
-        
+        priceLabel.backgroundColor =[UIColor clearColor];
+
         
         
         
         supply_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 43, 180, 20)];
-        supply_numLabel.text = @"浏览量123次";
+        supply_numLabel.text = @"浏览123次";
         supply_numLabel.font =[UIFont systemFontOfSize:PxFont(17)];
         [self.contentView addSubview:supply_numLabel];
         supply_numLabel.textColor=HexRGB(0x666666);
+        supply_numLabel.backgroundColor =[UIColor clearColor];
 
         
         read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 60, 180, 20)];
@@ -56,6 +61,7 @@
         [self.contentView addSubview:read_numLabel];
         read_numLabel.font =[UIFont systemFontOfSize:PxFont(17)];
         read_numLabel.textColor=HexRGB(0x666666);
+        read_numLabel.backgroundColor =[UIColor clearColor];
 
         
         

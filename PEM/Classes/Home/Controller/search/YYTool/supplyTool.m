@@ -83,7 +83,11 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if (![array isKindOfClass:[NSNull class]]){
+        if ([array isKindOfClass:[NSNull class]]){
+            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
+
+        }
+        else{
             for (NSDictionary *dict in array) {
                 supplyCOM *s =[[supplyCOM alloc] initWithDictonary:dict];
                 

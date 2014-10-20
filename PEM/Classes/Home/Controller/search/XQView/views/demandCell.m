@@ -20,7 +20,7 @@
         TitleLabel.text=@"公司与浙江省信用和棕色开往大得多";
         TitleLabel.frame =CGRectMake(20, 0, 180, 30);
         TitleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
-        
+        TitleLabel.backgroundColor =[UIColor clearColor];
         dateLabel=[[UILabel alloc]init];
         [self addSubview:dateLabel];
         dateLabel.text =@"09-10";
@@ -28,7 +28,8 @@
         dateLabel.numberOfLines = 1;
         dateLabel.font =[UIFont systemFontOfSize:PxFont(14)];
         dateLabel.textColor=HexRGB(0x666666);
-        
+        dateLabel.backgroundColor =[UIColor clearColor];
+
         
         contentLabel=[[UILabel alloc]init];
         [self addSubview:contentLabel];
@@ -37,6 +38,8 @@
         contentLabel.frame =CGRectMake(20, 25, 280, 40);
         contentLabel.font =[UIFont systemFontOfSize:PxFont(17)];
         contentLabel.textColor=HexRGB(0x666666);
+        contentLabel.backgroundColor =[UIColor clearColor];
+
     }
     return self;
 }

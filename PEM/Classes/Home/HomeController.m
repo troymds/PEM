@@ -26,7 +26,7 @@
 #import "adsModel.h"
 #import "CompanyXQViewController.h"
 #import "MessageController.h"
-#import "QRCodeViewController(1).h"
+#import "QRCodeViewController.h"
 @interface HomeController ()<UIScrollViewDelegate>
 {
     UIScrollView *_backScrollView;
@@ -420,6 +420,7 @@
         
         [findImage setImageWithURL:[NSURL URLWithString:hotCategoryModel.image]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
         
+       
     }
     
     UIButton *moreBtn =[UIButton buttonWithType:UIButtonTypeCustom];
@@ -585,10 +586,12 @@
 //八宫格
 -(void)categoryBtnClick:(UIButton *)cate{
     
+    
+    
     findViewController *find =[[findViewController alloc]init];
     find.titleLabel =cate.titleLabel.text;
     
-    NSString *strId =[NSString stringWithFormat:@"%ld",cate.tag-100];
+    NSString *strId =[NSString stringWithFormat:@"%d",cate.tag-100];
     find.cateIndex = strId;
     [self.navigationController pushViewController:find animated:YES];
     

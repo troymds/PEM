@@ -452,6 +452,13 @@
 }
 -(void)bodaBtn:(UIButton *)sender
 {
+    if (![SystemConfig sharedInstance].isUserLogin) {
+        
+        
+        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"温馨提示:" message:@"请登录后再一键拨号!" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消", nil];
+        [alert show];
+        
+    }else{
     XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
            [phoneView callPhoneNumber:xqModel.phone_num
                               call:^(NSTimeInterval duration) {
@@ -464,6 +471,7 @@
         
 
    }
+}
 
 
 @end

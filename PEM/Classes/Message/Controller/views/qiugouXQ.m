@@ -205,7 +205,7 @@
     
     UIButton *phoneBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     
-    phoneBtn .frame=CGRectMake(70, 0, 180, 35);
+    phoneBtn .frame=CGRectMake(45, 4, 230, 35);
     [phoneBtn setImage:[UIImage imageNamed:@"home_phone_pre.png"] forState:UIControlStateHighlighted];
     
     [phoneBtn setImage:[UIImage imageNamed:@"home_phone.png"] forState:UIControlStateNormal];

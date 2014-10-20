@@ -123,7 +123,7 @@
 
         UIButton *button =[UIButton buttonWithType:UIButtonTypeCustom];
         
-        button.frame = CGRectMake(0+but%3*(70+40), 0+but/3*(60+35), kWidth/3+2, 96);
+        button.frame = CGRectMake(-1+but%3*(70+40), 0+but/3*(60+35), kWidth/3+4, 96);
         button.tag =but+100;
         [_scrollView addSubview:button];
         [button setBackgroundImage:[UIImage imageNamed:@"dibuhengtiao.png"] forState:UIControlStateHighlighted];

@@ -6,8 +6,8 @@
 //  Copyright (c) 2014年 chunxi. All rights reserved.
 //
 
-#import "QRCodeViewController(1).h"
-
+#import "QRCodeViewController.h"
+#import "DimensionalCodeViewController.h"
 @interface QRCodeViewController ()
 
 @end
@@ -74,13 +74,16 @@
 -(void)backAction
 {
     
-    [self dismissViewControllerAnimated:YES completion:^{
+  
         [timer invalidate];
-    }];
+     self.navigationController.navigationBar.hidden = NO;
+    [self.navigationController popToRootViewControllerAnimated:YES];
+
 }
 -(void)viewWillAppear:(BOOL)animated
 {
     [self setupCamera];
+    self.navigationController.navigationBar.hidden = YES;
 }
 - (void)setupCamera
 {
@@ -124,7 +127,6 @@
 #pragma mark AVCaptureMetadataOutputObjectsDelegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
 {
-    NSLog(@"dddddddddd");
     
     NSString *stringValue;
     
@@ -135,11 +137,14 @@
     }
     
     [_session stopRunning];
-    [self dismissViewControllerAnimated:YES completion:^{
-      NSLog(@"cap ------ >:%@",stringValue);
-        
-    }];
+//    [self dismissViewControllerAnimated:YES completion:^{
+     NSLog(@"cap ------ >:%@",stringValue);
+//    }];
     
+    DimensionalCodeViewController *DimensionalCodeViewCon = [[DimensionalCodeViewController alloc]init];
+    DimensionalCodeViewCon.url =[NSURL URLWithString:[NSString stringWithFormat:@"%@",stringValue]];
+    self.navigationController.navigationBar.hidden = NO;
+    [self.navigationController pushViewController:DimensionalCodeViewCon animated:YES];
     
 }
 
