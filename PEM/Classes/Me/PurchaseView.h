@@ -22,8 +22,9 @@
 
 @interface PurchaseView : UIView<UITextFieldDelegate>
 {
-    UITapGestureRecognizer *tap;
+
 }
+
 
 @property (nonatomic,strong) CellView *categoryView;
 @property (nonatomic,strong) CellView *titleView;

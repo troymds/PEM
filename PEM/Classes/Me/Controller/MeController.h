@@ -23,8 +23,10 @@
 
 
 
-@interface MeController : UIViewController<UITextFieldDelegate,ProActionSheetDelegate,PublishViewDelegate,LoginViewDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,ProImageViewDelegate,UIAlertViewDelegate,SendValueDelegate,MyActionSheetViewDelegate>
+@interface MeController : UIViewController<UITextFieldDelegate,ProActionSheetDelegate,PublishViewDelegate,LoginViewDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,ProImageViewDelegate,UIAlertViewDelegate,SendValueDelegate,MyActionSheetViewDelegate,UIScrollViewDelegate>
 {
+    
+    UIScrollView *bgScrollView;
     UIScrollView *_supplyScrollView;
     BOOL _isPurchase;                        //判断是哪个页面
     ProActionSheet *_actionSheet;

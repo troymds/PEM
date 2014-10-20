@@ -21,7 +21,7 @@
 
 @interface SupplyView : UIView<UITextFieldDelegate>
 {
-    UITapGestureRecognizer *tap;
+    
 }
 @property (nonatomic,strong) CellView *categoryView;
 @property (nonatomic,strong) CellView *areaView;

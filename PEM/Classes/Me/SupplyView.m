@@ -292,18 +292,8 @@
         [self addSubview:_publishBtn];
         
         _isHide = YES;
-        
-        tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
-        [self addGestureRecognizer:tap];
-    }
+      }
     return self;
-}
-
-- (void)tapDown
-{
-    if ([self.delegate respondsToSelector:@selector(tapClicked)]) {
-        [self.delegate tapClicked];
-    }
 }
 
 
