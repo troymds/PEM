@@ -33,7 +33,7 @@
         _priceLabel.font = [UIFont systemFontOfSize:16];
         [self.contentView addSubview:_priceLabel];
         
-        _timesLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 55, 200, 15)];
+        _timesLabel = [[UILabel alloc] initWithFrame:CGRectMake(kWidth-170, 55, 150, 15)];
         _timesLabel.backgroundColor = [UIColor clearColor];
         _timesLabel.textColor = HexRGB(0x808080);
         _timesLabel.textAlignment = NSTextAlignmentRight;

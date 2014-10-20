@@ -75,6 +75,7 @@
     
     _userNameField = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, kWidth-25*2-30, 43)];
     _userNameField.placeholder = @"请输入您的手机号";
+    _userNameField.keyboardType = UIKeyboardTypeNumberPad;
     _userNameField.delegate = self;
     [bgView addSubview:_userNameField];
     

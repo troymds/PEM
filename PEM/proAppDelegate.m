@@ -112,8 +112,6 @@
     //短信分享
     [ShareSDK connectSMS];
     
-    //邮件分享
-    [ShareSDK connectMail];
     
     [self.window makeKeyAndVisible];
     
@@ -153,7 +151,7 @@
                     CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].companyInfo = item;
                     
-                    [self getVipInfo:[SystemConfig sharedInstance].viptype];
+                    [self getVipInfo:[SystemConfig sharedInstance].company_id];
                 }
             }failure:^(NSError *error){
                 NSLog(@"%@",error);
@@ -170,6 +168,7 @@
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
+        NSLog(@"%@",result);
         if (!isNull(result, @"response")) {
             if ([[dic objectForKey:@"code"] intValue] ==100) {
                 NSDictionary *data = [dic objectForKey:@"data"];

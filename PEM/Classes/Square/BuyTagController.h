@@ -26,6 +26,9 @@
     NSInteger bottomSpace;     //_scrollView底下空白高度
     NSMutableArray *_allTagArray;    //页面所有标签的数组
 
+    UITapGestureRecognizer *tap;
+
+    CGPoint contentOffset;
 
 }
 @end

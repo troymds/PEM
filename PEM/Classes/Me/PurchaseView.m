@@ -66,6 +66,7 @@
         _descriptionView.nameLabel.text = @"描  述";
         _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, width-60-25, 35)];
         _descriptionLabel.backgroundColor = [UIColor clearColor];
+        _descriptionLabel.text = @"十字以上";
         [_descriptionView addSubview:_descriptionLabel];
         UIImageView *img2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"]];
         img2.frame = CGRectMake(width-10-7, 11, 7, 13);
@@ -93,11 +94,12 @@
         [self addSubview:bgView2];
 
         _purchaseNum = [[CellView alloc] initWithFrame:CGRectMake(0, 0, width, 35)];
-        _purchaseNum.lineView.frame = CGRectMake(80,(_purchaseNum.frame.size.height-20)/2, 1, 20);
+        _purchaseNum.lineView.frame = CGRectMake(70,(_purchaseNum.frame.size.height-20)/2, 1, 20);
         _purchaseNum.nameLabel.text = @"求购数量";
-        _purchaseNum.nameLabel.frame =CGRectMake(0,0,80,35);
-        _purchaseNumField = [[UITextField alloc] initWithFrame:CGRectMake(85, 0, _purchaseNum.frame.size.width-90, 35)];
+        _purchaseNum.nameLabel.frame =CGRectMake(5,0,65,35);
+        _purchaseNumField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _purchaseNum.frame.size.width-75, 35)];
         _purchaseNumField.tag = PC_PURCHASE_TYPE;
+        _purchaseNumField.keyboardType = UIKeyboardTypeNumberPad;
         _purchaseNumField.font = [UIFont systemFontOfSize:PxFont(20)];
         _purchaseNumField.placeholder = @"求购物品的数量";
         _purchaseNumField.delegate = self;
@@ -105,10 +107,10 @@
         [bgView2 addSubview:_purchaseNum];
         
         _unitView = [[CellView alloc] initWithFrame:CGRectMake(0,35, width, 35)];
-        _unitView.lineView.frame = CGRectMake(80,(_purchaseNum.frame.size.height-20)/2, 1, 20);
+        _unitView.lineView.frame = CGRectMake(70,(_purchaseNum.frame.size.height-20)/2, 1, 20);
         _unitView.nameLabel.text = @"单     位";
-        _unitView.nameLabel.frame =CGRectMake(0,0,80,35);
-        _unitField = [[UITextField alloc] initWithFrame:CGRectMake(85, 0, _purchaseNum.frame.size.width-90, 35)];
+        _unitView.nameLabel.frame =CGRectMake(5,0,65,35);
+        _unitField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _purchaseNum.frame.size.width-75, 35)];
         _unitField.tag = PC_UNIT_TYPE;
         _unitField.font = [UIFont systemFontOfSize:PxFont(20)];
         _unitField.placeholder = @"求购物品的计量单位";
@@ -119,10 +121,11 @@
         
         _linkmanView = [[CellView alloc] initWithFrame:CGRectMake(0, 70, width, 35)];
         _linkmanView.nameLabel.text = @"联 系 人";
-        _linkmanView.lineView.frame = CGRectMake(80,(_linkmanView.frame.size.height-20)/2, 1, 20);
-        _linkmanView.nameLabel.frame =CGRectMake(0,0,80,35);
-        _linkManTextField = [[UITextField alloc] initWithFrame:CGRectMake(85, 0, _linkmanView.frame.size.width-80, 35)];
+        _linkmanView.lineView.frame = CGRectMake(70,(_linkmanView.frame.size.height-20)/2, 1, 20);
+        _linkmanView.nameLabel.frame =CGRectMake(5,0,65,35);
+        _linkManTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _linkmanView.frame.size.width-75, 35)];
         _linkManTextField.tag = PC_LINKMAN_TYPE;
+        _linkManTextField.placeholder = @"2-4个字符";
         _linkManTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _linkManTextField.delegate = self;
         [_linkmanView addSubview:_linkManTextField];
@@ -130,12 +133,11 @@
         
         _phoneNumView = [[CellView alloc] initWithFrame:CGRectMake(0, 105, width, 35)];
         _phoneNumView.nameLabel.text = @"电     话";
-        _phoneNumView.lineView.frame = CGRectMake(80,(_phoneNumView.frame.size.height-20)/2, 1, 20);
-        _phoneNumView.nameLabel.frame =CGRectMake(0,0,80,35);
+        _phoneNumView.lineView.frame = CGRectMake(70,(_phoneNumView.frame.size.height-20)/2, 1, 20);
+        _phoneNumView.nameLabel.frame =CGRectMake(5,0,65,35);
 
-        _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(90, 0, _phoneNumView.frame.size.width-80, 40)];
+        _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _phoneNumView.frame.size.width-75, 35)];
         _phoneNumTextField.tag = PC_PHONENUM_TYPE;
-        _phoneNumTextField.keyboardType = UIKeyboardTypePhonePad;
         _phoneNumTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _phoneNumTextField.placeholder = @"请输入正确的手机号码";
         _phoneNumTextField.delegate = self;
@@ -185,6 +187,7 @@
         [publishBtn addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:publishBtn];
         
+        tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
     }
     return self;
 }
@@ -236,25 +239,9 @@
 
 
 - (void)tapDown{
-    for (UIView *subView in self.subviews) {
-        if ([subView isKindOfClass:[UITextField class]]){
-            [subView resignFirstResponder];
-        }else{
-            for (UIView *view in subView.subviews) {
-                if ([view isKindOfClass:[UITextField class]]) {
-                    [view resignFirstResponder];
-                }else{
-                    for (UIView *vw in view.subviews) {
-                        if ([vw isKindOfClass:[UITextField class]]){
-                            [vw resignFirstResponder];
-                        }
-                    }
-                }
-
-            }
-        }
-    }
-}
+    if ([self.delegate respondsToSelector:@selector(tapClicked)]) {
+        [self.delegate tapClicked];
+    }}
 
 
 #pragma mark textField delegate

@@ -115,6 +115,7 @@
 		04AF26E419E8B17C001B29CB /* HotTagsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26DB19E8B17C001B29CB /* HotTagsController.m */; };
 		04AF26E519E8B17C001B29CB /* ProvinceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26DD19E8B17C001B29CB /* ProvinceController.m */; };
 		04AF26E619E8B17C001B29CB /* CityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26DF19E8B17C001B29CB /* CityController.m */; };
+		04B89CB419F50AE600A417AA /* btn_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B89CB319F50AE600A417AA /* btn_down@2x.png */; };
 		04C5043619F0A3C8008F36AD /* provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043519F0A3C8008F36AD /* provinces.plist */; };
 		04C5043B19F124FD008F36AD /* Vip1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043719F124FD008F36AD /* Vip1@2x.png */; };
 		04C5043C19F124FD008F36AD /* Vip2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043819F124FD008F36AD /* Vip2@2x.png */; };
@@ -607,6 +608,7 @@
 		04B5F01D19ECAA4300CE68A4 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		04B5F01F19ECAA5500CE68A4 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		04B5F02119ECAAF000CE68A4 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		04B89CB319F50AE600A417AA /* btn_down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_down@2x.png"; sourceTree = "<group>"; };
 		04C5043519F0A3C8008F36AD /* provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = provinces.plist; sourceTree = "<group>"; };
 		04C5043719F124FD008F36AD /* Vip1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip1@2x.png"; sourceTree = "<group>"; };
 		04C5043819F124FD008F36AD /* Vip2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip2@2x.png"; sourceTree = "<group>"; };
@@ -1270,6 +1272,7 @@
 		04AA6F3519C84EF4002A5009 /* SquareImages */ = {
 			isa = PBXGroup;
 			children = (
+				04B89CB319F50AE600A417AA /* btn_down@2x.png */,
 				0481D71D19EBDF3000C3278D /* update@2x.png */,
 				04AADCF919EBCF1700801D2B /* vip_0_info@2x.png */,
 				04AADCFA19EBCF1700801D2B /* vip_1_info@2x.png */,
@@ -2530,6 +2533,7 @@
 				55DA328A19ADB8C400A5A3CE /* xialakuang@2x.png in Resources */,
 				550A2F0E19B5C4A400331F5E /* tab_user_pre@2x.png in Resources */,
 				55E8C0F619D3A66A003F1685 /* purchase@2x.png in Resources */,
+				04B89CB419F50AE600A417AA /* btn_down@2x.png in Resources */,
 				554E1FC019D18FDA0024879C /* nav_search_btn@2x.png in Resources */,
 				55D16CAA19B6A0F7003B805A /* tab_release.png in Resources */,
 				0481D71E19EBDF3000C3278D /* update@2x.png in Resources */,

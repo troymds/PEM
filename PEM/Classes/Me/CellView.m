@@ -15,9 +15,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,50, frame.size.height)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,0,40, frame.size.height)];
         _nameLabel.backgroundColor = [UIColor clearColor];
-        _nameLabel.textAlignment = NSTextAlignmentCenter;
+        _nameLabel.textAlignment = NSTextAlignmentLeft;
         _nameLabel.textColor = HexRGB(0x666666);
         _nameLabel.font = [UIFont systemFontOfSize:PxFont(20)];
         [self addSubview:_nameLabel];

@@ -62,6 +62,14 @@
         NSArray *array = [NSArray arrayWithObjects:@"供应",@"求购",@"收藏",@"订阅", nil];
         CGFloat wid = frame.size.width/[array count];
         for (int i = 0; i < [array count]; i++) {
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.frame = CGRectMake(wid*i, 0, wid, 40);
+            button.backgroundColor = [UIColor clearColor];
+            [button setBackgroundImage:[UIImage imageNamed:@"btn_down.png"] forState:UIControlStateHighlighted];
+            button.tag = 40000+i;
+            [button addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+            [view addSubview:button];
+            
             UILabel *label2 = [[UILabel alloc] initWithFrame:CGRectMake(wid*i, 20, wid, 16)];
             label2.text = [array objectAtIndex:i];
             label2.textColor = HexRGB(0xffffff);
@@ -69,12 +77,6 @@
             label2.font = [UIFont systemFontOfSize:12];
             label2.textAlignment = NSTextAlignmentCenter;
             [view addSubview:label2];
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake(wid*i, 0, wid, 40);
-            button.backgroundColor = [UIColor clearColor];
-            button.tag = 40000+i;
-            [button addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
-            [view addSubview:button];
         }
         _supplayLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 4, wid, 16)];
         _supplayLabel.backgroundColor = [UIColor clearColor];

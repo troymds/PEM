@@ -101,9 +101,10 @@
     for (UIView *subView in self.view.subviews){
         if ([subView isKindOfClass:[TagButton class]]){
             TagButton *btn = (TagButton *)subView;
-            if (btn.isSelected){
-                [tagArray addObject:btn.titleLabel.text];
-            }
+            [tagArray addObject:btn];
+//            if (btn.isSelected){
+//                [tagArray addObject:btn.titleLabel.text];
+//            }
         }
     }
     if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {

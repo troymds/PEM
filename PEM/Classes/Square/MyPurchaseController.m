@@ -180,7 +180,6 @@
         cell.resultLabel.textColor = HexRGB(0x808080);
         
     }
-
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,59, kWidth-20, 1)];

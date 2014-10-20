@@ -22,7 +22,7 @@
         [self addSubview:view];
         CGRect mframe = [[UIScreen mainScreen] bounds];
         self.frame = mframe;
-        NSArray *arr = [NSArray arrayWithObjects:@"从相册选取",@"拍照",@"取消", nil];
+        NSArray *arr = [NSArray arrayWithObjects:@"相 册",@"拍 照",@"取 消", nil];
         _bgView = [[UIView alloc] initWithFrame:CGRectMake(0,mframe.size.height, mframe.size.width, 200)];
         _bgView.backgroundColor = HexRGB(0xffffff);
         [self addSubview:_bgView];
@@ -31,11 +31,16 @@
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             btn.frame = CGRectMake(40, space+(space+35)*i, mframe.size.width-40*2, 35);
             [btn setTitle:[arr objectAtIndex:i] forState:UIControlStateNormal];
-            [btn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-            [btn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
             [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [btn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
             btn.tag =4000+i;
+            if (i == 0){
+                btn.backgroundColor = HexRGB(0xfe7400);
+            }else if (i ==1){
+                btn.backgroundColor = HexRGB(0x069dd4);
+            }else{
+                btn.backgroundColor = HexRGB(0x808080);
+            }
             [_bgView addSubview:btn];
         }
     }

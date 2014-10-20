@@ -208,71 +208,10 @@
 
 //发布求购、发布供应按钮点击触发
 - (void)btnClick:(UIButton *)btn{
-//    int vipType = [[SystemConfig sharedInstance].viptype intValue];
-//    if (btn.tag == 2001) {
-//        if (vipType <=0) {
-//            //判断是否可以发布供应信息
-//            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
-//            [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
-//                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-//                if ([result objectForKey:@"response"]) {
-//                    NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
-//                    if ([code intValue] ==100) {
-//                        int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
-//                        if (data == 0) {
-//                            //不能发布信息
-//                            NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
-//                            MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-//                            [actionView showView];
-//                        }else if(data == 1){
-//                            //可以发布信息
-//                            _isPurchase = NO;
-//                            [UIView animateWithDuration:0.5 animations:^{
-//                                _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
-//                                _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
-//                                sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
-//                            }];
-//                            
-//                        }
-//                    }else{
-//                        
-//                    }
-//                }
-//            } failure:^(NSError *error) {
-//                NSLog(@"%@",error);
-//            }];
-//        }
-//    }
-    if (btn.tag == 2001&&(![SystemConfig sharedInstance].viptype||[[SystemConfig sharedInstance].viptype isEqualToString:@"0"])) {
-        btn.selected = NO;
-    }else
-    for (UIView *subView in self.view.subviews){
-        if ([subView isKindOfClass:[UIButton class]]){
-            UIButton *button = (UIButton *)subView;
-            if (btn.tag == button.tag){
-                if (button.tag ==2000||button.tag ==2001){
-                    button.selected = YES;
-                }
-            }else{
-                if (btn.tag == 2000||btn.tag ==2001){
-                    button.selected = NO;
-                }
-            }
-        }
-    }
-    switch (btn.tag) {
-        case 2000:
-        {
-            _isPurchase = YES;
-                [UIView animateWithDuration:0.3 animations:^{
-                    sliderLine.frame = CGRectMake(0, 38, kWidth/2, 2);
-                    _purchaseScrollView.frame = CGRectMake(0,40,kWidth,kHeight-64-40-49);
-                    _supplyScrollView.frame = CGRectMake(kWidth, 40, kWidth,kHeight-64-40-49);
-                }];
-        }
-            break;
-        case 2001:
-        {
+    int vipType = [[SystemConfig sharedInstance].viptype intValue];
+    //dang会员类型小于等于0时  检查是否能发布供应信息
+    if (btn.tag == 2001) {
+        if (vipType <= 0 ) {
             //判断是否可以发布供应信息
             NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
             [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
@@ -289,12 +228,23 @@
                         }else if(data == 1){
                             //可以发布信息
                             _isPurchase = NO;
+                            for (UIView *subView in self.view.subviews){
+                                if ([subView isKindOfClass:[UIButton class]]){
+                                    UIButton *button = (UIButton *)subView;
+                                    if (btn.tag == button.tag){
+                                        button.selected = YES;
+                                    }else{
+                                        button.selected = NO;
+                                    }
+                                }
+                            }
+                            
                             [UIView animateWithDuration:0.3 animations:^{
                                 _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
                                 _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
                                 sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
                             }];
-
+                            
                         }
                     }else{
                         
@@ -303,10 +253,33 @@
             } failure:^(NSError *error) {
                 NSLog(@"%@",error);
             }];
+        }else{
+            //可以发布信息
+            _isPurchase = NO;
+            [UIView animateWithDuration:0.3 animations:^{
+                _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
+                _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
+                sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
+            }];
         }
-                break;
-            default:
-                break;
+    }else{
+        _isPurchase = YES;
+        for (UIView *subView in self.view.subviews){
+            if ([subView isKindOfClass:[UIButton class]]){
+                UIButton *button = (UIButton *)subView;
+                if (btn.tag == button.tag){
+                    button.selected = YES;
+                }else{
+                    button.selected = NO;
+                }
+            }
+        }
+        [UIView animateWithDuration:0.3 animations:^{
+            sliderLine.frame = CGRectMake(0, 38, kWidth/2, 2);
+            _purchaseScrollView.frame = CGRectMake(0,40,kWidth,kHeight-64-40-49);
+            _supplyScrollView.frame = CGRectMake(kWidth, 40, kWidth,kHeight-64-40-49);
+        }];
+
     }
 }
 
@@ -365,7 +338,13 @@
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                 hud.dimBackground = NO;
                 hud.labelText = @"发布中...";
-                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",demandCateItem.uid,@"category_id",_purchaseView.titleTextField.text,@"title",demandDes,@"description",_purchaseView.phoneNumTextField.text,@"contacts_phone",_purchaseView.linkManTextField.text,@"contacts",_purchaseView.markLabel.text,@"tags",@"1",@"type",_purchaseView.unitField.text,@"unit",_purchaseView.purchaseNumField.text,@"buy_num",nil];
+                NSString *tags;
+                if (_purchaseView.markLabel.text) {
+                    tags = _purchaseView.markLabel.text;
+                }else{
+                    tags = @"";
+                }
+                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",demandCateItem.uid,@"category_id",_purchaseView.titleTextField.text,@"title",demandDes,@"description",_purchaseView.phoneNumTextField.text,@"contacts_phone",_purchaseView.linkManTextField.text,@"contacts",tags,@"tags",@"1",@"type",_purchaseView.unitField.text,@"unit",_purchaseView.purchaseNumField.text,@"buy_num",nil];
                 [HttpTool postWithPath:@"saveInfo" params:param  success:^(id JSON){
                     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
@@ -373,6 +352,7 @@
                     if ([[dic objectForKey:@"code"] intValue] == 100){
                         MyPurchaseController *pc = [[MyPurchaseController alloc] init];
                         [self.navigationController pushViewController:pc animated:YES];
+                        [self clearPurchaseData];
                     }else{
                         [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
                     }
@@ -515,7 +495,7 @@
         case 3003:
         {
             if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
-                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好！您目前所处等级没有权限上传3D图片,请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
+                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"尊敬的体验会员,普通会员及以上可单独购买上传次数" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
                 _upTDView.tag =1000;
                 [_upTDView showView];
             }else{
@@ -550,99 +530,6 @@
     }
 }
 
-
-//检查发布的求购数据信息
-- (BOOL)checkPurchaseData{
-    if (!demandCateItem) {
-        [RemindView showViewWithTitle:@"请选择分类" location:MIDDLE];
-        return NO;
-    }
-    if (!(_purchaseView.titleTextField.text.length!=0)) {
-        [RemindView showViewWithTitle:@"请填写标题" location:MIDDLE];
-        return NO;
-    }
-    if (!(demandDes&&demandDes.length !=0)) {
-        [RemindView showViewWithTitle:@"请填写求购产品的描述信息" location:MIDDLE];
-        return NO;
-    }
-    if (!(_purchaseView.purchaseNumField.text.length!=0)){
-        [RemindView showViewWithTitle:@"请输入需要求购的数量" location:MIDDLE];
-        return NO;
-    }
-    if (!(_purchaseView.unitField.text.length!=0)) {
-        [RemindView showViewWithTitle:@"请输入求购物品的计量单位" location:MIDDLE];
-        return NO;
-    }
-    if (!(_purchaseView.linkManTextField.text.length!=0)) {
-        [RemindView showViewWithTitle:@"请输入联系人" location:MIDDLE];
-        return NO;
-    }
-    if (!(_purchaseView.phoneNumTextField.text.length!=0)){
-        [RemindView showViewWithTitle:@"请输入手机号码" location:MIDDLE];
-        return NO;
-    }
-    if (![self isValidateMobile:_purchaseView.phoneNumTextField.text]){
-        [RemindView showViewWithTitle:@"请输入正确的手机号码" location:MIDDLE];
-        return NO;
-    }
-    return YES;
-}
-//判断电话是否合法 固定号码 或手机号
--(BOOL)isValidateMobile:(NSString *)mobile
-{
-    NSString *phoneRegex  =  @"((0\\d{2,3}-\\d{7,8})|(^((13[0-9])|(15[^4,\\D])|(18[0,0-9]))\\d{8}))$";
-    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",phoneRegex];
-    return [phoneTest evaluateWithObject:mobile];
-}
-
-
-//检查发布的供应数据信息
--(BOOL)checkSuppayData{
-    if (!supplyCateItem) {
-        [RemindView showViewWithTitle:@"请选择分类" location:MIDDLE];
-        return NO;
-    }
-    if (!(region&&region.length!=0)){
-        [RemindView showViewWithTitle:@"请选择供应的区域" location:MIDDLE];
-        return NO;
-    }
-    if (!(_supplyView.titleTextField.text.length!=0)) {
-        [RemindView showViewWithTitle:@"请填写标题" location:MIDDLE];
-        return NO;
-    }
-    if (!(_supplyView.priceTextField.text.length!=0)){
-        [RemindView showViewWithTitle:@"请输入供应产品价格" location:MIDDLE];
-        return NO;
-    }
-    if (!(_supplyView.unitField.text.length!=0)) {
-        [RemindView showViewWithTitle:@"请输入物品的计量单位" location:MIDDLE];
-    }
-    if (!(_supplyView.standardTextField.text.length!=0)) {
-        [RemindView showViewWithTitle:@"请填写产品的起订标准" location:MIDDLE];
-        return NO;
-    }
-    if (!(supplyDes&&supplyDes.length !=0)) {
-        [RemindView showViewWithTitle:@"请填写供应产品的描述信息" location:MIDDLE];
-        return NO;
-    }
-    if (!(_supplyView.linkManTextField.text.length!=0)) {
-        [RemindView showViewWithTitle:@"请输入联系人" location:MIDDLE];
-        return NO;
-    }
-    if (!(_supplyView.phoneNumTextField.text.length!=0)) {
-        [RemindView showViewWithTitle:@"请输入手机号码" location:MIDDLE];
-        return NO;
-    }
-    if (![self isValidateMobile:_supplyView.phoneNumTextField.text]){
-        [RemindView showViewWithTitle:@"请输入正确的手机号码" location:MIDDLE];
-        return NO;
-    }
-    if (!headImage){
-        [RemindView showViewWithTitle:@"请为产品选择一张图片" location:MIDDLE];
-        return NO;
-    }
-    return YES;
-}
 
 - (void)textFieldBeganEditting:(UITextField *)textField{
     activeField = textField;
@@ -806,6 +693,143 @@
     }
 }
 
+//发布求购成功后，清空页面数据
+- (void)clearPurchaseData
+{
+    _purchaseView.titleTextField.text = @"";
+    _purchaseView.descriptionLabel.text = @"";
+    demandDes = @"";
+    _purchaseView.purchaseNumField.text = @"";
+    _purchaseView.unitField.text = @"";
+    _purchaseView.markLabel.text = @"";
+    if (tagsArray.count!=0) {
+        [tagsArray removeAllObjects];
+    }
+}
+//发布供应成功后，清空页面数据
+- (void)clearSupplyData
+{
+    _supplyView.titleTextField.text = @"";
+    _supplyView.descriptionLabel.text = @"";
+    _supplyView.priceTextField.text = @"";
+    _supplyView.unitField.text = @"";
+    _supplyView.standardTextField.text = @"";
+    _supplyView.descriptionLabel.text = @"";
+    supplyDes = @"";
+    _supplyView.headImage.image = nil;
+    _supplyView.isHide = YES;
+    _supplyView.isExistImg = NO;
+}
+
+
+
+- (void)tapClicked
+{
+    [activeField resignFirstResponder];
+}
+
+//检查发布的求购数据信息
+- (BOOL)checkPurchaseData{
+    if (!demandCateItem) {
+        [RemindView showViewWithTitle:@"请选择分类" location:MIDDLE];
+        return NO;
+    }
+    if (!(_purchaseView.titleTextField.text.length!=0)) {
+        [RemindView showViewWithTitle:@"请填写标题" location:MIDDLE];
+        return NO;
+    }
+    if (!(demandDes&&demandDes.length !=0)) {
+        [RemindView showViewWithTitle:@"请填写求购产品的描述信息" location:MIDDLE];
+        return NO;
+    }
+    if (!(_purchaseView.purchaseNumField.text.length!=0)){
+        [RemindView showViewWithTitle:@"请输入需要求购的数量" location:MIDDLE];
+        return NO;
+    }
+    if (!(_purchaseView.unitField.text.length!=0)) {
+        [RemindView showViewWithTitle:@"请输入求购物品的计量单位" location:MIDDLE];
+        return NO;
+    }
+    if (!(_purchaseView.linkManTextField.text.length!=0)) {
+        [RemindView showViewWithTitle:@"请输入联系人" location:MIDDLE];
+        return NO;
+    }
+    if (_purchaseView.linkManTextField.text.length < 2||_purchaseView.linkManTextField.text.length>4) {
+        [RemindView showViewWithTitle:@"联系人为2-4个字符" location:MIDDLE];
+        return NO;
+    }
+    if (!(_purchaseView.phoneNumTextField.text.length!=0)){
+        [RemindView showViewWithTitle:@"请输入手机号码" location:MIDDLE];
+        return NO;
+    }
+    if (![self isValidateMobile:_purchaseView.phoneNumTextField.text]){
+        [RemindView showViewWithTitle:@"请输入正确的手机号码" location:MIDDLE];
+        return NO;
+    }
+    return YES;
+}
+//判断电话是否合法 固定号码 或手机号
+-(BOOL)isValidateMobile:(NSString *)mobile
+{
+    NSString *phoneRegex  =  @"((0\\d{2,3}-\\d{7,8})|(^((13[0-9])|(15[^4,\\D])|(18[0,0-9]))\\d{8}))$";
+    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",phoneRegex];
+    return [phoneTest evaluateWithObject:mobile];
+}
+
+
+//检查发布的供应数据信息
+-(BOOL)checkSuppayData{
+    if (!supplyCateItem) {
+        [RemindView showViewWithTitle:@"请选择分类" location:MIDDLE];
+        return NO;
+    }
+    if (!(region&&region.length!=0)){
+        [RemindView showViewWithTitle:@"请选择供应的区域" location:MIDDLE];
+        return NO;
+    }
+    if (!(_supplyView.titleTextField.text.length!=0)) {
+        [RemindView showViewWithTitle:@"请填写标题" location:MIDDLE];
+        return NO;
+    }
+    if (!(_supplyView.priceTextField.text.length!=0)){
+        [RemindView showViewWithTitle:@"请输入供应产品价格" location:MIDDLE];
+        return NO;
+    }
+    if (!(_supplyView.unitField.text.length!=0)) {
+        [RemindView showViewWithTitle:@"请输入物品的计量单位" location:MIDDLE];
+    }
+    if (!(_supplyView.standardTextField.text.length!=0)) {
+        [RemindView showViewWithTitle:@"请填写产品的起订标准" location:MIDDLE];
+        return NO;
+    }
+    if (!(supplyDes&&supplyDes.length !=0)) {
+        [RemindView showViewWithTitle:@"请填写供应产品的描述信息" location:MIDDLE];
+        return NO;
+    }
+    if (!(_supplyView.linkManTextField.text.length!=0)) {
+        [RemindView showViewWithTitle:@"请输入联系人" location:MIDDLE];
+        return NO;
+    }
+    if (_supplyView.linkManTextField.text.length < 2||_supplyView.linkManTextField.text.length>4) {
+        [RemindView showViewWithTitle:@"联系人为2-4个字符" location:MIDDLE];
+        return NO;
+    }
+    if (!(_supplyView.phoneNumTextField.text.length!=0)) {
+        [RemindView showViewWithTitle:@"请输入手机号码" location:MIDDLE];
+        return NO;
+    }
+    if (![self isValidateMobile:_supplyView.phoneNumTextField.text]){
+        [RemindView showViewWithTitle:@"请输入正确的手机号码" location:MIDDLE];
+        return NO;
+    }
+    if (!headImage){
+        [RemindView showViewWithTitle:@"请为产品选择一张图片" location:MIDDLE];
+        return NO;
+    }
+    return YES;
+}
+
+
 - (void)keyboardWillHide
 {
     if (_isPurchase){
@@ -951,6 +975,7 @@
         }
     }else if([controller isKindOfClass:[HotTagsController class]]){
         tagsArray = value;
+        
         NSMutableString *tagStr = [NSMutableString stringWithString:@""];
         for (int i = 0; i< tagsArray.count; i++) {
             [tagStr appendString:[tagsArray objectAtIndex:i]];

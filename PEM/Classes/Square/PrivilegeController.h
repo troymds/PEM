@@ -10,7 +10,7 @@
 #import "PriHeadView.h"
 #import "PriImageView.h"
 
-@interface PrivilegeController : UIViewController<ProImageViewDelegate>
+@interface PrivilegeController : UIViewController<ProImageViewDelegate,UIScrollViewDelegate>
 {
     PriHeadView *_headView;
     UIScrollView *_scrollView;
@@ -18,5 +18,6 @@
     UIButton *upPowerBtn;
     
     NSString *updateType;    //升级会员类型
+    
 }
 @end

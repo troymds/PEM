@@ -238,9 +238,11 @@
             break;
         case LOGINBACK_TYPE:
         {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"确认退出当前账号?" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认退出", nil];
-            alertView.tag = 1002;
-            [alertView show];
+            MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"确定退出登录?" delegate:self cancleButton:@"取消" otherButton:@"确定"];
+            [actionSheet showView];
+//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"确认退出当前账号?" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认退出", nil];
+//            alertView.tag = 1002;
+//            [alertView show];
             
         }
             break;
@@ -249,28 +251,30 @@
     }
 }
 
-#pragma mark -alertView_delegate
+#pragma mark -MyActionSheet_delegate
+- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView
+{
+    [SystemConfig sharedInstance].isUserLogin = NO;
+    [SystemConfig sharedInstance].company_id = nil;
+    [SystemConfig sharedInstance].viptype = nil;
+    [SystemConfig sharedInstance].companyInfo = nil;
+    [SystemConfig sharedInstance].vipInfo = nil;
+    
+    LoginController *login = [[LoginController alloc] init];
+    NSArray *arr = self.navigationController.viewControllers;
+    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
+    [array insertObject:login atIndex:1];
+    self.navigationController.viewControllers = array;
+    [self.navigationController popViewControllerAnimated:YES];
+
+}
+
+
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == 1002) {
-        if (buttonIndex == 1) {
-            [SystemConfig sharedInstance].isUserLogin = NO;
-            [SystemConfig sharedInstance].company_id = nil;
-            [SystemConfig sharedInstance].viptype = nil;
-            [SystemConfig sharedInstance].companyInfo = nil;
-            [SystemConfig sharedInstance].vipInfo = nil;
-            
-            LoginController *login = [[LoginController alloc] init];
-            NSArray *arr = self.navigationController.viewControllers;
-            NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
-            [array insertObject:login atIndex:1];
-            self.navigationController.viewControllers = array;
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    }else if(alertView.tag == 1001){
-        //版本更新
-        openURL(_url);
-    }
+    //版本更新
+    openURL(_url);
 }
 
 -(void)clearCacheSuccess

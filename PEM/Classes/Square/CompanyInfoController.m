@@ -122,9 +122,17 @@
 
 - (void)loadData{
     CompanyInfoItem *item = [SystemConfig sharedInstance].companyInfo;
-    _nameLabel.text = item.company_name;
-    NSString *address = [NSString stringWithFormat:@"%@%@",item.province_name,item.city_name];
-    _regionLabel.text = address;
+    if (item.company_name.length == 0) {
+        _nameLabel.text = @"未设置公司名";
+    }else{
+        _nameLabel.text = item.company_name;
+    }
+    if (item.province_name.length == 0&&item.city_name.length == 0) {
+        _regionLabel.text = @"未设置公司地址";
+    }else{
+        NSString *address = [NSString stringWithFormat:@"%@%@",item.province_name,item.city_name];
+        _regionLabel.text = address;
+    }
     _regionView.infoLabel.text = item.address;
     _websiteView.infoLabel.text = item.website;
     _emailView.infoLabel.text = item.email;

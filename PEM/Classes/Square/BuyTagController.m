@@ -37,8 +37,64 @@
     [_scrollView setContentSize:CGSizeMake(kWidth, kHeight-64)];
     [self addNavBarButton];
     [self addView];
+    
+    tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
+    
     // Do any additional setup after loading the view.
 }
+
+//点击事件
+- (void)tapDown
+{
+    [addField resignFirstResponder];
+}
+
+
+#pragma mark textField_delegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    contentOffset = _scrollView.contentOffset;
+    if (_iPhone4) {
+        if (bottomView.frame.origin.y - _scrollView.contentOffset.y > 100 ){
+            CGPoint offset = _scrollView.contentOffset;
+            offset.y = bottomView.frame.origin.y - 60;
+            [UIView animateWithDuration:0.2 animations:^{
+                _scrollView.contentOffset = offset;
+            }];
+        }
+    }
+    if (_iPhone5) {
+        if (bottomView.frame.origin.y - _scrollView.contentOffset.y > 150 ){
+            CGPoint offset = _scrollView.contentOffset;
+            offset.y = bottomView.frame.origin.y -120;
+            [UIView animateWithDuration:0.2 animations:^{
+                _scrollView.contentOffset = offset;
+            }];
+        }
+        
+    }
+    [_scrollView addGestureRecognizer:tap];
+    
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (_iPhone4) {
+        [UIView animateWithDuration:0.2 animations:^{
+            _scrollView.contentOffset = contentOffset;
+        }];
+    }
+    if (_iPhone5) {
+        [UIView animateWithDuration:0.2 animations:^{
+            _scrollView.contentOffset = contentOffset;
+        }];
+    }
+    [_scrollView removeGestureRecognizer:tap];
+    
+}
+
+
+
+
 - (void)addView{
     UIImageView *myTagImg = [[UIImageView alloc] initWithFrame:CGRectMake(19, 20, 20, 16)];
     myTagImg.image = [UIImage imageNamed:@"mytags"];
@@ -114,6 +170,14 @@
 {
     
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [addField resignFirstResponder];
+    return YES;
+}
+
+
 
 
 - (void)imageClicked:(ProImageView *)image
