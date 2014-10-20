@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface SaveTempDataTool : NSObject
-+(NSString *)getFilePath;
 
-+(void)archiveClass:(NSMutableArray *)array;
-+ (NSMutableArray *)unarchiveClass;
++ (NSString *)getFilePathWithTag:(int)tag;
++(void)archiveClass:(NSMutableArray *)array withArrayTag:(int)tag;
++ (NSMutableArray *)unarchiveClassWithArrayTag:(int)tag;
 
 @end

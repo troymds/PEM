@@ -16,6 +16,8 @@
     UIView *clearView;
     UIButton *bigBtn ;
     UIButton *history;
+    
+    int currentSelectedBtnTag;
 }
 @property(nonatomic,strong)NSMutableArray *supllyArray;
 @property(nonatomic,strong)NSMutableArray *demandArray;

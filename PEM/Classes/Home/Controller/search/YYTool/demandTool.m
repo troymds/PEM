@@ -10,6 +10,7 @@
 #import "HttpTool.h"
 #import "yyDemandModel.h"
 #import "demandCOM.h"
+#import "RemindView.h"
 @implementation demandTool
 + (void)statusesWithSuccess:(StatusSuccessBlock)success lastID:(NSString *)lastid failure:(StatusFailureBlock)failure
 {
@@ -20,16 +21,24 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if ([array isKindOfClass:[NSNull class]])
-        {}else{
-
-        for (NSDictionary *dict in array) {
+        if (![array isKindOfClass:[NSNull class]])
+        { for (NSDictionary *dict in array) {
             yyDemandModel *s =[[yyDemandModel alloc] initWithDictionaryFordemand:dict];
             
             [statuses addObject:s];
+            
         }
-        success(statuses);
+            success(statuses);
+
         }
+            else{
+
+            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
+
+
+        }
+    
+
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -56,6 +65,8 @@
                 [statuses addObject:s];
             }
             success(statuses);
+        }else{
+            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
         }
         
     } failure:^(NSError *error) {

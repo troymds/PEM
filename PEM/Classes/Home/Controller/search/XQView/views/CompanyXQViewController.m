@@ -483,6 +483,7 @@
     
     _conditionTableView.delegate =self;
     _conditionTableView.dataSource = self;
+
     
 }
 //供求信息

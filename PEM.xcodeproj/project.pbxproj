@@ -194,7 +194,6 @@
 		5556E03A19B494EA00BB6C85 /* StatusTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 5556E03819B494EA00BB6C85 /* StatusTool.m */; };
 		5588E22219EE06BC0095D362 /* xiangqingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E22119EE06BC0095D362 /* xiangqingViewController.m */; };
 		5588E22519EE06EA0095D362 /* HomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E22419EE06EA0095D362 /* HomeController.m */; };
-		5588E24919EE07600095D362 /* QRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E24819EE07600095D362 /* QRCodeViewController.m */; };
 		5588E26019EE07880095D362 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E24C19EE07880095D362 /* AFHTTPClient.m */; };
 		5588E26119EE07880095D362 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E24E19EE07880095D362 /* AFHTTPRequestOperation.m */; };
 		5588E26219EE07880095D362 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E25019EE07880095D362 /* AFImageRequestOperation.m */; };
@@ -206,13 +205,9 @@
 		5588E26919EE07880095D362 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E25F19EE07880095D362 /* UIImageView+AFNetworking.m */; };
 		5588E26F19EE084B0095D362 /* pick_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5588E26D19EE084B0095D362 /* pick_bg@2x.png */; };
 		5588E27019EE084B0095D362 /* title1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5588E26E19EE084B0095D362 /* title1@2x.png */; };
-		5588E27619EE61D20095D362 /* SaveDemandDataTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E27519EE61D20095D362 /* SaveDemandDataTool.m */; };
-		5588E27919EE61EE0095D362 /* SaveCompanyDataTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E27819EE61EE0095D362 /* SaveCompanyDataTool.m */; };
 		5588E27C19EE66FF0095D362 /* SearchDenamdModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E27B19EE66FF0095D362 /* SearchDenamdModel.m */; };
 		5588E27F19EE67140095D362 /* SearchCompanyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E27E19EE67140095D362 /* SearchCompanyModel.m */; };
-		5588E28219EE76130095D362 /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E28119EE76130095D362 /* SearchController.m */; };
 		5592B33A19E696A900C0728C /* aboutus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5592B33919E696A900C0728C /* aboutus@2x.png */; };
-		559DFF7619EFA95B0065194B /* findViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 559DFF7519EFA95B0065194B /* findViewController.m */; };
 		55B3C69819C6E4E300D04CE3 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55B3C69719C6E4E300D04CE3 /* CoreText.framework */; };
 		55B3C69A19C6E4EF00D04CE3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55B3C69919C6E4EF00D04CE3 /* QuartzCore.framework */; };
 		55B4972319EB7206005013A6 /* down_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4972119EB7206005013A6 /* down_pre@2x.png */; };
@@ -247,11 +242,15 @@
 		55B6420519D26804004F9C66 /* title3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B6420219D26804004F9C66 /* title3@2x.png */; };
 		55B6420A19D26A4F004F9C66 /* nav_BigLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B6420919D26A4F004F9C66 /* nav_BigLogo@2x.png */; };
 		55B6421419D2B74A004F9C66 /* nav_searchhome@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B6421319D2B74A004F9C66 /* nav_searchhome@2x.png */; };
-		55B682B619CFF74A0068308D /* home_ok_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B682B419CFF74A0068308D /* home_ok_pre@2x.png */; };
-		55B682B719CFF74A0068308D /* home_ok@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B682B519CFF74A0068308D /* home_ok@2x.png */; };
+		55B682B619CFF74A0068308D /* home_phone_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B682B419CFF74A0068308D /* home_phone_pre@2x.png */; };
+		55B682B719CFF74A0068308D /* home_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B682B519CFF74A0068308D /* home_phone@2x.png */; };
 		55B682BD19D029BC0068308D /* company2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B682BC19D029BC0068308D /* company2@2x.png */; };
 		55B707B919D3F03D006F61E7 /* dial_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B707B819D3F03D006F61E7 /* dial_btn@2x.png */; };
 		55B7254219DA9CA8008F5578 /* supplyWishlistidModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7254119DA9CA8008F5578 /* supplyWishlistidModel.m */; };
+		55B7820719F4985600EC9508 /* SearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7820619F4985600EC9508 /* SearchController.m */; };
+		55B7820A19F499A000EC9508 /* SaveTempDataTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7820919F499A000EC9508 /* SaveTempDataTool.m */; };
+		55B7820D19F49A2A00EC9508 /* findViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7820C19F49A2A00EC9508 /* findViewController.m */; };
+		55B7821019F4AC9900EC9508 /* QRCodeViewController(1).m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7820F19F4AC9900EC9508 /* QRCodeViewController(1).m */; };
 		55B86B2B19C6876E008B34AA /* XQgetInfoDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B86B2A19C6876E008B34AA /* XQgetInfoDetailModel.m */; };
 		55B86B2E19C68826008B34AA /* XQgetInfoTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B86B2D19C68826008B34AA /* XQgetInfoTool.m */; };
 		55B8B4F419CD220900FF86AD /* comHomeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B8B4F319CD220900FF86AD /* comHomeModel.m */; };
@@ -392,7 +391,6 @@
 		55E8C11619D3A6AD003F1685 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E8C10B19D3A6AD003F1685 /* SSKeychain.m */; };
 		55E8C11719D3A6AD003F1685 /* SSKeychainQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E8C10D19D3A6AD003F1685 /* SSKeychainQuery.m */; };
 		55E8C11819D3A6AD003F1685 /* DateManeger.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E8C10F19D3A6AD003F1685 /* DateManeger.m */; };
-		55E8C11919D3A6AD003F1685 /* SaveTempDataTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E8C11119D3A6AD003F1685 /* SaveTempDataTool.m */; };
 		55E8C17019D3AAD6003F1685 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 55E8C16F19D3AAD6003F1685 /* libz.dylib */; };
 		F31028F219B1DD7C00CCB1CE /* SearchResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F31028F119B1DD7C00CCB1CE /* SearchResultModel.m */; };
 		F32AE7F219B76FC900D67E05 /* HotCategoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F32AE7F119B76FC900D67E05 /* HotCategoryModel.m */; };
@@ -698,8 +696,6 @@
 		5588E22119EE06BC0095D362 /* xiangqingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = xiangqingViewController.m; sourceTree = "<group>"; };
 		5588E22319EE06EA0095D362 /* HomeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeController.h; sourceTree = "<group>"; };
 		5588E22419EE06EA0095D362 /* HomeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeController.m; sourceTree = "<group>"; };
-		5588E24719EE07600095D362 /* QRCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeViewController.h; sourceTree = "<group>"; };
-		5588E24819EE07600095D362 /* QRCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeViewController.m; sourceTree = "<group>"; };
 		5588E24B19EE07880095D362 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		5588E24C19EE07880095D362 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		5588E24D19EE07880095D362 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -721,19 +717,11 @@
 		5588E25F19EE07880095D362 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		5588E26D19EE084B0095D362 /* pick_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pick_bg@2x.png"; sourceTree = "<group>"; };
 		5588E26E19EE084B0095D362 /* title1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "title1@2x.png"; sourceTree = "<group>"; };
-		5588E27419EE61D20095D362 /* SaveDemandDataTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveDemandDataTool.h; sourceTree = "<group>"; };
-		5588E27519EE61D20095D362 /* SaveDemandDataTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveDemandDataTool.m; sourceTree = "<group>"; };
-		5588E27719EE61EE0095D362 /* SaveCompanyDataTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveCompanyDataTool.h; sourceTree = "<group>"; };
-		5588E27819EE61EE0095D362 /* SaveCompanyDataTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveCompanyDataTool.m; sourceTree = "<group>"; };
 		5588E27A19EE66FF0095D362 /* SearchDenamdModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchDenamdModel.h; sourceTree = "<group>"; };
 		5588E27B19EE66FF0095D362 /* SearchDenamdModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchDenamdModel.m; sourceTree = "<group>"; };
 		5588E27D19EE67140095D362 /* SearchCompanyModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchCompanyModel.h; sourceTree = "<group>"; };
 		5588E27E19EE67140095D362 /* SearchCompanyModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchCompanyModel.m; sourceTree = "<group>"; };
-		5588E28019EE76130095D362 /* SearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchController.h; sourceTree = "<group>"; };
-		5588E28119EE76130095D362 /* SearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchController.m; sourceTree = "<group>"; };
 		5592B33919E696A900C0728C /* aboutus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aboutus@2x.png"; sourceTree = "<group>"; };
-		559DFF7419EFA95B0065194B /* findViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = findViewController.h; sourceTree = "<group>"; };
-		559DFF7519EFA95B0065194B /* findViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = findViewController.m; sourceTree = "<group>"; };
 		55B3C69719C6E4E300D04CE3 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		55B3C69919C6E4EF00D04CE3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		55B4972119EB7206005013A6 /* down_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "down_pre@2x.png"; sourceTree = "<group>"; };
@@ -777,13 +765,21 @@
 		55B6420219D26804004F9C66 /* title3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "title3@2x.png"; path = "../navV/title3@2x.png"; sourceTree = "<group>"; };
 		55B6420919D26A4F004F9C66 /* nav_BigLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_BigLogo@2x.png"; sourceTree = "<group>"; };
 		55B6421319D2B74A004F9C66 /* nav_searchhome@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_searchhome@2x.png"; sourceTree = "<group>"; };
-		55B682B419CFF74A0068308D /* home_ok_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_ok_pre@2x.png"; sourceTree = "<group>"; };
-		55B682B519CFF74A0068308D /* home_ok@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_ok@2x.png"; sourceTree = "<group>"; };
+		55B682B419CFF74A0068308D /* home_phone_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_phone_pre@2x.png"; sourceTree = "<group>"; };
+		55B682B519CFF74A0068308D /* home_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_phone@2x.png"; sourceTree = "<group>"; };
 		55B682BC19D029BC0068308D /* company2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "company2@2x.png"; sourceTree = "<group>"; };
 		55B6BEC219A43BF5001F0502 /* AppMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppMacro.h; sourceTree = "<group>"; };
 		55B707B819D3F03D006F61E7 /* dial_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dial_btn@2x.png"; sourceTree = "<group>"; };
 		55B7254019DA9CA8008F5578 /* supplyWishlistidModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = supplyWishlistidModel.h; sourceTree = "<group>"; };
 		55B7254119DA9CA8008F5578 /* supplyWishlistidModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = supplyWishlistidModel.m; sourceTree = "<group>"; };
+		55B7820519F4985600EC9508 /* SearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchController.h; sourceTree = "<group>"; };
+		55B7820619F4985600EC9508 /* SearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchController.m; sourceTree = "<group>"; };
+		55B7820819F499A000EC9508 /* SaveTempDataTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveTempDataTool.h; sourceTree = "<group>"; };
+		55B7820919F499A000EC9508 /* SaveTempDataTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveTempDataTool.m; sourceTree = "<group>"; };
+		55B7820B19F49A2A00EC9508 /* findViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = findViewController.h; sourceTree = "<group>"; };
+		55B7820C19F49A2A00EC9508 /* findViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = findViewController.m; sourceTree = "<group>"; };
+		55B7820E19F4AC9900EC9508 /* QRCodeViewController(1).h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "QRCodeViewController(1).h"; sourceTree = "<group>"; };
+		55B7820F19F4AC9900EC9508 /* QRCodeViewController(1).m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "QRCodeViewController(1).m"; sourceTree = "<group>"; };
 		55B86B2919C6876E008B34AA /* XQgetInfoDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XQgetInfoDetailModel.h; path = ../FindTool/XQgetInfoDetailModel.h; sourceTree = "<group>"; };
 		55B86B2A19C6876E008B34AA /* XQgetInfoDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XQgetInfoDetailModel.m; path = ../FindTool/XQgetInfoDetailModel.m; sourceTree = "<group>"; };
 		55B86B2C19C68826008B34AA /* XQgetInfoTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XQgetInfoTool.h; path = ../Model/XQgetInfoTool.h; sourceTree = "<group>"; };
@@ -993,8 +989,6 @@
 		55E8C10D19D3A6AD003F1685 /* SSKeychainQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychainQuery.m; sourceTree = "<group>"; };
 		55E8C10E19D3A6AD003F1685 /* DateManeger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateManeger.h; sourceTree = "<group>"; };
 		55E8C10F19D3A6AD003F1685 /* DateManeger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateManeger.m; sourceTree = "<group>"; };
-		55E8C11019D3A6AD003F1685 /* SaveTempDataTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveTempDataTool.h; sourceTree = "<group>"; };
-		55E8C11119D3A6AD003F1685 /* SaveTempDataTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveTempDataTool.m; sourceTree = "<group>"; };
 		55E8C11A19D3A701003F1685 /* ChangeControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeControllerDelegate.h; sourceTree = "<group>"; };
 		55E8C11B19D3A701003F1685 /* ChangeItemDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeItemDelegate.h; sourceTree = "<group>"; };
 		55E8C16F19D3AAD6003F1685 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -1575,6 +1569,8 @@
 		5556E03619B494EA00BB6C85 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				55B7820819F499A000EC9508 /* SaveTempDataTool.h */,
+				55B7820919F499A000EC9508 /* SaveTempDataTool.m */,
 				5556E03719B494EA00BB6C85 /* StatusTool.h */,
 				5556E03819B494EA00BB6C85 /* StatusTool.m */,
 				554E1F8A19D0FA980024879C /* SearchTool.h */,
@@ -1586,8 +1582,8 @@
 		5588E24619EE07600095D362 /* ZBarSDK */ = {
 			isa = PBXGroup;
 			children = (
-				5588E24719EE07600095D362 /* QRCodeViewController.h */,
-				5588E24819EE07600095D362 /* QRCodeViewController.m */,
+				55B7820E19F4AC9900EC9508 /* QRCodeViewController(1).h */,
+				55B7820F19F4AC9900EC9508 /* QRCodeViewController(1).m */,
 			);
 			path = ZBarSDK;
 			sourceTree = "<group>";
@@ -1623,8 +1619,8 @@
 		55B4342719AEDD00006E8CBD /* search */ = {
 			isa = PBXGroup;
 			children = (
-				5588E28019EE76130095D362 /* SearchController.h */,
-				5588E28119EE76130095D362 /* SearchController.m */,
+				55B7820519F4985600EC9508 /* SearchController.h */,
+				55B7820619F4985600EC9508 /* SearchController.m */,
 				55E6CCFA19BEB366007C85BB /* XQView */,
 				550A2EF419B5B27400331F5E /* YYTool */,
 				55D035B119B87BBA000F090F /* Model */,
@@ -1815,12 +1811,6 @@
 				55E8C10D19D3A6AD003F1685 /* SSKeychainQuery.m */,
 				55E8C10E19D3A6AD003F1685 /* DateManeger.h */,
 				55E8C10F19D3A6AD003F1685 /* DateManeger.m */,
-				55E8C11019D3A6AD003F1685 /* SaveTempDataTool.h */,
-				55E8C11119D3A6AD003F1685 /* SaveTempDataTool.m */,
-				5588E27419EE61D20095D362 /* SaveDemandDataTool.h */,
-				5588E27519EE61D20095D362 /* SaveDemandDataTool.m */,
-				5588E27719EE61EE0095D362 /* SaveCompanyDataTool.h */,
-				5588E27819EE61EE0095D362 /* SaveCompanyDataTool.m */,
 				04AA702119C85053002A5009 /* GTMBase64 */,
 				5556E02F19B494AF00BB6C85 /* Tool */,
 				55D896E819AC62DA001EAF9F /* Lib */,
@@ -2015,8 +2005,8 @@
 		55D350A319C279BC00BFD8F3 /* views */ = {
 			isa = PBXGroup;
 			children = (
-				559DFF7419EFA95B0065194B /* findViewController.h */,
-				559DFF7519EFA95B0065194B /* findViewController.m */,
+				55B7820B19F49A2A00EC9508 /* findViewController.h */,
+				55B7820C19F49A2A00EC9508 /* findViewController.m */,
 				55CFB98519C16FCF00FF14F8 /* findDemandCell.h */,
 				55CFB98219C16FB200FF14F8 /* findSupplyCel.h */,
 				55CFB98319C16FB200FF14F8 /* findSupplyCel.m */,
@@ -2275,8 +2265,8 @@
 				55CFB99019C1929300FF14F8 /* xunjia_selecte1@2x.png */,
 				55CFB99119C1929300FF14F8 /* xunjia_selecte2@2x.png */,
 				55CFB99219C1929300FF14F8 /* xunji1@2x.png */,
-				55B682B419CFF74A0068308D /* home_ok_pre@2x.png */,
-				55B682B519CFF74A0068308D /* home_ok@2x.png */,
+				55B682B419CFF74A0068308D /* home_phone_pre@2x.png */,
+				55B682B519CFF74A0068308D /* home_phone@2x.png */,
 			);
 			path = find;
 			sourceTree = "<group>";
@@ -2423,7 +2413,7 @@
 				55D16CA819B6A0F7003B805A /* tab_product.png in Resources */,
 				55E8C0ED19D3A66A003F1685 /* tag@2x.png in Resources */,
 				55E8C0EC19D3A66A003F1685 /* share@2x.png in Resources */,
-				55B682B719CFF74A0068308D /* home_ok@2x.png in Resources */,
+				55B682B719CFF74A0068308D /* home_phone@2x.png in Resources */,
 				04AA6F3419C84E30002A5009 /* Provineces.plist in Resources */,
 				04A3BC7A19C05C5A00B2217B /* nomal_pre@2x.png in Resources */,
 				55D16CA519B6A0F7003B805A /* tab_index_pre.png in Resources */,
@@ -2436,7 +2426,7 @@
 				04A3BC7619C05C5A00B2217B /* individual_bg@2x.png in Resources */,
 				554E1FBA19D18FDA0024879C /* nav_delete_btn@2x.png in Resources */,
 				550A2F0C19B5C4A400331F5E /* tab_release_pre@2x.png in Resources */,
-				55B682B619CFF74A0068308D /* home_ok_pre@2x.png in Resources */,
+				55B682B619CFF74A0068308D /* home_phone_pre@2x.png in Resources */,
 				55DA328219ADB8C400A5A3CE /* shouye@2x.png in Resources */,
 				550A2F0B19B5C4A400331F5E /* tab_release@2x.png in Resources */,
 				55D16CA919B6A0F7003B805A /* tab_release_pre.png in Resources */,
@@ -2641,7 +2631,6 @@
 				55C10D6919CC1EC7002498DD /* comPanyNEWTool.m in Sources */,
 				555422A119C6BD9500C9DF9E /* conditionTool.m in Sources */,
 				55B5D25E199AEB19002A9750 /* proAppDelegate.m in Sources */,
-				5588E24919EE07600095D362 /* QRCodeViewController.m in Sources */,
 				04AF268E19E8B13D001B29CB /* SetAreaView.m in Sources */,
 				04AF268D19E8B13D001B29CB /* SetCellView.m in Sources */,
 				55D8974A19AC62DA001EAF9F /* REMenuItem.m in Sources */,
@@ -2653,6 +2642,7 @@
 				55D8974C19AC62DA001EAF9F /* MKAnnotationView+WebCache.m in Sources */,
 				5588E26019EE07880095D362 /* AFHTTPClient.m in Sources */,
 				5556E03219B494AF00BB6C85 /* HttpTool.m in Sources */,
+				55B7820A19F499A000EC9508 /* SaveTempDataTool.m in Sources */,
 				55D0359D19B7F55F000F090F /* HotDemandModel.m in Sources */,
 				55D8974719AC62DA001EAF9F /* MJRefreshHeaderView.m in Sources */,
 				55D035AD19B867E0000F090F /* companyTableViewCell.m in Sources */,
@@ -2661,6 +2651,7 @@
 				04AF26C819E8B15E001B29CB /* CellView.m in Sources */,
 				55D8975D19AC62DA001EAF9F /* UIScrollView+SVPullToRefresh.m in Sources */,
 				04AF26E119E8B17C001B29CB /* AreaController.m in Sources */,
+				55B7820719F4985600EC9508 /* SearchController.m in Sources */,
 				55D350A619C27AC700BFD8F3 /* gategoryListTool.m in Sources */,
 				04AF262619E8B108001B29CB /* PurchaseCell.m in Sources */,
 				04AF269919E8B13D001B29CB /* RemindView.m in Sources */,
@@ -2669,7 +2660,6 @@
 				5556E03919B494EA00BB6C85 /* Status.m in Sources */,
 				55D8974D19AC62DA001EAF9F /* NSData+GIF.m in Sources */,
 				04AF26AB19E8B150001B29CB /* PurchaseItem.m in Sources */,
-				5588E27619EE61D20095D362 /* SaveDemandDataTool.m in Sources */,
 				04AF268F19E8B13D001B29CB /* DeleteView.m in Sources */,
 				5588E26519EE07880095D362 /* AFPropertyListRequestOperation.m in Sources */,
 				5588E26319EE07880095D362 /* AFJSONRequestOperation.m in Sources */,
@@ -2677,7 +2667,6 @@
 				04AF26E619E8B17C001B29CB /* CityController.m in Sources */,
 				04AF26E219E8B17C001B29CB /* DescriptionController.m in Sources */,
 				0471EA1819ED3AA800060640 /* BuyTagController.m in Sources */,
-				5588E27919EE61EE0095D362 /* SaveCompanyDataTool.m in Sources */,
 				55D035AA19B8679E000F090F /* demandTableViewCell.m in Sources */,
 				04AF266219E8B129001B29CB /* AdviceController.m in Sources */,
 				04AF265A19E8B129001B29CB /* MyFavoriteController.m in Sources */,
@@ -2694,10 +2683,10 @@
 				04AF26C919E8B15E001B29CB /* ProImageView.m in Sources */,
 				55E8C11419D3A6AD003F1685 /* NSString+MD5.m in Sources */,
 				55D8975919AC62DA001EAF9F /* UIImageView+WebCache.m in Sources */,
+				55B7820D19F49A2A00EC9508 /* findViewController.m in Sources */,
 				55D035A619B86705000F090F /* supplyTableViewCell.m in Sources */,
 				55D8975C19AC62DA001EAF9F /* UIScrollView+SVInfiniteScrolling.m in Sources */,
 				55B5D359199AEEAE002A9750 /* NSString+MJ.m in Sources */,
-				55E8C11919D3A6AD003F1685 /* SaveTempDataTool.m in Sources */,
 				04AF261919E8B0F9001B29CB /* CallRecordItem.m in Sources */,
 				04AF265C19E8B129001B29CB /* AboutController.m in Sources */,
 				F31028F219B1DD7C00CCB1CE /* SearchResultModel.m in Sources */,
@@ -2710,8 +2699,8 @@
 				55B5D25A199AEB19002A9750 /* main.m in Sources */,
 				04AF262519E8B108001B29CB /* SupplyCell.m in Sources */,
 				04AC7A6819D963C500568926 /* SystemConfig.m in Sources */,
+				55B7821019F4AC9900EC9508 /* QRCodeViewController(1).m in Sources */,
 				55D035B019B8790F000F090F /* supplyTool.m in Sources */,
-				559DFF7619EFA95B0065194B /* findViewController.m in Sources */,
 				04AF261C19E8B0F9001B29CB /* TagInfoItem.m in Sources */,
 				55D035B719B89BAA000F090F /* demandTool.m in Sources */,
 				04AF262719E8B108001B29CB /* FavoriteCell.m in Sources */,
@@ -2761,7 +2750,6 @@
 				554E1F8C19D0FA980024879C /* SearchTool.m in Sources */,
 				554E1F9719D11A190024879C /* collocetAddToWishlistTool.m in Sources */,
 				04AF261B19E8B0F9001B29CB /* TagItem.m in Sources */,
-				5588E28219EE76130095D362 /* SearchController.m in Sources */,
 				5588E22219EE06BC0095D362 /* xiangqingViewController.m in Sources */,
 				04AF268919E8B13D001B29CB /* HeaderView.m in Sources */,
 				04AF261519E8B0F9001B29CB /* MySupplyItem.m in Sources */,

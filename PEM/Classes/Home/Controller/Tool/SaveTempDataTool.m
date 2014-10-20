@@ -1,20 +1,19 @@
 //
-//  SaveDemandDataTool.m
+//  SaveTempDataTool.m
 //  PEM
 //
-//  Created by YY on 14-10-15.
+//  Created by house365 on 14-8-30.
 //  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
 //
 
-#import "SaveDemandDataTool.h"
-static SaveDemandDataTool *shareInstance = nil;
-
-@implementation SaveDemandDataTool
-+(SaveDemandDataTool *)shareInstance
+#import "SaveTempDataTool.h"
+static SaveTempDataTool *shareInstance = nil;
+@implementation SaveTempDataTool
++(SaveTempDataTool *)shareInstance
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        shareInstance = [[SaveDemandDataTool alloc] init];
+        shareInstance = [[SaveTempDataTool alloc] init];
     });
     return shareInstance;
 }
@@ -27,23 +26,23 @@ static SaveDemandDataTool *shareInstance = nil;
     return [super allocWithZone:zone];
 }
 
-+ (NSString *)getFilePath
++ (NSString *)getFilePathWithTag:(int)tag
 {
-    return [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/searchDemandWord.plist"];
+    return [NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"Documents/searchWord%d.plist",tag]];
 }
 
-+(void)archiveClass:(NSMutableArray *)array
++(void)archiveClass:(NSMutableArray *)array withArrayTag:(int)tag
 {
     NSMutableData *data = [[NSMutableData alloc] initWithCapacity:0];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
     [archiver encodeObject:array];
     [archiver finishEncoding];
-    [data writeToFile:[self getFilePath] atomically:YES];
+    [data writeToFile:[self getFilePathWithTag:tag] atomically:YES];
 }
 
-+ (NSMutableArray *)unarchiveClass
++ (NSMutableArray *)unarchiveClassWithArrayTag:(int)tag
 {
-    NSMutableData *data = [[NSMutableData alloc] initWithContentsOfFile:[self getFilePath]];
+    NSMutableData *data = [[NSMutableData alloc] initWithContentsOfFile:[self getFilePathWithTag:tag]];
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
     NSMutableArray *array = [unarchiver decodeObject];
     [unarchiver finishDecoding];

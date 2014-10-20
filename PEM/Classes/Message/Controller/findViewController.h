@@ -16,6 +16,8 @@
     NSMutableArray *_CateDemandArray;
     NSMutableArray *_CetCategoryListArray;
     UIButton *_supplyBtnPice;
+    UIButton *_demandBtnTimer;
+
     UIButton *bigbutton;
 }
 @property(nonatomic,retain)NSMutableArray *CateSupplyArray;

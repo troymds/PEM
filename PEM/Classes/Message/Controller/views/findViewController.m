@@ -28,13 +28,8 @@
     UIView * rightBackViw;
     UIView *rightBackViewDemand;
     UIView *leftBackView;
-    BOOL isLeft;
-    BOOL isRight;
     
     UIView *linBackView;
-    MJRefreshHeaderView *MJHeadView;
-    MJRefreshFooterView *MJFootView;
-    
     UILabel *dataLabel;
 
     
@@ -67,6 +62,8 @@
     self.view.backgroundColor =[UIColor whiteColor];
     _selectedFind =[[UIButton alloc]init];
     _supplyBtnPice =[[UIButton alloc]init];
+    _demandBtnTimer =[[UIButton alloc]init];
+
 
     _CateSupplyArray =[[NSMutableArray alloc]init];
     _CateDemandArray =[[NSMutableArray alloc]init];
@@ -116,6 +113,8 @@
         
     }];
     
+    
+    
 
 }
 
@@ -158,56 +157,130 @@
     dataLabel.hidden = YES;
     dataLabel.enabled = NO;
     [self.view addSubview:dataLabel];
-}
+    
+    
+    }
 
 -(void)loadViewStatuses:(MJRefreshBaseView *)refreshView{
     
     [self addMBprogressView];
-    
-    [supplyTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+   
 
-        if (statues.count > 0) {
-            dataLabel.hidden = YES;
-            _tableView.hidden = NO;
-        }else
-        {if (statues.count==0){
-          
-      
-            [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-        }
-        }
-
-        [_CateSupplyArray addObjectsFromArray:statues];
-
+    if (_supplyBtnPice.tag==50) {
         [_tableView reloadData];
-        [refreshView endRefreshing];
+        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count > 0) {
+                dataLabel.hidden = YES;
+                _tableView.hidden = NO;
+            }else
+            {if (statues.count==0){
+                
+                
+                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+            }
+            }
+
+            [_CateSupplyArray addObjectsFromArray:statues];
+            [_tableView reloadData];
+            [refreshView endRefreshing];
+
+        }cateId:cateIndex supplyHot:@"read_num" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+            
+        }];
         
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-    
-    } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
         
-    }];
-    
-    
-    [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        if (statues.count > 0) {
-            dataLabel.hidden = YES;
-            _tableView.hidden = NO;
-        }else
-        {if (statues.count==0){
-        [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-        }
-        }
-        [_CateDemandArray addObjectsFromArray:statues];
+    }else{
+        
         [_tableView reloadData];
-        [refreshView endRefreshing];
         
-    } DemandId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] DemandFailure:^(NSError *error) {
+        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count > 0) {
+                dataLabel.hidden = YES;
+                _tableView.hidden = NO;
+            }else
+            {if (statues.count==0){
+                
+                
+                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+            }
+            }
+            
+            [_CateSupplyArray addObjectsFromArray:statues];
+            [_tableView reloadData];
+            [refreshView endRefreshing];
+
+            
+            
+            
+        }cateId:cateIndex supplyHot:@"price" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+            
+        }];
+
+    }
+    if (_demandBtnTimer.tag ==60) {
         
-    }];
-    
-    
+        [_tableView reloadData];
+        
+        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count > 0) {
+                dataLabel.hidden = YES;
+                _tableView.hidden = NO;
+            }else
+            {if (statues.count==0){
+                
+                
+                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+            }
+            }
+            
+            [_CateDemandArray addObjectsFromArray:statues];
+            
+            [_tableView reloadData];
+            [refreshView endRefreshing];
+            
+            
+            
+        }cateId:cateIndex demandHot:@"read_num" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
+            
+        }];
+        
+    }else{
+        
+        [_CateDemandArray removeAllObjects];
+        [_tableView reloadData];
+        
+        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count > 0) {
+                dataLabel.hidden = YES;
+                _tableView.hidden = NO;
+            }else
+            {if (statues.count==0){
+                
+                
+                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+            }
+            }
+            
+            [_CateDemandArray addObjectsFromArray:statues];
+            [_tableView reloadData];
+            [refreshView endRefreshing];
+
+            
+            
+        }cateId:cateIndex demandHot:@"time" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
+            
+            
+            
+        }];
+        
+        
+        
+    }
+
   
 
 }
@@ -407,6 +480,8 @@
     leftbtn.selected=!leftbtn.selected;
 
     if (leftbtn.selected ==NO) {
+        [bigbutton removeFromSuperview];
+
         [self addBigButton];
         _rightBtnDemand.selected = YES;
         _rigthBtn.selected = YES;
@@ -492,6 +567,28 @@
     
 
     if (sender.tag ==11) {
+        
+        [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            
+            if (statues.count ==0) {
+
+                dataLabel.hidden = NO;
+                _tableView.hidden = YES;
+                
+            }else{
+                
+                _tableView.hidden = NO;
+                dataLabel.hidden = YES;
+            }[_CateDemandArray addObjectsFromArray:statues];
+            [_tableView reloadData];
+            
+            
+            
+        } DemandId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] DemandFailure:^(NSError *error) {
+            
+        }];
         [_rigthBtn removeFromSuperview];
         [_rightBtnDemand removeFromSuperview];
 
@@ -501,30 +598,11 @@
         [bigbutton removeFromSuperview];
         [_CateSupplyArray removeAllObjects];
         [_tableView reloadData];
-
-        [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
-//            NSLog(@"%lu",(unsigned long)statues.count);
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
-            
-            if (statues.count ==0) {
-                
-                dataLabel.hidden = NO;
-                _tableView.hidden = YES;
-            }else{
-                
-                _tableView.hidden = NO;
-                dataLabel.hidden = YES;
-            }[_CateDemandArray addObjectsFromArray:statues];
-            [_tableView reloadData];
-
-           
-
-        } DemandId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] DemandFailure:^(NSError *error) {
-            
-        }];
+        
+//        [self addMBprogressView];
+        
     }else{
-
+        [self addMBprogressView];
         [self loadSupplyDataResoult];
 
         [_rigthBtn removeFromSuperview];
@@ -626,6 +704,7 @@
 }
 
 -(void)rightSegmentDemandBtnClick:(UIButton *)demand{
+    _demandBtnTimer.tag = demand.tag;
     
     [self addMBprogressView];
 
