@@ -13,6 +13,7 @@
 #import "phoneView.h"
 #import "SystemConfig.h"
 #import "DemandController.h"
+#import "PrivilegeController.h"
 @interface qiugouXQ ()<UIWebViewDelegate>
 {
     UIScrollView *_backScrollView;
@@ -287,7 +288,7 @@
     if (![SystemConfig sharedInstance].viptype) {
     
     
-    UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"温馨提示:" message:@"目前只有VIP及以上用户可以一键拨号，请升级!" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消", nil];
+    UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员:" message:@"只有普通会员及以上会员可以拨打求购电话，您需要升级才能使用本功能!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
         [alert show];
 
     }else{
@@ -309,13 +310,14 @@
 
     
 }
+
+
 -(void)gotoCompanyBtnClick:(UIButton *)goCompany{
     XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
-    NSLog(@"%@",comID.vip_type);
 
     if ([comID.vip_type isEqualToString:@"0"]) {
         
-        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"温馨提示:" message:@"目前只有VIP及以上用户可以进入公司，请升级!" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消", nil];
+        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员" message:@"抱歉，体验会员不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
         [alert show];
         
     }else{
@@ -323,6 +325,12 @@
     
     xqVC.companyID =comID.company_id;
     [self.navigationController pushViewController:xqVC animated:YES];
+    }
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex ==0) {
+        PrivilegeController *lvc =[[PrivilegeController alloc] init];
+        [self.navigationController pushViewController:lvc animated:YES];
     }
 }
 @end

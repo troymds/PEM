@@ -48,7 +48,7 @@
 
 @synthesize companyHom,companyID ,comArr;
 @synthesize companyHomeArray=_companyHomeArray ;
-
+@synthesize BigCompanyScrollView=_BigCompanyScrollView;
 
 - (void)viewDidLoad
 {
@@ -63,7 +63,6 @@
     _conditionArray =[[NSMutableArray alloc]init];
     comArr =[[NSMutableArray alloc]init];
     
-    self.title=_companyName;
     
     [self addRefreshViews];
     [self loadViewStatusesHome];
@@ -83,11 +82,16 @@
     _selectedBtn = [[UIButton alloc]init];
     
     [self addCompanyConditionTableView];
-    //[self addCompanyHome];
     [self addChooseBtn];
+
 }
 
-
+-(void)addBigCompanyScrollView{
+    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+    _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, kHeight);
+    _BigCompanyScrollView.backgroundColor =[UIColor redColor];
+    [self.view addSubview:_BigCompanyScrollView];
+}
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
 {
@@ -266,7 +270,8 @@
         
         CGFloat urlHeight =[comHomeModel.website sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
         
-        
+        self.title=comHomeModel.name;
+
         _companyHomeScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
         [companyHom addSubview:_companyHomeScrollView];
         if (comArr.count>0) {
@@ -626,11 +631,21 @@
 #pragma mark threeButton
 -(void)addCompanyButton
 {
+    UIView *companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 30)];
+    [self.view addSubview:companyBackView];
+    companyBackView.backgroundColor =HexRGB(0xe1e9e9);
+    for (int i=0; i<2; i++) {
+        UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/3+i%3*(75+32), 5, 1, 20)];
+        [companyBackView addSubview:companyBackLine];
+        
+        companyBackLine.backgroundColor =[UIColor lightGrayColor];
+
+    }
     for (int p=0; p<3; p++)
     {
         NSArray *companyArr =@[@"公司首页",@"企业动态",@"供求信息"];
         UIButton *companyBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-        [self.view addSubview:companyBtn];
+        [companyBackView addSubview:companyBtn];
         
         [companyBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
         [companyBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
@@ -657,13 +672,14 @@
 {
     UIButton *button = (UIButton *)[self.view viewWithTag:20];
     [button setTitleColor:HexRGB(0x808080) forState:UIControlStateSelected];
-    
+
     _selectedBtn.selected = NO;
     _selectedBtn = company;
     company.selected = YES;
     
     if (company.tag == 20)
     {
+
         [_refreshView endRefreshing];
         
         conditionView.hidden = YES;

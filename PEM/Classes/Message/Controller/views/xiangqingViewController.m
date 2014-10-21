@@ -17,6 +17,7 @@
 #import "supplyWishlistidModel.h"
 #import "SystemConfig.h"
 #import "RemindView.h"
+#import "LoginController.h"
 @interface phoneView ()
 
 @end
@@ -422,7 +423,9 @@
 
     }else{
         if (![SystemConfig sharedInstance].isUserLogin){
-            [RemindView showViewWithTitle:@"收藏失败，请登录后收藏！" location:BELLOW];
+            LoginController *registerVC =[[LoginController alloc]init];
+            [self.navigationController pushViewController:registerVC animated:YES];
+//            [RemindView showViewWithTitle:@"收藏失败，请登录后收藏！" location:BELLOW];
             collect.selected = NO;
         }else{
             

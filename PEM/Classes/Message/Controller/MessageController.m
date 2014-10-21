@@ -123,13 +123,10 @@
 
         UIButton *button =[UIButton buttonWithType:UIButtonTypeCustom];
         
-        button.frame = CGRectMake(-1+but%3*(70+40), 0+but/3*(60+35), kWidth/3+4, 96);
+        button.frame = CGRectMake(but%3*(70+37), 0+but/3*(60+35), kWidth/3, 96);
         button.tag =but+100;
         [_scrollView addSubview:button];
         [button setBackgroundImage:[UIImage imageNamed:@"dibuhengtiao.png"] forState:UIControlStateHighlighted];
-//        [button setBackgroundImage:[UIImage imageNamed:[NSString stringWithFormat:@"find_Image%d.png",but]] forState:UIControlStateNormal];
-//        UIImage *cageImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:cagegoryModel.imageGategpry]]];
-//        [button setImage:cageImage forState:UIControlStateNormal];
         UIButton *titleBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [titleBtn setTitle:cagegoryModel.nameGategory forState:UIControlStateNormal];
         [_scrollView addSubview:titleBtn];
@@ -176,7 +173,7 @@
         UIView *liney =[[UIView alloc]init];
         liney.backgroundColor =HexRGB(0xe6e3e4);
 
-        liney.frame =CGRectMake(kWidth/3+2+i%3*(75+35),8 , 1, _categoryArray.count/3*(63+30));
+        liney.frame =CGRectMake(kWidth/3+i%3*(75+32),8 , 1, _categoryArray.count/3*(63+30));
         [_scrollView addSubview:liney];
     }
 
