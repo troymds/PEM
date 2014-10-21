@@ -1,10 +1,6 @@
 
 #import "HttpTool.h"
-#import "AFNetworking.h"
-#import "NSString+MD5.h"
-#import "SystemConfig.h"
-#import "DateManeger.h"
-#import "UIImageView+WebCache.h"
+
 
 @implementation HttpTool
 + (void)requestWithPath:(NSString *)path params:(NSDictionary *)params success:(HttpSuccessBlock)success failure:(HttpFailureBlock)failure method:(NSString *)method
@@ -31,7 +27,13 @@
      [client postPath:pathStr parameters:allParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
         success(responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+
         failure(error);
+        
+//        self.error =error;
+//        if ([self.delegate respondsToSelector:@selector(downloadFailed:)]) {
+//            [self.delegate downloadFailed:self];
+//        }
     }];
 }
 

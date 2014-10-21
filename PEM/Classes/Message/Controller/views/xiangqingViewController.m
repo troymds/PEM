@@ -17,6 +17,7 @@
 #import "supplyWishlistidModel.h"
 #import "SystemConfig.h"
 #import "RemindView.h"
+#import "LoginController.h"
 @interface phoneView ()
 
 @end
@@ -193,7 +194,7 @@
    
     
     hearImage =[[UIImageView alloc]init];
-    hearImage.frame =CGRectMake(0,0, 320, 160);
+    hearImage.frame =CGRectMake(0,0, kWidth, 160);
     hearImage.userInteractionEnabled = YES;
     [_backScrollView addSubview:hearImage];
     
@@ -203,7 +204,7 @@
 
     }else{
         
-        UIWebView *webview_3d = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, 300, 160)];
+        UIWebView *webview_3d = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 160)];
         webview_3d.userInteractionEnabled = NO;
         [_backScrollView addSubview:webview_3d];
         [webview_3d loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:xqModel.url_3d]]];
@@ -258,15 +259,19 @@
     [_backScrollView addSubview:picLabel];
     picLabel.font =[UIFont systemFontOfSize:PxFont(30)];
 
-//    起价
+    //    起价
+    for (int l=0; l<3; l++) {
+        NSArray *labelArray =@[[NSString stringWithFormat:@"%@起供应",xqModel.min_sell_num],[NSString stringWithFormat:@"浏览%@次",xqModel.read_num],[NSString stringWithFormat:@"%@",xqModel.region]];
         UILabel *linLabel =[[UILabel alloc]init];
-        linLabel.text =[NSString stringWithFormat:@"%@起供应    浏览%@次    %@",xqModel.min_sell_num,xqModel.read_num,xqModel.region];
-    
-        linLabel.frame =CGRectMake(10,225+nameWeight, kWidth-20, 20);
+        linLabel.text =labelArray[l];
+        
+        
+        linLabel.frame =CGRectMake(20+l%3*((kWidth-20)/3),225+nameWeight, (kWidth-40)/3, 20);
         [_backScrollView addSubview:linLabel];
         
         linLabel.font =[UIFont systemFontOfSize:10];
         linLabel.textColor =HexRGB(0x666666);
+    }
     
 //线条
     
@@ -422,7 +427,9 @@
 
     }else{
         if (![SystemConfig sharedInstance].isUserLogin){
-            [RemindView showViewWithTitle:@"收藏失败，请登录后收藏！" location:BELLOW];
+            LoginController *registerVC =[[LoginController alloc]init];
+            [self.navigationController pushViewController:registerVC animated:YES];
+//            [RemindView showViewWithTitle:@"收藏失败，请登录后收藏！" location:BELLOW];
             collect.selected = NO;
         }else{
             

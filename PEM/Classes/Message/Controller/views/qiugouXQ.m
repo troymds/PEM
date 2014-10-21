@@ -13,6 +13,7 @@
 #import "phoneView.h"
 #import "SystemConfig.h"
 #import "DemandController.h"
+#import "PrivilegeController.h"
 @interface qiugouXQ ()<UIWebViewDelegate>
 {
     UIScrollView *_backScrollView;
@@ -221,27 +222,28 @@
     [backView addSubview:goCompany];
     goCompany.titleLabel.font =[UIFont systemFontOfSize:PxFont(15)];
     [goCompany setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    goCompany.frame = CGRectMake(280, 40, 40, 44);
+    goCompany.frame = CGRectMake(0, 40, kWidth, 44);
     [goCompany setImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"] forState:UIControlStateNormal];
-   
+    goCompany.imageEdgeInsets =UIEdgeInsetsMake(0, 280, 0, 0);
     [goCompany addTarget:self action:@selector(gotoCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     //name
     UILabel *nameCopany =[[UILabel alloc]init];
 //    nameCopany.text = xqModel.company_name;
     NSLog(@"%@",nameCopany);
     nameCopany.backgroundColor =[UIColor clearColor];
-//    CGFloat nameCompanyw ;
-//    if (![nameCopany isKindOfClass:[NSNull class]]) {
+    CGFloat nameCompanyw ;
+    if ([nameCopany isKindOfClass:[NSNull class]]) {
+
+    }else{
 //        nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(16)] constrainedToSize:CGSizeMake(MAXFLOAT, 30)].width;
-//
-//    }else{
-//    }
+
+    }
     [backView addSubview:nameCopany];
     nameCopany.frame =CGRectMake(20, 40, 210, 44);
-//    nameCopany.font =[UIFont systemFontOfSize:PxFont(16)];
+    nameCopany.font =[UIFont systemFontOfSize:PxFont(16)];
 
     //vip
-    UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(20,50, 18, 25)];
+    UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(20+nameCompanyw,50, 18, 25)];
     
     if ([xqModel.vip_type isEqualToString:@"1"]) {
         _companyImgVip.image =[UIImage imageNamed:@"Vip4.png"];
@@ -284,10 +286,12 @@
 -(void)phoneBtnClick:(UIButton *)sentder
 {
     
-    if (![SystemConfig sharedInstance].viptype) {
+    XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
+    
+    if ([comID.vip_type isEqualToString:@"0"]) {
     
     
-    UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"温馨提示:" message:@"目前只有VIP及以上用户可以一键拨号，请升级!" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消", nil];
+    UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员:" message:@"只有普通会员及以上会员可以拨打求购电话，您需要升级才能使用本功能!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
         [alert show];
 
     }else{
@@ -309,13 +313,15 @@
 
     
 }
+
+
 -(void)gotoCompanyBtnClick:(UIButton *)goCompany{
     XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
-    NSLog(@"%@",comID.vip_type);
 
     if ([comID.vip_type isEqualToString:@"0"]) {
         
-        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"温馨提示:" message:@"目前只有VIP及以上用户可以进入公司，请升级!" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消", nil];
+        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员" message:@"抱歉，体验会员不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
+        
         [alert show];
         
     }else{
@@ -323,6 +329,12 @@
     
     xqVC.companyID =comID.company_id;
     [self.navigationController pushViewController:xqVC animated:YES];
+    }
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex ==0) {
+        PrivilegeController *lvc =[[PrivilegeController alloc] init];
+        [self.navigationController pushViewController:lvc animated:YES];
     }
 }
 @end

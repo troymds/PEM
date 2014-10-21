@@ -48,7 +48,7 @@
 
 @synthesize companyHom,companyID ,comArr;
 @synthesize companyHomeArray=_companyHomeArray ;
-
+@synthesize BigCompanyScrollView=_BigCompanyScrollView;
 
 - (void)viewDidLoad
 {
@@ -63,7 +63,6 @@
     _conditionArray =[[NSMutableArray alloc]init];
     comArr =[[NSMutableArray alloc]init];
     
-    self.title=_companyName;
     
     [self addRefreshViews];
     [self loadViewStatusesHome];
@@ -83,8 +82,8 @@
     _selectedBtn = [[UIButton alloc]init];
     
     [self addCompanyConditionTableView];
-    //[self addCompanyHome];
     [self addChooseBtn];
+
 }
 
 
@@ -234,18 +233,43 @@
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
 }
-
+-(void)addBigCompanyScrollView{
+    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+    _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, kHeight);
+    _BigCompanyScrollView.backgroundColor =[UIColor redColor];
+    [self.view addSubview:_BigCompanyScrollView];
+    
+    
+}
 //公司首页
 -(void)addCompanyHome
 {
     companyHom=[[UIView alloc]init];
-    companyHom.frame =CGRectMake(0, 35, 320, self.view.frame.size.height-30);
+    companyHom.frame =CGRectMake(0, 30, 320, self.view.frame.size.height-30);
     companyHom.backgroundColor =[UIColor whiteColor];
     [self.view addSubview:companyHom];
     [self addCompahyHomeUI];
 }
 
-
+//企业动态
+-(void)addCompanyConditionTableView
+{
+    conditionView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, kHeight-30)];
+    conditionView.backgroundColor =[UIColor greenColor];
+    
+    
+    [self.view addSubview:conditionView];
+    
+    
+    _conditionTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, conditionView.frame.size.height-68) style:UITableViewStylePlain];
+    _conditionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [conditionView addSubview:_conditionTableView];
+    
+    _conditionTableView.delegate =self;
+    _conditionTableView.dataSource = self;
+    
+    
+}
 
 #pragma mark ------companyHomeUI
 -(void)addCompahyHomeUI
@@ -266,7 +290,8 @@
         
         CGFloat urlHeight =[comHomeModel.website sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
         
-        
+        self.title=comHomeModel.name;
+
         _companyHomeScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
         [companyHom addSubview:_companyHomeScrollView];
         if (comArr.count>0) {
@@ -542,25 +567,7 @@
 }
 -(void)companySDIndexClick:(UIButton *)sender{
 }
-//企业动态
--(void)addCompanyConditionTableView
-{
-    conditionView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, kHeight-30)];
-    conditionView.backgroundColor =[UIColor greenColor];
-    
-    
-    [self.view addSubview:conditionView];
-    
-    
-    _conditionTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, conditionView.frame.size.height-68) style:UITableViewStylePlain];
-    _conditionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [conditionView addSubview:_conditionTableView];
-    
-    _conditionTableView.delegate =self;
-    _conditionTableView.dataSource = self;
 
-    
-}
 //供求信息
 #pragma mark ------addCompanySupplyANDDemandUI
 
@@ -587,7 +594,7 @@
         [chooseBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
         [chooseBtn setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
         [chooseBtn setBackgroundImage:[UIImage imageNamed:@"back_companypre.png"] forState:UIControlStateSelected];
-        chooseBtn.frame =CGRectMake(0+btn%3*kWidth/2, 0, kWidth/2,43);
+        chooseBtn.frame =CGRectMake(0+btn%3*kWidth/2, 1, kWidth/2,40);
         chooseBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         [chooseBtn setTitle:titleArray[btn] forState:UIControlStateNormal];
         [chooseBtn addTarget:self action:@selector(chooseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -626,11 +633,21 @@
 #pragma mark threeButton
 -(void)addCompanyButton
 {
+    UIView *companyBackView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 30)];
+    [self.view addSubview:companyBackView];
+    companyBackView.backgroundColor =HexRGB(0xe1e9e9);
+    for (int i=0; i<2; i++) {
+        UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/3+i%3*(75+32), 5, 1, 20)];
+        [companyBackView addSubview:companyBackLine];
+        
+        companyBackLine.backgroundColor =[UIColor lightGrayColor];
+
+    }
     for (int p=0; p<3; p++)
     {
         NSArray *companyArr =@[@"公司首页",@"企业动态",@"供求信息"];
         UIButton *companyBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-        [self.view addSubview:companyBtn];
+        [companyBackView addSubview:companyBtn];
         
         [companyBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
         [companyBtn setTitleColor:HexRGB(0x069dd4) forState:UIControlStateSelected];
@@ -657,13 +674,14 @@
 {
     UIButton *button = (UIButton *)[self.view viewWithTag:20];
     [button setTitleColor:HexRGB(0x808080) forState:UIControlStateSelected];
-    
+
     _selectedBtn.selected = NO;
     _selectedBtn = company;
     company.selected = YES;
     
     if (company.tag == 20)
     {
+
         [_refreshView endRefreshing];
         
         conditionView.hidden = YES;
@@ -729,7 +747,6 @@
 }
 
 
-#pragma mark --tableViewDatasource
 #pragma mark--tableViewDataSoure
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -97,7 +97,10 @@
 
 }
 #pragma mark -=---判断网络是否连接
-
+-(void)downloadFailed:(HttpTool *)request{
+    NSLog(@"FFFFFFF");
+    [Loading loadingFailure];
+}
 #pragma mark 加载微博数据
 - (void)loadNewData
 {
@@ -409,15 +412,15 @@
         [categoryButtTitle addTarget:self action:@selector(categoryBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [CategoryButt addTarget:self action:@selector(categoryBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         categoryButtTitle.tag = [hotCategoryModel.cateid intValue]+100;
-        
         CategoryButt.tag=categoryButtTitle.tag ;
+        
+        
         
         
         UIImageView *findImage =[[UIImageView alloc]init];
         findImage.frame =CGRectMake(20+c%4*(50+25), 152+c/4*(40+40), 50,50);
         [_backScrollView addSubview:findImage];
         findImage.userInteractionEnabled = NO;
-        
         [findImage setImageWithURL:[NSURL URLWithString:hotCategoryModel.image]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
         
        
@@ -437,6 +440,7 @@
     moreTitle.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
     [moreBtn addTarget:self action:@selector(moreBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [moreTitle addTarget:self action:@selector(moreBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    
 
 
     
@@ -578,7 +582,6 @@
     qiugouXQ *qiug =[[qiugouXQ alloc]init];
     HotDemandModel *model =[_hotDemandArray objectAtIndex:deman.tag-200];
     qiug.demandIndex =model.demandHotid;
-    //    qiug.demandIndex=_demandID  ;
     [self.navigationController pushViewController:qiug animated:YES];
     
 }
