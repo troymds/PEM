@@ -15,6 +15,8 @@
     UIView *suplyANDdemandView;
     UIButton *ChosseSelectedBtn;
     UIScrollView *_BigCompanyScrollView;
+    
+
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;
 

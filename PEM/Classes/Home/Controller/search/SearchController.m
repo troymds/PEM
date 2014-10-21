@@ -512,7 +512,7 @@
     self.view = _bgView;
     
     
-    _backViw =[[UIView alloc]initWithFrame:CGRectMake(50, 3, 70, 60)];
+    _backViw =[[UIView alloc]initWithFrame:CGRectMake(20, 3, 100, 70)];
     [_bgView addSubview:_backViw];
     
     [_recTableView reloadData];
@@ -552,7 +552,7 @@
     }
     
     UIImageView *kuangImage =[[UIImageView alloc]init];
-    kuangImage.frame = CGRectMake(-12, -48, 100, 138);
+    kuangImage.frame = CGRectMake(-14, -58, 130, 168);
     kuangImage.image =[UIImage imageNamed:@"xialakuang.png"];
     [_backViw addSubview:kuangImage];
     kuangImage.userInteractionEnabled = YES;
@@ -562,12 +562,12 @@
     {
         UIView *l =[[UIView alloc]init];
         [kuangImage addSubview:l];
-        l.frame =CGRectMake(12, 67+segBtn%3*(17+2), 74, 1);
+        l.frame =CGRectMake(16, 78+segBtn%3*(17+8), 94, 1);
         l.backgroundColor =HexRGB(0xe6e3e4);
         UIButton * sear =[UIButton buttonWithType:UIButtonTypeCustom];
         [kuangImage addSubview:sear];
         [sear setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        sear.frame =CGRectMake(12, 47+segBtn%3*(17+2), 74, 20);
+        sear.frame =CGRectMake(15, 53+segBtn%3*(17+8), 96, 28);
         sear.titleLabel.font =[UIFont systemFontOfSize:14];
         [sear setTitle:sea[segBtn] forState:UIControlStateNormal];
         [sear setBackgroundImage:[UIImage imageNamed:@"blackBg.png"] forState:UIControlStateHighlighted];

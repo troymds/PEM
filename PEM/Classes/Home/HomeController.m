@@ -96,7 +96,10 @@
 
 }
 #pragma mark -=---判断网络是否连接
-
+-(void)downloadFailed:(HttpTool *)request{
+    NSLog(@"FFFFFFF");
+    [Loading loadingFailure];
+}
 #pragma mark 加载微博数据
 - (void)loadNewData
 {

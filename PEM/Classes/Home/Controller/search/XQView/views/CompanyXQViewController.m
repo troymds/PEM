@@ -86,12 +86,7 @@
 
 }
 
--(void)addBigCompanyScrollView{
-    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
-    _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, kHeight);
-    _BigCompanyScrollView.backgroundColor =[UIColor redColor];
-    [self.view addSubview:_BigCompanyScrollView];
-}
+
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
 {
@@ -238,18 +233,43 @@
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
 }
-
+-(void)addBigCompanyScrollView{
+    _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+    _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, kHeight);
+    _BigCompanyScrollView.backgroundColor =[UIColor redColor];
+    [self.view addSubview:_BigCompanyScrollView];
+    
+    
+}
 //公司首页
 -(void)addCompanyHome
 {
     companyHom=[[UIView alloc]init];
-    companyHom.frame =CGRectMake(0, 35, 320, self.view.frame.size.height-30);
+    companyHom.frame =CGRectMake(0, 30, 320, self.view.frame.size.height-30);
     companyHom.backgroundColor =[UIColor whiteColor];
     [self.view addSubview:companyHom];
     [self addCompahyHomeUI];
 }
 
-
+//企业动态
+-(void)addCompanyConditionTableView
+{
+    conditionView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, kHeight-30)];
+    conditionView.backgroundColor =[UIColor greenColor];
+    
+    
+    [self.view addSubview:conditionView];
+    
+    
+    _conditionTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, conditionView.frame.size.height-68) style:UITableViewStylePlain];
+    _conditionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [conditionView addSubview:_conditionTableView];
+    
+    _conditionTableView.delegate =self;
+    _conditionTableView.dataSource = self;
+    
+    
+}
 
 #pragma mark ------companyHomeUI
 -(void)addCompahyHomeUI
@@ -547,25 +567,7 @@
 }
 -(void)companySDIndexClick:(UIButton *)sender{
 }
-//企业动态
--(void)addCompanyConditionTableView
-{
-    conditionView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, kHeight-30)];
-    conditionView.backgroundColor =[UIColor greenColor];
-    
-    
-    [self.view addSubview:conditionView];
-    
-    
-    _conditionTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, conditionView.frame.size.height-68) style:UITableViewStylePlain];
-    _conditionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [conditionView addSubview:_conditionTableView];
-    
-    _conditionTableView.delegate =self;
-    _conditionTableView.dataSource = self;
 
-    
-}
 //供求信息
 #pragma mark ------addCompanySupplyANDDemandUI
 
@@ -592,7 +594,7 @@
         [chooseBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
         [chooseBtn setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
         [chooseBtn setBackgroundImage:[UIImage imageNamed:@"back_companypre.png"] forState:UIControlStateSelected];
-        chooseBtn.frame =CGRectMake(0+btn%3*kWidth/2, 0, kWidth/2,43);
+        chooseBtn.frame =CGRectMake(0+btn%3*kWidth/2, 1, kWidth/2,40);
         chooseBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         [chooseBtn setTitle:titleArray[btn] forState:UIControlStateNormal];
         [chooseBtn addTarget:self action:@selector(chooseBtnClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -745,7 +747,6 @@
 }
 
 
-#pragma mark --tableViewDatasource
 #pragma mark--tableViewDataSoure
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
