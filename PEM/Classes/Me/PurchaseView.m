@@ -65,6 +65,8 @@
         _descriptionView = [[CellView alloc] initWithFrame:CGRectMake(0, 70, width, 35)];
         _descriptionView.nameLabel.text = @"描  述";
         _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, width-60-25, 35)];
+        _descriptionLabel.font = [UIFont systemFontOfSize:PxFont(20)];
+        _descriptionLabel.textColor = HexRGB(0x666666);
         _descriptionLabel.backgroundColor = [UIColor clearColor];
         _descriptionLabel.text = @"十字以上";
         [_descriptionView addSubview:_descriptionLabel];
@@ -187,7 +189,6 @@
         [publishBtn addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:publishBtn];
         
-        tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
     }
     return self;
 }
@@ -236,12 +237,6 @@
     }
     return YES;
 }
-
-
-- (void)tapDown{
-    if ([self.delegate respondsToSelector:@selector(tapClicked)]) {
-        [self.delegate tapClicked];
-    }}
 
 
 #pragma mark textField delegate

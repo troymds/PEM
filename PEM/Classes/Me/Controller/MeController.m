@@ -74,29 +74,90 @@
 
 - (void)addView
 {
+    bgScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,40, kWidth, kHeight-64-40-44)];
+    [bgScrollView setContentSize:CGSizeMake(kWidth*2, bgScrollView.frame.size.height)];
+    bgScrollView.backgroundColor= HexRGB(0xffffff);
+    bgScrollView.delegate = self;
+    bgScrollView.showsHorizontalScrollIndicator = NO;
+    bgScrollView.showsVerticalScrollIndicator = NO;
+    bgScrollView.pagingEnabled = YES;
+    [self.view addSubview:bgScrollView];
     //求购
-    _purchaseScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,40,kWidth,kHeight-64-40-44)];
+    _purchaseScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,kWidth,bgScrollView.frame.size.height)];
     _purchaseScrollView.showsHorizontalScrollIndicator = NO;
     _purchaseScrollView.showsVerticalScrollIndicator = NO;
     _purchaseScrollView.backgroundColor= HexRGB(0xffffff);
-    _purchaseView = [[PurchaseView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width,416)];
+    _purchaseView = [[PurchaseView alloc] initWithFrame:CGRectMake(0, 0,kWidth,416)];
     _purchaseView.delegate =self;
     [_purchaseScrollView addSubview:_purchaseView];
-    [_purchaseScrollView setContentSize:CGSizeMake(self.view.frame.size.width,416)];
-    [self.view addSubview:_purchaseScrollView];
+    [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416)];
+    [bgScrollView addSubview:_purchaseScrollView];
     
     //供应
-    _supplyScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(kWidth, 40, self.view.frame.size.width,kHeight-64-40-44)];
+    _supplyScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(kWidth,0,kWidth,bgScrollView.frame.size.height)];
     _supplyScrollView.showsHorizontalScrollIndicator = NO;
     _supplyScrollView.showsVerticalScrollIndicator = NO;
     _supplyScrollView.backgroundColor = HexRGB(0xffffff);
-    [self.view addSubview:_supplyScrollView];
-    _supplyView = [[SupplyView alloc] initWithFrame:CGRectMake(0,0, self.view.frame.size.width, 565)];
+    [bgScrollView addSubview:_supplyScrollView];
+    
+    _supplyView = [[SupplyView alloc] initWithFrame:CGRectMake(0,0,kWidth, 565)];
     _supplyView.delegate =self;
     _supplyView.headImage.delegate = self;
-    [_supplyScrollView setContentSize:CGSizeMake(self.view.frame.size.width, 565)];
+    [_supplyScrollView setContentSize:CGSizeMake(kWidth, 565)];
     [_supplyScrollView addSubview:_supplyView];
+}
 
+
+#pragma mark  scrollview_delegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    //bgScrollView向左拖动偏移量少于0时不能在拖动
+    if (scrollView.contentOffset.x <=0) {
+        scrollView.contentOffset = CGPointMake(0, 0);
+    }
+    //bgScrollView向右拖动到第二页后不能在向右拖动
+    if (scrollView.contentOffset.x >= kWidth) {
+        scrollView.contentOffset = CGPointMake(kWidth, 0);
+    }
+    //发布、求购按钮下的滑动条跟着scrollView滑动
+    [UIView animateWithDuration:0.01 animations:^{
+        sliderLine.frame = CGRectMake(scrollView.contentOffset.x/2,38, kWidth/2, 2);
+    }];
+    if (scrollView.contentOffset.x == 0) {
+        for (UIView *subView in self.view.subviews){
+            if ([subView isKindOfClass:[UIButton class]]){
+                UIButton *button = (UIButton *)subView;
+                if (button.tag == 2000) {
+                    button.selected = YES;
+                }else{
+                    button.selected = NO;
+                }
+            }
+        }
+    }
+    if (scrollView.contentOffset.x == kWidth) {
+        for (UIView *subView in self.view.subviews){
+            if ([subView isKindOfClass:[UIButton class]]){
+                UIButton *button = (UIButton *)subView;
+                if (button.tag == 2001) {
+                    button.selected = YES;
+                }else{
+                    button.selected = NO;
+                }
+            }
+        }
+    }
+}
+
+//bgScrollView开始拖拽时执行
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    //判断是否是向右拖拽,如果是,则判断该用户是否能发布供应信息  如果能
+//    if (scrollView.contentOffset.x>0) {
+//        NSLog(@"%f",scrollView.contentOffset.x);
+//        return;
+//    }
+    return;
 }
 
 
@@ -238,13 +299,7 @@
                                     }
                                 }
                             }
-                            
-                            [UIView animateWithDuration:0.3 animations:^{
-                                _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
-                                _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
-                                sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
-                            }];
-                            
+                            [bgScrollView scrollRectToVisible:CGRectMake(kWidth,40, kWidth, bgScrollView.frame.size.height) animated:YES];
                         }
                     }else{
                         
@@ -256,11 +311,7 @@
         }else{
             //可以发布信息
             _isPurchase = NO;
-            [UIView animateWithDuration:0.3 animations:^{
-                _supplyScrollView.frame = CGRectMake(0, 40, kWidth, kHeight-64-40-49);
-                _purchaseScrollView.frame = CGRectMake(-kWidth, 40, kWidth,kHeight-64-40-49);
-                sliderLine.frame = CGRectMake(kWidth/2,38, kWidth/2, 2);
-            }];
+            [bgScrollView scrollRectToVisible:CGRectMake(kWidth,40, kWidth, bgScrollView.frame.size.height) animated:YES];
         }
     }else{
         _isPurchase = YES;
@@ -274,12 +325,7 @@
                 }
             }
         }
-        [UIView animateWithDuration:0.3 animations:^{
-            sliderLine.frame = CGRectMake(0, 38, kWidth/2, 2);
-            _purchaseScrollView.frame = CGRectMake(0,40,kWidth,kHeight-64-40-49);
-            _supplyScrollView.frame = CGRectMake(kWidth, 40, kWidth,kHeight-64-40-49);
-        }];
-
+        [bgScrollView scrollRectToVisible:CGRectMake(0, 40, kWidth, bgScrollView.frame.size.height) animated:YES];
     }
 }
 
@@ -402,6 +448,7 @@
                             NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                             NSDictionary *dic = [result objectForKey:@"response"];
                             if ([[dic objectForKey:@"code"] intValue] == 100){
+                                [self clearSupplyData];
                                 MySupplyController *sc = [[MySupplyController alloc] init];
                                 [self.navigationController pushViewController:sc animated:YES];
                             }else{
@@ -714,19 +761,16 @@
     _supplyView.priceTextField.text = @"";
     _supplyView.unitField.text = @"";
     _supplyView.standardTextField.text = @"";
-    _supplyView.descriptionLabel.text = @"";
+    _supplyView.descriptionLabel.text = @"十字以上";
     supplyDes = @"";
     _supplyView.headImage.image = nil;
-    _supplyView.isHide = YES;
+    headImage = nil;
+    //下面两句代码不能颠倒
     _supplyView.isExistImg = NO;
+    _supplyView.isHide = YES;
+    [_supplyScrollView setContentSize:CGSizeMake(kWidth,_supplyView.frame.size.height)];
 }
 
-
-
-- (void)tapClicked
-{
-    [activeField resignFirstResponder];
-}
 
 //检查发布的求购数据信息
 - (BOOL)checkPurchaseData{

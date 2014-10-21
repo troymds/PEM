@@ -16,7 +16,11 @@
         _title = [dic objectForKey:@"title"];
         _info_id = [dic objectForKey:@"info_id"];
         _img = [dic objectForKey:@"img"];
-        _price = [dic objectForKey:@"price"];
+        if (isNull(dic, @"price")) {
+            _price = @"0";
+        }else{
+            _price = [dic objectForKey:@"price"];
+        }
         _collectTimes = [dic objectForKey:@"collectTimes"];
         if (isNull(dic, @"collect_num")) {
             _collect_num = @"0";
