@@ -63,110 +63,117 @@
 
 - (void)keyboardWillHide
 {
-    if (_offset.y > _scrollView.contentSize.height - _scrollView.frame.size.height){
-        _offset.y = _scrollView.contentSize.height - _scrollView.frame.size.height;
-    }
-    [UIView animateWithDuration:0.3 animations:^{
-        _scrollView.contentOffset = _offset;
+//    if (_offset.y > _scrollView.contentSize.height - _scrollView.frame.size.height){
+//        _offset.y = _scrollView.contentSize.height - _scrollView.frame.size.height;
+//    }
+//    [UIView animateWithDuration:0.3 animations:^{
+//        _scrollView.contentOffset = _offset;
+//    }];
+    [UIView animateWithDuration:0.2 animations:^{
+        [_scrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
     }];
 }
 
 - (void)textFieldBeganEditting:(UITextField *)textField{
-    if (_iPhone4) {
-        if(textField.tag == PRICE_TYPE){
-            if (_scrollView.contentOffset.y < 50) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _scrollView.contentOffset;
-                    _offset = offset;
-                    offset.y = 50;
-                    _scrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == UNIT_TYPE){
-            if (_scrollView.contentOffset.y < 80) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _scrollView.contentOffset;
-                    _offset = offset;
-                    offset.y = 80;
-                    _scrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == STANDARD_TYPE){
-            if (_scrollView.contentOffset.y < 140) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _scrollView.contentOffset;
-                    _offset = offset;
-                    offset.y = 140;
-                    _scrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == LINKMAN_TYPE){
-            if (_scrollView.contentOffset.y < 200) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _scrollView.contentOffset;
-                    _offset = offset;
-                    offset.y = 200;
-                    _scrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == PHONENUM_TYPE){
-            if (_scrollView.contentOffset.y < 240) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _scrollView.contentOffset;
-                    _offset = offset;
-                    offset.y = 240;
-                    _scrollView.contentOffset= offset;
-                }];
-            }
-        }
-    }else if (_iPhone5){
-        if(textField.tag == PRICE_TYPE){
-            if (_scrollView.contentOffset.y < 50) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _scrollView.contentOffset;
-                    _offset = offset;
-                    offset.y = 50;
-                    _scrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == UNIT_TYPE){
-            if (_scrollView.contentOffset.y < 80) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _scrollView.contentOffset;
-                    _offset = offset;
-                    offset.y = 80;
-                    _scrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == STANDARD_TYPE){
-            if (_scrollView.contentOffset.y < 140) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _scrollView.contentOffset;
-                    _offset = offset;
-                    offset.y = 140;
-                    _scrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == LINKMAN_TYPE){
-            if (_scrollView.contentOffset.y < 200) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _scrollView.contentOffset;
-                    _offset = offset;
-                    offset.y = 200;
-                    _scrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == PHONENUM_TYPE){
-            if (_scrollView.contentOffset.y < 240) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _scrollView.contentOffset;
-                    _offset = offset;
-                    offset.y = 240;
-                    _scrollView.contentOffset= offset;
-                }];
-            }
-        }
-    }
+    activeField = textField;
+    [UIView animateWithDuration:0.02 animations:^{
+        [_scrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+240)];
+    }];
+//    if (_iPhone4) {
+//        if(textField.tag == PRICE_TYPE){
+//            if (_scrollView.contentOffset.y < 50) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _scrollView.contentOffset;
+//                    _offset = offset;
+//                    offset.y = 50;
+//                    _scrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == UNIT_TYPE){
+//            if (_scrollView.contentOffset.y < 80) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _scrollView.contentOffset;
+//                    _offset = offset;
+//                    offset.y = 80;
+//                    _scrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == STANDARD_TYPE){
+//            if (_scrollView.contentOffset.y < 140) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _scrollView.contentOffset;
+//                    _offset = offset;
+//                    offset.y = 140;
+//                    _scrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == LINKMAN_TYPE){
+//            if (_scrollView.contentOffset.y < 200) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _scrollView.contentOffset;
+//                    _offset = offset;
+//                    offset.y = 200;
+//                    _scrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == PHONENUM_TYPE){
+//            if (_scrollView.contentOffset.y < 240) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _scrollView.contentOffset;
+//                    _offset = offset;
+//                    offset.y = 240;
+//                    _scrollView.contentOffset= offset;
+//                }];
+//            }
+//        }
+//    }else if (_iPhone5){
+//        if(textField.tag == PRICE_TYPE){
+//            if (_scrollView.contentOffset.y < 50) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _scrollView.contentOffset;
+//                    _offset = offset;
+//                    offset.y = 50;
+//                    _scrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == UNIT_TYPE){
+//            if (_scrollView.contentOffset.y < 80) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _scrollView.contentOffset;
+//                    _offset = offset;
+//                    offset.y = 80;
+//                    _scrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == STANDARD_TYPE){
+//            if (_scrollView.contentOffset.y < 140) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _scrollView.contentOffset;
+//                    _offset = offset;
+//                    offset.y = 140;
+//                    _scrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == LINKMAN_TYPE){
+//            if (_scrollView.contentOffset.y < 200) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _scrollView.contentOffset;
+//                    _offset = offset;
+//                    offset.y = 200;
+//                    _scrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == PHONENUM_TYPE){
+//            if (_scrollView.contentOffset.y < 240) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _scrollView.contentOffset;
+//                    _offset = offset;
+//                    offset.y = 240;
+//                    _scrollView.contentOffset= offset;
+//                }];
+//            }
+//        }
+//    }
 }
 
 - (void)loadData
@@ -354,6 +361,7 @@
         case 9000:
         {
             CategoryController *category = [[CategoryController alloc] init];
+            [activeField resignFirstResponder];
             category.delegate = self;
             [self.navigationController pushViewController:category animated:YES];
             
@@ -362,6 +370,7 @@
         case 9001:
         {
             AreaController *area = [[AreaController alloc] init];
+            [activeField resignFirstResponder];
             area.delegate = self;
             [self.navigationController pushViewController:area animated:YES];
         }
@@ -377,6 +386,7 @@
         case 9003:
         {
             DescriptionController *vc = [[DescriptionController alloc] init];
+            [activeField resignFirstResponder];
             vc.delegate = self;
             vc.isSupply = YES;
             if (supplyDes!=0){

@@ -118,8 +118,14 @@
 #pragma mark ---proImageView_delegate
 - (void)imageClicked:(ProImageView *)image
 {
-    CompanySetController *csc = [[CompanySetController alloc] init];
-    [self.navigationController pushViewController:csc animated:YES];
+    if (![SystemConfig sharedInstance].isUserLogin){
+        LoginController *loginVC = [[LoginController alloc] init];
+        loginVC.pushType = MENU_TYPE;
+        [self.navigationController pushViewController:loginVC animated:YES];
+    }else{
+        CompanySetController *csc = [[CompanySetController alloc] init];
+        [self.navigationController pushViewController:csc animated:YES];
+    }
 }
 
 //点击用户名触发
@@ -225,22 +231,28 @@
 
 #pragma mark headerView delegate
 - (void)buttonClick:(UIButton *)btn{
-    if (btn.tag == 20000) {
-        LoginController *loginVc = [[LoginController alloc] init];
-        loginVc.pushType = DIRECT_TYPE;
-        [self.navigationController pushViewController:loginVc animated:YES];
-    }else if (btn.tag == 40000){
-        MySupplyController *msc = [[MySupplyController alloc] init];
-        [self.navigationController pushViewController:msc animated:YES];
-    }else if (btn.tag == 40001){
-        MyPurchaseController *mpc = [[MyPurchaseController alloc] init];
-        [self.navigationController pushViewController:mpc animated:YES];
-    }else if (btn.tag == 40002){
-        MyFavoriteController *mfc = [[MyFavoriteController alloc] init];
-        [self.navigationController pushViewController:mfc animated:YES];
+    if (![SystemConfig sharedInstance].isUserLogin){
+        LoginController *loginVC = [[LoginController alloc] init];
+        loginVC.pushType = MENU_TYPE;
+        [self.navigationController pushViewController:loginVC animated:YES];
     }else{
-        SubscribController *sc = [[SubscribController alloc] init];
-        [self.navigationController pushViewController:sc animated:YES];
+        if (btn.tag == 20000) {
+            LoginController *loginVc = [[LoginController alloc] init];
+            loginVc.pushType = DIRECT_TYPE;
+            [self.navigationController pushViewController:loginVc animated:YES];
+        }else if (btn.tag == 40000){
+            MySupplyController *msc = [[MySupplyController alloc] init];
+            [self.navigationController pushViewController:msc animated:YES];
+        }else if (btn.tag == 40001){
+            MyPurchaseController *mpc = [[MyPurchaseController alloc] init];
+            [self.navigationController pushViewController:mpc animated:YES];
+        }else if (btn.tag == 40002){
+            MyFavoriteController *mfc = [[MyFavoriteController alloc] init];
+            [self.navigationController pushViewController:mfc animated:YES];
+        }else{
+            SubscribController *sc = [[SubscribController alloc] init];
+            [self.navigationController pushViewController:sc animated:YES];
+        }
     }
 }
 

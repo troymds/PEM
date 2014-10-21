@@ -50,6 +50,8 @@
     BOOL isShowTD;
     
     UITextField *activeField;         //当前编辑的输入框
+    
+    int height;          //键盘高度
 
 }
 

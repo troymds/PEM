@@ -54,15 +54,28 @@
         //若处于登录状态 将企业信息显示在页面上进行修改
         [self loadInfoData:[SystemConfig sharedInstance].companyInfo];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void)keyboardWillShow:(NSNotification *)notify
+{
+    NSDictionary *userInfo = [notify userInfo];
+    NSValue *value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [value CGRectValue];
+    height = keyboardRect.size.height;
+    [_scrollView setContentSize:CGSizeMake(kWidth, 500+height)];
+}
+
 - (void)keyboardWillHiden{
+//    [UIView animateWithDuration:0.2 animations:^{
+//        if (_offset.y > _scrollView.contentSize.height-_scrollView.frame.size.height) {
+//            _offset.y =_scrollView.contentSize.height-_scrollView.frame.size.height;
+//        }
+//        _scrollView.contentOffset = _offset;
+//    }];
     [UIView animateWithDuration:0.2 animations:^{
-        if (_offset.y > _scrollView.contentSize.height-_scrollView.frame.size.height) {
-            _offset.y =_scrollView.contentSize.height-_scrollView.frame.size.height;
-        }
-        _scrollView.contentOffset = _offset;
+        [_scrollView setContentSize:CGSizeMake(kWidth, 500)];
     }];
 }
 
@@ -234,6 +247,8 @@
     _cityId = item.city_id;
 }
 
+
+#pragma mark textField_delegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
     return YES;
@@ -256,6 +271,124 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     [activeField resignFirstResponder];
 }
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    activeField = textField;
+    [_scrollView setContentSize:CGSizeMake(kWidth, 500+240)];
+    //    switch (textField.tag) {
+    //        case NAME_TYPE:
+    //        {
+    //            if (_iPhone4){
+    //                if (_scrollView.contentOffset.y < 40) {
+    //                    [UIView animateWithDuration:0.2 animations:^{
+    //                        CGPoint offset = _scrollView.contentOffset;
+    //                        _offset = offset;
+    //                        offset.y = 40;
+    //                        _scrollView.contentOffset = offset;
+    //                    }];
+    //                }
+    //            }
+    //        }
+    //            break;
+    //        case AREA_TYPE:
+    //        {
+    //            if (_iPhone4){
+    //                if (_scrollView.contentOffset.y < 120) {
+    //                    [UIView animateWithDuration:0.2 animations:^{
+    //                        CGPoint offset = _scrollView.contentOffset;
+    //                        _offset = offset;
+    //                        offset.y = 120;
+    //                        _scrollView.contentOffset = offset;
+    //                    }];
+    //                }
+    //            }else if(iPhone5){
+    //                if (_scrollView.contentOffset.y < 60) {
+    //                    [UIView animateWithDuration:0.2 animations:^{
+    //                        CGPoint offset = _scrollView.contentOffset;
+    //                        _offset = offset;
+    //                        offset.y = 60;
+    //                        _scrollView.contentOffset = offset;
+    //                    }];
+    //                }
+    //            }
+    //        }
+    //            break;
+    //        case PHONE_TYPE:
+    //        {
+    //            if (_iPhone4){
+    //                if (_scrollView.contentOffset.y < 180) {
+    //                    [UIView animateWithDuration:0.2 animations:^{
+    //                        CGPoint offset = _scrollView.contentOffset;
+    //                        _offset = offset;
+    //                        offset.y = 180;
+    //                        _scrollView.contentOffset = offset;
+    //                    }];
+    //                }
+    //            }else if(iPhone5){
+    //                if (_scrollView.contentOffset.y < 120) {
+    //                    [UIView animateWithDuration:0.2 animations:^{
+    //                        CGPoint offset = _scrollView.contentOffset;
+    //                        _offset = offset;
+    //                        offset.y = 120;
+    //                        _scrollView.contentOffset = offset;
+    //                    }];
+    //                }
+    //            }
+    //        }
+    //            break;
+    //        case WEBSITE_TYPE:
+    //        {
+    //            if (_iPhone4){
+    //                if (_scrollView.contentOffset.y < 220) {
+    //                    [UIView animateWithDuration:0.2 animations:^{
+    //                        CGPoint offset = _scrollView.contentOffset;
+    //                        _offset = offset;
+    //                        offset.y = 220;
+    //                        _scrollView.contentOffset = offset;
+    //                    }];
+    //                }
+    //            }else if(iPhone5){
+    //                if (_scrollView.contentOffset.y < 160) {
+    //                    [UIView animateWithDuration:0.2 animations:^{
+    //                        CGPoint offset = _scrollView.contentOffset;
+    //                        _offset = offset;
+    //                        offset.y = 160;
+    //                        _scrollView.contentOffset = offset;
+    //                    }];
+    //                }
+    //            }
+    //        }
+    //            break;
+    //        case EMAIL_TYPE:
+    //        {
+    //            if (_iPhone4){
+    //                if (_scrollView.contentOffset.y < 280) {
+    //                    [UIView animateWithDuration:0.2 animations:^{
+    //                        CGPoint offset = _scrollView.contentOffset;
+    //                        _offset = offset;
+    //                        offset.y = 280;
+    //                        _scrollView.contentOffset = offset;
+    //                    }];
+    //                }
+    //            }else if(iPhone5){
+    //                if (_scrollView.contentOffset.y < 220) {
+    //                    [UIView animateWithDuration:0.2 animations:^{
+    //                        CGPoint offset = _scrollView.contentOffset;
+    //                        _offset = offset;
+    //                        offset.y = 220;
+    //                        _scrollView.contentOffset = offset;
+    //                    }];
+    //                }
+    //            }
+    //        }
+    //            break;
+    //
+    //        default:
+    //            break;
+    //    }
+}
+
+
 
 - (void)buttonClick{
     if ([self checkOut]){
@@ -341,120 +474,6 @@
 
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField{
-    activeField = textField;
-    switch (textField.tag) {
-        case NAME_TYPE:
-        {
-            if (_iPhone4){
-                if (_scrollView.contentOffset.y < 40) {
-                    [UIView animateWithDuration:0.2 animations:^{
-                        CGPoint offset = _scrollView.contentOffset;
-                        _offset = offset;
-                        offset.y = 40;
-                        _scrollView.contentOffset = offset;
-                    }];
-                }
-            }
-        }
-            break;
-        case AREA_TYPE:
-        {
-            if (_iPhone4){
-                if (_scrollView.contentOffset.y < 120) {
-                    [UIView animateWithDuration:0.2 animations:^{
-                        CGPoint offset = _scrollView.contentOffset;
-                        _offset = offset;
-                        offset.y = 120;
-                        _scrollView.contentOffset = offset;
-                    }];
-                }
-            }else if(iPhone5){
-                if (_scrollView.contentOffset.y < 60) {
-                    [UIView animateWithDuration:0.2 animations:^{
-                        CGPoint offset = _scrollView.contentOffset;
-                        _offset = offset;
-                        offset.y = 60;
-                        _scrollView.contentOffset = offset;
-                    }];
-                }
-            }
-        }
-            break;
-        case PHONE_TYPE:
-        {
-            if (_iPhone4){
-                if (_scrollView.contentOffset.y < 180) {
-                    [UIView animateWithDuration:0.2 animations:^{
-                        CGPoint offset = _scrollView.contentOffset;
-                        _offset = offset;
-                        offset.y = 180;
-                        _scrollView.contentOffset = offset;
-                    }];
-                }
-            }else if(iPhone5){
-                if (_scrollView.contentOffset.y < 120) {
-                    [UIView animateWithDuration:0.2 animations:^{
-                        CGPoint offset = _scrollView.contentOffset;
-                        _offset = offset;
-                        offset.y = 120;
-                        _scrollView.contentOffset = offset;
-                    }];
-                }
-            }
-        }
-            break;
-        case WEBSITE_TYPE:
-        {
-            if (_iPhone4){
-                if (_scrollView.contentOffset.y < 220) {
-                    [UIView animateWithDuration:0.2 animations:^{
-                        CGPoint offset = _scrollView.contentOffset;
-                        _offset = offset;
-                        offset.y = 220;
-                        _scrollView.contentOffset = offset;
-                    }];
-                }
-            }else if(iPhone5){
-                if (_scrollView.contentOffset.y < 160) {
-                    [UIView animateWithDuration:0.2 animations:^{
-                        CGPoint offset = _scrollView.contentOffset;
-                        _offset = offset;
-                        offset.y = 160;
-                        _scrollView.contentOffset = offset;
-                    }];
-                }
-            }
-        }
-            break;
-        case EMAIL_TYPE:
-        {
-            if (_iPhone4){
-                if (_scrollView.contentOffset.y < 280) {
-                    [UIView animateWithDuration:0.2 animations:^{
-                        CGPoint offset = _scrollView.contentOffset;
-                        _offset = offset;
-                        offset.y = 280;
-                        _scrollView.contentOffset = offset;
-                    }];
-                }
-            }else if(iPhone5){
-                if (_scrollView.contentOffset.y < 220) {
-                    [UIView animateWithDuration:0.2 animations:^{
-                        CGPoint offset = _scrollView.contentOffset;
-                        _offset = offset;
-                        offset.y = 220;
-                        _scrollView.contentOffset = offset;
-                    }];
-                }
-            }
-        }
-            break;
-
-        default:
-            break;
-    }
-}
 
 - (BOOL)checkOut{
     //企业邮箱必添  其他可选

@@ -76,6 +76,7 @@
         _titleView.nameLabel.text = @"标 题";
         _titleTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 0,width-90, 35)];
         _titleTextField.tag = TITLE_TYPE;
+        _titleTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _titleTextField.font =[UIFont systemFontOfSize:PxFont(20)];
         _titleTextField.placeholder = @"15字以内";
         _titleTextField.delegate = self;
@@ -107,6 +108,7 @@
         [_priceView addSubview:priceLabel];
         _priceTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0,width-75-20, 35)];
         _priceTextField.delegate = self;
+        _priceTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _priceTextField.keyboardType = UIKeyboardTypeNumberPad;
         _priceTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _priceTextField.tag = PRICE_TYPE;
@@ -120,6 +122,7 @@
 
         _unitField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _unitView.frame.size.width-75, 35)];
         _unitField.tag = UNIT_TYPE;
+        _unitField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _unitField.font = [UIFont systemFontOfSize:PxFont(20)];
         _unitField.placeholder = @"供应物品的计量单位";
         _unitField.delegate = self;
@@ -133,6 +136,7 @@
         
         _standardTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _standardView.frame.size.width-75, 35)];
         _standardTextField.tag = STANDARD_TYPE;
+        _standardTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _standardTextField.keyboardType = UIKeyboardTypeNumberPad;
         _standardTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _standardTextField.delegate = self;
@@ -148,7 +152,7 @@
         _descriptionLabel.backgroundColor = [UIColor clearColor];
         _descriptionLabel.textColor = HexRGB(0x666666);
         _descriptionLabel.font = [UIFont systemFontOfSize:PxFont(20)];
-        _descriptionLabel.text = @"十字以上";
+        _descriptionLabel.text = @"10字以上";
         [_descriptionView addSubview:_descriptionLabel];
         UIImageView *img4 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"]];
         img4.frame = CGRectMake(width-10-7, 11, 7, 13);
@@ -187,6 +191,7 @@
         _linkmanView.nameLabel.frame =CGRectMake(5,0,50,35);
         _linkManTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 0, _linkmanView.frame.size.width-60, 35)];
         _linkManTextField.tag = LINKMAN_TYPE;
+        _linkManTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _linkManTextField.placeholder = @"2-4个字符";
         _linkManTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _linkManTextField.delegate = self;
@@ -200,6 +205,7 @@
         _phoneNumView.nameLabel.frame =CGRectMake(5,0,50,35);
         _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 0, _phoneNumView.frame.size.width-60, 35)];
         _phoneNumTextField.tag = PHONENUM_TYPE;
+        _phoneNumTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _phoneNumTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _phoneNumTextField.delegate = self;
         [_phoneNumView addSubview:_phoneNumTextField];
@@ -213,6 +219,7 @@
         _imageView.nameLabel.frame =CGRectMake(5,0,50,35);
         UILabel *imgLabel = [[UILabel alloc] initWithFrame:CGRectMake(60,0, 60, 35)];
         imgLabel.font = [UIFont systemFontOfSize:PxFont(20)];
+        imgLabel.backgroundColor = [UIColor clearColor];
         imgLabel.text = @"一张";
         imgLabel.textColor = HexRGB(0x666666);
         [_imageView addSubview:imgLabel];

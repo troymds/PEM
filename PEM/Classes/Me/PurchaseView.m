@@ -55,6 +55,7 @@
         _titleView = [[CellView alloc] initWithFrame:CGRectMake(0, 35, width, 35)];
         _titleView.nameLabel.text = @"标  题";
         _titleTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 0, _titleView.frame.size.width-60, 35)];
+        _titleTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _titleTextField.tag = PC_TITLE_TYPE;
         _titleTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _titleTextField.placeholder = @"15字以内";
@@ -68,7 +69,7 @@
         _descriptionLabel.font = [UIFont systemFontOfSize:PxFont(20)];
         _descriptionLabel.textColor = HexRGB(0x666666);
         _descriptionLabel.backgroundColor = [UIColor clearColor];
-        _descriptionLabel.text = @"十字以上";
+        _descriptionLabel.text = @"10字以上";
         [_descriptionView addSubview:_descriptionLabel];
         UIImageView *img2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"]];
         img2.frame = CGRectMake(width-10-7, 11, 7, 13);
@@ -101,6 +102,7 @@
         _purchaseNum.nameLabel.frame =CGRectMake(5,0,65,35);
         _purchaseNumField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _purchaseNum.frame.size.width-75, 35)];
         _purchaseNumField.tag = PC_PURCHASE_TYPE;
+        _purchaseNumField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _purchaseNumField.keyboardType = UIKeyboardTypeNumberPad;
         _purchaseNumField.font = [UIFont systemFontOfSize:PxFont(20)];
         _purchaseNumField.placeholder = @"求购物品的数量";
@@ -114,6 +116,7 @@
         _unitView.nameLabel.frame =CGRectMake(5,0,65,35);
         _unitField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _purchaseNum.frame.size.width-75, 35)];
         _unitField.tag = PC_UNIT_TYPE;
+        _unitField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _unitField.font = [UIFont systemFontOfSize:PxFont(20)];
         _unitField.placeholder = @"求购物品的计量单位";
         _unitField.delegate = self;
@@ -127,6 +130,7 @@
         _linkmanView.nameLabel.frame =CGRectMake(5,0,65,35);
         _linkManTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _linkmanView.frame.size.width-75, 35)];
         _linkManTextField.tag = PC_LINKMAN_TYPE;
+        _linkManTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _linkManTextField.placeholder = @"2-4个字符";
         _linkManTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _linkManTextField.delegate = self;
@@ -140,6 +144,7 @@
 
         _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _phoneNumView.frame.size.width-75, 35)];
         _phoneNumTextField.tag = PC_PHONENUM_TYPE;
+        _phoneNumTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _phoneNumTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _phoneNumTextField.placeholder = @"请输入正确的手机号码";
         _phoneNumTextField.delegate = self;

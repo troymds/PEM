@@ -39,10 +39,12 @@
     self.view.backgroundColor = HexRGB(0xffffff);
 
     // Do any additional setup after loading the view.
+    _scorllView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    [_scorllView setContentSize:CGSizeMake(kWidth, 416)];
     _demandView = [[PurchaseView alloc] initWithFrame:CGRectMake(0, 0, kWidth,416)];
     _demandView.delegate =self;
     tagsArray = [NSMutableArray array];
-    [self.view addSubview:_demandView];
+    [_scorllView addSubview:_demandView];
     if(!_isAdd){
         [self loadData];
     }
@@ -267,39 +269,41 @@
 
 - (void)textFieldBeganEditting:(UITextField *)textField
 {
-    if (_iPhone4) {
-        if (textField.tag == PC_PURCHASE_TYPE) {
-            [UIView animateWithDuration:0.3 animations:^{
-                _demandView.frame = CGRectMake(0,-60, kWidth, 416);
-            }];
-        }else if(textField.tag == PC_UNIT_TYPE){
-            [UIView animateWithDuration:0.3 animations:^{
-                _demandView.frame = CGRectMake(0,-100, kWidth, 416);
-            }];
-        }else if(textField.tag == PC_LINKMAN_TYPE){
-            [UIView animateWithDuration:0.3 animations:^{
-                _demandView.frame = CGRectMake(0,-160, kWidth, 416);
-            }];
-        }else if (textField.tag == PC_PHONENUM_TYPE){
-            [UIView animateWithDuration:0.3 animations:^{
-                _demandView.frame = CGRectMake(0,-190, kWidth, 416);
-            }];
-        }
-    }else if (_iPhone5){
-        if(textField.tag == PC_UNIT_TYPE){
-            [UIView animateWithDuration:0.3 animations:^{
-                _demandView.frame = CGRectMake(0, -30, kWidth, 416);
-            }];
-        }else if(textField.tag == PC_LINKMAN_TYPE){
-            [UIView animateWithDuration:0.3 animations:^{
-                _demandView.frame = CGRectMake(0, -80, kWidth, 416);
-            }];
-        }else if (textField.tag == PC_PHONENUM_TYPE){
-            [UIView animateWithDuration:0.3 animations:^{
-                _demandView.frame = CGRectMake(0,-120, kWidth, 416);
-            }];
-        }
-    }
+    activeField = textField;
+    [_scorllView setContentSize:CGSizeMake(kWidth,416+240)];
+//    if (_iPhone4) {
+//        if (textField.tag == PC_PURCHASE_TYPE) {
+//            [UIView animateWithDuration:0.3 animations:^{
+//                _demandView.frame = CGRectMake(0,-60, kWidth, 416);
+//            }];
+//        }else if(textField.tag == PC_UNIT_TYPE){
+//            [UIView animateWithDuration:0.3 animations:^{
+//                _demandView.frame = CGRectMake(0,-100, kWidth, 416);
+//            }];
+//        }else if(textField.tag == PC_LINKMAN_TYPE){
+//            [UIView animateWithDuration:0.3 animations:^{
+//                _demandView.frame = CGRectMake(0,-160, kWidth, 416);
+//            }];
+//        }else if (textField.tag == PC_PHONENUM_TYPE){
+//            [UIView animateWithDuration:0.3 animations:^{
+//                _demandView.frame = CGRectMake(0,-190, kWidth, 416);
+//            }];
+//        }
+//    }else if (_iPhone5){
+//        if(textField.tag == PC_UNIT_TYPE){
+//            [UIView animateWithDuration:0.3 animations:^{
+//                _demandView.frame = CGRectMake(0, -30, kWidth, 416);
+//            }];
+//        }else if(textField.tag == PC_LINKMAN_TYPE){
+//            [UIView animateWithDuration:0.3 animations:^{
+//                _demandView.frame = CGRectMake(0, -80, kWidth, 416);
+//            }];
+//        }else if (textField.tag == PC_PHONENUM_TYPE){
+//            [UIView animateWithDuration:0.3 animations:^{
+//                _demandView.frame = CGRectMake(0,-120, kWidth, 416);
+//            }];
+//        }
+//    }
 }
 
 

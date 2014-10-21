@@ -28,6 +28,7 @@
         
         _textField = [[UITextField alloc] initWithFrame:CGRectMake(90, 10,frame.size.width-90-10, 20)];
         _textField.font = [UIFont systemFontOfSize:13];
+        _textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _textField.textColor = HexRGB(0x808080);
         [self addSubview:_textField];
     }

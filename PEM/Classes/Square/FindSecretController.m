@@ -55,6 +55,7 @@
     
     _phoneNumField = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, kWidth-25*2-30, 43)];
     _phoneNumField.placeholder = @"请输入您的手机号";
+    _phoneNumField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _phoneNumField.delegate = self;
     [view addSubview:_phoneNumField];
     

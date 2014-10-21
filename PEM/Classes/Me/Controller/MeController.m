@@ -68,6 +68,7 @@
     
     tagsArray = [NSMutableArray array];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 }
 
@@ -134,6 +135,11 @@
                 }
             }
         }
+        _isPurchase = YES;
+        [activeField resignFirstResponder];
+        [UIView animateWithDuration:0.2 animations:^{
+            [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
+        }];
     }
     if (scrollView.contentOffset.x == kWidth) {
         for (UIView *subView in self.view.subviews){
@@ -146,19 +152,24 @@
                 }
             }
         }
+        _isPurchase = NO;
+        [activeField resignFirstResponder];
+        [UIView animateWithDuration:0.2 animations:^{
+            [_purchaseScrollView setContentSize:CGSizeMake(kWidth, _purchaseView.frame.size.height)];
+        }];
     }
 }
 
 //bgScrollView开始拖拽时执行
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{
     //判断是否是向右拖拽,如果是,则判断该用户是否能发布供应信息  如果能
 //    if (scrollView.contentOffset.x>0) {
 //        NSLog(@"%f",scrollView.contentOffset.x);
 //        return;
 //    }
-    return;
-}
+//    return;
+//}
 
 
 //登陆框按钮点击
@@ -396,6 +407,7 @@
                     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                     NSDictionary *dic = [result objectForKey:@"response"];
                     if ([[dic objectForKey:@"code"] intValue] == 100){
+                        [activeField resignFirstResponder];
                         MyPurchaseController *pc = [[MyPurchaseController alloc] init];
                         [self.navigationController pushViewController:pc animated:YES];
                         [self clearPurchaseData];
@@ -449,6 +461,7 @@
                             NSDictionary *dic = [result objectForKey:@"response"];
                             if ([[dic objectForKey:@"code"] intValue] == 100){
                                 [self clearSupplyData];
+                                [activeField resignFirstResponder];
                                 MySupplyController *sc = [[MySupplyController alloc] init];
                                 [self.navigationController pushViewController:sc animated:YES];
                             }else{
@@ -580,164 +593,170 @@
 
 - (void)textFieldBeganEditting:(UITextField *)textField{
     activeField = textField;
-    if (_iPhone4) {
-        if (textField.tag == PC_PURCHASE_TYPE) {
-            if (_purchaseScrollView.contentOffset.y < 90) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _purchaseScrollView.contentOffset;
-                    _purchaseOffset = offset;
-                    offset.y = 90;
-                    _purchaseScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == PC_UNIT_TYPE){
-            if (_purchaseScrollView.contentOffset.y < 130) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _purchaseScrollView.contentOffset;
-                    _purchaseOffset = offset;
-                    offset.y = 130;
-                    _purchaseScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == PC_LINKMAN_TYPE){
-            if (_purchaseScrollView.contentOffset.y < 160) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _purchaseScrollView.contentOffset;
-                    _purchaseOffset = offset;
-                    offset.y = 160;
-                    _purchaseScrollView.contentOffset= offset;
-                }];
-            }
-        }else if (textField.tag == PC_PHONENUM_TYPE){
-            if (_purchaseScrollView.contentOffset.y < 190) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _purchaseScrollView.contentOffset;
-                    _purchaseOffset = offset;
-                    offset.y = 190;
-                    _purchaseScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == PRICE_TYPE){
-            if (_supplyScrollView.contentOffset.y < 50) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _supplyScrollView.contentOffset;
-                    _supplyOffset = offset;
-                    offset.y = 50;
-                    _supplyScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == UNIT_TYPE){
-            if (_supplyScrollView.contentOffset.y < 80) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _supplyScrollView.contentOffset;
-                    _supplyOffset = offset;
-                    offset.y = 80;
-                    _supplyScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == STANDARD_TYPE){
-            if (_supplyScrollView.contentOffset.y < 140) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _supplyScrollView.contentOffset;
-                    _supplyOffset = offset;
-                    offset.y = 140;
-                    _supplyScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == LINKMAN_TYPE){
-            if (_supplyScrollView.contentOffset.y < 200) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _supplyScrollView.contentOffset;
-                    _supplyOffset = offset;
-                    offset.y = 200;
-                    _supplyScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == PHONENUM_TYPE){
-            if (_supplyScrollView.contentOffset.y < 240) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _supplyScrollView.contentOffset;
-                    _supplyOffset = offset;
-                    offset.y = 240;
-                    _supplyScrollView.contentOffset= offset;
-                }];
-            }
-        }
-    }else if (_iPhone5){
-        if(textField.tag == PC_UNIT_TYPE){
-            if (_purchaseScrollView.contentOffset.y < 50) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _purchaseScrollView.contentOffset;
-                    _purchaseOffset = offset;
-                    offset.y = 50;
-                    _purchaseScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == PC_LINKMAN_TYPE){
-            if (_purchaseScrollView.contentOffset.y < 80) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _purchaseScrollView.contentOffset;
-                    _purchaseOffset = offset;
-                    offset.y = 80;
-                    _purchaseScrollView.contentOffset= offset;
-                }];
-            }
-        }else if (textField.tag == PC_PHONENUM_TYPE){
-            if (_purchaseScrollView.contentOffset.y < 120) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _purchaseScrollView.contentOffset;
-                    _purchaseOffset = offset;
-                    offset.y = 120;
-                    _purchaseScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == PRICE_TYPE){
-            if (_supplyScrollView.contentOffset.y < 50) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _supplyScrollView.contentOffset;
-                    _supplyOffset = offset;
-                    offset.y = 50;
-                    _supplyScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == UNIT_TYPE){
-            if (_supplyScrollView.contentOffset.y < 80) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _supplyScrollView.contentOffset;
-                    _supplyOffset = offset;
-                    offset.y = 80;
-                    _supplyScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == STANDARD_TYPE){
-            if (_supplyScrollView.contentOffset.y < 140) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _supplyScrollView.contentOffset;
-                    _supplyOffset = offset;
-                    offset.y = 140;
-                    _supplyScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == LINKMAN_TYPE){
-            if (_supplyScrollView.contentOffset.y < 200) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _supplyScrollView.contentOffset;
-                    _supplyOffset = offset;
-                    offset.y = 200;
-                    _supplyScrollView.contentOffset= offset;
-                }];
-            }
-        }else if(textField.tag == PHONENUM_TYPE){
-            if (_supplyScrollView.contentOffset.y < 240) {
-                [UIView animateWithDuration:0.3 animations:^{
-                    CGPoint offset = _supplyScrollView.contentOffset;
-                    _supplyOffset = offset;
-                    offset.y = 240;
-                    _supplyScrollView.contentOffset= offset;
-                }];
-            }
-        }
+    if (_isPurchase) {
+        [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416+240)];
+    }else{
+        [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+240)];
     }
+
+//    if (_iPhone4) {
+//        if (textField.tag == PC_PURCHASE_TYPE) {
+//            if (_purchaseScrollView.contentOffset.y < 90) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _purchaseScrollView.contentOffset;
+//                    _purchaseOffset = offset;
+//                    offset.y = 90;
+//                    _purchaseScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == PC_UNIT_TYPE){
+//            if (_purchaseScrollView.contentOffset.y < 130) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _purchaseScrollView.contentOffset;
+//                    _purchaseOffset = offset;
+//                    offset.y = 130;
+//                    _purchaseScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == PC_LINKMAN_TYPE){
+//            if (_purchaseScrollView.contentOffset.y < 160) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _purchaseScrollView.contentOffset;
+//                    _purchaseOffset = offset;
+//                    offset.y = 160;
+//                    _purchaseScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if (textField.tag == PC_PHONENUM_TYPE){
+//            if (_purchaseScrollView.contentOffset.y < 190) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _purchaseScrollView.contentOffset;
+//                    _purchaseOffset = offset;
+//                    offset.y = 190;
+//                    _purchaseScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == PRICE_TYPE){
+//            if (_supplyScrollView.contentOffset.y < 50) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _supplyScrollView.contentOffset;
+//                    _supplyOffset = offset;
+//                    offset.y = 50;
+//                    _supplyScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == UNIT_TYPE){
+//            if (_supplyScrollView.contentOffset.y < 80) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _supplyScrollView.contentOffset;
+//                    _supplyOffset = offset;
+//                    offset.y = 80;
+//                    _supplyScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == STANDARD_TYPE){
+//            if (_supplyScrollView.contentOffset.y < 140) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _supplyScrollView.contentOffset;
+//                    _supplyOffset = offset;
+//                    offset.y = 140;
+//                    _supplyScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == LINKMAN_TYPE){
+//            if (_supplyScrollView.contentOffset.y < 200) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _supplyScrollView.contentOffset;
+//                    _supplyOffset = offset;
+//                    offset.y = 200;
+//                    _supplyScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == PHONENUM_TYPE){
+//            if (_supplyScrollView.contentOffset.y < 240) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _supplyScrollView.contentOffset;
+//                    _supplyOffset = offset;
+//                    offset.y = 240;
+//                    _supplyScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }
+//    }else if (_iPhone5){
+//        if(textField.tag == PC_UNIT_TYPE){
+//            if (_purchaseScrollView.contentOffset.y < 50) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _purchaseScrollView.contentOffset;
+//                    _purchaseOffset = offset;
+//                    offset.y = 50;
+//                    _purchaseScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == PC_LINKMAN_TYPE){
+//            if (_purchaseScrollView.contentOffset.y < 80) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _purchaseScrollView.contentOffset;
+//                    _purchaseOffset = offset;
+//                    offset.y = 80;
+//                    _purchaseScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if (textField.tag == PC_PHONENUM_TYPE){
+//            if (_purchaseScrollView.contentOffset.y < 120) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _purchaseScrollView.contentOffset;
+//                    _purchaseOffset = offset;
+//                    offset.y = 120;
+//                    _purchaseScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == PRICE_TYPE){
+//            if (_supplyScrollView.contentOffset.y < 50) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _supplyScrollView.contentOffset;
+//                    _supplyOffset = offset;
+//                    offset.y = 50;
+//                    _supplyScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == UNIT_TYPE){
+//            if (_supplyScrollView.contentOffset.y < 80) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _supplyScrollView.contentOffset;
+//                    _supplyOffset = offset;
+//                    offset.y = 80;
+//                    _supplyScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == STANDARD_TYPE){
+//            if (_supplyScrollView.contentOffset.y < 140) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _supplyScrollView.contentOffset;
+//                    _supplyOffset = offset;
+//                    offset.y = 140;
+//                    _supplyScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == LINKMAN_TYPE){
+//            if (_supplyScrollView.contentOffset.y < 200) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _supplyScrollView.contentOffset;
+//                    _supplyOffset = offset;
+//                    offset.y = 200;
+//                    _supplyScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }else if(textField.tag == PHONENUM_TYPE){
+//            if (_supplyScrollView.contentOffset.y < 240) {
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    CGPoint offset = _supplyScrollView.contentOffset;
+//                    _supplyOffset = offset;
+//                    offset.y = 240;
+//                    _supplyScrollView.contentOffset= offset;
+//                }];
+//            }
+//        }
+//    }
 }
 
 //发布求购成功后，清空页面数据
@@ -874,29 +893,38 @@
 }
 
 
+
+//键盘监听
+- (void)keyboardWillShow:(NSNotification *)notify
+{
+    NSDictionary *userInfo = [notify userInfo];
+    NSValue *value = [userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [value CGRectValue];
+    height = keyboardRect.size.height;
+    if (_isPurchase) {
+        [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416+height)];
+    }else{
+        [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+height)];
+    }
+}
+
 - (void)keyboardWillHide
 {
-    if (_isPurchase){
-        if (_purchaseOffset.y > _purchaseScrollView.contentSize.height - _purchaseScrollView.frame.size.height){
-            _purchaseOffset.y = _purchaseScrollView.contentSize.height - _purchaseScrollView.frame.size.height;
-        }
-        [UIView animateWithDuration:0.3 animations:^{
-            _purchaseScrollView.contentOffset = _purchaseOffset;
+    if (_isPurchase) {
+        [UIView animateWithDuration:0.2 animations:^{
+            [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416)];
         }];
     }else{
-        if (_supplyOffset.y > _supplyScrollView.contentSize.height - _supplyScrollView.frame.size.height){
-            _supplyOffset.y = _supplyScrollView.contentSize.height - _supplyScrollView.frame.size.height;
-        }
-        [UIView animateWithDuration:0.3 animations:^{
-            _supplyScrollView.contentOffset = _supplyOffset;
+        [UIView animateWithDuration:0.2 animations:^{
+            [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
         }];
     }
 }
 
 
+//获取用户VIP信息
 - (void)getVipInfo:(NSString *)company_id
 {
-    //获取用户VIP信息
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.dimBackground = NO;
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
@@ -1022,6 +1050,7 @@
         
         NSMutableString *tagStr = [NSMutableString stringWithString:@""];
         for (int i = 0; i< tagsArray.count; i++) {
+            
             [tagStr appendString:[tagsArray objectAtIndex:i]];
             if (i < [tagsArray count]-1){
                 [tagStr appendString:@","];

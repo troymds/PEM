@@ -52,44 +52,40 @@
 
 #pragma mark textField_delegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    contentOffset = _scrollView.contentOffset;
-    if (_iPhone4) {
-        if (bottomView.frame.origin.y - _scrollView.contentOffset.y > 100 ){
-            CGPoint offset = _scrollView.contentOffset;
-            offset.y = bottomView.frame.origin.y - 60;
-            [UIView animateWithDuration:0.2 animations:^{
-                _scrollView.contentOffset = offset;
-            }];
-        }
-    }
-    if (_iPhone5) {
-        if (bottomView.frame.origin.y - _scrollView.contentOffset.y > 150 ){
-            CGPoint offset = _scrollView.contentOffset;
-            offset.y = bottomView.frame.origin.y -120;
-            [UIView animateWithDuration:0.2 animations:^{
-                _scrollView.contentOffset = offset;
-            }];
-        }
-        
-    }
-    [_scrollView addGestureRecognizer:tap];
+    isKeyboardShow = YES;
     
+    CGFloat distanse = _scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
+    if (distanse < 250) {
+        [UIView animateWithDuration:0.2 animations:^{
+            [_scrollView setContentSize:CGSizeMake(kWidth,_scrollView.contentSize.height+150)];
+            //            _scrollView.contentOffset = contentOffset;
+        }];
+    }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if (_iPhone4) {
-        [UIView animateWithDuration:0.2 animations:^{
-            _scrollView.contentOffset = contentOffset;
-        }];
-    }
-    if (_iPhone5) {
-        [UIView animateWithDuration:0.2 animations:^{
-            _scrollView.contentOffset = contentOffset;
-        }];
-    }
-    [_scrollView removeGestureRecognizer:tap];
-    
+    isKeyboardShow = NO;
+    [UIView animateWithDuration:0.2 animations:^{
+        if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
+            [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
+        }
+        if (bottomView.frame.origin.y > 149) {
+            [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
+        }
+    }];
+//    if (_iPhone4) {
+//        [UIView animateWithDuration:0.2 animations:^{
+//            _scrollView.contentOffset = contentOffset;
+//        }];
+//    }
+//    if (_iPhone5) {
+//        [UIView animateWithDuration:0.2 animations:^{
+//            _scrollView.contentOffset = contentOffset;
+//        }];
+//    }
+//    [_scrollView removeGestureRecognizer:tap];
+//    
 }
 
 
@@ -136,6 +132,7 @@
     
     addField = [[UITextField alloc] initWithFrame:CGRectMake(20,63, kWidth-40, 35)];
     addField.delegate = self;
+    addField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     addField.placeholder = @"请输入您要购买的标签";
     addField.layer.borderColor = HexRGB(0xced2d8).CGColor;
     addField.layer.borderWidth = 1.0f;
@@ -309,11 +306,21 @@
             bottomView.frame = bottomFrame;
         }
     }
-    if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
-        [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
-    }
-    if (bottomView.frame.origin.y > 149) {
-        [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
+    if (isKeyboardShow) {
+        CGFloat distanse = _scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
+        if (distanse < 250) {
+            [UIView animateWithDuration:0.2 animations:^{
+                [_scrollView setContentSize:CGSizeMake(kWidth,_scrollView.contentSize.height+50)];
+                //            _scrollView.contentOffset = contentOffset;
+            }];
+        }
+    }else{
+        if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
+            [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
+        }
+        if (bottomView.frame.origin.y > 149) {
+            [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
+        }
     }
 }
 

@@ -83,7 +83,6 @@
     [HttpTool postWithPath:@"getWishlist" params:params success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",result);
         if (isRefresh) {
             if (_dataArray.count!=0) {
                 [_dataArray removeAllObjects];
@@ -102,6 +101,7 @@
                 UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
                 view.backgroundColor = HexRGB(0xffffff);
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
+                label.backgroundColor = [UIColor clearColor];
                 label.textAlignment = NSTextAlignmentCenter;
                 label.text = @"没有收藏!";
                 label.center = view.center;

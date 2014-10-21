@@ -30,7 +30,7 @@
     
     UIScrollView *_scrollView;
     
-    UITapGestureRecognizer *tap;
+//    UITapGestureRecognizer *tap;
     
     CGPoint contentOffset;
     
@@ -41,3 +41,4 @@
     int tag_num;     //剩余可订阅标签个数
 }
 @end
+//

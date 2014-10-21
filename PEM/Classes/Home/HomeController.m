@@ -27,6 +27,7 @@
 #import "CompanyXQViewController.h"
 #import "MessageController.h"
 #import "QRCodeViewController.h"
+
 @interface HomeController ()<UIScrollViewDelegate>
 {
     UIScrollView *_backScrollView;
@@ -399,7 +400,6 @@
         [CategoryButt setTitle:hotCategoryModel.name forState:UIControlStateNormal  ];
         
         UIButton *categoryButtTitle =[UIButton buttonWithType:UIButtonTypeCustom];
-        
         categoryButtTitle.frame =CGRectMake(14+c%4*(50+25), 200+c/4*(40+40), 65, 30);
         [_backScrollView addSubview:categoryButtTitle];
         [categoryButtTitle setTitle:hotCategoryModel.name forState:UIControlStateNormal];

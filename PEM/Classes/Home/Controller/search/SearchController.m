@@ -482,6 +482,7 @@
     _selectBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-65);
     
     _searchTextField =[[UITextField alloc]init];
+    _searchTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _searchTextField.frame =CGRectMake(63, 0, 165, 30);
     [_searchImage addSubview:_searchTextField];
     [_selectBtn addTarget:self action:@selector(xuankaBtn:) forControlEvents:UIControlEventTouchUpInside];
