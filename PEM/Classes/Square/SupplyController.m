@@ -18,6 +18,7 @@
 #import "SupplyDetailItem.h"
 #import "UIImageView+WebCache.h"
 #import "MySupplyController.h"
+#import "PrivilegeController.h"
 
 
 @interface SupplyController ()
@@ -53,11 +54,48 @@
     [_scrollView setContentSize:CGSizeMake(self.view.frame.size.width, 565)];
     [_scrollView addSubview:_supplyView];
     if (!_isAdd) {
+        //编辑类型  请求要编辑的数据
         isOrigionImg = YES;
         [self loadData];
+    }else{
+        //添加 判断是否可以发布
+        [self check];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)check
+{
+    //判断是否能发布供应信息
+    int vipType = [[SystemConfig sharedInstance].viptype intValue];
+    //当会员类型小于等于0时  检查是否能发布供应信息
+    if (vipType <= 0 ) {
+        //判断是否可以发布供应信息
+        NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.dimBackground = NO;
+        [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+            if ([result objectForKey:@"response"]) {
+                NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
+                if ([code intValue] ==100) {
+                    int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
+                    if (data == 0) {
+                        //不能发布信息
+                        NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
+                        MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                        [actionView showView];
+                    }
+                }
+            }
+        } failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            NSLog(@"%@",error);
+        }];
+    }
+
 }
 
 
@@ -377,6 +415,7 @@
             break;
         case 9002:
         {
+            [activeField resignFirstResponder];
             CGRect frame = [UIScreen mainScreen].bounds;
             ProActionSheet *actionSheet = [[ProActionSheet alloc] initWithFrame:frame];
             actionSheet.delegate = self;
@@ -485,6 +524,12 @@
     }
 }
 
+
+- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView
+{
+    PrivilegeController *pri = [[PrivilegeController alloc] init];
+    [self.navigationController pushViewController:pri animated:YES];
+}
 
 #pragma mark UIImagePickerControllerDelegate
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

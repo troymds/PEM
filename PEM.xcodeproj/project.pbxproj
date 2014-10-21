@@ -116,6 +116,7 @@
 		04AF26E519E8B17C001B29CB /* ProvinceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26DD19E8B17C001B29CB /* ProvinceController.m */; };
 		04AF26E619E8B17C001B29CB /* CityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26DF19E8B17C001B29CB /* CityController.m */; };
 		04B89CB419F50AE600A417AA /* btn_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B89CB319F50AE600A417AA /* btn_down@2x.png */; };
+		04C0105419F6A76100227EF5 /* Reachability1.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C0105319F6A76100227EF5 /* Reachability1.m */; };
 		04C5043619F0A3C8008F36AD /* provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043519F0A3C8008F36AD /* provinces.plist */; };
 		04C5043B19F124FD008F36AD /* Vip1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043719F124FD008F36AD /* Vip1@2x.png */; };
 		04C5043C19F124FD008F36AD /* Vip2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043819F124FD008F36AD /* Vip2@2x.png */; };
@@ -613,6 +614,8 @@
 		04B5F01F19ECAA5500CE68A4 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		04B5F02119ECAAF000CE68A4 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		04B89CB319F50AE600A417AA /* btn_down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_down@2x.png"; sourceTree = "<group>"; };
+		04C0105219F6A76100227EF5 /* Reachability1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability1.h; sourceTree = "<group>"; };
+		04C0105319F6A76100227EF5 /* Reachability1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability1.m; sourceTree = "<group>"; };
 		04C5043519F0A3C8008F36AD /* provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = provinces.plist; sourceTree = "<group>"; };
 		04C5043719F124FD008F36AD /* Vip1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip1@2x.png"; sourceTree = "<group>"; };
 		04C5043819F124FD008F36AD /* Vip2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip2@2x.png"; sourceTree = "<group>"; };
@@ -1814,6 +1817,8 @@
 		55B5D28B199AECAC002A9750 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				04C0105219F6A76100227EF5 /* Reachability1.h */,
+				04C0105319F6A76100227EF5 /* Reachability1.m */,
 				55E8C10219D3A6AD003F1685 /* AdaptationSize.h */,
 				55E8C10319D3A6AD003F1685 /* AdaptationSize.m */,
 				04AE446019D7B4A500E4D83C /* FileManager.h */,
@@ -2744,6 +2749,7 @@
 				55E1AFB519A6E1D60095F9C2 /* MoreController.m in Sources */,
 				04AF26E319E8B17C001B29CB /* TDImageController.m in Sources */,
 				04AF261719E8B0F9001B29CB /* MyFavoriteItem.m in Sources */,
+				04C0105419F6A76100227EF5 /* Reachability1.m in Sources */,
 				04AA702819C85255002A5009 /* qiugouXQ.m in Sources */,
 				55B7821519F4F17800EC9508 /* DimensionalCodeViewController.m in Sources */,
 				55D2FB4F19BFFF5700248CAF /* comditionController.m in Sources */,

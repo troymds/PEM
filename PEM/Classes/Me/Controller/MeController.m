@@ -157,6 +157,35 @@
         [UIView animateWithDuration:0.2 animations:^{
             [_purchaseScrollView setContentSize:CGSizeMake(kWidth, _purchaseView.frame.size.height)];
         }];
+        
+        //判断是否能发布供应信息
+        int vipType = [[SystemConfig sharedInstance].viptype intValue];
+        //当会员类型小于等于0时  检查是否能发布供应信息
+        if (vipType <= 0 ) {
+            //判断是否可以发布供应信息
+            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.dimBackground = NO;
+            [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                if ([result objectForKey:@"response"]) {
+                    NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
+                    if ([code intValue] ==100) {
+                        int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
+                        if (data == 0) {
+                            //不能发布信息
+                            NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
+                            MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                                [actionView showView];
+                        }
+                    }
+                }
+            } failure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            NSLog(@"%@",error);
+            }];
+        }
     }
 }
 
@@ -280,50 +309,51 @@
 
 //发布求购、发布供应按钮点击触发
 - (void)btnClick:(UIButton *)btn{
-    int vipType = [[SystemConfig sharedInstance].viptype intValue];
-    //dang会员类型小于等于0时  检查是否能发布供应信息
+//    int vipType = [[SystemConfig sharedInstance].viptype intValue];
+    //当会员类型小于等于0时  检查是否能发布供应信息
     if (btn.tag == 2001) {
-        if (vipType <= 0 ) {
-            //判断是否可以发布供应信息
-            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
-            [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
-                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                if ([result objectForKey:@"response"]) {
-                    NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
-                    if ([code intValue] ==100) {
-                        int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
-                        if (data == 0) {
-                            //不能发布信息
-                            NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
-                            MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                            [actionView showView];
-                        }else if(data == 1){
-                            //可以发布信息
-                            _isPurchase = NO;
-                            for (UIView *subView in self.view.subviews){
-                                if ([subView isKindOfClass:[UIButton class]]){
-                                    UIButton *button = (UIButton *)subView;
-                                    if (btn.tag == button.tag){
-                                        button.selected = YES;
-                                    }else{
-                                        button.selected = NO;
-                                    }
-                                }
-                            }
-                            [bgScrollView scrollRectToVisible:CGRectMake(kWidth,40, kWidth, bgScrollView.frame.size.height) animated:YES];
-                        }
-                    }else{
-                        
-                    }
+        
+        //可以发布信息
+        _isPurchase = NO;
+        for (UIView *subView in self.view.subviews){
+            if ([subView isKindOfClass:[UIButton class]]){
+                UIButton *button = (UIButton *)subView;
+                if (btn.tag == button.tag){
+                    button.selected = YES;
+                }else{
+                    button.selected = NO;
                 }
-            } failure:^(NSError *error) {
-                NSLog(@"%@",error);
-            }];
-        }else{
-            //可以发布信息
-            _isPurchase = NO;
-            [bgScrollView scrollRectToVisible:CGRectMake(kWidth,40, kWidth, bgScrollView.frame.size.height) animated:YES];
+            }
         }
+        [bgScrollView scrollRectToVisible:CGRectMake(kWidth,40, kWidth, bgScrollView.frame.size.height) animated:YES];
+//        if (vipType <= 0 ) {
+//            //判断是否可以发布供应信息
+//            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+//            [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
+//                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+//                if ([result objectForKey:@"response"]) {
+//                    NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
+//                    if ([code intValue] ==100) {
+//                        int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
+//                        if (data == 0) {
+//                            //不能发布信息
+//                            NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
+//                            MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+//                            [actionView showView];
+//                        }else if(data == 1){
+//                        }
+//                    }else{
+//                        
+//                    }
+//                }
+//            } failure:^(NSError *error) {
+//                NSLog(@"%@",error);
+//            }];
+//        }else{
+//            //可以发布信息
+//            _isPurchase = NO;
+//            [bgScrollView scrollRectToVisible:CGRectMake(kWidth,40, kWidth, bgScrollView.frame.size.height) animated:YES];
+//        }
     }else{
         _isPurchase = YES;
         for (UIView *subView in self.view.subviews){
