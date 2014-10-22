@@ -44,13 +44,34 @@
     x =20;
     current_count = 0;
     max_count = 10;
-    
+        
     _dataArray = [[NSMutableArray alloc] init];
     
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    scrollView.backgroundColor = HexRGB(0xffffff);
+    scrollView.showsVerticalScrollIndicator = NO;
+    [scrollView setContentSize:CGSizeMake(kWidth, scrollView.frame.size.height)];
+    [self.view  addSubview:scrollView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
+    
     [self addView];
-
     [self addNavBarButton];
     [self loadData];
+}
+
+- (void)keyboardWillHiden
+{
+    isEditing = NO;
+    if (bottomView.frame.size.height+bottomView.frame.origin.y <= scrollView.frame.size.height) {
+        [UIView animateWithDuration:0.2 animations:^{
+            [scrollView setContentSize:CGSizeMake(kWidth, scrollView.frame.size.height)];
+        }];
+    }else{
+        [UIView animateWithDuration:0.2 animations:^{
+            [scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.size.height+bottomView.frame.origin.y+20)];
+        }];
+    }
 }
 
 - (void)addNavBarButton{
@@ -70,18 +91,18 @@
 - (void)addView{
     UIImageView *hotTagImg = [[UIImageView alloc] initWithFrame:CGRectMake(19, 20, 20, 16)];
     hotTagImg.image = [UIImage imageNamed:@"hotTags.png"];
-    [self.view addSubview:hotTagImg];
+    [scrollView addSubview:hotTagImg];
 
     
     UILabel *hotLabel = [[UILabel alloc] initWithFrame:CGRectMake(45, 20, kWidth-45-20, 16)];
     hotLabel.text = @"热门标签";
     hotLabel.textColor = HexRGB(0x3a3a3a);
     hotLabel.font = [UIFont systemFontOfSize:PxFont(24)];
-    [self.view addSubview:hotLabel];
+    [scrollView addSubview:hotLabel];
     
     bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 130, kWidth,70)];
     bottomView.backgroundColor = HexRGB(0xffffff);
-    [self.view addSubview:bottomView];
+    [scrollView addSubview:bottomView];
     
     UIImageView *addTagImg = [[UIImageView alloc] initWithFrame:CGRectMake(19, 0, 20, 16)];
     addTagImg.image = [UIImage imageNamed:@"addtags.png"];
@@ -113,7 +134,7 @@
 
 - (void)finish{
     NSMutableArray *tagArray = [NSMutableArray array];
-    for (UIView *subView in self.view.subviews){
+    for (UIView *subView in scrollView.subviews){
         if ([subView isKindOfClass:[TagButton class]]){
             TagButton *btn = (TagButton *)subView;
             if (btn.isSelected){
@@ -129,10 +150,9 @@
 
 
 - (void)addTags:(UIButton *)btn{
-    
     if (addField.text.length!=0) {
         if (current_count < max_count) {
-            for (UIView *subView in self.view.subviews){
+            for (UIView *subView in scrollView.subviews){
                 if ([subView isKindOfClass:[TagButton class]]){
                     TagButton *btn = (TagButton *)subView;
                     NSString *title = btn.titleLabel.text;
@@ -168,7 +188,7 @@
     x += space +size.width+distance*2;
     [btn setTitle:title forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(tagBtnDown:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
+    [scrollView addSubview:btn];
     [self moveBottomView];
 }
 
@@ -244,17 +264,15 @@
     CGRect bottomFrame = bottomView.frame;
     bottomFrame.origin.y = 40+(currentRow+1)*(30+10)+10;
     bottomView.frame = bottomFrame;
-    
+    if (bottomView.frame.size.height+bottomView.frame.origin.y > scrollView.contentSize.height) {
+        [scrollView setContentSize:CGSizeMake(kWidth, bottomView.frame.size.height+bottomView.frame.origin.y+20)];
+    }
     if (isEditing) {
-        if (_iPhone4) {
-            if (bottomView.frame.origin.y - 120 > 0) {
-                [UIView animateWithDuration:0.2 animations:^{
-                    self.view.frame = CGRectMake(0,-(bottomView.frame.origin.y-120), self.view.frame.size.width, self.view.frame.size.height);
-                }];
-            }
+        int distance = scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
+        if (distance < 240) {
+            [scrollView setContentSize:CGSizeMake(kWidth, bottomView.frame.origin.y+bottomView.frame.size.height+240)];
         }
     }
-    
 }
 
 - (void)tagBtnDown:(TagButton *)btn{
@@ -272,38 +290,14 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     isEditing = YES;
-    if (_iPhone4) {
-        if (bottomView.frame.origin.y - 120 > 0) {
-            [UIView animateWithDuration:0.2 animations:^{
-                self.view.frame = CGRectMake(0,-(bottomView.frame.origin.y-120), self.view.frame.size.width, self.view.frame.size.height);
-            }];
-        }
-    }
-    if (_iPhone5) {
-        if (bottomView.frame.origin.y - 180 > 0) {
-            [UIView animateWithDuration:0.2 animations:^{
-                self.view.frame = CGRectMake(0,-(bottomView.frame.origin.y-180), self.view.frame.size.width, self.view.frame.size.height);
-            }];
-        }
+    int distance = scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
+    if (distance < 240) {
+        [scrollView setContentSize:CGSizeMake(kWidth, bottomView.frame.origin.y+bottomView.frame.size.height+240)];
     }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    isEditing = NO;
-    if (_iPhone4) {
-        [UIView animateWithDuration:0.2 animations:^{
-            self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-        }];
-    }
-    if (_iPhone5) {
-        if (bottomView.frame.origin.y - 180 > 0) {
-            [UIView animateWithDuration:0.2 animations:^{
-                self.view.frame = CGRectMake(0,-(bottomView.frame.origin.y-180), self.view.frame.size.width, self.view.frame.size.height);
-            }];
-        }
-    }
-
 }
 
 

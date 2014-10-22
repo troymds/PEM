@@ -38,7 +38,7 @@
     imgView.image = [UIImage imageNamed:@"aboutus.png"];
     [self.view addSubview:imgView];
     
-    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake((kWidth-263)/2, 150, 263, 160)];
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(25, 150, kWidth-25*2, 160)];
     bgView.backgroundColor = HexRGB(0xffffff);
     bgView.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
     bgView.layer.masksToBounds = YES;
@@ -51,7 +51,7 @@
         lineView.backgroundColor = HexRGB(0xd5d5d5);
         [bgView addSubview:lineView];
     }
-    NSArray *arr = [NSArray arrayWithObjects:@"公司名称",@"联系人",@"企业邮箱",@"联系电话", nil];
+    NSArray *arr = [NSArray arrayWithObjects:@"公司名称",@"联 系 人",@"企业邮箱",@"联系电话", nil];
     NSArray *array = [NSArray arrayWithObjects:@"南京普而摩网络技术有限公司",@"董小姐",@"kefu@chinapromo.cn",@"025-68713202", nil];
     for (int i = 0; i < 4; i++) {
         UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 10+i*(20+20),70, 20)];

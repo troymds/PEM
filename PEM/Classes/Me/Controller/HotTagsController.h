@@ -23,6 +23,7 @@
     
     UIView *bottomView;
     BOOL isEditing;        //判断是否在编辑状态 即键盘在不在界面上
+    UIScrollView *scrollView;    
 }
 
 @property (nonatomic,strong) NSMutableArray *tagArray;    //选中标签
