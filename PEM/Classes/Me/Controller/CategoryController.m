@@ -16,6 +16,7 @@
 #import "HttpTool.h"
 #import "CategoryItem.h"
 #import "TKRoundedView.h"
+#import "RemindView.h"
 
 @interface CategoryController ()
 
@@ -67,7 +68,7 @@
         [_tableView reloadData];
         } failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSLog(@"%@",error);
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
 

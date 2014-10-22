@@ -403,7 +403,7 @@
         
 //                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签,想订阅更多标签,请单独购买",_maxNum] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"单独购买", nil];
 //                [alertView show];
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您好,您目前只能订阅%ld个标签",_maxNum] delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签",_maxNum] delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
                 [alertView show];
             }
         }

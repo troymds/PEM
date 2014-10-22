@@ -289,76 +289,39 @@
         {
             //发布供应信息
             if ([self checkSuppayData]){
-                NSString *apply3D;
-                if (isShowTD){
-                    apply3D = @"1";
-                }else{
-                    apply3D = @"0";
-                }
-                if (isOrigionImg) {
-                    //如果没有修改图片  直接上传数据
-                    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"2",@"type",[SystemConfig sharedInstance].company_id,@"company_id",supplyCateItem.uid,@"category_id",region,@"region_name",apply3D,@"apply3D",_supplyView.priceTextField.text,@"price",_supplyView.standardTextField.text,@"min_sell_num",_supplyView.titleTextField.text,@"title",supplyDes,@"description",_supplyView.linkManTextField.text,@"contacts",_supplyView.phoneNumTextField.text,@"contacts_phone",imageUrl,@"image_url",_supplyView.unitField.text,@"unit",_info_id,@"info_id", nil];
-                    [HttpTool postWithPath:@"saveInfo" params:param success:^(id JSON) {
+                
+                int vipType = [[SystemConfig sharedInstance].viptype intValue];
+                //当会员类型小于等于0时  检查是否能发布供应信息
+                if (vipType <= 0 ) {
+                    //判断是否可以发布供应信息
+                    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.dimBackground = NO;
+                    [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
+                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                        NSDictionary *dic = [result objectForKey:@"response"];
-                        if ([[dic objectForKey:@"code"] intValue] == 100){
-                            //编辑成功，刷新原来列表界面
-                            MySupplyController *vc = [self.navigationController.viewControllers objectAtIndex:1];
-                            self.delegate = vc;
-                            if ([self.delegate respondsToSelector:@selector(reloadData)]) {
-                                [self.delegate reloadData];
-                            }
-                            [self.navigationController popToViewController:vc animated:YES];
-                        }else{
-                            [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
-                        }
-                    } failure:^(NSError *error){
-                        NSLog(@"%@",error);
-                    }];
-
-                }else{
-                    NSData *data;
-                    NSString *str;
-                    if (UIImagePNGRepresentation(headImage)) {
-                        data = UIImagePNGRepresentation(headImage);
-                        str= @"png";
-                    }else{
-                        data = UIImageJPEGRepresentation(headImage, 1.0);
-                        str = @"jpg";
-                    }
-                    NSString *s = [GTMBase64 stringByEncodingData:data];
-                    NSString *string = [NSString stringWithFormat:@"data:image/%@;base64,%@",str,s];
-                    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:string,@"image", nil];
-                    [HttpTool postWithPath:@"uploadImage" params:param success:^(id JSON){
-                        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                        if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100){
-                            imageUrl = [[result objectForKey:@"response"] objectForKey:@"data"];
-                            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"2",@"type",[SystemConfig sharedInstance].company_id,@"company_id",supplyCateItem.uid,@"category_id",region,@"region_name",apply3D,@"apply3D",_supplyView.priceTextField.text,@"price",_supplyView.standardTextField.text,@"min_sell_num",_supplyView.titleTextField.text,@"title",supplyDes,@"description",_supplyView.linkManTextField.text,@"contacts",_supplyView.phoneNumTextField.text,@"contacts_phone",imageUrl,@"image_url",_supplyView.unitField.text,@"unit", nil];
-                            [HttpTool postWithPath:@"saveInfo" params:param success:^(id JSON) {
-                                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                                NSDictionary *dic = [result objectForKey:@"response"];
-                                if ([[dic objectForKey:@"code"] intValue] == 100){
-                                    //编辑成功，刷新原来列表界面
-                                    MySupplyController *vc = [self.navigationController.viewControllers objectAtIndex:1];
-                                    self.delegate = vc;
-                                    if ([self.delegate respondsToSelector:@selector(reloadData)]) {
-                                        [self.delegate reloadData];
-                                    }
-                                    [self.navigationController popToViewController:vc animated:YES];
+                        if ([result objectForKey:@"response"]) {
+                            NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
+                            if ([code intValue] ==100) {
+                                int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
+                                if (data == 0) {
+                                    //不能发布信息
+                                    NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
+                                    MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                                    [actionView showView];
                                 }else{
-                                    [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+                                    [self publishSupplyInfo];
                                 }
-                            } failure:^(NSError *error){
-                                NSLog(@"%@",error);
-                            }];
-                            
-                        }else{
-                            [RemindView showViewWithTitle:@"上传图片失败" location:MIDDLE];
+                            }else{
+                                [RemindView showViewWithTitle:@"操作失败" location:MIDDLE];
+                            }
                         }
                     } failure:^(NSError *error) {
-                        NSLog(@"%@",error);
+                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                     }];
- 
+                }else{
+                    [self publishSupplyInfo];
                 }
             }
         }
@@ -436,6 +399,93 @@
             break;
         default:
             break;
+    }
+}
+
+- (void)publishSupplyInfo
+{
+    NSString *apply3D;
+    if (isShowTD){
+        apply3D = @"1";
+    }else{
+        apply3D = @"0";
+    }
+    if (isOrigionImg) {
+        //如果没有修改图片  直接上传数据
+        NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"2",@"type",[SystemConfig sharedInstance].company_id,@"company_id",supplyCateItem.uid,@"category_id",region,@"region_name",apply3D,@"apply3D",_supplyView.priceTextField.text,@"price",_supplyView.standardTextField.text,@"min_sell_num",_supplyView.titleTextField.text,@"title",supplyDes,@"description",_supplyView.linkManTextField.text,@"contacts",_supplyView.phoneNumTextField.text,@"contacts_phone",imageUrl,@"image_url",_supplyView.unitField.text,@"unit",_info_id,@"info_id", nil];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.labelText = @"发布中...";
+        [HttpTool postWithPath:@"saveInfo" params:param success:^(id JSON) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+            NSDictionary *dic = [result objectForKey:@"response"];
+            if ([[dic objectForKey:@"code"] intValue] == 100){
+                //编辑成功，刷新原来列表界面
+                MySupplyController *vc = [self.navigationController.viewControllers objectAtIndex:1];
+                self.delegate = vc;
+                if ([self.delegate respondsToSelector:@selector(reloadData)]) {
+                    [self.delegate reloadData];
+                }
+                [self.navigationController popToViewController:vc animated:YES];
+            }else{
+                [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+            }
+        } failure:^(NSError *error){
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+        
+    }else{
+        NSData *data;
+        NSString *str;
+        if (UIImagePNGRepresentation(headImage)) {
+            data = UIImagePNGRepresentation(headImage);
+            str= @"png";
+        }else{
+            data = UIImageJPEGRepresentation(headImage, 1.0);
+            str = @"jpg";
+        }
+        NSString *s = [GTMBase64 stringByEncodingData:data];
+        NSString *string = [NSString stringWithFormat:@"data:image/%@;base64,%@",str,s];
+        NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:string,@"image", nil];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.labelText = @"发布中...";
+        [HttpTool postWithPath:@"uploadImage" params:param success:^(id JSON){
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+            if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100){
+                imageUrl = [[result objectForKey:@"response"] objectForKey:@"data"];
+                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"2",@"type",[SystemConfig sharedInstance].company_id,@"company_id",supplyCateItem.uid,@"category_id",region,@"region_name",apply3D,@"apply3D",_supplyView.priceTextField.text,@"price",_supplyView.standardTextField.text,@"min_sell_num",_supplyView.titleTextField.text,@"title",supplyDes,@"description",_supplyView.linkManTextField.text,@"contacts",_supplyView.phoneNumTextField.text,@"contacts_phone",imageUrl,@"image_url",_supplyView.unitField.text,@"unit", nil];
+                
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.labelText =@"发布中...";
+                [HttpTool postWithPath:@"saveInfo" params:param success:^(id JSON) {
+                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                    NSDictionary *dic = [result objectForKey:@"response"];
+                    if ([[dic objectForKey:@"code"] intValue] == 100){
+                        //编辑成功，刷新原来列表界面
+                        MySupplyController *vc = [self.navigationController.viewControllers objectAtIndex:1];
+                        self.delegate = vc;
+                        if ([self.delegate respondsToSelector:@selector(reloadData)]) {
+                            [self.delegate reloadData];
+                        }
+                        [self.navigationController popToViewController:vc animated:YES];
+                    }else{
+                        [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+                    }
+                } failure:^(NSError *error){
+                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                }];
+                
+            }else{
+                [RemindView showViewWithTitle:@"上传图片失败" location:MIDDLE];
+            }
+        } failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
     }
 }
 

@@ -68,8 +68,8 @@
     
     tagsArray = [NSMutableArray array];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 }
 
 
@@ -135,6 +135,7 @@
                 }
             }
         }
+        needCheck = NO;
         _isPurchase = YES;
         [activeField resignFirstResponder];
         [UIView animateWithDuration:0.2 animations:^{
@@ -157,48 +158,48 @@
         [UIView animateWithDuration:0.2 animations:^{
             [_purchaseScrollView setContentSize:CGSizeMake(kWidth, _purchaseView.frame.size.height)];
         }];
-        
-        //判断是否能发布供应信息
-        int vipType = [[SystemConfig sharedInstance].viptype intValue];
-        //当会员类型小于等于0时  检查是否能发布供应信息
-        if (vipType <= 0 ) {
-            //判断是否可以发布供应信息
-            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
-            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.dimBackground = NO;
-            [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                if ([result objectForKey:@"response"]) {
-                    NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
-                    if ([code intValue] ==100) {
-                        int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
-                        if (data == 0) {
-                            //不能发布信息
-                            NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
-                            MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+        if (needCheck) {
+            //判断是否能发布供应信息
+            int vipType = [[SystemConfig sharedInstance].viptype intValue];
+            //当会员类型小于等于0时  检查是否能发布供应信息
+            if (vipType <= 0 ) {
+                //判断是否可以发布供应信息
+                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.dimBackground = NO;
+                [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
+                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                    if ([result objectForKey:@"response"]) {
+                        NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
+                        if ([code intValue] ==100) {
+                            int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
+                            if (data == 0) {
+                                //不能发布信息
+                                NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
+                                MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
                                 [actionView showView];
+                            }
                         }
                     }
-                }
-            } failure:^(NSError *error) {
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            NSLog(@"%@",error);
-            }];
+                } failure:^(NSError *error) {
+                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                    NSLog(@"%@",error);
+                }];
+            }
         }
     }
 }
 
 //bgScrollView开始拖拽时执行
-//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-//{
-    //判断是否是向右拖拽,如果是,则判断该用户是否能发布供应信息  如果能
-//    if (scrollView.contentOffset.x>0) {
-//        NSLog(@"%f",scrollView.contentOffset.x);
-//        return;
-//    }
-//    return;
-//}
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (_isPurchase) {
+        needCheck = YES;
+    }else{
+        needCheck = NO;
+    }
+}
 
 
 //登陆框按钮点击
@@ -309,11 +310,9 @@
 
 //发布求购、发布供应按钮点击触发
 - (void)btnClick:(UIButton *)btn{
-//    int vipType = [[SystemConfig sharedInstance].viptype intValue];
-    //当会员类型小于等于0时  检查是否能发布供应信息
     if (btn.tag == 2001) {
-        
         //可以发布信息
+        needCheck = YES;
         _isPurchase = NO;
         for (UIView *subView in self.view.subviews){
             if ([subView isKindOfClass:[UIButton class]]){
@@ -326,34 +325,6 @@
             }
         }
         [bgScrollView scrollRectToVisible:CGRectMake(kWidth,40, kWidth, bgScrollView.frame.size.height) animated:YES];
-//        if (vipType <= 0 ) {
-//            //判断是否可以发布供应信息
-//            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
-//            [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
-//                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-//                if ([result objectForKey:@"response"]) {
-//                    NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
-//                    if ([code intValue] ==100) {
-//                        int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
-//                        if (data == 0) {
-//                            //不能发布信息
-//                            NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
-//                            MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-//                            [actionView showView];
-//                        }else if(data == 1){
-//                        }
-//                    }else{
-//                        
-//                    }
-//                }
-//            } failure:^(NSError *error) {
-//                NSLog(@"%@",error);
-//            }];
-//        }else{
-//            //可以发布信息
-//            _isPurchase = NO;
-//            [bgScrollView scrollRectToVisible:CGRectMake(kWidth,40, kWidth, bgScrollView.frame.size.height) animated:YES];
-//        }
     }else{
         _isPurchase = YES;
         for (UIView *subView in self.view.subviews){
@@ -446,7 +417,7 @@
                     }
                 } failure:^(NSError *error) {
                     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                    NSLog(@"%@",error);
+                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                 }];
             }
         }
@@ -455,60 +426,39 @@
         {
             //发布供应信息
             if ([self checkSuppayData]){
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.dimBackground = NO;
-                hud.labelText = @"发布中...";
-                NSData *data;
-                NSString *str;
-                if (UIImagePNGRepresentation(headImage)) {
-                    data = UIImagePNGRepresentation(headImage);
-                    str= @"png";
-                }else{
-                    data = UIImageJPEGRepresentation(headImage, 1.0);
-                    str = @"jpg";
-                }
-                NSString *s = [GTMBase64 stringByEncodingData:data];
-                NSString *string = [NSString stringWithFormat:@"data:image/%@;base64,%@",str,s];
-                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:string,@"image", nil];
-                [HttpTool postWithPath:@"uploadImage" params:param success:^(id JSON){
-                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                    if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100 ){
-                        imageUrl = [[result objectForKey:@"response"] objectForKey:@"data"];
-                        NSString *apply3D;
-                        if (isShowTD){
-                            apply3D = @"1";
-                        }else{
-                            apply3D = @"0";
-                        }
-                        NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"2",@"type",[SystemConfig sharedInstance].company_id,@"company_id",supplyCateItem.uid,@"category_id",region,@"region_name",apply3D,@"apply3D",_supplyView.priceTextField.text,@"price",_supplyView.standardTextField.text,@"min_sell_num",_supplyView.titleTextField.text,@"title",supplyDes,@"description",_supplyView.linkManTextField.text,@"contacts",_supplyView.phoneNumTextField.text,@"contacts_phone",imageUrl,@"image_url",_supplyView.unitField.text,@"unit", nil];
-                        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                        hud.dimBackground = NO;
-                        hud.labelText = @"发布中...";
-                        [HttpTool postWithPath:@"saveInfo" params:params success:^(id JSON) {
-                            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                            NSDictionary *dic = [result objectForKey:@"response"];
-                            if ([[dic objectForKey:@"code"] intValue] == 100){
-                                [self clearSupplyData];
-                                [activeField resignFirstResponder];
-                                MySupplyController *sc = [[MySupplyController alloc] init];
-                                [self.navigationController pushViewController:sc animated:YES];
+                int vipType = [[SystemConfig sharedInstance].viptype intValue];
+                //当会员类型小于等于0时  检查是否能发布供应信息
+                if (vipType <= 0 ) {
+                    //判断是否可以发布供应信息
+                    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.dimBackground = NO;
+                    [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
+                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                        if ([result objectForKey:@"response"]) {
+                            NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
+                            if ([code intValue] ==100) {
+                                int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
+                                if (data == 0) {
+                                    //不能发布信息
+                                    NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
+                                    MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                                    [actionView showView];
+                                }else{
+                                    [self publishSupplyInfo];
+                                }
                             }else{
-                                [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+                                [RemindView showViewWithTitle:@"操作失败" location:MIDDLE];
                             }
-                        } failure:^(NSError *error){
-                            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                            NSLog(@"%@",error);
-                        }];
-                        
-                    }else{
-                        [RemindView showViewWithTitle:@"上传图片失败" location:MIDDLE];
-                    }
-                } failure:^(NSError *error) {
-                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                    NSLog(@"%@",error);
-                }];
+                        }
+                    } failure:^(NSError *error) {
+                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                    }];
+                }else{
+                    [self publishSupplyInfo];
+                }
             }
         }
             break;
@@ -621,6 +571,67 @@
 }
 
 
+//发布供应信息
+- (void)publishSupplyInfo
+{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.dimBackground = NO;
+    hud.labelText = @"发布中...";
+    NSData *data;
+    NSString *str;
+    if (UIImagePNGRepresentation(headImage)) {
+        data = UIImagePNGRepresentation(headImage);
+        str= @"png";
+    }else{
+        data = UIImageJPEGRepresentation(headImage, 1.0);
+        str = @"jpg";
+    }
+    NSString *s = [GTMBase64 stringByEncodingData:data];
+    NSString *string = [NSString stringWithFormat:@"data:image/%@;base64,%@",str,s];
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:string,@"image", nil];
+    [HttpTool postWithPath:@"uploadImage" params:param success:^(id JSON){
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100 ){
+            imageUrl = [[result objectForKey:@"response"] objectForKey:@"data"];
+            NSString *apply3D;
+            if (isShowTD){
+                apply3D = @"1";
+            }else{
+                apply3D = @"0";
+            }
+            NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"2",@"type",[SystemConfig sharedInstance].company_id,@"company_id",supplyCateItem.uid,@"category_id",region,@"region_name",apply3D,@"apply3D",_supplyView.priceTextField.text,@"price",_supplyView.standardTextField.text,@"min_sell_num",_supplyView.titleTextField.text,@"title",supplyDes,@"description",_supplyView.linkManTextField.text,@"contacts",_supplyView.phoneNumTextField.text,@"contacts_phone",imageUrl,@"image_url",_supplyView.unitField.text,@"unit", nil];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.dimBackground = NO;
+            hud.labelText = @"发布中...";
+            [HttpTool postWithPath:@"saveInfo" params:params success:^(id JSON) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSDictionary *dic = [result objectForKey:@"response"];
+                if ([[dic objectForKey:@"code"] intValue] == 100){
+                    [self clearSupplyData];
+                    [activeField resignFirstResponder];
+                    MySupplyController *sc = [[MySupplyController alloc] init];
+                    [self.navigationController pushViewController:sc animated:YES];
+                }else{
+                    [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+                }
+            } failure:^(NSError *error){
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+            
+        }else{
+            [RemindView showViewWithTitle:@"上传图片失败" location:MIDDLE];
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
+
+}
+
+
 - (void)textFieldBeganEditting:(UITextField *)textField{
     activeField = textField;
     if (_isPurchase) {
@@ -628,165 +639,20 @@
     }else{
         [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+240)];
     }
+}
 
-//    if (_iPhone4) {
-//        if (textField.tag == PC_PURCHASE_TYPE) {
-//            if (_purchaseScrollView.contentOffset.y < 90) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _purchaseScrollView.contentOffset;
-//                    _purchaseOffset = offset;
-//                    offset.y = 90;
-//                    _purchaseScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == PC_UNIT_TYPE){
-//            if (_purchaseScrollView.contentOffset.y < 130) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _purchaseScrollView.contentOffset;
-//                    _purchaseOffset = offset;
-//                    offset.y = 130;
-//                    _purchaseScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == PC_LINKMAN_TYPE){
-//            if (_purchaseScrollView.contentOffset.y < 160) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _purchaseScrollView.contentOffset;
-//                    _purchaseOffset = offset;
-//                    offset.y = 160;
-//                    _purchaseScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if (textField.tag == PC_PHONENUM_TYPE){
-//            if (_purchaseScrollView.contentOffset.y < 190) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _purchaseScrollView.contentOffset;
-//                    _purchaseOffset = offset;
-//                    offset.y = 190;
-//                    _purchaseScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == PRICE_TYPE){
-//            if (_supplyScrollView.contentOffset.y < 50) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _supplyScrollView.contentOffset;
-//                    _supplyOffset = offset;
-//                    offset.y = 50;
-//                    _supplyScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == UNIT_TYPE){
-//            if (_supplyScrollView.contentOffset.y < 80) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _supplyScrollView.contentOffset;
-//                    _supplyOffset = offset;
-//                    offset.y = 80;
-//                    _supplyScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == STANDARD_TYPE){
-//            if (_supplyScrollView.contentOffset.y < 140) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _supplyScrollView.contentOffset;
-//                    _supplyOffset = offset;
-//                    offset.y = 140;
-//                    _supplyScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == LINKMAN_TYPE){
-//            if (_supplyScrollView.contentOffset.y < 200) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _supplyScrollView.contentOffset;
-//                    _supplyOffset = offset;
-//                    offset.y = 200;
-//                    _supplyScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == PHONENUM_TYPE){
-//            if (_supplyScrollView.contentOffset.y < 240) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _supplyScrollView.contentOffset;
-//                    _supplyOffset = offset;
-//                    offset.y = 240;
-//                    _supplyScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }
-//    }else if (_iPhone5){
-//        if(textField.tag == PC_UNIT_TYPE){
-//            if (_purchaseScrollView.contentOffset.y < 50) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _purchaseScrollView.contentOffset;
-//                    _purchaseOffset = offset;
-//                    offset.y = 50;
-//                    _purchaseScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == PC_LINKMAN_TYPE){
-//            if (_purchaseScrollView.contentOffset.y < 80) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _purchaseScrollView.contentOffset;
-//                    _purchaseOffset = offset;
-//                    offset.y = 80;
-//                    _purchaseScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if (textField.tag == PC_PHONENUM_TYPE){
-//            if (_purchaseScrollView.contentOffset.y < 120) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _purchaseScrollView.contentOffset;
-//                    _purchaseOffset = offset;
-//                    offset.y = 120;
-//                    _purchaseScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == PRICE_TYPE){
-//            if (_supplyScrollView.contentOffset.y < 50) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _supplyScrollView.contentOffset;
-//                    _supplyOffset = offset;
-//                    offset.y = 50;
-//                    _supplyScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == UNIT_TYPE){
-//            if (_supplyScrollView.contentOffset.y < 80) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _supplyScrollView.contentOffset;
-//                    _supplyOffset = offset;
-//                    offset.y = 80;
-//                    _supplyScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == STANDARD_TYPE){
-//            if (_supplyScrollView.contentOffset.y < 140) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _supplyScrollView.contentOffset;
-//                    _supplyOffset = offset;
-//                    offset.y = 140;
-//                    _supplyScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == LINKMAN_TYPE){
-//            if (_supplyScrollView.contentOffset.y < 200) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _supplyScrollView.contentOffset;
-//                    _supplyOffset = offset;
-//                    offset.y = 200;
-//                    _supplyScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == PHONENUM_TYPE){
-//            if (_supplyScrollView.contentOffset.y < 240) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _supplyScrollView.contentOffset;
-//                    _supplyOffset = offset;
-//                    offset.y = 240;
-//                    _supplyScrollView.contentOffset= offset;
-//                }];
-//            }
-//        }
-//    }
+- (void)textFieldEndEditting:(UITextField *)textField
+{
+    if (_isPurchase) {
+        [UIView animateWithDuration:0.2 animations:^{
+            [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416)];
+        }];
+    }else{
+        [UIView animateWithDuration:0.2 animations:^{
+            [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
+        }];
+    }
+
 }
 
 //发布求购成功后，清空页面数据
@@ -925,31 +791,31 @@
 
 
 //键盘监听
-- (void)keyboardWillShow:(NSNotification *)notify
-{
-    NSDictionary *userInfo = [notify userInfo];
-    NSValue *value = [userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect keyboardRect = [value CGRectValue];
-    height = keyboardRect.size.height;
-    if (_isPurchase) {
-        [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416+height)];
-    }else{
-        [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+height)];
-    }
-}
+//- (void)keyboardWillShow:(NSNotification *)notify
+//{
+//    NSDictionary *userInfo = [notify userInfo];
+//    NSValue *value = [userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGRect keyboardRect = [value CGRectValue];
+//    height = keyboardRect.size.height;
+//    if (_isPurchase) {
+//        [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416+height)];
+//    }else{
+//        [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+height)];
+//    }
+//}
 
-- (void)keyboardWillHide
-{
-    if (_isPurchase) {
-        [UIView animateWithDuration:0.2 animations:^{
-            [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416)];
-        }];
-    }else{
-        [UIView animateWithDuration:0.2 animations:^{
-            [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
-        }];
-    }
-}
+//- (void)keyboardWillHide
+//{
+//    if (_isPurchase) {
+//        [UIView animateWithDuration:0.2 animations:^{
+//            [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416)];
+//        }];
+//    }else{
+//        [UIView animateWithDuration:0.2 animations:^{
+//            [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
+//        }];
+//    }
+//}
 
 
 //获取用户VIP信息

@@ -68,12 +68,6 @@
 }
 
 - (void)keyboardWillHiden{
-//    [UIView animateWithDuration:0.2 animations:^{
-//        if (_offset.y > _scrollView.contentSize.height-_scrollView.frame.size.height) {
-//            _offset.y =_scrollView.contentSize.height-_scrollView.frame.size.height;
-//        }
-//        _scrollView.contentOffset = _offset;
-//    }];
     [UIView animateWithDuration:0.2 animations:^{
         [_scrollView setContentSize:CGSizeMake(kWidth, 500)];
     }];
@@ -228,7 +222,7 @@
 - (void)loadInfoData:(CompanyInfoItem *)item{
     //如果以前上传过图片  则显示图片
     if (item.image&&item.image.length!=0){
-        [_iconImage setImageWithURL:[NSURL URLWithString:item.image]];
+        [_iconImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"company_default.png"]];
         isExistImg = YES;
         _imgStr = item.image;
     }
@@ -275,117 +269,6 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     activeField = textField;
     [_scrollView setContentSize:CGSizeMake(kWidth, 500+240)];
-    //    switch (textField.tag) {
-    //        case NAME_TYPE:
-    //        {
-    //            if (_iPhone4){
-    //                if (_scrollView.contentOffset.y < 40) {
-    //                    [UIView animateWithDuration:0.2 animations:^{
-    //                        CGPoint offset = _scrollView.contentOffset;
-    //                        _offset = offset;
-    //                        offset.y = 40;
-    //                        _scrollView.contentOffset = offset;
-    //                    }];
-    //                }
-    //            }
-    //        }
-    //            break;
-    //        case AREA_TYPE:
-    //        {
-    //            if (_iPhone4){
-    //                if (_scrollView.contentOffset.y < 120) {
-    //                    [UIView animateWithDuration:0.2 animations:^{
-    //                        CGPoint offset = _scrollView.contentOffset;
-    //                        _offset = offset;
-    //                        offset.y = 120;
-    //                        _scrollView.contentOffset = offset;
-    //                    }];
-    //                }
-    //            }else if(iPhone5){
-    //                if (_scrollView.contentOffset.y < 60) {
-    //                    [UIView animateWithDuration:0.2 animations:^{
-    //                        CGPoint offset = _scrollView.contentOffset;
-    //                        _offset = offset;
-    //                        offset.y = 60;
-    //                        _scrollView.contentOffset = offset;
-    //                    }];
-    //                }
-    //            }
-    //        }
-    //            break;
-    //        case PHONE_TYPE:
-    //        {
-    //            if (_iPhone4){
-    //                if (_scrollView.contentOffset.y < 180) {
-    //                    [UIView animateWithDuration:0.2 animations:^{
-    //                        CGPoint offset = _scrollView.contentOffset;
-    //                        _offset = offset;
-    //                        offset.y = 180;
-    //                        _scrollView.contentOffset = offset;
-    //                    }];
-    //                }
-    //            }else if(iPhone5){
-    //                if (_scrollView.contentOffset.y < 120) {
-    //                    [UIView animateWithDuration:0.2 animations:^{
-    //                        CGPoint offset = _scrollView.contentOffset;
-    //                        _offset = offset;
-    //                        offset.y = 120;
-    //                        _scrollView.contentOffset = offset;
-    //                    }];
-    //                }
-    //            }
-    //        }
-    //            break;
-    //        case WEBSITE_TYPE:
-    //        {
-    //            if (_iPhone4){
-    //                if (_scrollView.contentOffset.y < 220) {
-    //                    [UIView animateWithDuration:0.2 animations:^{
-    //                        CGPoint offset = _scrollView.contentOffset;
-    //                        _offset = offset;
-    //                        offset.y = 220;
-    //                        _scrollView.contentOffset = offset;
-    //                    }];
-    //                }
-    //            }else if(iPhone5){
-    //                if (_scrollView.contentOffset.y < 160) {
-    //                    [UIView animateWithDuration:0.2 animations:^{
-    //                        CGPoint offset = _scrollView.contentOffset;
-    //                        _offset = offset;
-    //                        offset.y = 160;
-    //                        _scrollView.contentOffset = offset;
-    //                    }];
-    //                }
-    //            }
-    //        }
-    //            break;
-    //        case EMAIL_TYPE:
-    //        {
-    //            if (_iPhone4){
-    //                if (_scrollView.contentOffset.y < 280) {
-    //                    [UIView animateWithDuration:0.2 animations:^{
-    //                        CGPoint offset = _scrollView.contentOffset;
-    //                        _offset = offset;
-    //                        offset.y = 280;
-    //                        _scrollView.contentOffset = offset;
-    //                    }];
-    //                }
-    //            }else if(iPhone5){
-    //                if (_scrollView.contentOffset.y < 220) {
-    //                    [UIView animateWithDuration:0.2 animations:^{
-    //                        CGPoint offset = _scrollView.contentOffset;
-    //                        _offset = offset;
-    //                        offset.y = 220;
-    //                        _scrollView.contentOffset = offset;
-    //                    }];
-    //                }
-    //            }
-    //        }
-    //            break;
-    //
-    //        default:
-    //            break;
-    //    }
 }
 
 
@@ -412,7 +295,7 @@
                         [RemindView showViewWithTitle:@"设置失败" location:MIDDLE];
                     }
                 }failure:^(NSError *error){
-                    NSLog(@"%@",error);
+                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                 }];
             }else{
                 [self updateData];
@@ -469,7 +352,6 @@
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-        NSLog(@"%@",error);
     }];
 
 }

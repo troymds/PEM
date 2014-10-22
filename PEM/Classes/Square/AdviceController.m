@@ -104,7 +104,7 @@
                     [RemindView showViewWithTitle:@"反馈失败" location:MIDDLE];
                 }
             } failure:^(NSError *error) {
-                NSLog(@"%@",error);
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
             }];
         }else{
             [RemindView showViewWithTitle:@"请输入您的宝贵意见!" location:MIDDLE];

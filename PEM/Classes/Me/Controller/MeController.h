@@ -51,7 +51,7 @@
     
     UITextField *activeField;         //当前编辑的输入框
     
-    int height;          //键盘高度
+    BOOL needCheck;             //判断当scrollview滚动时是否需要 检查能否发布供应信息
 
 }
 

@@ -35,7 +35,7 @@
         _headView.nameLabel.text = @"未注册用户";
         _headView.typeLabel.text = @"游客";
     }else{
-        [_headView.iconImg setImageWithURL:[NSURL URLWithString:[SystemConfig sharedInstance].companyInfo.image]];
+        [_headView.iconImg setImageWithURL:[NSURL URLWithString:[SystemConfig sharedInstance].companyInfo.image] placeholderImage:[UIImage imageNamed:@"company_default.png"]];
         if ([SystemConfig sharedInstance].companyInfo.company_name.length==0) {
             _headView.nameLabel.text = @"未设置公司名";
         }else{

@@ -45,7 +45,7 @@
         //判断是否是登录状态 若是 显示企业头像等信息
         CompanyInfoItem *item = [SystemConfig sharedInstance].companyInfo;
         if (item.image&&item.image.length!=0){
-            [_headView.headerImage setImageWithURL:[NSURL URLWithString:item.image]];
+            [_headView.headerImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"company_default.png"]];
         }
         NSString *name;
         if (item.company_name.length==0) {

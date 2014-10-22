@@ -235,11 +235,11 @@
             }
 
         }else{
-            NSLog(@"删除失败");
+            [RemindView showViewWithTitle:@"删除失败" location:MIDDLE];
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSLog(@"%@",error);
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
 
@@ -262,11 +262,11 @@
             }
 
         }else{
-            NSLog(@"删除失败");
+            [RemindView showViewWithTitle:@"删除失败" location:MIDDLE];
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSLog(@"%@",error);
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
 

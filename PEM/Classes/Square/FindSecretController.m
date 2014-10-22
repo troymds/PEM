@@ -86,7 +86,7 @@
                 [alertView show];
             }
         } failure:^(NSError *error) {
-            NSLog(@"%@",error);
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         }];
     }else{
         [RemindView showViewWithTitle:@"手机号不合法" location:TOP];

@@ -164,7 +164,7 @@
                         [RemindView showViewWithTitle:@"编辑失败" location:MIDDLE];
                     }
                 } failure:^(NSError *error) {
-                    NSLog(@"%@",error);
+                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                 }];
             }
         }

@@ -254,24 +254,41 @@
         [self addSubview:selectBtn];
         
         _remindView = [[UIView alloc] initWithFrame:CGRectMake(20, 460, kWidth-20*2, 30)];
-        UILabel *remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _remindView.frame.size.width, 30)];
-        remindLabel.numberOfLines = 0;
+        
         NSString *string = @"上传3D图片需要大量素材，发布成功后请等待我们与您联系，或现在";
         CGSize size = [AdaptationSize getSizeFromString:string Font:[UIFont systemFontOfSize:12] withHight:15 withWidth:CGFLOAT_MAX];
+        
+        CGSize btnSize = [AdaptationSize getSizeFromString:@"联系我们" Font:[UIFont systemFontOfSize:12] withHight:15 withWidth:CGFLOAT_MAX];
+
+        
+        UILabel *remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _remindView.frame.size.width, 30)];
+        remindLabel.backgroundColor = [UIColor clearColor];
+        remindLabel.numberOfLines = 0;
         remindLabel.text = string;
         remindLabel.font = [UIFont systemFontOfSize:12];
         
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setTitle:@"联系我们" forState:UIControlStateNormal];
-        CGSize btnSize = [AdaptationSize getSizeFromString:@"联系我们" Font:[UIFont systemFontOfSize:12] withHight:15 withWidth:CGFLOAT_MAX];
         [button setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont systemFontOfSize:12];
-        button.frame = CGRectMake(size.width-kWidth+40,15,btnSize.width, 15);
         [button addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
         button.tag = 3004;
         [_remindView addSubview:button];
         
-        UIView *btnLine = [[UIView alloc] initWithFrame:CGRectMake(size.width-kWidth+40,29,btnSize.width,0.5)];
+        if (size.width<_remindView.frame.size.width) {
+            remindLabel.frame = CGRectMake(0, 0, _remindView.frame.size.width, 15);
+            if (size.width+btnSize.width>_remindView.frame.size.width) {
+                button.frame = CGRectMake(0, 15, btnSize.width, 15);
+            }else{
+                button.frame = CGRectMake(size.width, 0, btnSize.width, 15);
+            }
+        }else{
+            remindLabel.frame = CGRectMake(0, 0, _remindView.frame.size.width, 30);
+            button.frame = CGRectMake(size.width-remindLabel.frame.size.width, 15, btnSize.width,15);
+        }
+    
+        UIView *btnLine = [[UIView alloc] initWithFrame:CGRectMake(button.frame.origin.x,button.frame.origin.y+button.frame.size.height-1,btnSize.width,0.5)];
         btnLine.backgroundColor = [UIColor blueColor];
         [_remindView addSubview:btnLine];
         
