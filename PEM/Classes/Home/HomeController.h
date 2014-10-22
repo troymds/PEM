@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-@interface HomeController : UIViewController
+#import "ShrinkImage.h"
+@interface HomeController : UIViewController<ShrinkImageDelegate>
 {
     NSTimer *_timer;
 }

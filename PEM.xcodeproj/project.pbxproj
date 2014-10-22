@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		045C5B9F19F7F8A500EC34F5 /* ShrinkImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 045C5B9E19F7F8A500EC34F5 /* ShrinkImage.m */; };
+		045C5BA219F8051000EC34F5 /* UIScrollView+UITouch.m in Sources */ = {isa = PBXBuildFile; fileRef = 045C5BA119F8051000EC34F5 /* UIScrollView+UITouch.m */; };
 		0471EA1819ED3AA800060640 /* BuyTagController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0471EA1719ED3AA800060640 /* BuyTagController.m */; };
 		0481D71E19EBDF3000C3278D /* update@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0481D71D19EBDF3000C3278D /* update@2x.png */; };
 		04989E6F19F0107400E407EE /* ProLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04989E6E19F0107400E407EE /* ProLabel.m */; };
@@ -419,6 +421,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		045C5B9D19F7F8A500EC34F5 /* ShrinkImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShrinkImage.h; sourceTree = "<group>"; };
+		045C5B9E19F7F8A500EC34F5 /* ShrinkImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShrinkImage.m; sourceTree = "<group>"; };
+		045C5BA019F8051000EC34F5 /* UIScrollView+UITouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UITouch.h"; sourceTree = "<group>"; };
+		045C5BA119F8051000EC34F5 /* UIScrollView+UITouch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UITouch.m"; sourceTree = "<group>"; };
 		0471EA1619ED3AA800060640 /* BuyTagController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyTagController.h; sourceTree = "<group>"; };
 		0471EA1719ED3AA800060640 /* BuyTagController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyTagController.m; sourceTree = "<group>"; };
 		0481D71D19EBDF3000C3278D /* update@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "update@2x.png"; sourceTree = "<group>"; };
@@ -1762,6 +1768,8 @@
 				55B5D356199AEEAE002A9750 /* UIBarButtonItem+MJ.m */,
 				55B5D357199AEEAE002A9750 /* UIImage+MJ.h */,
 				55B5D358199AEEAE002A9750 /* UIImage+MJ.m */,
+				045C5BA019F8051000EC34F5 /* UIScrollView+UITouch.h */,
+				045C5BA119F8051000EC34F5 /* UIScrollView+UITouch.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1989,6 +1997,8 @@
 				55D035A919B8679E000F090F /* demandTableViewCell.m */,
 				55D035AB19B867E0000F090F /* companyTableViewCell.h */,
 				55D035AC19B867E0000F090F /* companyTableViewCell.m */,
+				045C5B9D19F7F8A500EC34F5 /* ShrinkImage.h */,
+				045C5B9E19F7F8A500EC34F5 /* ShrinkImage.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2652,6 +2662,7 @@
 				5588E27C19EE66FF0095D362 /* SearchDenamdModel.m in Sources */,
 				04AF26B119E8B150001B29CB /* SupplyDetailItem.m in Sources */,
 				04AF26E419E8B17C001B29CB /* HotTagsController.m in Sources */,
+				045C5B9F19F7F8A500EC34F5 /* ShrinkImage.m in Sources */,
 				04AF268C19E8B13D001B29CB /* SetImageView.m in Sources */,
 				55B8B4FA19CD505500FF86AD /* demandCOM.m in Sources */,
 				04AF265419E8B129001B29CB /* RegisterContrller.m in Sources */,
@@ -2661,6 +2672,7 @@
 				55B5104319F73930009F9008 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				5530177019A3520600E52F07 /* DockItem.m in Sources */,
 				5588E27F19EE67140095D362 /* SearchCompanyModel.m in Sources */,
+				045C5BA219F8051000EC34F5 /* UIScrollView+UITouch.m in Sources */,
 				55C10D6919CC1EC7002498DD /* comPanyNEWTool.m in Sources */,
 				555422A119C6BD9500C9DF9E /* conditionTool.m in Sources */,
 				55B5104719F73930009F9008 /* UIImageView+AFNetworking.m in Sources */,

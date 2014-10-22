@@ -419,6 +419,7 @@
         
         UIImageView *findImage =[[UIImageView alloc]init];
         findImage.frame =CGRectMake(20+c%4*(50+25), 152+c/4*(40+40), 50,50);
+        findImage.tag = [hotCategoryModel.cateid intValue] +1000;
         [_backScrollView addSubview:findImage];
         findImage.userInteractionEnabled = NO;
         [findImage setImageWithURL:[NSURL URLWithString:hotCategoryModel.image]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
@@ -445,6 +446,8 @@
 
     
 }
+
+
 -(void)moreBtnClick{
     MessageController *message =[[MessageController alloc]init];
     [self.navigationController pushViewController:message animated:YES];
@@ -588,8 +591,6 @@
 
 //八宫格
 -(void)categoryBtnClick:(UIButton *)cate{
-    
-    
     
     findViewController *find =[[findViewController alloc]init];
     find.titleLabel =cate.titleLabel.text;
