@@ -32,6 +32,8 @@
     
     CGPoint _offset;
     
+    UITextField *activeField;
+    
 }
 
 @property (nonatomic,copy) NSString *info_id;

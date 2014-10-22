@@ -68,7 +68,7 @@
     [self loadData];
     [self addView];
     
-    tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
+//    tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
 }
 
 
@@ -229,7 +229,7 @@
 
 - (void)addView{
     UIImageView *myTagImg = [[UIImageView alloc] initWithFrame:CGRectMake(19, 20, 20, 16)];
-    myTagImg.image = [UIImage imageNamed:@"mytags"];
+    myTagImg.image = [UIImage imageNamed:@"mytags.png"];
     [_scrollView addSubview:myTagImg];
     
     UILabel *hotLabel = [[UILabel alloc] initWithFrame:CGRectMake(45, 20,160, 16)];
@@ -268,6 +268,7 @@
 
     addField = [[UITextField alloc] initWithFrame:CGRectMake(20,63, kWidth-40, 35)];
     addField.delegate = self;
+    addField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     addField.placeholder = @"请输入您要添加的新标签";
     addField.layer.borderColor = HexRGB(0xced2d8).CGColor;
     addField.layer.borderWidth = 1.0f;
@@ -292,44 +293,62 @@
 
 #pragma mark textField_delegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    contentOffset = _scrollView.contentOffset;
-    if (_iPhone4) {
-        if (bottomView.frame.origin.y - _scrollView.contentOffset.y > 100 ){
-            CGPoint offset = _scrollView.contentOffset;
-            offset.y = bottomView.frame.origin.y - 60;
-            [UIView animateWithDuration:0.2 animations:^{
-                _scrollView.contentOffset = offset;
-            }];
-        }
+    
+    isKeyboardShow = YES;
+    
+    CGFloat distanse = _scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
+    if (distanse < 250) {
+        [UIView animateWithDuration:0.2 animations:^{
+            [_scrollView setContentSize:CGSizeMake(kWidth,_scrollView.contentSize.height+150)];
+            //            _scrollView.contentOffset = contentOffset;
+        }];
     }
-    if (_iPhone5) {
-        if (bottomView.frame.origin.y - _scrollView.contentOffset.y > 150 ){
-            CGPoint offset = _scrollView.contentOffset;
-            offset.y = bottomView.frame.origin.y -120;
-            [UIView animateWithDuration:0.2 animations:^{
-                _scrollView.contentOffset = offset;
-            }];
-        }
-        
-    }
-    [_scrollView addGestureRecognizer:tap];
+
+//    contentOffset = _scrollView.contentOffset;
+//    if (_iPhone4) {
+//        if (bottomView.frame.origin.y - _scrollView.contentOffset.y > 100 ){
+//            CGPoint offset = _scrollView.contentOffset;
+//            offset.y = bottomView.frame.origin.y - 60;
+//            [UIView animateWithDuration:0.2 animations:^{
+//                _scrollView.contentOffset = offset;
+//            }];
+//        }
+//    }
+//    if (_iPhone5) {
+//        if (bottomView.frame.origin.y - _scrollView.contentOffset.y > 150 ){
+//            CGPoint offset = _scrollView.contentOffset;
+//            offset.y = bottomView.frame.origin.y -120;
+//            [UIView animateWithDuration:0.2 animations:^{
+//                _scrollView.contentOffset = offset;
+//            }];
+//        }
+//        
+//    }
+//    [_scrollView addGestureRecognizer:tap];
 
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    if (_iPhone4) {
-        [UIView animateWithDuration:0.2 animations:^{
-            _scrollView.contentOffset = contentOffset;
-        }];
-    }
-    if (_iPhone5) {
-        [UIView animateWithDuration:0.2 animations:^{
-            _scrollView.contentOffset = contentOffset;
-        }];
-    }
-    [_scrollView removeGestureRecognizer:tap];
+    isKeyboardShow = NO;
+    [UIView animateWithDuration:0.2 animations:^{
+        if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
+            [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
+        }
+        if (bottomView.frame.origin.y > 149) {
+            [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
+        }
+    }];
 
+//    if (_iPhone4) {
+//    }
+//    if (_iPhone5) {
+//        [UIView animateWithDuration:0.2 animations:^{
+//            _scrollView.contentOffset = contentOffset;
+//        }];
+//    }
+//    [_scrollView removeGestureRecognizer:tap];
+//
 }
 
 
@@ -381,7 +400,10 @@
                     addField.text = @"";
                 }
             }else{
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签,想订阅更多标签,请单独购买",_maxNum] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"单独购买", nil];
+        
+//                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签,想订阅更多标签,请单独购买",_maxNum] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"单独购买", nil];
+//                [alertView show];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签",_maxNum] delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
                 [alertView show];
             }
         }
@@ -460,11 +482,21 @@
             bottomView.frame = bottomFrame;
         }
     }
-    if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
-        [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
-    }
-    if (bottomView.frame.origin.y > 149) {
-        [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
+    if (isKeyboardShow) {
+        CGFloat distanse = _scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
+        if (distanse < 250) {
+            [UIView animateWithDuration:0.2 animations:^{
+                [_scrollView setContentSize:CGSizeMake(kWidth,_scrollView.contentSize.height+50)];
+                //            _scrollView.contentOffset = contentOffset;
+            }];
+        }
+    }else{
+        if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
+            [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
+        }
+        if (bottomView.frame.origin.y > 149) {
+            [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
+        }
     }
 }
 

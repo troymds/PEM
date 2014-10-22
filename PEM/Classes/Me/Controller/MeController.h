@@ -50,6 +50,8 @@
     BOOL isShowTD;
     
     UITextField *activeField;         //当前编辑的输入框
+    
+    BOOL needCheck;             //判断当scrollview滚动时是否需要 检查能否发布供应信息
 
 }
 

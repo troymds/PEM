@@ -35,11 +35,14 @@
             [btn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
             btn.tag =4000+i;
             if (i == 0){
-                btn.backgroundColor = HexRGB(0xfe7400);
+                [btn setBackgroundImage:[UIImage imageNamed:@"finish1.png"] forState:UIControlStateNormal];
+                [btn setBackgroundImage:[UIImage imageNamed:@"finish1_pre.png"] forState:UIControlStateHighlighted];
             }else if (i ==1){
-                btn.backgroundColor = HexRGB(0x069dd4);
+                [btn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+                [btn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
             }else{
-                btn.backgroundColor = HexRGB(0x808080);
+                [btn setBackgroundImage:[UIImage imageNamed:@"cancel.png"] forState:UIControlStateNormal];
+                [btn setBackgroundImage:[UIImage imageNamed:@"cancel_pre.png"] forState:UIControlStateHighlighted];
             }
             [_bgView addSubview:btn];
         }

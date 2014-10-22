@@ -75,6 +75,7 @@
     
     _userNameField = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, kWidth-25*2-30, 43)];
     _userNameField.placeholder = @"请输入您的手机号";
+    _userNameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _userNameField.keyboardType = UIKeyboardTypeNumberPad;
     _userNameField.delegate = self;
     [bgView addSubview:_userNameField];
@@ -87,6 +88,7 @@
     _secretField = [[UITextField alloc] initWithFrame:CGRectMake(40, 43, kWidth-25*2-40, 43)];
     _secretField.placeholder = @"请输入密码";
     _secretField.secureTextEntry = YES;
+    _secretField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _secretField.delegate = self;
     [bgView addSubview:_secretField];
     

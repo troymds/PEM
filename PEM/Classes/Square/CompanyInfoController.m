@@ -68,7 +68,7 @@
 
 - (void)addView{
     _iconImage = [[UIImageView alloc] initWithFrame:CGRectMake(25,35, 77, 77)];
-    _iconImage.image = [UIImage imageNamed:@"company_default@2x.png"];
+    _iconImage.image = [UIImage imageNamed:@"company_default.png"];
     [self.view addSubview:_iconImage];
     
     _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(110, 35, 200, 20)];
@@ -138,7 +138,7 @@
     _emailView.infoLabel.text = item.email;
     _phoneView.infoLabel.text = item.company_tel;
     if ([SystemConfig sharedInstance].companyInfo.image.length!=0) {
-        [_iconImage setImageWithURL:[NSURL URLWithString:[SystemConfig sharedInstance].companyInfo.image]];
+        [_iconImage setImageWithURL:[NSURL URLWithString:[SystemConfig sharedInstance].companyInfo.image] placeholderImage:[UIImage imageNamed:@"company_default.png"]];
     }
     if ([SystemConfig sharedInstance].vipInfo) {
         _vipTypeLabel.text = [NSString stringWithFormat:@"等级:%@",[SystemConfig sharedInstance].vipInfo.vip_name];

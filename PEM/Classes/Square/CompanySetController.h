@@ -40,6 +40,8 @@
     BOOL isExistImg;           //判断企业设置中头像是否存在 使用默认头像则表示不存在
     
     UITextField *activeField;    //当前处于编辑状态的输入框
+    
+    int height;          //键盘高度
 }
 
 @property (nonatomic,strong) ProImageView *iconImage;

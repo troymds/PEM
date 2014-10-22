@@ -16,6 +16,7 @@
 #import "HttpTool.h"
 #import "CategoryItem.h"
 #import "TKRoundedView.h"
+#import "RemindView.h"
 
 @interface CategoryController ()
 
@@ -54,7 +55,10 @@
 }
 
 - (void)getData{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
     [HttpTool postWithPath:@"getCategoryList" params:nil success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSArray *array = [NSArray arrayWithArray:[dic objectForKey:@"response"]];
         for (NSDictionary *subDic in array) {
@@ -63,7 +67,8 @@
         }
         [_tableView reloadData];
         } failure:^(NSError *error) {
-        NSLog(@"%@",error);
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
 

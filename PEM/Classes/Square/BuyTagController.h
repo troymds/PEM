@@ -30,5 +30,6 @@
 
     CGPoint contentOffset;
 
+    BOOL isKeyboardShow;
 }
 @end

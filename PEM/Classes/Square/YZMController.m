@@ -112,6 +112,7 @@
     
     yzmField = [[UITextField alloc] initWithFrame:CGRectMake(40,0,kWidth-25*2-40-61-8, 43)];
     yzmField.delegate = self;
+    yzmField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     yzmField.placeholder = @"请输入正确结果";
     [bgView addSubview:yzmField];
     
@@ -133,6 +134,7 @@
     
     secretField = [[UITextField alloc] initWithFrame:CGRectMake(40, 43, kWidth-25*2-40-61-8, 43)];
     secretField.delegate = self;
+    secretField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     secretField.placeholder = @"请输入密码";
     secretField.secureTextEntry = YES;
     [bgView addSubview:secretField];

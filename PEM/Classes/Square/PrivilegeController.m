@@ -35,9 +35,12 @@
         _headView.nameLabel.text = @"未注册用户";
         _headView.typeLabel.text = @"游客";
     }else{
-        [_headView.iconImg setImageWithURL:[NSURL URLWithString:[SystemConfig sharedInstance].companyInfo.image]];
-        _headView.nameLabel.text = [SystemConfig sharedInstance].companyInfo.company_name;
-        NSLog(@"-----%@",[SystemConfig sharedInstance].vipInfo.vip_name);
+        [_headView.iconImg setImageWithURL:[NSURL URLWithString:[SystemConfig sharedInstance].companyInfo.image] placeholderImage:[UIImage imageNamed:@"company_default.png"]];
+        if ([SystemConfig sharedInstance].companyInfo.company_name.length==0) {
+            _headView.nameLabel.text = @"未设置公司名";
+        }else{
+            _headView.nameLabel.text = [SystemConfig sharedInstance].companyInfo.company_name;
+        }
         if ([SystemConfig sharedInstance].vipInfo) {
             _headView.typeLabel.text = [SystemConfig sharedInstance].vipInfo.vip_name;
         }
@@ -94,7 +97,6 @@
         rc.pushType = UPDATE_TYPE;
         [self.navigationController pushViewController:rc animated:YES];
     }else{
-        NSLog(@"%@",updateType);
         NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",updateType,@"apply_type", nil];
         [HttpTool postWithPath:@"applyVip" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];

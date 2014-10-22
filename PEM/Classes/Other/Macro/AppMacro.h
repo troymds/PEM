@@ -92,6 +92,6 @@
 
 
 #define kBaseURL @"http://218.244.149.129"
-#define kURL @"http://192.168.1.161"
+#define kURL @"http://192.168.1.155"
 #define UMAPPKEY @"54229e41fd98c5994a00d6a7"
 

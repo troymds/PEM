@@ -58,6 +58,7 @@
     remindView.backgroundColor = HexRGB(0xffffff);
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,180, 20)];
     label.textAlignment = NSTextAlignmentCenter;
+    label.backgroundColor = [UIColor clearColor];
     label.text = @"没有求购信息!";
     label.center = remindView.center;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -234,11 +235,11 @@
             }
 
         }else{
-            NSLog(@"删除失败");
+            [RemindView showViewWithTitle:@"删除失败" location:MIDDLE];
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSLog(@"%@",error);
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
 
@@ -261,11 +262,11 @@
             }
 
         }else{
-            NSLog(@"删除失败");
+            [RemindView showViewWithTitle:@"删除失败" location:MIDDLE];
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSLog(@"%@",error);
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
 

@@ -36,7 +36,7 @@
         
         _userField = [[UITextField alloc] initWithFrame:CGRectMake(60,27.5, 150, 23)];
         _userField.tag = USERNAME_TYPE;
-
+        _userField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _userField.delegate = self;
         _userField.placeholder = @"请输入您的手机号";
         _userField.keyboardType = UIKeyboardTypeNumberPad;
@@ -52,6 +52,7 @@
 
         _passwordField = [[UITextField alloc] initWithFrame:CGRectMake(60,77.5, 150, 23)];
         _passwordField.placeholder = @"请输入您的密码";
+        _passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _passwordField.tag = SECRET_TYPE;
         _passwordField.delegate =self;
         _passwordField.secureTextEntry = YES;

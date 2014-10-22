@@ -9,6 +9,7 @@
 #import "CityController.h"
 #import "HttpTool.h"
 #import "AreaItem.h"
+#import "RemindView.h"
 
 @interface CityController ()
 
@@ -51,7 +52,7 @@
             [_tableView reloadData];
         }
     } failure:^(NSError *error) {
-        NSLog(@"%@",error);
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 
 }

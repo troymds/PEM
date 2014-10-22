@@ -20,7 +20,8 @@
     CategoryItem *demandCateItem;        //发布求购分类
     NSString *demandDes;                   //发布求购描述
     NSMutableArray *tagsArray;           //标签数组
-    
+ 
+    UITextField *activeField;
 }
 
 @property (nonatomic,copy) NSString *info_id;

@@ -64,36 +64,51 @@
     [btn addTarget:self action:@selector(finish) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
     self.navigationItem.rightBarButtonItem = item;
-
 }
 
 
 - (void)addView{
-    UILabel *hotLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, kWidth-20*2, 20)];
+    UIImageView *hotTagImg = [[UIImageView alloc] initWithFrame:CGRectMake(19, 20, 20, 16)];
+    hotTagImg.image = [UIImage imageNamed:@"hotTags.png"];
+    [self.view addSubview:hotTagImg];
+
+    
+    UILabel *hotLabel = [[UILabel alloc] initWithFrame:CGRectMake(45, 20, kWidth-45-20, 16)];
     hotLabel.text = @"热门标签";
-    hotLabel.textColor = HexRGB(0x069dd4);
+    hotLabel.textColor = HexRGB(0x3a3a3a);
     hotLabel.font = [UIFont systemFontOfSize:PxFont(24)];
     [self.view addSubview:hotLabel];
     
-    addTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 100, kWidth-20*2, 20)];
+    bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 130, kWidth,70)];
+    bottomView.backgroundColor = HexRGB(0xffffff);
+    [self.view addSubview:bottomView];
+    
+    UIImageView *addTagImg = [[UIImageView alloc] initWithFrame:CGRectMake(19, 0, 20, 16)];
+    addTagImg.image = [UIImage imageNamed:@"addtags.png"];
+    [bottomView addSubview:addTagImg];
+
+    
+    addTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(45, 0, kWidth-45-20, 16)];
     addTagLabel.text = @"新增标签";
-    addTagLabel.textColor = HexRGB(0x069dd4);
+    addTagLabel.textColor = HexRGB(0x3a3a3a);
     addTagLabel.font = [UIFont systemFontOfSize:PxFont(24)];
-    [self.view addSubview:addTagLabel];
+    [bottomView addSubview:addTagLabel];
     
     addField = [[UITextField alloc] initWithFrame:CGRectMake(20,addTagLabel.frame.origin.y+addTagLabel.frame.size.height+5, 200, 35)];
     addField.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
+    addField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     addField.layer.borderWidth = 1.0;
     addField.delegate = self;
-    [self.view addSubview:addField];
+    [bottomView addSubview:addField];
     
-    addBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     addBtn.frame = CGRectMake(addField.frame.origin.x+addField.frame.size.width+20, addField.frame.origin.y, 60, 35);
     [addBtn setTitle:@"添加" forState:UIControlStateNormal];
+    [addBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+    [addBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     [addBtn setTitleColor:HexRGB(0xffffff) forState:UIControlStateNormal];
-    [addBtn setBackgroundColor:HexRGB(0x069dd4)];
     [addBtn addTarget:self action:@selector(addTags:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:addBtn];
+    [bottomView addSubview:addBtn];
 }
 
 - (void)finish{
@@ -101,10 +116,9 @@
     for (UIView *subView in self.view.subviews){
         if ([subView isKindOfClass:[TagButton class]]){
             TagButton *btn = (TagButton *)subView;
-            [tagArray addObject:btn];
-//            if (btn.isSelected){
-//                [tagArray addObject:btn.titleLabel.text];
-//            }
+            if (btn.isSelected){
+                [tagArray addObject:btn.titleLabel.text];
+            }
         }
     }
     if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
@@ -143,40 +157,48 @@
 - (void)addButtonWithTitle:(NSString *)title selected:(BOOL)seleclted
 {
     NSInteger distance = 5;
-    CGSize size = [AdaptationSize getSizeFromString:title Font:[UIFont systemFontOfSize:10] withHight:20 withWidth:CGFLOAT_MAX];
+    CGSize size = [AdaptationSize getSizeFromString:title Font:[UIFont systemFontOfSize:15] withHight:20 withWidth:CGFLOAT_MAX];
     if (x+space+size.width+distance*2 > kWidth-20) {
         currentRow++;
         x = 20;
     }
-    TagButton *btn = [[TagButton alloc] initWithFrame:CGRectMake(x, 50+currentRow*(20+10), size.width+distance*2, 20)];
+    TagButton *btn = [[TagButton alloc] initWithFrame:CGRectMake(x, 50+currentRow*(30+10), size.width+distance*2, 30)];
     btn.isSelected = seleclted;
-    btn.titleLabel.font = [UIFont systemFontOfSize:10];
+    btn.titleLabel.font = [UIFont systemFontOfSize:15];
     x += space +size.width+distance*2;
     [btn setTitle:title forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(tagBtnDown:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
     [self moveBottomView];
-    
 }
 
 
 //下载标签数据
 - (void)loadData{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.dimBackground = NO;
     [HttpTool postWithPath:@"getHotTags" params:nil success:^(id JSON){
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSArray *arr = [[result objectForKey:@"response"] objectForKey:@"data"];
-        for (NSDictionary *dic in arr){
-            HotTagItem *item = [[HotTagItem alloc] initWithDictionary:dic];
-            //添加热门标签
-            [_dataArray addObject:item];
+        if ([result objectForKey:@"response"]) {
+            NSDictionary *dic = [result objectForKey:@"response"];
+            if ([[dic objectForKey:@"code"] intValue] == 100) {
+                if (!isNull(dic, @"data")) {
+                    NSArray *arr = [[result objectForKey:@"response"] objectForKey:@"data"];
+                    for (NSDictionary *dic in arr){
+                        HotTagItem *item = [[HotTagItem alloc] initWithDictionary:dic];
+                        //添加热门标签
+                        [_dataArray addObject:item];
+                    }
+                    [self addTags];
+                }
+            }
         }
-        [self addTags];
     } failure:^(NSError *error){
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     //    NSLog(@"error");
     }];
 }
-
-
 
 - (void)addTags
 {
@@ -184,7 +206,7 @@
         BOOL basic = NO;
         HotTagItem *item = [_dataArray objectAtIndex:i];
         //如果是第二次进入该页面 则判断上次保存的标签中是否存在选中的热门标签
-        NSInteger count = 0;   // 获取上次手动添加的标签数量
+        NSInteger count = 0;   // 获取上次手动添加的标签数量dfdsf
         
         for (int i = 0; i < [_tagArray count]; i++){
             if ([item.name isEqualToString:[_tagArray objectAtIndex:i]]){
@@ -219,15 +241,20 @@
 
 
 - (void)moveBottomView{
-    CGRect labelFrame = addTagLabel.frame;
-    CGRect fieldFrame = addField.frame;
-    CGRect btnFrame = addBtn.frame;
-    labelFrame.origin.y = 40 + (currentRow+1)*(20+10)+10;   //40为热门标签的底坐标，20为button的高度，10为上下button的间距
-    fieldFrame.origin.y = labelFrame.origin.y+addTagLabel.frame.size.height+5;
-    btnFrame.origin.y = fieldFrame.origin.y;
-    addTagLabel.frame = labelFrame;
-    addField.frame = fieldFrame;
-    addBtn.frame = btnFrame;
+    CGRect bottomFrame = bottomView.frame;
+    bottomFrame.origin.y = 40+(currentRow+1)*(30+10)+10;
+    bottomView.frame = bottomFrame;
+    
+    if (isEditing) {
+        if (_iPhone4) {
+            if (bottomView.frame.origin.y - 120 > 0) {
+                [UIView animateWithDuration:0.2 animations:^{
+                    self.view.frame = CGRectMake(0,-(bottomView.frame.origin.y-120), self.view.frame.size.width, self.view.frame.size.height);
+                }];
+            }
+        }
+    }
+    
 }
 
 - (void)tagBtnDown:(TagButton *)btn{
@@ -240,6 +267,46 @@
     [textField resignFirstResponder];
     return YES;
 }
+
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    isEditing = YES;
+    if (_iPhone4) {
+        if (bottomView.frame.origin.y - 120 > 0) {
+            [UIView animateWithDuration:0.2 animations:^{
+                self.view.frame = CGRectMake(0,-(bottomView.frame.origin.y-120), self.view.frame.size.width, self.view.frame.size.height);
+            }];
+        }
+    }
+    if (_iPhone5) {
+        if (bottomView.frame.origin.y - 180 > 0) {
+            [UIView animateWithDuration:0.2 animations:^{
+                self.view.frame = CGRectMake(0,-(bottomView.frame.origin.y-180), self.view.frame.size.width, self.view.frame.size.height);
+            }];
+        }
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    isEditing = NO;
+    if (_iPhone4) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+        }];
+    }
+    if (_iPhone5) {
+        if (bottomView.frame.origin.y - 180 > 0) {
+            [UIView animateWithDuration:0.2 animations:^{
+                self.view.frame = CGRectMake(0,-(bottomView.frame.origin.y-180), self.view.frame.size.width, self.view.frame.size.height);
+            }];
+        }
+    }
+
+}
+
+
 
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
