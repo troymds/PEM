@@ -1,6 +1,7 @@
 
 #import "HttpTool.h"
-
+#import "AFHTTPClient.h"
+#import <objc/message.h>
 
 @implementation HttpTool
 + (void)requestWithPath:(NSString *)path params:(NSDictionary *)params success:(HttpSuccessBlock)success failure:(HttpFailureBlock)failure method:(NSString *)method
@@ -27,13 +28,14 @@
      [client postPath:pathStr parameters:allParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
         success(responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-
+       
+       
+      
+        
+      
         failure(error);
         
-//        self.error =error;
-//        if ([self.delegate respondsToSelector:@selector(downloadFailed:)]) {
-//            [self.delegate downloadFailed:self];
-//        }
+       
     }];
 }
 
