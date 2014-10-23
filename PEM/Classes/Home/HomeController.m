@@ -64,6 +64,7 @@
     [self.view addSubview:_searchImage];
     self.navigationItem.titleView =_searchImage;
     [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateNormal];
+
     [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
     
         
@@ -195,7 +196,7 @@
     // 初始化 pagecontrol
     self.pageControl = [[UIPageControl alloc]init];
     //    CGSize size = self.view.frame.size;
-    pageControl.frame = CGRectMake(self.view.frame.size.width*0.3, 108, 1, 1);
+    pageControl.frame = CGRectMake(kWidth*0.5, 108, 1, 1);
     
     pageControl.currentPageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_page_on.png"]];
     pageControl.pageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_page_off.png"]];
@@ -361,7 +362,7 @@
     TodayNumModel *todayNum =[tody objectAtIndex:0];
     
     int init_x = 100;
-    int init_y = 118;
+    int init_y = 116;
     int viewWidth_f = 210;
     
     NSMutableArray* setArray_f = [[NSMutableArray alloc] initWithCapacity:5];
@@ -448,7 +449,6 @@
     
 }
 -(void)moreBtnClick:(UIButton *)more{
-    NSLog(@"%ld",(long)more.tag);
     for (UIView *view in [_backScrollView subviews])
     {
         if (view.tag == 88)
@@ -631,7 +631,7 @@
 -(void)categoryBtnClick:(UIButton *)cate
 {
 
-    currentTag = cate.tag+10000;
+    currentTag =(int) cate.tag+10000;
     
     curStr = cate.titleLabel.text;
     

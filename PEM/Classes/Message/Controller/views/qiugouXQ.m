@@ -14,6 +14,7 @@
 #import "SystemConfig.h"
 #import "DemandController.h"
 #import "PrivilegeController.h"
+#import "LoginController.h"
 @interface qiugouXQ ()<UIWebViewDelegate>
 {
     UIScrollView *_backScrollView;
@@ -35,8 +36,20 @@
     [super viewDidLoad];
     self.view.backgroundColor =HexRGB(0xffffff);
     demandArray =[[NSMutableArray alloc]init];
-    self.title = @"求购详情";
+  
     [self loadStatusView];
+    
+    UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-90, 44)];
+    self.navigationItem.titleView =navBgView;
+    navBgView.backgroundColor =[UIColor clearColor];
+    UILabel *titleLabele =[[UILabel alloc]init];
+    [navBgView addSubview:titleLabele];
+    titleLabele.frame = CGRectMake((kWidth-90-80)*0.5, 0, 80, 44);
+    titleLabele.backgroundColor =[UIColor clearColor];
+    
+    titleLabele.text =@"求购详情";
+    titleLabele.font = [UIFont systemFontOfSize:PxFont(26)];
+
 
 }
 -(void)loadStatusView{
@@ -287,8 +300,13 @@
 {
     
     XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
-    
-    if ([comID.vip_type isEqualToString:@"0"]) {
+    if (![SystemConfig sharedInstance].isUserLogin) {
+        
+        LoginController *lvc =[[LoginController alloc] init];
+        [self.navigationController pushViewController:lvc animated:YES];
+
+        
+    }else if ([comID.vip_type isEqualToString:@"0"]) {
     
     
     UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员:" message:@"只有普通会员及以上会员可以拨打求购电话，您需要升级才能使用本功能!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
@@ -317,8 +335,14 @@
 
 -(void)gotoCompanyBtnClick:(UIButton *)goCompany{
     XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
+    if (![SystemConfig sharedInstance].isUserLogin) {
+        
+        
+        LoginController *lvc =[[LoginController alloc] init];
+        [self.navigationController pushViewController:lvc animated:YES];
 
-    if ([comID.vip_type isEqualToString:@"0"]) {
+        
+    }else if ([comID.vip_type isEqualToString:@"0"]) {
         
         UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员" message:@"抱歉，体验会员不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
         
@@ -330,6 +354,7 @@
     xqVC.companyID =comID.company_id;
     [self.navigationController pushViewController:xqVC animated:YES];
     }
+    
 }
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex ==0) {

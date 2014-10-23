@@ -23,17 +23,9 @@
 
 @implementation proAppDelegate
 
--(BOOL)prefersStatusBarHidden{
-    return NO;
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    application.statusBarHidden = YES;
-
-    application.statusBarStyle=UIStatusBarStyleLightContent;
-    
     
     
     
@@ -41,7 +33,6 @@
     
     if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
         // iOS 7
-        [self prefersStatusBarHidden];
         [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
     }
     NSString *key = (NSString *)kCFBundleVersionKey;

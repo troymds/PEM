@@ -58,7 +58,18 @@
             self.edgesForExtendedLayout = UIRectEdgeNone;
         }
     }
-    self.title = [NSString stringWithFormat:@"%@分类",_titleLabel];
+    
+    UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-90, 44)];
+    self.navigationItem.titleView =navBgView;
+    navBgView.backgroundColor =[UIColor clearColor];
+    UILabel *titleLabele =[[UILabel alloc]init];
+    [navBgView addSubview:titleLabele];
+    titleLabele.frame = CGRectMake((kWidth-90-80)*0.5, 0, 80, 44);
+    titleLabele.backgroundColor =[UIColor clearColor];
+    
+    titleLabele.text =[NSString stringWithFormat:@"%@分类",_titleLabel];
+    titleLabele.font = [UIFont systemFontOfSize:PxFont(26)];
+
     self.view.backgroundColor =[UIColor whiteColor];
     _selectedFind =[[UIButton alloc]init];
     _supplyBtnPice =[[UIButton alloc]init];
@@ -303,12 +314,12 @@
 
      [_leftBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
    
-    _leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 0);
-    _leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-150);
+    _leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -45, 0, 0);
+    _leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-100);
 
   }
 -(void)leftSegment{
-    leftBackView =[[UIView alloc]initWithFrame:CGRectMake(kWidth/7, 30, 95, 50)];
+    leftBackView =[[UIView alloc]initWithFrame:CGRectMake(kWidth/8, 30, 95, 50)];
     [self.view addSubview:leftBackView];
     [self.view bringSubviewToFront:leftBackView];
     UIImageView *kuangImage =[[UIImageView alloc]init];
@@ -317,7 +328,7 @@
     [leftBackView addSubview:kuangImage];
     kuangImage.userInteractionEnabled = YES;
     UIView *lin =[[UIView alloc]init];
-    lin.frame=CGRectMake(15, 61, 97, 1);
+    lin.frame=CGRectMake(16, 61, 96, 1);
     lin.backgroundColor =HexRGB(0xefeded);
     [kuangImage addSubview:lin];
 
@@ -350,8 +361,8 @@
     [_rigthBtn addTarget:self action:@selector(rightXuanka:) forControlEvents:UIControlEventTouchUpInside];
     [_rigthBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
     [_rigthBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateSelected];
-    _rigthBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -80, 0, 0);
-    _rigthBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-30);
+    _rigthBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -50, 0, 0);
+    _rigthBtn.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-75);
     
 }
 
@@ -367,12 +378,12 @@
     [_rightBtnDemand addTarget:self action:@selector(rightXuankaDemand:) forControlEvents:UIControlEventTouchUpInside];
     [_rightBtnDemand setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
     [_rightBtnDemand setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateSelected];
-    _rightBtnDemand.titleEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0);
-    _rightBtnDemand.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-80);
+    _rightBtnDemand.titleEdgeInsets = UIEdgeInsetsMake(0, -50, 0, 0);
+    _rightBtnDemand.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-75);
     
 }
 -(void)rightSegment{
-    rightBackViw =[[UIView alloc]initWithFrame:CGRectMake(kWidth/2+15, 30, 95, 50)];
+    rightBackViw =[[UIView alloc]initWithFrame:CGRectMake(kWidth/2+25, 30, 95, 50)];
     [self.view addSubview:rightBackViw];
     
     [self.view bringSubviewToFront:rightBackViw];
@@ -412,7 +423,7 @@
 
 
 -(void)rightSegmentDemand{
-    rightBackViewDemand =[[UIView alloc]initWithFrame:CGRectMake(kWidth/2+15, 30, 95, 50)];
+    rightBackViewDemand =[[UIView alloc]initWithFrame:CGRectMake(kWidth/2+25, 30, 95, 50)];
     [self.view addSubview:rightBackViewDemand];
     
     [self.view bringSubviewToFront:rightBackViewDemand];
@@ -423,7 +434,7 @@
     rightImage.userInteractionEnabled = YES;
     
     UIView *lin =[[UIView alloc]init];
-    lin.frame=CGRectMake(15, 61, 97, 1);
+    lin.frame=CGRectMake(16, 61, 96, 1);
     lin.backgroundColor =HexRGB(0xefeded);
     [rightImage addSubview:lin];
     

@@ -23,7 +23,6 @@
     NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =[d[@"response"]objectForKey:@"data"];
-        NSLog(@"%@",array);
          if (![array isKindOfClass:[NSNull class]]){
         XQgetInfoDetailModel *s =[[XQgetInfoDetailModel alloc] initWithDictionaryForGategory:array];
             [statuses addObject:s];

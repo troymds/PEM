@@ -48,11 +48,22 @@
     // xingQingId 发送请求的参数
     XQArray =[[NSMutableArray alloc]init];
     _wishlistidArray =[[NSMutableArray alloc]initWithCapacity:0];
-    self.title=@"产品详情";
     [self loadStatusView];
     self.view.backgroundColor =[UIColor whiteColor];
     
     
+    UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-90, 44)];
+    self.navigationItem.titleView =navBgView;
+    navBgView.backgroundColor =[UIColor clearColor];
+    UILabel *titleLabele =[[UILabel alloc]init];
+    [navBgView addSubview:titleLabele];
+    titleLabele.frame = CGRectMake((kWidth-90-80)*0.5, 0, 80, 44);
+    titleLabele.backgroundColor =[UIColor clearColor];
+
+    titleLabele.text =@"产品详情";
+    titleLabele.font = [UIFont systemFontOfSize:PxFont(26)];
+    
+
 }
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -264,6 +275,7 @@
         NSArray *labelArray =@[[NSString stringWithFormat:@"%@起供应",xqModel.min_sell_num],[NSString stringWithFormat:@"浏览%@次",xqModel.read_num],[NSString stringWithFormat:@"%@",xqModel.region]];
         UILabel *linLabel =[[UILabel alloc]init];
         linLabel.text =labelArray[l];
+        linLabel.backgroundColor =[UIColor clearColor];
         
         
         linLabel.frame =CGRectMake(20+l%3*((kWidth-20)/3),225+nameWeight, (kWidth-40)/3, 20);
@@ -429,7 +441,6 @@
         if (![SystemConfig sharedInstance].isUserLogin){
             LoginController *registerVC =[[LoginController alloc]init];
             [self.navigationController pushViewController:registerVC animated:YES];
-//            [RemindView showViewWithTitle:@"收藏失败，请登录后收藏！" location:BELLOW];
             collect.selected = NO;
         }else{
             
@@ -440,7 +451,6 @@
                     collect.selected = !collect.selected;
                     [RemindView showViewWithTitle:@"收藏成功!" location:BELLOW];
                     
-                    //如果是从我的收藏页面进来的  收藏成功刷新我的收藏页面
                     if ([self.delegate respondsToSelector:@selector(reloadData)]) {
                         [self.delegate reloadData];
                     }
@@ -461,9 +471,8 @@
 {
     if (![SystemConfig sharedInstance].isUserLogin) {
         
-        
-        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"温馨提示:" message:@"请登录后再一键拨号!" delegate:self cancelButtonTitle:@"确认" otherButtonTitles:@"取消", nil];
-        [alert show];
+        LoginController *lvc =[[LoginController alloc] init];
+        [self.navigationController pushViewController:lvc animated:YES];
         
     }else{
     XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
@@ -479,6 +488,11 @@
 
    }
 }
-
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex ==0) {
+        LoginController *lvc =[[LoginController alloc] init];
+        [self.navigationController pushViewController:lvc animated:YES];
+    }
+}
 
 @end

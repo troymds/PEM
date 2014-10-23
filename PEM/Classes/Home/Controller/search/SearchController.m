@@ -562,20 +562,23 @@
     NSArray *sea =@[@"供应",@"求购",@"企业"];
     for (int segBtn=0; segBtn<3; segBtn++)
     {
-        UIView *l =[[UIView alloc]init];
-        [kuangImage addSubview:l];
-        l.frame =CGRectMake(16, 78+segBtn%3*(17+8), 94, 1);
-        l.backgroundColor =HexRGB(0xe6e3e4);
+       
         UIButton * sear =[UIButton buttonWithType:UIButtonTypeCustom];
         [kuangImage addSubview:sear];
         [sear setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        sear.frame =CGRectMake(15, 53+segBtn%3*(17+8), 96, 28);
+        sear.frame =CGRectMake(16, 55+segBtn%3*(17+8), 95, 25);
         sear.titleLabel.font =[UIFont systemFontOfSize:14];
         [sear setTitle:sea[segBtn] forState:UIControlStateNormal];
         [sear setBackgroundImage:[UIImage imageNamed:@"blackBg.png"] forState:UIControlStateHighlighted];
         sear.tag = 200+segBtn;
         
         [sear addTarget:self action:@selector(sortSelectedBtn:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    for (int i=0; i<2; i++) {
+        UIView *l =[[UIView alloc]init];
+        [kuangImage addSubview:l];
+        l.frame =CGRectMake(16, 80+i%3*(17+8), 95, 1);
+        l.backgroundColor =HexRGB(0xe6e3e4);
     }
     
 }
@@ -627,10 +630,7 @@
             }
         }
         
-        
-        
-        
-        [self searchToGo];
+             [self searchToGo];
 
     }
     

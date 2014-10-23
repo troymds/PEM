@@ -19,8 +19,7 @@
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
         if ([array isKindOfClass:[NSNull class]]){
-            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
-        }
+                   }
         else{
             for (NSDictionary *dict in array) {
 

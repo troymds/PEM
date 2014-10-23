@@ -28,6 +28,8 @@
 #import "xiangqingViewController.h"
 #import "MJRefresh.h"
 #import "RemindView.h"
+#define KHEIGHT_COMPANY  12
+
 @interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UIButton *_selectedBtn;
@@ -68,7 +70,6 @@
     
     [self addRefreshViews];
     
-    [self addShowNoDataView];
     
     [self loadViewStatusesHome];
     
@@ -84,7 +85,8 @@
     _orangLin.backgroundColor =HexRGB(0x069dd4);
     
     //_selectedBtn = [[UIButton alloc]init];
-    
+    [self addShowNoDataView];
+
     [self addCompanyConditionView];
     [self addSupplyDemandView];
     [self addChooseBtn];
@@ -131,6 +133,16 @@
             [_companyHomeArray addObject:statues];
             comHomeModel *statuModel =[statues objectAtIndex:0];
             
+            if (statues.count > 0) {
+                
+                companyBackView.hidden = NO;
+                dataLabel.hidden = YES;
+            }else if(statues.count==0){
+                dataLabel.hidden = NO;
+                companyBackView.hidden = YES;
+                
+            }
+
             if ([statuModel.infoarray isKindOfClass:[NSNull class]]){
                 
             }else
@@ -164,29 +176,29 @@
         if (_selectedBtn.tag == 20)
         {
             [self supplyRequest];
-        }if (_companySupplyArray.count ==0) {
-            [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
             
+
         }
         else if(_selectedBtn.tag == 21)
         {
             [self companyRequest];
+            if (_companyDemandArray.count ==0) {
+                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                
+            }
         }
-        if (_companyDemandArray.count ==0) {
-            [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-            
-        }else if(_selectedBtn.tag == 22)
+        
+        else if(_selectedBtn.tag == 22)
         {
             [self demandRequest];
+            if (_companyNEWArray.count ==0) {
+                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                
+            }
+
         }
     }
-    if (_companyNEWArray.count ==0) {
-        [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-        
-    }else{
-        [refreshLoading endRefreshing];
-        return;
-    }
+    
     
     _refreshView = refreshLoading;
 }
@@ -303,7 +315,7 @@
     _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
     _BigCompanyScrollView.pagingEnabled = YES;
     _BigCompanyScrollView.userInteractionEnabled = YES;
-    _BigCompanyScrollView.bounces = NO;
+//    _BigCompanyScrollView.bounces = NO;
     
     _BigCompanyScrollView.delegate = self;
     [self.view addSubview:_BigCompanyScrollView];
@@ -332,7 +344,7 @@
     _conditionTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, conditionView.frame.size.height-44) style:UITableViewStylePlain];
     _conditionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [conditionView addSubview:_conditionTableView];
-    _conditionTableView.backgroundColor =[UIColor yellowColor];
+    _conditionTableView.backgroundColor =[UIColor whiteColor];
     _conditionTableView.delegate =self;
     _conditionTableView.dataSource = self;
     _conditionTableView.tag = 130;
@@ -348,7 +360,7 @@
     [_BigCompanyScrollView addSubview:suplyANDdemandView];
     
     
-    _supplyANDdemandTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, conditionView.frame.size.height-100) style:UITableViewStylePlain];
+    _supplyANDdemandTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, conditionView.frame.size.height-110) style:UITableViewStylePlain];
     _supplyANDdemandTableView.backgroundColor =[UIColor whiteColor];
     _supplyANDdemandTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [suplyANDdemandView addSubview:_supplyANDdemandTableView];
@@ -437,15 +449,7 @@
         
     }
 }
-//bgScrollView开始拖拽时执行
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    //    float x = scrollView.contentOffset.x/scrollView.frame.size.width;
-    //
-    //    NSLog(@"----%f",x);
-    
-}
 
 
 #pragma mark ------companyHomeUI
@@ -453,76 +457,78 @@
 {
     if (_companyHomeArray.count>0)
     {
-        CGFloat nameCompanyy ;
         
         comHomeModel *comHomeModel =[[_companyHomeArray objectAtIndex:0]objectAtIndex:0];
+        
+        UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-90, 44)];
+        self.navigationItem.titleView =navBgView;
+        navBgView.backgroundColor =[UIColor clearColor];
+        UIButton *navBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+        [navBgView addSubview:navBtn];
+        [navBtn setTitle:comHomeModel.name forState:UIControlStateNormal];
+        navBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
+        [navBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal ];
+        navBtn.frame = CGRectMake(0, 0, kWidth-90, 44);
+        
+        
         CGFloat keyContent =[comHomeModel.mainRun sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT) ].height;
         CGFloat content =[comHomeModel.introduction sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT)].height;
         CGFloat nameCompanyw =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, 50)].width;
-        nameCompanyy =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
+         CGFloat nameCompanyy =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
         
         CGFloat nameCompanww =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(MAXFLOAT, 50)].width;
         
         
-        CGFloat urlHeight =[comHomeModel.website sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
         
-        self.title=comHomeModel.name;
         
+        
+       //上下滑动背景图
         _companyHomeScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+        _companyHomeScrollView.bounces = NO;
         [companyHom addSubview:_companyHomeScrollView];
-        if (comArr.count>0) {
-            _companyHomeScrollView.contentSize = CGSizeMake(kWidth,nameCompanyy+content+keyContent+comArr.count*30+340);
-            
-        }else{
-            _companyHomeScrollView.contentSize = CGSizeMake(kWidth,nameCompanyy+content+keyContent+comArr.count*30+380);
-            
-        }
         _companyHomeScrollView.showsVerticalScrollIndicator=NO;
         _companyHomeScrollView.userInteractionEnabled = YES;
-        for (int li=0; li<3; li++) {
+        if (comArr.count>0) {
+            _companyHomeScrollView.contentSize = CGSizeMake(kWidth,74+KHEIGHT_COMPANY*12+66+keyContent+content+comArr.count*30+140);
+            
+        }else{
+            _companyHomeScrollView.contentSize = CGSizeMake(kWidth,74+KHEIGHT_COMPANY*12+66+keyContent+content+comArr.count*30+180);
+            
+        }
+//        线条
+        for (int li=0; li<4; li++) {
             UIImageView *linView =[[UIImageView alloc]init];
             [_companyHomeScrollView addSubview:linView];
             linView.image =[UIImage imageNamed:@"bg_homeCodition.png"];
             
-            if (nameCompanww== 180) {
-                _companyHomeScrollView.contentSize = CGSizeMake(kWidth,nameCompanyy+content+keyContent+comArr.count*30+370);
                 if (li==0) {
-                    linView.frame =CGRectMake(0,30+nameCompanyy+urlHeight+45, 320, 16);
+                    linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY, kWidth, 10);
                     
                 }
                 if (li==1) {
-                    linView.frame =CGRectMake(0,55+nameCompanyy+urlHeight+80+keyContent, 320, 16);
+                    linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY*5+40, kWidth, 10);
                 }if (li==2) {
-                    linView.frame =CGRectMake(0,55+nameCompanyy+urlHeight+135+keyContent+content, 320, 16);;
+                    linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY*9+50+keyContent, kWidth, 10);;
                 }
-                
-                
-            }else{
-                
-                if (li==0) {
-                    linView.frame =CGRectMake(0,30+nameCompanyy+urlHeight+20, 320, 16);
-                    
-                }
-                if (li==1) {
-                    linView.frame =CGRectMake(0,30+nameCompanyy+urlHeight+80+keyContent, 320, 16);
-                }if (li==2) {
-                    linView.frame =CGRectMake(0,30+nameCompanyy+urlHeight+135+keyContent+content, 320, 16);;
-                }
-                
+            if (li==3) {
+                linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY*12+66+keyContent+content, kWidth, 10);;
             }
+            
+            
         }
         
         
-        UIImageView*  _companyImage = [[UIImageView alloc] initWithFrame:CGRectMake(15, 6, 106, 67)];
+        UIImageView*  _companyImage = [[UIImageView alloc] initWithFrame:CGRectMake(15, 6, 105, 74)];
         [_companyImage setImageWithURL:[NSURL URLWithString:comHomeModel.image] placeholderImage:[UIImage imageNamed:@"loading.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
         [_companyHomeScrollView addSubview:_companyImage];
         //名字
-        UILabel* _nameCompany = [[UILabel alloc] initWithFrame:CGRectMake(130, 6, 180, nameCompanyy)];
+        UILabel* _nameCompany = [[UILabel alloc] initWithFrame:CGRectMake(125, KHEIGHT_COMPANY, 180, nameCompanyy)];
         _nameCompany.text = comHomeModel.name;
         _nameCompany.backgroundColor =[UIColor clearColor];
         _nameCompany.numberOfLines = 2;
         _nameCompany.font =[UIFont systemFontOfSize:PxFont(20)];
         [_companyHomeScrollView addSubview:_nameCompany];
+        
         
         //vip
         UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(nameCompanyw, nameCompanyy-20, 18, 25)];
@@ -552,44 +558,59 @@
             _companyImgVip.image =[UIImage imageNamed:@"Vip6.png"];
         }
         
-        
-        
         [_nameCompany addSubview:_companyImgVip];
+        
+//        企业详情E平台
+        UIButton *company_E =[UIButton buttonWithType:UIButtonTypeCustom];
+        [_companyHomeScrollView addSubview:company_E];
+        company_E.frame = CGRectMake(130, 55, 100, 30);
+        [company_E setImage:[UIImage imageNamed:@"company_E_btn.png"] forState:UIControlStateNormal];
+        
+        //    电话
+        UILabel*  _telphoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 74+KHEIGHT_COMPANY*2+10, kWidth-60, 15)];
+        _telphoneLabel.text =[NSString stringWithFormat:@"电话:%@",comHomeModel.tel];
+        _telphoneLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        _telphoneLabel.textColor=HexRGB(0x5e5e5e);
+        _telphoneLabel.backgroundColor =[UIColor clearColor];
+        
+        UIImageView *_telphoneImage =[[UIImageView alloc]initWithFrame:CGRectMake(22, 74+KHEIGHT_COMPANY*2+10, 12, 12 )];
+        [_companyHomeScrollView addSubview:_telphoneImage];
+        _telphoneImage.image =[UIImage imageNamed:@"phone_pany.png"];
+
+
+        //    网址
+        UILabel * _urlLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 74+KHEIGHT_COMPANY*3+20, kWidth-60, 15)];
+        _urlLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        _urlLabel.backgroundColor =[UIColor clearColor];
+        
+        _urlLabel.text =[NSString stringWithFormat:@"网址:%@",comHomeModel.website];
+        [_companyHomeScrollView addSubview:_urlLabel];
+        _urlLabel.textColor=HexRGB(0x5e5e5e);
+
+        UIImageView *_urlImage =[[UIImageView alloc]initWithFrame:CGRectMake(22, 74+KHEIGHT_COMPANY*3+22, 12, 12 )];
+        [_companyHomeScrollView addSubview:_urlImage];
+        _urlImage.image =[UIImage imageNamed:@"website_url.png"];
+
         
         
         //地址
-        UILabel*  _addessLabel = [[UILabel alloc] initWithFrame:CGRectMake(130, 7+nameCompanyy, 180, 20)];
+        UILabel*  _addessLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 74+KHEIGHT_COMPANY*4+30, kWidth-60, 15)];
         _addessLabel.text =[NSString stringWithFormat:@"地址:%@",comHomeModel.addr] ;
-        _addessLabel.textColor=HexRGB(0x666666);
-        _addessLabel.font =[UIFont systemFontOfSize:PxFont(15)];
+        _addessLabel.textColor=HexRGB(0x5e5e5e);
+        _addessLabel.backgroundColor =[UIColor clearColor];
+        _addessLabel.font =[UIFont systemFontOfSize:PxFont(18)];
         [_companyHomeScrollView addSubview:_addessLabel];
-        //    网址
-        UILabel * _urlLabel = [[UILabel alloc] initWithFrame:CGRectMake(130, 25+nameCompanyy, 180, urlHeight)];
-        _urlLabel.font =[UIFont systemFontOfSize:PxFont(15)];
-        _urlLabel.numberOfLines = 2;
-        _urlLabel.text =[NSString stringWithFormat:@"网址:%@",comHomeModel.website];
-        [_companyHomeScrollView addSubview:_urlLabel];
-        _urlLabel.textColor=HexRGB(0x666666);
+        
+        UIImageView *_addessImage =[[UIImageView alloc]initWithFrame:CGRectMake(22, 74+KHEIGHT_COMPANY*3+44, 12, 12 )];
+        [_companyHomeScrollView addSubview:_addessImage];
+        _addessImage.image =[UIImage imageNamed:@"place_company.png"];
+        
+
         
         
-        
-        //    电话
-        UILabel*  _telphoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(130, 23+nameCompanyy+urlHeight, 180, 20)];
-        _telphoneLabel.text =[NSString stringWithFormat:@"电话:%@",comHomeModel.tel];
-        _telphoneLabel.font =[UIFont systemFontOfSize:PxFont(15)];
-        _telphoneLabel.textColor=HexRGB(0x666666);
         
         [_companyHomeScrollView addSubview:_telphoneLabel];
-        if (nameCompanww== 180) {
-            
-            _addessLabel.frame =CGRectMake(130, 25+7+nameCompanyy, 180, 20);
-            
-            _urlLabel.frame =CGRectMake(130, 50+nameCompanyy, 180, urlHeight);
-            
-            _telphoneLabel.frame =CGRectMake(130, 47+nameCompanyy+urlHeight, 180, 20);
-            
-            
-        }
+        
         
         NSArray *array =@[@"【主营范围】",@"【公司简介】",@"【近期供求】",];
         for (int s =0; s<3; s++) {
@@ -600,32 +621,22 @@
             [_companyHomeScrollView addSubview:titleLabel];
             titleLabel.text =array[s];
             
-            titleLabel.frame =CGRectMake(10, nameCompanyy+urlHeight+60, 150, 40);
-            if (nameCompanww== 180) {
-                titleLabel.frame =CGRectMake(10, nameCompanyy+urlHeight+85, 150, 40);
+            titleLabel.frame =CGRectMake(10, 74+KHEIGHT_COMPANY*6+40, 150, 40);
+            
+                if (s==1) {
+                    titleLabel.frame =CGRectMake(10, 74+KHEIGHT_COMPANY*10+50+keyContent, 150, 40);
+                    
+                }
+                if (s==2) {
+                    titleLabel.frame =CGRectMake(10,74+KHEIGHT_COMPANY*13+66+keyContent+content, 150, 40 );
                 
-                if (s==1) {
-                    titleLabel.frame =CGRectMake(10, nameCompanyy+urlHeight+145+keyContent, 150, 40);
-                    
-                }
-                if (s==2) {
-                    titleLabel.frame =CGRectMake(10,nameCompanyy+urlHeight+200+keyContent+content, 150, 40 );
-                }
-            }else {
-                if (s==1) {
-                    titleLabel.frame =CGRectMake(10, nameCompanyy+urlHeight+120+keyContent, 150, 40);
-                    
-                }
-                if (s==2) {
-                    titleLabel.frame =CGRectMake(10,nameCompanyy+urlHeight+175+keyContent+content, 150, 40 );
-                }
             }
             //        主营范围
             UILabel * _keyLabel =[[UILabel alloc]init];
             _keyLabel.text =comHomeModel.mainRun;
             [_companyHomeScrollView addSubview:_keyLabel];
             _keyLabel.numberOfLines = 0;
-            _keyLabel.frame =CGRectMake(17, nameCompanyy+urlHeight+90, 280, keyContent+15);
+            _keyLabel.frame =CGRectMake(17, 74+KHEIGHT_COMPANY*8+46, 280, keyContent+15);
             _keyLabel.font =[UIFont systemFontOfSize:PxFont(18)];
             _keyLabel.textColor = HexRGB(0x666666);
             
@@ -638,18 +649,13 @@
             _contentLabel.textColor = HexRGB(0x666666);
             _contentLabel.font =[UIFont systemFontOfSize:PxFont(18)];
             
-            _contentLabel.frame =CGRectMake(17, nameCompanyy+urlHeight+110+keyContent+40, 280, content+15);
+            _contentLabel.frame =CGRectMake(17, 74+KHEIGHT_COMPANY*11+66+keyContent, 280, content+15);
             
-            if (nameCompanww== 180) {
-                _contentLabel.frame =CGRectMake(17, nameCompanyy+urlHeight+135+keyContent+40, 280, content+15);
-                
-                _keyLabel.frame =CGRectMake(17, nameCompanyy+urlHeight+115, 280, keyContent+15);
-                
-            }
+           
             UILabel *sdLagel;
             sdLagel =[[UILabel alloc]init];
             [_companyHomeScrollView addSubview:sdLagel];
-            sdLagel.frame =CGRectMake((kWidth-100)/2, nameCompanyy+urlHeight+keyContent+content+210,100, 20);
+            sdLagel.frame =CGRectMake((kWidth-100)/2, 74+KHEIGHT_COMPANY*13+100+keyContent+content,100, 20);
             sdLagel.text = @"暂无近期供求！";
             sdLagel.textColor =HexRGB(0x666666);
             sdLagel.font = [UIFont systemFontOfSize:PxFont(17)];
@@ -679,22 +685,17 @@
                     [_comandBtn setTitle:comArrModel.name forState:UIControlStateNormal];
                     _comandBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);//设置title在button上的位置（上top，左left，下bottom，右right）
                     
-                    _comandBtn.frame =CGRectMake (20, nameCompanyy+urlHeight+keyContent+content+210+a%comArr.count*(30), cmwith+20, 20);
+                    _comandBtn.frame =CGRectMake (20, 74+KHEIGHT_COMPANY*14+86+keyContent+content+a%comArr.count*(30), cmwith+20, 20);
                     
                     _comandBtn.tag =1000+a;
                     UILabel *dateLabel =[[UILabel alloc]init];
                     dateLabel.text = comArrModel.time;
-                    dateLabel.frame =CGRectMake (260, nameCompanyy+ urlHeight+keyContent+content+210+a%comArr.count*(30), 50, 20);
+                    dateLabel.frame =CGRectMake (260, 74+KHEIGHT_COMPANY*14+86+keyContent+content+a%comArr.count*(30), 50, 20);
                     [_companyHomeScrollView addSubview:dateLabel];
                     dateLabel.font =[UIFont systemFontOfSize:PxFont(18)];
                     dateLabel.textColor =HexRGB(0x808080);
                     [_comandBtn addTarget:self action:@selector(comandBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-                    if (nameCompanww== 180) {
-                        _comandBtn.frame =CGRectMake (20, nameCompanyy+urlHeight+keyContent+content+245+a%comArr.count*(30), cmwith+20, 20);
-                        
-                        dateLabel.frame =CGRectMake (260, nameCompanyy+ urlHeight+keyContent+content+245+a%comArr.count*(30), 50, 20);
-                        
-                    }
+                   
                 }else {
                     
                     
@@ -707,11 +708,11 @@
                     UIView *lin =[[UIView alloc]init];
                     lin.backgroundColor =HexRGB(0xe6e3e4);
                     lin.alpha = 0.5;
-                    lin.frame=CGRectMake (5,nameCompanyy+urlHeight+ keyContent+content+230+l%comArr.count*(30), 310, 1);
+                    lin.frame=CGRectMake (5,74+KHEIGHT_COMPANY*14+106+keyContent+content+l%comArr.count*(30), 310, 1);
                     
                     [_companyHomeScrollView addSubview:lin];
                     if (nameCompanww== 180) {
-                        lin.frame=CGRectMake (5,nameCompanyy+urlHeight+ keyContent+content+230+l%comArr.count*(30)+35, 310, 1);
+                        lin.frame=CGRectMake (5,74+KHEIGHT_COMPANY*14+106+keyContent+content+l%comArr.count*(30)+35, 310, 1);
                         
                     }
                 }
@@ -740,8 +741,6 @@
         
     }
     else{return;}
-}
--(void)companySDIndexClick:(UIButton *)sender{
 }
 
 //供求信息
