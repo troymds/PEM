@@ -460,10 +460,12 @@
 
 -(void)addbutton
 {
+    UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 44)];
     _searchImage =[[UIImageView alloc]init];
-    _searchImage.frame =CGRectMake(0, 20, 250, 30);
-    [self.view addSubview:_searchImage];
-    self.navigationItem.titleView =_searchImage;
+    _searchImage.frame =CGRectMake(0, 7, 230, 30);
+    //[self.view addSubview:_searchImage];
+    [navBgView addSubview:_searchImage];
+    self.navigationItem.titleView =navBgView;
     _searchImage.userInteractionEnabled = YES;
     _searchImage.image =[UIImage imageNamed:@"nav_searchBtn.png"];
     
@@ -482,7 +484,6 @@
     _selectBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-65);
     
     _searchTextField =[[UITextField alloc]init];
-    _searchTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     _searchTextField.frame =CGRectMake(63, 0, 165, 30);
     [_searchImage addSubview:_searchTextField];
     [_selectBtn addTarget:self action:@selector(xuankaBtn:) forControlEvents:UIControlEventTouchUpInside];
@@ -1051,7 +1052,8 @@
     [bigBtn addTarget:self action:@selector(bigBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     
 }
--(void)bigBtnClick:(UIButton *)big{
+-(void)bigBtnClick:(UIButton *)big
+{
     _selectBtn.selected = YES;
 
     [bigBtn removeFromSuperview];
@@ -1065,8 +1067,6 @@
     _selectXuanka.selected = xuan.selected;
     if (xuan.selected==NO)
     {
-        
-       
         [self addBigButton];
         [self xuangxiangka];
     }else
@@ -1306,7 +1306,7 @@
     {
         [_searchComanyArray removeAllObjects];
         [_recTableView reloadData];
-        [SaveTempDataTool archiveClass:_searchComanyArray withArrayTag:_searBtn.tag];
+        [SaveTempDataTool archiveClass:_searchComanyArray withArrayTag:202];
         _searchTextField.text = nil;
         
         recordLabel.hidden = NO;
@@ -1315,7 +1315,7 @@
     {
         [_searchDemandArray removeAllObjects];
         [_recTableView reloadData];
-        [SaveTempDataTool archiveClass:_searchDemandArray withArrayTag:_searBtn.tag];
+        [SaveTempDataTool archiveClass:_searchDemandArray withArrayTag:201];
         _searchTextField.text = nil;
         
         recordLabel.hidden = NO;
@@ -1324,7 +1324,7 @@
     {
         [_searchSupplyArray removeAllObjects];
         [_recTableView reloadData];
-        [SaveTempDataTool archiveClass:_searchSupplyArray withArrayTag:_searBtn.tag];
+        [SaveTempDataTool archiveClass:_searchSupplyArray withArrayTag:200];
         _searchTextField.text = nil;
         
         recordLabel.hidden = NO;
