@@ -42,9 +42,7 @@
     space = 10;
     currentRow = 0;
     x =20;
-    current_count = 0;
-    max_count = 10;
-        
+    
     _dataArray = [[NSMutableArray alloc] init];
     
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
@@ -150,26 +148,34 @@
 
 
 - (void)addTags:(UIButton *)btn{
-    if (addField.text.length!=0) {
-        if (current_count < max_count) {
-            for (UIView *subView in scrollView.subviews){
-                if ([subView isKindOfClass:[TagButton class]]){
-                    TagButton *btn = (TagButton *)subView;
-                    NSString *title = btn.titleLabel.text;
-                    if ([title isEqualToString:addField.text]) {
-                        [RemindView showViewWithTitle:@"该标签已存在" location:MIDDLE];
-                        return;
+    int count = 0;
+    for (UIView *subView in scrollView.subviews){
+        if ([subView isKindOfClass:[TagButton class]]){
+            TagButton *btn = (TagButton *)subView;
+            if (btn.isSelected){
+                count++;
+            }
+        }
+    }
+    if (count == 10) {
+        [RemindView showViewWithTitle:@"您最多只能添加10个标签" location:MIDDLE];
+    }else{
+        if (addField.text.length!=0) {
+                for (UIView *subView in scrollView.subviews){
+                    if ([subView isKindOfClass:[TagButton class]]){
+                        TagButton *btn = (TagButton *)subView;
+                        NSString *title = btn.titleLabel.text;
+                        if ([title isEqualToString:addField.text]) {
+                            [RemindView showViewWithTitle:@"该标签已存在" location:MIDDLE];
+                            return;
+                        }
                     }
                 }
-            }
-            [self addButtonWithTitle:addField.text selected:YES];
-            addField.text = @"";
-            current_count++;
+                [self addButtonWithTitle:addField.text selected:YES];
+                addField.text = @"";
         }else{
-            [RemindView showViewWithTitle:@"您最多只能添加10个标签" location:MIDDLE];
+            [RemindView showViewWithTitle:@"请输入标签" location:MIDDLE];
         }
-    }else{
-        [RemindView showViewWithTitle:@"请输入标签" location:MIDDLE];
     }
 }
 
@@ -236,7 +242,6 @@
                 count++;
             }
         }
-        current_count = count;
         [self addButtonWithTitle:item.name selected:basic];
     }
     if (_tagArray.count!=0) {

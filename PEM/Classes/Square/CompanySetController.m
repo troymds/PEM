@@ -15,6 +15,7 @@
 #import "GTMBase64.h"
 #import "RemindView.h"
 #import "CityController.h"
+#import "AdaptationSize.h"
 
 #define SETICON_TYPE 6000
 #define ICON_TYPE 6001
@@ -54,22 +55,23 @@
         //若处于登录状态 将企业信息显示在页面上进行修改
         [self loadInfoData:[SystemConfig sharedInstance].companyInfo];
     }
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)keyboardWillShow:(NSNotification *)notify
-{
-    NSDictionary *userInfo = [notify userInfo];
-    NSValue *value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect keyboardRect = [value CGRectValue];
-    height = keyboardRect.size.height;
-    [_scrollView setContentSize:CGSizeMake(kWidth, 500+height)];
-}
+//- (void)keyboardWillShow:(NSNotification *)notify
+//{
+//    NSDictionary *userInfo = [notify userInfo];
+//    NSValue *value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGRect keyboardRect = [value CGRectValue];
+//    height = keyboardRect.size.height;
+//    [_scrollView setContentSize:CGSizeMake(kWidth, 500+height)];
+//}
 
 - (void)keyboardWillHiden{
+    isEditing = NO;
     [UIView animateWithDuration:0.2 animations:^{
-        [_scrollView setContentSize:CGSizeMake(kWidth, 500)];
+        [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
     }];
 }
 
@@ -77,7 +79,6 @@
 {
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     _scrollView.backgroundColor = HexRGB(0xffffff);
-    [_scrollView setContentSize:CGSizeMake(kWidth, 500)];
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:_scrollView];
@@ -111,7 +112,7 @@
     [_scrollView addSubview:_iconSetView];
     
     
-    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(21, 133, kWidth-42, 280)];
+    bgView = [[UIView alloc] initWithFrame:CGRectMake(21, 133, kWidth-42, 280)];
     bgView.layer.masksToBounds = YES;
     bgView.layer.cornerRadius = 6.0f;
     bgView.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
@@ -169,13 +170,23 @@
     _emailView.textField.tag = EMAIL_TYPE;
     [bgView addSubview:_emailView];
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(21, 443, kWidth-42,35);
-    [button setTitle:@"完 成" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(buttonClick) forControlEvents:UIControlEventTouchUpInside];
-    [button setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [button setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
-    [_scrollView addSubview:button];
+    remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(21, bgView.frame.origin.y+bgView.frame.size.height+5,kWidth-21*2,0)];
+    remindLabel.backgroundColor = [UIColor clearColor];
+    remindLabel.textColor = [UIColor redColor];
+    remindLabel.font = [UIFont systemFontOfSize:11];
+    remindLabel.numberOfLines = 0;
+    [_scrollView addSubview:remindLabel];
+    
+    
+    finishBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    finishBtn.frame = CGRectMake(21,bgView.frame.origin.y+bgView.frame.size.height+10, kWidth-42,35);
+    [finishBtn setTitle:@"完 成" forState:UIControlStateNormal];
+    [finishBtn addTarget:self action:@selector(buttonClick) forControlEvents:UIControlEventTouchUpInside];
+    [finishBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
+    [finishBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
+    [_scrollView addSubview:finishBtn];
+    
+    [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
 }
 
 //选择省份城市
@@ -268,7 +279,43 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     activeField = textField;
-    [_scrollView setContentSize:CGSizeMake(kWidth, 500+240)];
+    isEditing = YES;
+    CGFloat y;
+    if (_iPhone4) {
+        y = bgView.frame.origin.y-60;
+    }else if (_iPhone5){
+        y = 0;
+    }else if(_iPhone6){
+        y = bgView.frame.origin.y-200;
+    }else{
+        y = bgView.frame.origin.y- 250;
+    }
+    switch (textField.tag) {
+        case NAME_TYPE:
+            
+                break;
+        case AREA_TYPE:
+            y = y+40*3;
+
+            break;
+        case PHONE_TYPE:
+            y = y+40*4;
+
+            break;
+        case WEBSITE_TYPE:
+            y = y+40*5;
+            break;
+        case EMAIL_TYPE:
+            y = y+40*6;
+            break;
+     
+        default:
+            break;
+    }
+    [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
+    [UIView animateWithDuration:0.3 animations:^{
+        [_scrollView setContentOffset:CGPointMake(0, y)];
+    }];
 }
 
 
@@ -321,7 +368,7 @@
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
         if ([[dic objectForKey:@"code"] intValue] == 100){
-            [RemindView showViewWithTitle:@"设置成功" location:BELLOW];
+            [RemindView showViewWithTitle:@"设置成功" location:MIDDLE];
             if ([SystemConfig sharedInstance].companyInfo){
                 //设置成功后更新单例中的企业数据
                 [SystemConfig sharedInstance].companyInfo.image = _imgStr;
@@ -335,6 +382,18 @@
                 [SystemConfig sharedInstance].companyInfo.website = _websiteView.textField.text;
                 [SystemConfig sharedInstance].companyInfo.email = _emailView.textField.text;
             }
+            
+            //隐藏掉可能存在的错误提示
+            remindLabel.text = @"";
+            [UIView animateWithDuration:0.3 animations:^{
+                finishBtn.frame = CGRectMake(21, bgView.frame.origin.y+bgView.frame.size.height, kWidth-21*2, 35);
+                if (isEditing) {
+                    [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
+                    
+                }else{
+                    [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
+                }
+            }];
             if ([self.pushType isEqualToString:DERECT_SET_TYPE]){
             }else  if([self.pushType isEqualToString:PUBLISH_TYPE]){
                 [self.navigationController popToRootViewControllerAnimated:YES];
@@ -358,19 +417,63 @@
 
 
 - (BOOL)checkOut{
-    //企业邮箱必添  其他可选
-    if (_emailView.textField.text.length == 0) {
-        [RemindView showViewWithTitle:@"请填写企业邮箱" location:MIDDLE];
-        return NO;
-    }
     if (_phoneView.textField.text.length!=0) {
         if (![self isValidPhoneNum:_phoneView.textField.text]) {
-            [RemindView showViewWithTitle:@"请填写正确的号码格式" location:MIDDLE];
+            NSString *textStr = @"请输入正确的号码格式,如固话:010-88888888或手机号:138********";
+            CGSize size = [AdaptationSize getSizeFromString:textStr Font:[UIFont systemFontOfSize:11] withHight:CGFLOAT_MAX withWidth:kWidth-21*2];
+            remindLabel.frame = CGRectMake(21, remindLabel.frame.origin.y,kWidth-21*2,size.height);
+            finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
+            remindLabel.text = textStr;
+            finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
+    
+            [UIView animateWithDuration:0.3 animations:^{
+                if (isEditing) {
+                    [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
+                    
+                }else{
+                    [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
+                }
+            }];
+
             return NO;
         }
     }
+    //企业邮箱必添  其他可选
+    if (_emailView.textField.text.length == 0) {
+        NSString *textStr = @"企业邮箱不能为空";
+        CGSize size = [AdaptationSize getSizeFromString:textStr Font:[UIFont systemFontOfSize:11] withHight:CGFLOAT_MAX withWidth:kWidth-21*2];
+        remindLabel.frame = CGRectMake(21, remindLabel.frame.origin.y,kWidth-21*2,size.height);
+        finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
+        remindLabel.text = textStr;
+        finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            if (isEditing) {
+                [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
+
+            }else{
+                [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
+            }
+        }];
+
+        return NO;
+    }
     if (![self isValidateEmail:_emailView.textField.text]) {
-        [RemindView showViewWithTitle:@"邮箱格式不正确" location:MIDDLE];
+        
+        NSString *textStr = @"请输入正确的邮箱格式";
+        CGSize size = [AdaptationSize getSizeFromString:textStr Font:[UIFont systemFontOfSize:11] withHight:CGFLOAT_MAX withWidth:kWidth-21*2];
+        remindLabel.frame = CGRectMake(21, remindLabel.frame.origin.y,kWidth-21*2,size.height);
+        finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
+        remindLabel.text = textStr;
+        finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
+        [UIView animateWithDuration:0.3 animations:^{
+            if (isEditing) {
+                [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
+                
+            }else{
+                [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
+            }
+        }];
         return NO;
     }
     return YES;
