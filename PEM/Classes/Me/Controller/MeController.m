@@ -634,15 +634,146 @@
 
 - (void)textFieldBeganEditting:(UITextField *)textField{
     activeField = textField;
+    CGFloat y = 0;
+    switch (textField.tag) {
+        case PC_TITLE_TYPE:
+        {
+            y = 0;
+        }
+            break;
+        case PC_PURCHASE_TYPE:
+        {
+            if (_iPhone4) {
+                y = 90;
+            }else if (_iPhone5){
+                y = 35;
+            }else{
+                y = 0;
+            }
+        }
+            break;
+        case PC_UNIT_TYPE:
+        {
+            if (_iPhone4) {
+                y = 125;
+            }else if (_iPhone5){
+                y = 70;
+            }else{
+                y =35;
+            }
+        }
+            break;
+        case PC_LINKMAN_TYPE:
+        {
+            if (_iPhone4) {
+                y = 160;
+            }else if (_iPhone5){
+                y = 105;
+            }else{
+                y = 70;
+            }
+        }
+            break;
+        case PC_PHONENUM_TYPE:
+        {
+            if (_iPhone4) {
+                y = 195;
+            }else if (_iPhone5){
+                y = 140;
+            }else{
+                y = 105;
+            }
+        }
+            break;
+        case TITLE_TYPE:
+        {
+            if (_iPhone4) {
+                y = 35;
+            }else if (_iPhone5){
+                y = 0;
+            }else{
+                y = 0;
+            }
+        }
+            break;
+        case PRICE_TYPE:
+        {
+            if (_iPhone4) {
+                y = 90;
+            }else if (_iPhone5){
+                y = 35;
+            }else{
+                y = 0;
+            }
+        }
+            break;
+        case UNIT_TYPE:
+        {
+            if (_iPhone4) {
+                y = 125;
+            }else if (_iPhone5){
+                y = 70;
+            }else{
+                y = 35;
+            }
+        }
+            break;
+        case STANDARD_TYPE:
+        {
+            if (_iPhone4) {
+                y = 160;
+            }else if (_iPhone5){
+                y = 105;
+            }else{
+                y = 70;
+            }
+        }
+            break;
+        case LINKMAN_TYPE:
+        {
+            if (_iPhone4) {
+                y = 245;
+            }else if (_iPhone5){
+                y = 190;
+            }else{
+               y = 145;
+            }
+        }
+            break;
+        case PHONENUM_TYPE:
+        {
+            if (_iPhone4) {
+                y = 280;
+            }else if (_iPhone5){
+                y = 225;
+            }else{
+                y = 180;
+            }
+        }
+            break;
+        default:
+            break;
+    }
+
     if (_isPurchase) {
+        [_purchaseScrollView setContentOffset:CGPointMake(0, y) animated:YES];
+//        [UIView animateWithDuration:0.2 animations:^{
+//            [_purchaseScrollView setContentOffset:CGPointMake(0, y)];
+//        }];
         [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416+240)];
     }else{
+//        [UIView animateWithDuration:0.2 animations:^{
+//            [_supplyScrollView setContentOffset:CGPointMake(0, y)];
+//        }];
+        [_supplyScrollView setContentOffset:CGPointMake(0, y) animated:YES];
         [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+240)];
     }
+
 }
 
 - (void)textFieldEndEditting:(UITextField *)textField
 {
+    isEditing = NO;
     if (_isPurchase) {
         [UIView animateWithDuration:0.2 animations:^{
             [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416)];

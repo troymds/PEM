@@ -26,7 +26,7 @@
     SetCellView *_nameView;
     SetAreaView *_provinceView;
     SetAreaView *_cityView;
-    UIView *_bgView;
+    UIView *bgView;
     NSString *_imgStr;       //图片url
     
     NSString  *_provinceId;    //所选省份的id
@@ -40,6 +40,11 @@
     BOOL isExistImg;           //判断企业设置中头像是否存在 使用默认头像则表示不存在
     
     UITextField *activeField;    //当前处于编辑状态的输入框
+    
+    UILabel *remindLabel;       //错误提醒文字
+    
+    UIButton *finishBtn;      //完成按钮
+    BOOL isEditing;        //键盘是否在窗口上
     
     int height;          //键盘高度
 }

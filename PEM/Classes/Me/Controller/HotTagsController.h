@@ -18,8 +18,6 @@
     NSInteger space;        //标签按钮之间的空格
     CGFloat x;               //添加标签时按钮的x坐标
     NSInteger currentRow;    //最后一个标签当前显示的行数  0开始
-    NSInteger current_count;  //当前添加的标签数
-    NSInteger max_count;     //添加的最大标签数
     
     UIView *bottomView;
     BOOL isEditing;        //判断是否在编辑状态 即键盘在不在界面上

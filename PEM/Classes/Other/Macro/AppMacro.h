@@ -13,7 +13,7 @@
 
 #define _iPhone4 ([UIScreen mainScreen].bounds.size.height == 480)
 #define _iPhone5 ([UIScreen mainScreen].bounds.size.height == 568)
-
+#define _iPhone6 ([UIScreen mainScreen].bounds.size.height == 667)
 
 #if TARGET_IPHONE_SIMULATOR
 #define SIMULATOR 1
@@ -93,5 +93,4 @@
 
 #define kBaseURL @"http://218.244.149.129"
 #define kURL @"http://192.168.1.155"
-#define UMAPPKEY @"54229e41fd98c5994a00d6a7"
 
