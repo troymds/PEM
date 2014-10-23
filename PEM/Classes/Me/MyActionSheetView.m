@@ -27,15 +27,15 @@
         CGRect frame = [UIScreen mainScreen].bounds;
         self.frame = frame;
         self.backgroundColor = [UIColor clearColor];
-        UIView *view = [[UIView alloc] initWithFrame:frame];
+        view = [[UIView alloc] initWithFrame:frame];
         view.backgroundColor = [UIColor blackColor];
-        view.alpha = 0.5;
+        view.alpha = 0.0;
         [self addSubview:view];
         
         CGSize size = [AdaptationSize getSizeFromString:message Font:[UIFont systemFontOfSize:14] withHight:CGFLOAT_MAX withWidth:233];
 
         
-        UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-40,56+40+size.height+35)];
+        bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-40,56+40+size.height+35)];
         bgView.backgroundColor = HexRGB(0xffffff);
         bgView.center = self.center;
         [self addSubview:bgView];
@@ -84,9 +84,60 @@
         [bgView addSubview:_cancelButton];
         
         self.delegate = delegate;
+        
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.1];
+        [UIView setAnimationDelegate:self];
+        view.alpha = 0.25;
+        bgView.transform = CGAffineTransformScale([self transformForOrientation],0.7,0.7);;
+        [UIView commitAnimations];
+        [self performSelector:@selector(changeUI) withObject:nil afterDelay:0.1];
+        
     }
     return self;
 }
+
+- (void)changeUI
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.1];
+    view.alpha = 0.5;
+    [UIView setAnimationDelegate:self];
+    bgView.transform = CGAffineTransformScale([self transformForOrientation], 1.05, 1.05);;
+    [UIView commitAnimations];
+    [self performSelector:@selector(changeUI2) withObject:nil afterDelay:0.1];
+
+}
+
+- (void)changeUI2
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.1];
+    [UIView setAnimationDelegate:self];
+    bgView.transform = CGAffineTransformScale([self transformForOrientation], 1.0, 1.0);;
+    [UIView commitAnimations];
+}
+
+
+- (CGAffineTransform)transformForOrientation
+{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (UIInterfaceOrientationLandscapeLeft == orientation)
+    {
+        return CGAffineTransformMakeRotation(M_PI*1.5);
+    } else if (UIInterfaceOrientationLandscapeRight == orientation)
+    {
+        return CGAffineTransformMakeRotation(M_PI/2);
+    } else if (UIInterfaceOrientationPortraitUpsideDown == orientation)
+    {
+        return CGAffineTransformMakeRotation(-M_PI);
+    } else
+    {
+        return CGAffineTransformIdentity;
+    }
+}
+
 
 - (void)actionButtonDown:(UIButton *)button
 {

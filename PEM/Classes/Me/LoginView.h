@@ -32,6 +32,7 @@
     UIButton *findBtn;
     UIButton *registerBtn;
     UITapGestureRecognizer *tap;
+    UITapGestureRecognizer *tap1;
 }
 
 @property (nonatomic,strong) UITextField *userField;
