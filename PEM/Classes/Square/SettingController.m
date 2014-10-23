@@ -153,17 +153,7 @@
 
 
 - (void)adviceMessage{
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
-        label.textAlignment = NSTextAlignmentCenter;
-        label.text = @"感谢您的反馈";
-        CGPoint center = CGPointMake(kWidth/2, kHeight/2);
-        label.textColor = [UIColor blackColor];
-        label.center = center;
-        [[UIApplication sharedApplication].keyWindow addSubview:label];
-        [UIView animateWithDuration:3.0 animations:^{
-            label.alpha = 0;
-        }];
-
+    [RemindView showViewWithTitle:@"感谢您的反馈!" location:MIDDLE];
 }
 
 - (void)imageClicked:(SetImageView *)imageView
