@@ -9,12 +9,22 @@
 #import <UIKit/UIKit.h>
 
 @interface CompanyXQViewController : UIViewController{
-    NSMutableArray *_companyHomeArray;
     
     UIScrollView* _companyHomeScrollView;
+    
+    UIView *conditionView;
+    UITableView *_conditionTableView;
+
+
     UIView *suplyANDdemandView;
+    UITableView *_supplyANDdemandTableView;
+    
     UIButton *ChosseSelectedBtn;
+    NSMutableArray *_companyHomeArray;
+
     UIScrollView *_BigCompanyScrollView;
+    UIView *companyBackView;
+    
     
 
 }

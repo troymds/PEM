@@ -27,7 +27,6 @@
 #import "CompanyXQViewController.h"
 #import "MessageController.h"
 #import "QRCodeViewController.h"
-
 @interface HomeController ()<UIScrollViewDelegate>
 {
     UIScrollView *_backScrollView;
@@ -40,7 +39,8 @@
     NSMutableArray *_hotSupplyArray;//热门供应
     
     
-    
+    int currentTag;
+    NSString *curStr;
 }
 @end
 
@@ -85,7 +85,7 @@
     [self addBackScrollView];//    背景
     [self loadNewData];
     
-    
+    currentTag = 0;
 }
 -(void)lo{
     
@@ -195,7 +195,7 @@
     // 初始化 pagecontrol
     self.pageControl = [[UIPageControl alloc]init];
     //    CGSize size = self.view.frame.size;
-    pageControl.frame = CGRectMake(self.view.frame.size.width*0.5, 108, 1, 1);
+    pageControl.frame = CGRectMake(self.view.frame.size.width*0.3, 108, 1, 1);
     
     pageControl.currentPageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_page_on.png"]];
     pageControl.pageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_page_off.png"]];
@@ -294,8 +294,6 @@
 
 -(void)addBackScrollView
 {
-    
-    
     _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height-44)];
     _backScrollView.contentSize = CGSizeMake(320,960);
     _backScrollView.userInteractionEnabled=YES;
@@ -390,9 +388,8 @@
 #pragma mark 添加八个按钮
 -(void)addCategorybutton:(NSMutableArray *)btnImgArray
 {
-    
-    
-    for (int c=0; c<7; c++) {
+    for (int c=0; c<7; c++)
+    {
         
         UIButton *CategoryButt =[UIButton buttonWithType:UIButtonTypeCustom];
         CategoryButt.frame =CGRectMake(20+c%4*(50+25), 152+c/4*(40+40), 50,50);
@@ -403,26 +400,30 @@
         [CategoryButt setTitle:hotCategoryModel.name forState:UIControlStateNormal  ];
         
         UIButton *categoryButtTitle =[UIButton buttonWithType:UIButtonTypeCustom];
+        
         categoryButtTitle.frame =CGRectMake(14+c%4*(50+25), 200+c/4*(40+40), 65, 30);
         [_backScrollView addSubview:categoryButtTitle];
         [categoryButtTitle setTitle:hotCategoryModel.name forState:UIControlStateNormal];
         [categoryButtTitle setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         categoryButtTitle.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         [categoryButtTitle setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
-        [categoryButtTitle addTarget:self action:@selector(categoryBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        [CategoryButt addTarget:self action:@selector(categoryBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        categoryButtTitle.tag = [hotCategoryModel.cateid intValue]+100;
-        CategoryButt.tag=categoryButtTitle.tag ;
+                categoryButtTitle.tag = [hotCategoryModel.cateid intValue]+100;
+        CategoryButt.tag=categoryButtTitle.tag;
         
-        
-        
+
         
         UIImageView *findImage =[[UIImageView alloc]init];
         findImage.frame =CGRectMake(20+c%4*(50+25), 152+c/4*(40+40), 50,50);
-        findImage.tag = [hotCategoryModel.cateid intValue] +1000;
+        findImage.tag = CategoryButt.tag+10000;
+        
         [_backScrollView addSubview:findImage];
         findImage.userInteractionEnabled = NO;
         [findImage setImageWithURL:[NSURL URLWithString:hotCategoryModel.image]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
+        
+        
+        [categoryButtTitle addTarget:self action:@selector(categoryBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [CategoryButt addTarget:self action:@selector(categoryBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+
         
        
     }
@@ -439,21 +440,58 @@
     [moreTitle setTitle:@"更多" forState:UIControlStateNormal];
     [moreTitle setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
     moreTitle.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
-    [moreBtn addTarget:self action:@selector(moreBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    [moreTitle addTarget:self action:@selector(moreBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    
+    [moreBtn addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [moreTitle addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    moreBtn.tag = 88;
 
 
     
 }
+-(void)moreBtnClick:(UIButton *)more{
+    NSLog(@"%ld",(long)more.tag);
+    for (UIView *view in [_backScrollView subviews])
+    {
+        if (view.tag == 88)
+        {
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:0.3];
+            [UIView setAnimationDelegate:self];
+            
+            view.transform = CGAffineTransformScale([self transformForOrientation], 0.8, 0.8);;
+            
+            [UIView commitAnimations];
+            
+        }
+    }
+    [self performSelector:@selector(changeUITwo) withObject:nil afterDelay:0.3];
 
+   }
 
--(void)moreBtnClick{
+-(void)changeUITwo{
+    for (UIView *view in [_backScrollView subviews])
+    {
+        if (view.tag == 88)
+        {
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:0.3];
+            [UIView setAnimationDelegate:self];
+            
+            view.transform = CGAffineTransformScale([self transformForOrientation], 1.0, 1.0);
+            
+            [UIView commitAnimations];
+        }
+    }
+    
+    
+    [self performSelector:@selector(goNextVCTwo) withObject:nil afterDelay:0.3];
+
+}
+-(void)goNextVCTwo{
     MessageController *message =[[MessageController alloc]init];
+    
+   
     [self.navigationController pushViewController:message animated:YES];
 }
-
-
 #pragma mark 添加三条广告
 -(void)addHot:(NSMutableArray *)hotDemand hotSupply:(NSMutableArray *)supply
 {
@@ -590,16 +628,79 @@
 }
 
 //八宫格
--(void)categoryBtnClick:(UIButton *)cate{
+-(void)categoryBtnClick:(UIButton *)cate
+{
+
+    currentTag = cate.tag+10000;
     
+    curStr = cate.titleLabel.text;
+    
+    for (UIView *view in [_backScrollView subviews])
+    {
+        if (view.tag == currentTag)
+        {
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:0.3];
+            [UIView setAnimationDelegate:self];
+            
+            view.transform = CGAffineTransformScale([self transformForOrientation], 0.8, 0.8);;
+
+            [UIView commitAnimations];
+
+        }
+    }
+    [self performSelector:@selector(changeUI) withObject:nil afterDelay:0.3];
+
+}
+- (CGAffineTransform)transformForOrientation
+{
+	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	if (UIInterfaceOrientationLandscapeLeft == orientation)
+    {
+		return CGAffineTransformMakeRotation(M_PI*1.5);
+	} else if (UIInterfaceOrientationLandscapeRight == orientation)
+    {
+		return CGAffineTransformMakeRotation(M_PI/2);
+	} else if (UIInterfaceOrientationPortraitUpsideDown == orientation)
+    {
+		return CGAffineTransformMakeRotation(-M_PI);
+	} else
+    {
+		return CGAffineTransformIdentity;
+	}
+}
+
+
+- (void)changeUI
+{
+    for (UIView *view in [_backScrollView subviews])
+    {
+        if (view.tag == currentTag)
+        {
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:0.3];
+            [UIView setAnimationDelegate:self];
+            
+            view.transform = CGAffineTransformScale([self transformForOrientation], 1.0, 1.0);
+
+            [UIView commitAnimations];
+        }
+    }
+    
+    
+    [self performSelector:@selector(goNextVC2) withObject:nil afterDelay:0.3];
+    
+}
+
+- (void)goNextVC2
+{
     findViewController *find =[[findViewController alloc]init];
-    find.titleLabel =cate.titleLabel.text;
+    find.titleLabel = curStr;
     
-    NSString *strId =[NSString stringWithFormat:@"%d",cate.tag-100];
+    NSString *strId =[NSString stringWithFormat:@"%d",currentTag-100-10000];
     find.cateIndex = strId;
     [self.navigationController pushViewController:find animated:YES];
-    
-    
+
 }
 
 -(void)searchBarBtn{
