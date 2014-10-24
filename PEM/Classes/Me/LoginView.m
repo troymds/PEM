@@ -44,7 +44,7 @@
         _userField.keyboardType = UIKeyboardTypeNumberPad;
         [bgView addSubview:_userField];
         
-        UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake(10,64.5,bgView.frame.size.width-10*2, 0.5)];
+        line1 = [[UIView alloc] initWithFrame:CGRectMake(10,64.5,bgView.frame.size.width-10*2, 0.5)];
         line1.backgroundColor = HexRGB(0x666666);
         [bgView addSubview:line1];
         
@@ -60,7 +60,7 @@
         _passwordField.secureTextEntry = YES;
         [bgView addSubview:_passwordField];
         
-        UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(10,114.5,bgView.frame.size.width-10*2, 0.5)];
+        line2 = [[UIView alloc] initWithFrame:CGRectMake(10,114.5,bgView.frame.size.width-10*2, 0.5)];
         line2.backgroundColor = HexRGB(0x666666);
         [bgView addSubview:line2];
 
@@ -177,11 +177,20 @@
 
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
+    if (textField.tag == USERNAME_TYPE) {
+        line1.backgroundColor = HexRGB(0x069dd4);
+    }else{
+        line2.backgroundColor = HexRGB(0x069dd4);
+    }
+
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
-    
+    if (textField.tag == USERNAME_TYPE) {
+        line1.backgroundColor = HexRGB(0x666666);
+    }else{
+        line2.backgroundColor = HexRGB(0x666666);
+    }
 }
 
 
