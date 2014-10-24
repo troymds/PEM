@@ -223,7 +223,7 @@
         
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(36,433, 150, 20)];
-        label.text = @"是否上传3D图片";
+        label.text = @"是否上传全景图片";
         label.textColor = HexRGB(0x666666);
         label.font = [UIFont systemFontOfSize:PxFont(20)];
         label.backgroundColor = [UIColor clearColor];
@@ -239,7 +239,7 @@
         
         _remindView = [[UIView alloc] initWithFrame:CGRectMake(20, 460, kWidth-20*2, 30)];
         
-        NSString *string = @"上传3D图片需要大量素材，发布成功后请等待我们与您联系，或现在";
+        NSString *string = @"上传全景图片需要大量素材，发布成功后请等待我们与您联系，或现在";
         CGSize size = [AdaptationSize getSizeFromString:string Font:[UIFont systemFontOfSize:12] withHight:15 withWidth:CGFLOAT_MAX];
         
         CGSize btnSize = [AdaptationSize getSizeFromString:@"联系我们" Font:[UIFont systemFontOfSize:12] withHight:15 withWidth:CGFLOAT_MAX];

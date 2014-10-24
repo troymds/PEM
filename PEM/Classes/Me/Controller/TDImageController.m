@@ -28,7 +28,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = HexRGB(0xffffff);
-    self.title = @"3D图片上传";
+    self.title = @"全景图片上传";
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width-10*2, 200)];
     bgView.layer.borderColor = HexRGB(0x93d9f3).CGColor;
     bgView.layer.borderWidth = 0.3f;
@@ -37,7 +37,7 @@
     [self.view addSubview:bgView];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(5,0, bgView.frame.size.width-5*2, 200)];
-    NSString *str = @"尊敬的VVIP会员：\n      您好！由于上传3D图片需要大量素材,您可直接点击下方的在线申请与我们联系,我们的工作人员会尽快雨凝联系,为您提供3D图片上传的具体操作步骤！\n     感谢您的配合！";
+    NSString *str = @"尊敬的VVIP会员：\n      您好！由于上传全景图片需要大量素材,您可直接点击下方的在线申请与我们联系,我们的工作人员会尽快雨凝联系,为您提供全景图片上传的具体操作步骤！\n     感谢您的配合！";
     label.backgroundColor = [UIColor clearColor];
     label.text = str;
     label.numberOfLines  = 0;

@@ -173,6 +173,7 @@
         case 10000:
         {
             CategoryController *category = [[CategoryController alloc] init];
+            [activeField resignFirstResponder];
             category.delegate = self;
             category.isSupply = NO;
             [self.navigationController pushViewController:category animated:YES];
@@ -182,6 +183,7 @@
         case 10001:
         {
             DescriptionController *vc = [[DescriptionController alloc] init];
+            [activeField resignFirstResponder];
             vc.delegate = self;
             vc.isSupply = NO;
             if (demandDes.length!=0) {
@@ -193,6 +195,7 @@
         case 10002:
         {
             HotTagsController *hotVC = [[HotTagsController alloc] init];
+            [activeField resignFirstResponder];
             hotVC.delegate = self;
             if (tagsArray.count!=0) {
                 hotVC.tagArray = tagsArray;

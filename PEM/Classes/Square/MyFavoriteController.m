@@ -80,8 +80,9 @@
     }
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
+    
+    
     [HttpTool postWithPath:@"getWishlist" params:params success:^(id JSON) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         if (isRefresh) {
             if (_dataArray.count!=0) {
@@ -123,6 +124,7 @@
         [_tableView reloadData];
     } failure:^(NSError *error){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         NSLog(@"%@",error);
     }];
 }
@@ -137,7 +139,11 @@
     MyFavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
     [cell.iconImageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",item.img]] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
     cell.nameLabel.text = item.title;
-    cell.priceLabel.text = [NSString stringWithFormat:@"价格:%@元",item.price];
+    if ([item.price isEqualToString:@"0"]) {
+        cell.priceLabel.text = @"价格:面议";
+    }else{
+        cell.priceLabel.text = [NSString stringWithFormat:@"价格:%@元",item.price];
+    }
     cell.dateLabel.text = item.collectTimes;
     cell.timesLabel.text = [NSString stringWithFormat:@"收藏%@次",item.collect_num];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;

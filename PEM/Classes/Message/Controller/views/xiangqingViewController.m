@@ -582,6 +582,13 @@
                                   
                               } cancel:^{
                                   NSLog(@"User cancelled the call");
+                              } finish:^{
+                                  NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"call_id",xqModel.company_id,@"to_id",xqModel.info_id,@"info_id", nil];
+                                  [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
+                                      
+                                  } failure:^(NSError *error) {
+                                      
+                                  }];
                               }];
         
         

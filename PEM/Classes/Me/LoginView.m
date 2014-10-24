@@ -19,7 +19,7 @@
         self.backgroundColor = [UIColor clearColor];
         UIView *view = [[UIView alloc] initWithFrame:frame];
         view.backgroundColor = [UIColor blackColor];
-        view.alpha = 0.0;
+        view.alpha = 0.5;
         [self addSubview:view];
         
         tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
@@ -101,7 +101,6 @@
         [self addSubview:bgView];
         
         [UIView animateWithDuration:0.3 animations:^{
-            view.alpha = 0.5;
             bgView.frame = CGRectMake((kWidth-275)/2,95, 275, 250);
         }];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
@@ -150,6 +149,11 @@
 
 
 - (void)showView{
+    if (bgView.frame.origin.y == kHeight) {
+        [UIView animateWithDuration:0.3 animations:^{
+            bgView.frame = CGRectMake((kWidth-275)/2,95, 275, 250);
+        }];
+    }
     [[[UIApplication sharedApplication] keyWindow] addSubview:self];
 }
 
