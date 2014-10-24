@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SendValueDelegate.h"
 
-@interface HotTagsController : UIViewController<UITextFieldDelegate>
+@interface HotTagsController : UIViewController<UITextFieldDelegate,UIScrollViewDelegate>
 {
     NSMutableArray *_dataArray;       //所有标签
     UILabel *addTagLabel;

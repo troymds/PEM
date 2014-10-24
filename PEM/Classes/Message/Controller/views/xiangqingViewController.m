@@ -321,7 +321,7 @@
 
     //底部
     UIButton  *forImage =[UIButton buttonWithType:UIButtonTypeCustom];
-    forImage.frame =CGRectMake(0, self.view.frame.size.height-44, 320, 44);
+    forImage.frame =CGRectMake(0, self.view.frame.size.height-44, kWidth, 44);
     [forImage addTarget:self action:@selector(goCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:forImage];

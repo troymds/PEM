@@ -48,6 +48,7 @@
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     scrollView.backgroundColor = HexRGB(0xffffff);
     scrollView.showsVerticalScrollIndicator = NO;
+    scrollView.delegate = self;
     [scrollView setContentSize:CGSizeMake(kWidth, scrollView.frame.size.height)];
     [self.view  addSubview:scrollView];
     
@@ -72,6 +73,11 @@
     }
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    NSLog(@"----%f",scrollView.contentOffset.y);
+}
+
 - (void)addNavBarButton{
     // 创建按钮
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -79,6 +85,7 @@
     // 设置普通背景图片
     [btn setTitle:@"保存" forState:UIControlStateNormal];
     [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
     btn.frame = CGRectMake(10, 10,52, 24);
     [btn addTarget:self action:@selector(finish) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
@@ -273,10 +280,19 @@
         [scrollView setContentSize:CGSizeMake(kWidth, bottomView.frame.size.height+bottomView.frame.origin.y+20)];
     }
     if (isEditing) {
+//        CGFloat y;
+//        if (_iPhone4) {
+//            y = 100;
+//        }else if (_iPhone5){
+//            y = 150;
+//        }
+//        [scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-y) animated:YES];
         int distance = scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
         if (distance < 240) {
             [scrollView setContentSize:CGSizeMake(kWidth, bottomView.frame.origin.y+bottomView.frame.size.height+240)];
         }
+        [scrollView setContentOffset:CGPointMake(0, scrollView.contentSize.height-scrollView.frame.size.height) animated:YES];
+
     }
 }
 
@@ -295,14 +311,23 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     isEditing = YES;
+//    CGFloat y;
+//    if (_iPhone4) {
+//        y = 100;
+//    }else if (_iPhone5){
+//        y = 150;
+//    }
+//    [scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-y) animated:YES];
     int distance = scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
     if (distance < 240) {
         [scrollView setContentSize:CGSizeMake(kWidth, bottomView.frame.origin.y+bottomView.frame.size.height+240)];
     }
+    [scrollView setContentOffset:CGPointMake(0, scrollView.contentSize.height-scrollView.frame.size.height) animated:YES];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    
 }
 
 

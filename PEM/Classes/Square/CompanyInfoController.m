@@ -47,8 +47,9 @@
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     
     // 设置普通背景图片
-    [btn setTitle:@"修改" forState:UIControlStateNormal];
+    [btn setTitle:@"修 改" forState:UIControlStateNormal];
     [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
     // 设置尺寸
     btn.frame = CGRectMake(10, 10,52, 24);
     [btn addTarget:self action:@selector(edit) forControlEvents:UIControlEventTouchUpInside];

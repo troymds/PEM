@@ -44,6 +44,7 @@
     UIImage *image = [UIImage imageNamed:@"nav_login_btn.png"];
     [btn setTitle:@"登 录" forState:UIControlStateNormal];
     [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
     // 设置尺寸
     btn.bounds = (CGRect){CGPointZero, image.size};
     btn.frame = CGRectMake(10, 10,52, 24);

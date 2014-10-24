@@ -70,6 +70,7 @@
         _otherButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_otherButton setTitle:otherButton forState:UIControlStateNormal];
         [_otherButton setTitleColor:HexRGB(0x000000) forState:UIControlStateNormal];
+        [_otherButton setBackgroundImage:[UIImage imageNamed:@"action_btn.png"] forState:UIControlStateHighlighted];
         _otherButton.tag = 0;
         [_otherButton addTarget:self action:@selector(actionButtonDown:) forControlEvents:UIControlEventTouchUpInside];
         _otherButton.frame = CGRectMake(0, bgView.frame.size.height-35,(kWidth-40)/2, 35);
@@ -79,6 +80,7 @@
         _cancelButton.tag = 1;
         [_cancelButton setTitle:cancelButton forState:UIControlStateNormal];
         [_cancelButton setTitleColor:HexRGB(0x000000) forState:UIControlStateNormal];
+        [_cancelButton setBackgroundImage:[UIImage imageNamed:@"action_btn.png"] forState:UIControlStateHighlighted];
         [_cancelButton addTarget:self action:@selector(actionButtonDown:) forControlEvents:UIControlEventTouchUpInside];
         _cancelButton.frame = CGRectMake(273/2, bgView.frame.size.height-35,(kWidth-40)/2, 35);
         [bgView addSubview:_cancelButton];

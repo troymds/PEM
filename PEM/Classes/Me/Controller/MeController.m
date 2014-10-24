@@ -69,9 +69,8 @@
     tagsArray = [NSMutableArray array];
     
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 }
-
 
 - (void)addView
 {
@@ -370,8 +369,9 @@
         default:
             break;
     }
-    
 }
+
+
 
 
 #pragma mark alertView_delegate
@@ -756,24 +756,24 @@
     }
 
     if (_isPurchase) {
+
         [_purchaseScrollView setContentOffset:CGPointMake(0, y) animated:YES];
-//        [UIView animateWithDuration:0.2 animations:^{
-//            [_purchaseScrollView setContentOffset:CGPointMake(0, y)];
-//        }];
         [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416+240)];
     }else{
-//        [UIView animateWithDuration:0.2 animations:^{
-//            [_supplyScrollView setContentOffset:CGPointMake(0, y)];
-//        }];
         [_supplyScrollView setContentOffset:CGPointMake(0, y) animated:YES];
         [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+240)];
     }
 
 }
 
-- (void)textFieldEndEditting:(UITextField *)textField
+//- (void)textFieldEndEditting:(UITextField *)textField
+//{
+//    isEditing = NO;
+//
+//}
+
+- (void)keyboardWillHide
 {
-    isEditing = NO;
     if (_isPurchase) {
         [UIView animateWithDuration:0.2 animations:^{
             [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416)];
@@ -783,7 +783,6 @@
             [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
         }];
     }
-
 }
 
 //发布求购成功后，清空页面数据

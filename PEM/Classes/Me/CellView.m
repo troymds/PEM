@@ -15,13 +15,13 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,0,40, frame.size.height)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(5,0,65, frame.size.height)];
         _nameLabel.backgroundColor = [UIColor clearColor];
         _nameLabel.textAlignment = NSTextAlignmentLeft;
         _nameLabel.textColor = HexRGB(0x666666);
         _nameLabel.font = [UIFont systemFontOfSize:PxFont(20)];
         [self addSubview:_nameLabel];
-        _lineView = [[UIView alloc] initWithFrame:CGRectMake(50, (frame.size.height-20)/2, 1, 20)];
+        _lineView = [[UIView alloc] initWithFrame:CGRectMake(70, (frame.size.height-20)/2, 1, 20)];
         _lineView.backgroundColor = HexRGB(0x666666);
         [self addSubview:_lineView];
     }
