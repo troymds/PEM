@@ -33,6 +33,46 @@
     self.view.backgroundColor = HexRGB(0xffffff);
     // Do any additional setup after loading the view.
     [self addView];
+    
+    // 创建按钮
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    // 设置普通背景图片
+    [btn setTitle:@"完 成" forState:UIControlStateNormal];
+    [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
+    // 设置尺寸
+    btn.frame = CGRectMake(10, 10,52, 24);
+    [btn addTarget:self action:@selector(finish) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
+    self.navigationItem.rightBarButtonItem = item;
+
+}
+
+- (void)finish
+{
+    if (isEdit) {
+        if (![_textView.text isEqualToString:@""]) {
+            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",_textView.text,@"content", nil];
+            [HttpTool postWithPath:@"addAdvice" params:param success:^(id JSON) {
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSDictionary *dic = [result objectForKey:@"response"];
+                if ([[dic objectForKey:@"code"] intValue] ==100){
+                    [self.navigationController popViewControllerAnimated:YES];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"advice" object:nil];
+                }else{
+                    [RemindView showViewWithTitle:@"反馈失败" location:MIDDLE];
+                }
+            } failure:^(NSError *error) {
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }else{
+            [RemindView showViewWithTitle:@"请输入您的宝贵意见!" location:MIDDLE];
+        }
+    }else{
+        [RemindView showViewWithTitle:@"请输入您的宝贵意见!" location:MIDDLE];
+    }
+
 }
 
 - (void)addView{

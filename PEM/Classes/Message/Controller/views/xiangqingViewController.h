@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "ReloadDataDelegate.h"
+#import "LoginView.h"
 
-@interface xiangqingViewController : UIViewController<UIWebViewDelegate>
+
+@interface xiangqingViewController : UIViewController<UIWebViewDelegate,LoginViewDelegate>
 {
     float webheight;
     UIWebView *_gyWebView;
@@ -21,6 +23,9 @@
     
     //标题
     UILabel *nameLable;
+    
+    LoginView *_loginView;
+
 }
 @property (nonatomic, weak) NSString *supplyIndex;
 @property(nonatomic,weak)NSString *company_Id;

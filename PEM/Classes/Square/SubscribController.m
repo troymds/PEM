@@ -40,7 +40,7 @@
     
     
     space = 20;
-    bottomSpace = kHeight-64-149;
+    bottomSpace = kHeight-64-105;
     currentRow = 0;
     x =20;
     _currentCount = 0;
@@ -67,10 +67,22 @@
     [self addNavBarButton];
     [self loadData];
     [self addView];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
 //    tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
 }
 
+- (void)keyboardWillHiden
+{
+    isKeyboardShow = NO;
+    [UIView animateWithDuration:0.2 animations:^{
+        if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
+            [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
+        }
+        if (bottomView.frame.origin.y > 105) {
+            [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
+        }
+    }];
+}
 
 //获取用户VIP信息
 - (void)getVipInfo
@@ -105,8 +117,9 @@
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     
     // 设置普通背景图片
-    [btn setTitle:@"保存" forState:UIControlStateNormal];
+    [btn setTitle:@"保 存" forState:UIControlStateNormal];
     [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
     // 设置尺寸
     btn.frame = CGRectMake(10, 10,52, 24);
     [btn addTarget:self action:@selector(finish) forControlEvents:UIControlEventTouchUpInside];
@@ -248,7 +261,7 @@
     [_scrollView addSubview:managerBtn];
     
     
-    bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 149, kWidth,160)];
+    bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 105, kWidth,160)];
     [_scrollView addSubview:bottomView];
     UIImageView *addHotImg = [[UIImageView alloc] initWithFrame:CGRectMake(20,29, 20, 16)];
     addHotImg.image = [UIImage imageNamed:@"addtags.png"];
@@ -295,7 +308,6 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
     isKeyboardShow = YES;
-    
     CGFloat distanse = _scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
     if (distanse < 250) {
         [UIView animateWithDuration:0.2 animations:^{
@@ -303,52 +315,19 @@
             //            _scrollView.contentOffset = contentOffset;
         }];
     }
-
-//    contentOffset = _scrollView.contentOffset;
-//    if (_iPhone4) {
-//        if (bottomView.frame.origin.y - _scrollView.contentOffset.y > 100 ){
-//            CGPoint offset = _scrollView.contentOffset;
-//            offset.y = bottomView.frame.origin.y - 60;
-//            [UIView animateWithDuration:0.2 animations:^{
-//                _scrollView.contentOffset = offset;
-//            }];
-//        }
-//    }
-//    if (_iPhone5) {
-//        if (bottomView.frame.origin.y - _scrollView.contentOffset.y > 150 ){
-//            CGPoint offset = _scrollView.contentOffset;
-//            offset.y = bottomView.frame.origin.y -120;
-//            [UIView animateWithDuration:0.2 animations:^{
-//                _scrollView.contentOffset = offset;
-//            }];
-//        }
-//        
-//    }
-//    [_scrollView addGestureRecognizer:tap];
+    if (_iPhone4) {
+        [_scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-10) animated:YES];
+    }else if (_iPhone5) {
+        [_scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-75) animated:YES];
+    }else{
+        [_scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-130) animated:YES];
+    }
 
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    isKeyboardShow = NO;
-    [UIView animateWithDuration:0.2 animations:^{
-        if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
-            [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
-        }
-        if (bottomView.frame.origin.y > 149) {
-            [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
-        }
-    }];
-
-//    if (_iPhone4) {
-//    }
-//    if (_iPhone5) {
-//        [UIView animateWithDuration:0.2 animations:^{
-//            _scrollView.contentOffset = contentOffset;
-//        }];
-//    }
-//    [_scrollView removeGestureRecognizer:tap];
-//
+    
 }
 
 
@@ -473,7 +452,7 @@
         }
     }else{
         CGRect bottomFrame = bottomView.frame;
-        bottomFrame.origin.y = 149;   //40为热门标签的底坐标，20为button的高度，10为上下button的间距
+        bottomFrame.origin.y = 105;   //40为热门标签的底坐标，20为button的高度，10为上下button的间距
         if (!_isDelete) {
             [UIView animateWithDuration:0.2 animations:^{
                 bottomView.frame = bottomFrame;
@@ -490,11 +469,18 @@
                 //            _scrollView.contentOffset = contentOffset;
             }];
         }
+        if (_iPhone4) {
+            [_scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-10) animated:YES];
+        }else if (_iPhone5) {
+            [_scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-75) animated:YES];
+        }else{
+            [_scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-130) animated:YES];
+        }
     }else{
         if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
             [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
         }
-        if (bottomView.frame.origin.y > 149) {
+        if (bottomView.frame.origin.y > 105) {
             [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
         }
     }

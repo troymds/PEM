@@ -386,7 +386,7 @@
             //隐藏掉可能存在的错误提示
             remindLabel.text = @"";
             [UIView animateWithDuration:0.3 animations:^{
-                finishBtn.frame = CGRectMake(21, bgView.frame.origin.y+bgView.frame.size.height, kWidth-21*2, 35);
+                finishBtn.frame = CGRectMake(21, bgView.frame.origin.y+bgView.frame.size.height+10, kWidth-21*2, 35);
                 if (isEditing) {
                     [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
                     

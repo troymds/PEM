@@ -34,8 +34,8 @@
         [self addSubview:bgView1];
         
         _categoryView = [[CellView alloc] initWithFrame:CGRectMake(0, 0, width, 35)];
-        _categoryView.nameLabel.text = @"分 类";
-        _categoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 0,width-80, 35)];
+        _categoryView.nameLabel.text = @"分     类";
+        _categoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 0,width-75-17, 35)];
         _categoryLabel.backgroundColor = [UIColor clearColor];
         [_categoryView addSubview:_categoryLabel];
         
@@ -53,8 +53,8 @@
         
         
         _areaView = [[CellView alloc] initWithFrame:CGRectMake(0, 35, width, 35)];
-        _areaView.nameLabel.text = @"区 域";
-        _areaLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 0,width-80, 35)];
+        _areaView.nameLabel.text = @"区     域";
+        _areaLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 0,width-75-17, 35)];
         _areaLabel.backgroundColor = [UIColor clearColor];
         [_areaView addSubview:_areaLabel];
         
@@ -73,8 +73,8 @@
         
         
         _titleView = [[CellView alloc] initWithFrame:CGRectMake(0, 70, width, 35)];
-        _titleView.nameLabel.text = @"标 题";
-        _titleTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 0,width-90, 35)];
+        _titleView.nameLabel.text = @"标     题";
+        _titleTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0,width-75, 35)];
         _titleTextField.tag = TITLE_TYPE;
         _titleTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _titleTextField.font =[UIFont systemFontOfSize:PxFont(20)];
@@ -99,11 +99,9 @@
         [self addSubview:bgView2];
         
         _priceView = [[CellView alloc] initWithFrame:CGRectMake(0, 0, width, 35)];
-        _priceView.nameLabel.text = @"价    格";
+        _priceView.nameLabel.text = @"价     格";
         UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(width-10-20, 0, 20, 35)];
         priceLabel.text = @"元";
-        _priceView.lineView.frame = CGRectMake(70,(_priceView.frame.size.height-20)/2, 1, 20);
-        _priceView.nameLabel.frame =CGRectMake(5,0,65,35);
         priceLabel.backgroundColor = [UIColor clearColor];
         [_priceView addSubview:priceLabel];
         _priceTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0,width-75-20, 35)];
@@ -116,10 +114,7 @@
         [bgView2 addSubview:_priceView];
         
         _unitView = [[CellView alloc] initWithFrame:CGRectMake(0,35, width, 35)];
-        _unitView.lineView.frame = CGRectMake(70,(_unitView.frame.size.height-20)/2, 1, 20);
-        _unitView.nameLabel.text = @"单    位";
-        _unitView.nameLabel.frame =CGRectMake(5,0,65,35);
-
+        _unitView.nameLabel.text = @"单     位";
         _unitField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _unitView.frame.size.width-75, 35)];
         _unitField.tag = UNIT_TYPE;
         _unitField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -131,9 +126,6 @@
         
         _standardView = [[CellView alloc] initWithFrame:CGRectMake(0,70, width, 35)];
         _standardView.nameLabel.text = @"起定标准";
-        _standardView.lineView.frame = CGRectMake(70,(_standardView.frame.size.height-20)/2, 1, 20);
-        _standardView.nameLabel.frame =CGRectMake(5,0,65,35);
-        
         _standardTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _standardView.frame.size.width-75, 35)];
         _standardTextField.tag = STANDARD_TYPE;
         _standardTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -144,11 +136,9 @@
         [bgView2 addSubview:_standardView];
         
         _descriptionView = [[CellView alloc] initWithFrame:CGRectMake(0, 105, width, 35)];
-        _descriptionView.nameLabel.text = @"描    述";
-        _descriptionView.lineView.frame = CGRectMake(70,(_descriptionView.frame.size.height-20)/2, 1, 20);
-        _descriptionView.nameLabel.frame =CGRectMake(5,0,65,35);
+        _descriptionView.nameLabel.text = @"描     述";
 
-        _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 0,width-75-10-7, 35)];
+        _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 0,width-75-17, 35)];
         _descriptionLabel.backgroundColor = [UIColor clearColor];
         _descriptionLabel.textColor = HexRGB(0x666666);
         _descriptionLabel.font = [UIFont systemFontOfSize:PxFont(20)];
@@ -186,10 +176,8 @@
         
         
         _linkmanView = [[CellView alloc] initWithFrame:CGRectMake(0,0, width, 35)];
-        _linkmanView.nameLabel.text = @"联系人";
-        _linkmanView.lineView.frame = CGRectMake(55,(_linkmanView.frame.size.height-20)/2, 1, 20);
-        _linkmanView.nameLabel.frame =CGRectMake(5,0,50,35);
-        _linkManTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 0, _linkmanView.frame.size.width-60, 35)];
+        _linkmanView.nameLabel.text = @"联 系 人";
+        _linkManTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _linkmanView.frame.size.width-75, 35)];
         _linkManTextField.tag = LINKMAN_TYPE;
         _linkManTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _linkManTextField.placeholder = @"2-4个字符";
@@ -200,10 +188,8 @@
         
         
         _phoneNumView = [[CellView alloc] initWithFrame:CGRectMake(0, 35, width, 35)];
-        _phoneNumView.nameLabel.text = @"电   话";
-        _phoneNumView.lineView.frame = CGRectMake(55,(_phoneNumView.frame.size.height-20)/2, 1, 20);
-        _phoneNumView.nameLabel.frame =CGRectMake(5,0,50,35);
-        _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 0, _phoneNumView.frame.size.width-60, 35)];
+        _phoneNumView.nameLabel.text = @"电     话";
+        _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _phoneNumView.frame.size.width-75, 35)];
         _phoneNumTextField.tag = PHONENUM_TYPE;
         _phoneNumTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _phoneNumTextField.font = [UIFont systemFontOfSize:PxFont(20)];
@@ -214,10 +200,8 @@
         
         
         _imageView = [[CellView alloc] initWithFrame:CGRectMake(0,70, width, 35)];
-        _imageView.nameLabel.text = @"图   片";
-        _imageView.lineView.frame = CGRectMake(55,(_phoneNumView.frame.size.height-20)/2, 1, 20);
-        _imageView.nameLabel.frame =CGRectMake(5,0,50,35);
-        UILabel *imgLabel = [[UILabel alloc] initWithFrame:CGRectMake(60,0, 60, 35)];
+        _imageView.nameLabel.text = @"图     片";
+        UILabel *imgLabel = [[UILabel alloc] initWithFrame:CGRectMake(80,0, 60, 35)];
         imgLabel.font = [UIFont systemFontOfSize:PxFont(20)];
         imgLabel.backgroundColor = [UIColor clearColor];
         imgLabel.text = @"一张";
@@ -239,7 +223,7 @@
         
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(36,433, 150, 20)];
-        label.text = @"是否上传3D图片";
+        label.text = @"是否上传全景图片";
         label.textColor = HexRGB(0x666666);
         label.font = [UIFont systemFontOfSize:PxFont(20)];
         label.backgroundColor = [UIColor clearColor];
@@ -255,7 +239,7 @@
         
         _remindView = [[UIView alloc] initWithFrame:CGRectMake(20, 460, kWidth-20*2, 30)];
         
-        NSString *string = @"上传3D图片需要大量素材，发布成功后请等待我们与您联系，或现在";
+        NSString *string = @"上传全景图片需要大量素材，发布成功后请等待我们与您联系，或现在";
         CGSize size = [AdaptationSize getSizeFromString:string Font:[UIFont systemFontOfSize:12] withHight:15 withWidth:CGFLOAT_MAX];
         
         CGSize btnSize = [AdaptationSize getSizeFromString:@"联系我们" Font:[UIFont systemFontOfSize:12] withHight:15 withWidth:CGFLOAT_MAX];

@@ -69,9 +69,8 @@
     tagsArray = [NSMutableArray array];
     
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 }
-
 
 - (void)addView
 {
@@ -370,8 +369,9 @@
         default:
             break;
     }
-    
 }
+
+
 
 
 #pragma mark alertView_delegate
@@ -541,7 +541,7 @@
             }else{
                 int display_3d_num = [[SystemConfig sharedInstance].vipInfo.display_3d_num intValue];
                 if (display_3d_num <= 0) {
-                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您还不能上传3D图片或上传3D图片数量已用完,要上传3D图片,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
+                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您还不能上传全景图片或上传全景图片数量已用完,要上传全景图片,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
                     actionSheet.tag = 1001;
                     [actionSheet showView];
                 }else{
@@ -559,7 +559,7 @@
             break;
         case 3004:
         {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"上传3D图片" message:@"" delegate:self cancelButtonTitle:@"咨询我们" otherButtonTitles:@"取消", nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"上传全景图片" message:@"" delegate:self cancelButtonTitle:@"咨询我们" otherButtonTitles:@"取消", nil];
             alertView.tag = 1002;
             alertView.delegate = self;
             [alertView show];
@@ -756,24 +756,24 @@
     }
 
     if (_isPurchase) {
+
         [_purchaseScrollView setContentOffset:CGPointMake(0, y) animated:YES];
-//        [UIView animateWithDuration:0.2 animations:^{
-//            [_purchaseScrollView setContentOffset:CGPointMake(0, y)];
-//        }];
         [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416+240)];
     }else{
-//        [UIView animateWithDuration:0.2 animations:^{
-//            [_supplyScrollView setContentOffset:CGPointMake(0, y)];
-//        }];
         [_supplyScrollView setContentOffset:CGPointMake(0, y) animated:YES];
         [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+240)];
     }
 
 }
 
-- (void)textFieldEndEditting:(UITextField *)textField
+//- (void)textFieldEndEditting:(UITextField *)textField
+//{
+//    isEditing = NO;
+//
+//}
+
+- (void)keyboardWillHide
 {
-    isEditing = NO;
     if (_isPurchase) {
         [UIView animateWithDuration:0.2 animations:^{
             [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416)];
@@ -783,14 +783,14 @@
             [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
         }];
     }
-
 }
 
 //发布求购成功后，清空页面数据
 - (void)clearPurchaseData
 {
     _purchaseView.titleTextField.text = @"";
-    _purchaseView.descriptionLabel.text = @"";
+    _purchaseView.descriptionLabel.text = @"十字以上";
+    _purchaseView.descriptionLabel.textColor = HexRGB(0x666666);
     demandDes = @"";
     _purchaseView.purchaseNumField.text = @"";
     _purchaseView.unitField.text = @"";
@@ -808,6 +808,7 @@
     _supplyView.unitField.text = @"";
     _supplyView.standardTextField.text = @"";
     _supplyView.descriptionLabel.text = @"十字以上";
+    _supplyView.descriptionLabel.textColor = HexRGB(0x666666);
     supplyDes = @"";
     _supplyView.headImage.image = nil;
     headImage = nil;
@@ -1067,9 +1068,11 @@
     }else if ([controller isKindOfClass:[DescriptionController class]]){
         if (isDemand) {
             demandDes = value;
+            _purchaseView.descriptionLabel.textColor = [UIColor blackColor];
             _purchaseView.descriptionLabel.text = value;
         }else{
             supplyDes = value;
+            _supplyView.descriptionLabel.textColor = [UIColor blackColor];
             _supplyView.descriptionLabel.text = value;
         }
     }else if([controller isKindOfClass:[HotTagsController class]]){

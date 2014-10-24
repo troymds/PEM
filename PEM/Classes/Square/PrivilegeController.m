@@ -162,7 +162,7 @@
             rightImg.image = [UIImage imageNamed:@"vip_1_info.png"];
             rightImg.frame = CGRectMake(22,24,229,369);
             upPowerBtn.hidden = YES;
-            if (rightImg.frame.origin.y < _scrollView.frame.size.height) {
+            if (rightImg.frame.origin.y+rightImg.frame.size.height < _scrollView.frame.size.height) {
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,_scrollView.frame.size.height)];
             }else{
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,rightImg.frame.origin.y+rightImg.frame.size.height+20)];
@@ -171,7 +171,7 @@
             rightImg.image = [UIImage imageNamed:@"vip_2_info.png"];
             rightImg.frame = CGRectMake(22,24,229,369);
             upPowerBtn.hidden = YES;
-            if (rightImg.frame.origin.y < _scrollView.frame.size.height) {
+            if (rightImg.frame.origin.y+rightImg.frame.size.height < _scrollView.frame.size.height) {
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,_scrollView.frame.size.height)];
             }else{
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,rightImg.frame.origin.y+rightImg.frame.size.height+20)];
@@ -180,7 +180,7 @@
             rightImg.image = [UIImage imageNamed:@"vip_3_info.png"];
             rightImg.frame = CGRectMake(22,24,229,369);
             upPowerBtn.hidden = YES;
-            if (rightImg.frame.origin.y < _scrollView.frame.size.height) {
+            if (rightImg.frame.origin.y+rightImg.frame.size.height < _scrollView.frame.size.height) {
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,_scrollView.frame.size.height)];
             }else{
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,rightImg.frame.origin.y+rightImg.frame.size.height+20)];
@@ -189,7 +189,7 @@
             rightImg.image = [UIImage imageNamed:@"vip_4_info.png"];
             rightImg.frame = CGRectMake(22,24,229,369);
             upPowerBtn.hidden = YES;
-            if (rightImg.frame.origin.y < _scrollView.frame.size.height) {
+            if (rightImg.frame.origin.y+rightImg.frame.size.height < _scrollView.frame.size.height) {
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,_scrollView.frame.size.height)];
             }else{
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,rightImg.frame.origin.y+rightImg.frame.size.height+20)];
@@ -220,7 +220,7 @@
             rightImg.image = [UIImage imageNamed:@"vip_visitor.png"];
             rightImg.frame = CGRectMake(22,24,234,128);
             upPowerBtn.hidden = YES;
-            if (rightImg.frame.origin.y < _scrollView.frame.size.height) {
+            if (rightImg.frame.origin.y +rightImg.frame.size.height < _scrollView.frame.size.height) {
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,_scrollView.frame.size.height)];
             }else{
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,rightImg.frame.origin.y+rightImg.frame.size.height+20)];
@@ -234,11 +234,11 @@
             rightImg.frame = CGRectMake(22,24,229,229);
             
             upPowerBtn.frame = CGRectMake(22,rightImg.frame.origin.y+rightImg.frame.size.height,_scrollView.frame.size.width-22*2,35);
-            if (upPowerBtn.frame.origin.y+upPowerBtn.frame.size.height +10 < _scrollView.frame.size.height) {
-                [_scrollView setContentSize:CGSizeMake(kWidth-60, _scrollView.frame.size.height)];
-            }else{
-                [_scrollView setContentSize:CGSizeMake(kWidth-60,upPowerBtn.frame.origin.y+upPowerBtn.frame.size.height+20)];
-            }
+//            if (upPowerBtn.frame.origin.y+upPowerBtn.frame.size.height +10 < _scrollView.frame.size.height) {
+//                [_scrollView setContentSize:CGSizeMake(kWidth-60, _scrollView.frame.size.height)];
+//            }else{
+//                [_scrollView setContentSize:CGSizeMake(kWidth-60,upPowerBtn.frame.origin.y+upPowerBtn.frame.size.height+20)];
+//            }
             upPowerBtn.hidden = NO;
             //判断是否需要升级按钮
             if ([SystemConfig sharedInstance].viptype) {

@@ -23,7 +23,8 @@
     UILabel *_messageLabel;
     UIButton *_cancelButton;
     UIButton *_otherButton;
-//    UIView *bgView;
+    UIView *bgView;
+    UIView *view;
 }
 
 @property (nonatomic,weak) id <MyActionSheetViewDelegate> delegate;

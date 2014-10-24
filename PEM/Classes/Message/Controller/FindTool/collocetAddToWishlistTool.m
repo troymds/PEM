@@ -39,7 +39,7 @@
     
     
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:wishlistid, @"wishlistid", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:wishlistid, @"wishlistid",companyid,@"company_id", nil];
     [HttpTool postWithPath:@"cancleWishlist" params:dic success:^(id JSON) {
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
 

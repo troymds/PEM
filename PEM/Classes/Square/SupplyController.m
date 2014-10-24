@@ -101,12 +101,6 @@
 
 - (void)keyboardWillHide
 {
-//    if (_offset.y > _scrollView.contentSize.height - _scrollView.frame.size.height){
-//        _offset.y = _scrollView.contentSize.height - _scrollView.frame.size.height;
-//    }
-//    [UIView animateWithDuration:0.3 animations:^{
-//        _scrollView.contentOffset = _offset;
-//    }];
     [UIView animateWithDuration:0.2 animations:^{
         [_scrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
     }];
@@ -114,104 +108,80 @@
 
 - (void)textFieldBeganEditting:(UITextField *)textField{
     activeField = textField;
-    [UIView animateWithDuration:0.02 animations:^{
-        [_scrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+240)];
-    }];
-//    if (_iPhone4) {
-//        if(textField.tag == PRICE_TYPE){
-//            if (_scrollView.contentOffset.y < 50) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _scrollView.contentOffset;
-//                    _offset = offset;
-//                    offset.y = 50;
-//                    _scrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == UNIT_TYPE){
-//            if (_scrollView.contentOffset.y < 80) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _scrollView.contentOffset;
-//                    _offset = offset;
-//                    offset.y = 80;
-//                    _scrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == STANDARD_TYPE){
-//            if (_scrollView.contentOffset.y < 140) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _scrollView.contentOffset;
-//                    _offset = offset;
-//                    offset.y = 140;
-//                    _scrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == LINKMAN_TYPE){
-//            if (_scrollView.contentOffset.y < 200) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _scrollView.contentOffset;
-//                    _offset = offset;
-//                    offset.y = 200;
-//                    _scrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == PHONENUM_TYPE){
-//            if (_scrollView.contentOffset.y < 240) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _scrollView.contentOffset;
-//                    _offset = offset;
-//                    offset.y = 240;
-//                    _scrollView.contentOffset= offset;
-//                }];
-//            }
-//        }
-//    }else if (_iPhone5){
-//        if(textField.tag == PRICE_TYPE){
-//            if (_scrollView.contentOffset.y < 50) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _scrollView.contentOffset;
-//                    _offset = offset;
-//                    offset.y = 50;
-//                    _scrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == UNIT_TYPE){
-//            if (_scrollView.contentOffset.y < 80) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _scrollView.contentOffset;
-//                    _offset = offset;
-//                    offset.y = 80;
-//                    _scrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == STANDARD_TYPE){
-//            if (_scrollView.contentOffset.y < 140) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _scrollView.contentOffset;
-//                    _offset = offset;
-//                    offset.y = 140;
-//                    _scrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == LINKMAN_TYPE){
-//            if (_scrollView.contentOffset.y < 200) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _scrollView.contentOffset;
-//                    _offset = offset;
-//                    offset.y = 200;
-//                    _scrollView.contentOffset= offset;
-//                }];
-//            }
-//        }else if(textField.tag == PHONENUM_TYPE){
-//            if (_scrollView.contentOffset.y < 240) {
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    CGPoint offset = _scrollView.contentOffset;
-//                    _offset = offset;
-//                    offset.y = 240;
-//                    _scrollView.contentOffset= offset;
-//                }];
-//            }
-//        }
-//    }
+    CGFloat y = 0;
+    switch (textField.tag) {
+        case TITLE_TYPE:
+        {
+            if (_iPhone4) {
+                y = 35;
+            }else if (_iPhone5){
+                y = 0;
+            }else{
+                y = 0;
+            }
+        }
+            break;
+        case PRICE_TYPE:
+        {
+            if (_iPhone4) {
+                y = 75;
+            }else if (_iPhone5){
+                y = 35;
+            }else{
+                y = 0;
+            }
+        }
+            break;
+        case UNIT_TYPE:
+        {
+            if (_iPhone4) {
+                y = 110;
+            }else if (_iPhone5){
+                y = 70;
+            }else{
+                y = 35;
+            }
+        }
+            break;
+        case STANDARD_TYPE:
+        {
+            if (_iPhone4) {
+                y = 150;
+            }else if (_iPhone5){
+                y = 105;
+            }else{
+                y = 70;
+            }
+        }
+            break;
+        case LINKMAN_TYPE:
+        {
+            if (_iPhone4) {
+                y = 240;
+            }else if (_iPhone5){
+                y = 190;
+            }else{
+                y = 145;
+            }
+        }
+            break;
+        case PHONENUM_TYPE:
+        {
+            if (_iPhone4) {
+                y = 275;
+            }else if (_iPhone5){
+                y = 225;
+            }else{
+                y = 180;
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    [_scrollView setContentOffset:CGPointMake(0, y) animated:YES];
+    [_scrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+240)];
+
 }
 
 - (void)loadData
@@ -329,13 +299,13 @@
         case 3003:
         {
             if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
-                MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好！您目前所处等级没有权限上传3D图片,请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
+                MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好！您目前所处等级没有权限上传全景图片,请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
                 actionView.tag =1000;
                 [actionView showView];
             }else{
                 int display_3d_num = [[SystemConfig sharedInstance].vipInfo.display_3d_num intValue];
                 if (display_3d_num <= 0) {
-                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您还不能上传3D图片或上传3D图片数量已用完,要上传3D图片,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
+                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您还不能上传全景图片或上传全景图片数量已用完,要上传全景图片,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
                     actionSheet.tag = 1001;
                     [actionSheet showView];
                 }else{
@@ -353,7 +323,7 @@
             break;
         case 3004:
         {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"上传3D图片" message:@"" delegate:self cancelButtonTitle:@"咨询我们" otherButtonTitles:@"取消", nil];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"上传全景图片" message:@"" delegate:self cancelButtonTitle:@"咨询我们" otherButtonTitles:@"取消", nil];
             alertView.tag = 1002;
             alertView.delegate = self;
             [alertView show];

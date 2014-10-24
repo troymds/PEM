@@ -9,11 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @interface phoneView : NSObject
+
 typedef void (^ACETelCallBlock)(NSTimeInterval duration);
 typedef void (^ACETelCancelBlock)(void);
+typedef void (^ACETelBackBlock)(void);
 
 + (BOOL)callPhoneNumber:(NSString *)phoneNumber
                    call:(ACETelCallBlock)callBlock
-                 cancel:(ACETelCancelBlock)cancelBlock;
+                 cancel:(ACETelCancelBlock)cancelBlock finish:(ACETelBackBlock)backBlock;
 
 @end

@@ -14,6 +14,7 @@
 
 @property (nonatomic, copy) ACETelCallBlock callBlock;
 @property (nonatomic, copy) ACETelCancelBlock cancelBlock;
+@property (nonatomic, copy) ACETelBackBlock backBlock;
 @end
 
 @implementation phoneView
@@ -29,7 +30,7 @@
 
 + (BOOL)callPhoneNumber:(NSString *)phoneNumber
                    call:(ACETelCallBlock)callBlock
-                 cancel:(ACETelCancelBlock)cancelBlock
+                 cancel:(ACETelCancelBlock)cancelBlock finish:(ACETelBackBlock)backBlock
 {
     if ([self validPhone:phoneNumber]) {
         
@@ -41,6 +42,7 @@
         // set the blocks
         telPrompt.callBlock = callBlock;
         telPrompt.cancelBlock = cancelBlock;
+        telPrompt.backBlock = backBlock;
         
         // clean the phone number
         NSString *simplePhoneNumber =
@@ -96,11 +98,14 @@
     
     if (self.callStartTime != nil) {
         
+        
         // I'm coming back after a call
         if (self.callBlock != nil) {
             self.callBlock(-([self.callStartTime timeIntervalSinceNow]) - kCallSetupTime);
         }
-        
+        if (self.backBlock !=nil) {
+            self.backBlock();
+        }
         // reset the start timer
         self.callStartTime = nil;
         

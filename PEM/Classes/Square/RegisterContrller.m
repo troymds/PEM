@@ -42,6 +42,7 @@
     // 设置普通背景图片
     [btn setTitle:@"登 录" forState:UIControlStateNormal];
     [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
     // 设置尺寸
     btn.frame = CGRectMake(10, 10,52, 24);
     [btn addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
@@ -60,26 +61,6 @@
     }else{
         [self.navigationController popViewControllerAnimated:YES];
     }
-//    NSArray *viewControllers = self.navigationController.viewControllers;
-//    for (int i = (int)[viewControllers count]-1; i >= 0; i--) {
-//        id vc = [viewControllers objectAtIndex:i];
-//        if ([vc isKindOfClass:[PrivilegeController class]]) {
-//                LoginController *loginVC =  [[LoginController alloc] init];
-//                [self.navigationController pushViewController:loginVC animated:YES];
-//            return;
-//        }
-//    }
-//    for (int i = (int)[viewControllers count]-1; i >= 0; i--) {
-//        id vc = [viewControllers objectAtIndex:i];
-//         if ([vc respondsToSelector:@selector(backFromController:)]) {
-//            self.delegate = vc;
-//            [self.delegate backFromController:self];
-//            break;
-//        }
-//    }
-//
-    
-    
 }
 
 - (void)addView{

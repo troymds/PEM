@@ -33,8 +33,8 @@
         [self addSubview:bgView1];
 
         _categoryView = [[CellView alloc] initWithFrame:CGRectMake(0, 0, width, 35)];
-        _categoryView.nameLabel.text = @"分  类";
-        _categoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, _categoryView.frame.size.width-60, 35)];
+        _categoryView.nameLabel.text = @"分     类";
+        _categoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 0, _categoryView.frame.size.width-75-17, 35)];
         _categoryLabel.backgroundColor = [UIColor clearColor];
         [_categoryView addSubview:_categoryLabel];
         UIImageView *img1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"]];
@@ -53,8 +53,8 @@
 
         
         _titleView = [[CellView alloc] initWithFrame:CGRectMake(0, 35, width, 35)];
-        _titleView.nameLabel.text = @"标  题";
-        _titleTextField = [[UITextField alloc] initWithFrame:CGRectMake(60, 0, _titleView.frame.size.width-60, 35)];
+        _titleView.nameLabel.text = @"标     题";
+        _titleTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _titleView.frame.size.width-75, 35)];
         _titleTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _titleTextField.tag = PC_TITLE_TYPE;
         _titleTextField.font = [UIFont systemFontOfSize:PxFont(20)];
@@ -64,8 +64,8 @@
         [bgView1 addSubview:_titleView];
         
         _descriptionView = [[CellView alloc] initWithFrame:CGRectMake(0, 70, width, 35)];
-        _descriptionView.nameLabel.text = @"描  述";
-        _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, width-60-25, 35)];
+        _descriptionView.nameLabel.text = @"描     述";
+        _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 0, width-75-25, 35)];
         _descriptionLabel.font = [UIFont systemFontOfSize:PxFont(20)];
         _descriptionLabel.textColor = HexRGB(0x666666);
         _descriptionLabel.backgroundColor = [UIColor clearColor];
@@ -97,9 +97,7 @@
         [self addSubview:bgView2];
 
         _purchaseNum = [[CellView alloc] initWithFrame:CGRectMake(0, 0, width, 35)];
-        _purchaseNum.lineView.frame = CGRectMake(70,(_purchaseNum.frame.size.height-20)/2, 1, 20);
         _purchaseNum.nameLabel.text = @"求购数量";
-        _purchaseNum.nameLabel.frame =CGRectMake(5,0,65,35);
         _purchaseNumField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _purchaseNum.frame.size.width-75, 35)];
         _purchaseNumField.tag = PC_PURCHASE_TYPE;
         _purchaseNumField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -111,9 +109,7 @@
         [bgView2 addSubview:_purchaseNum];
         
         _unitView = [[CellView alloc] initWithFrame:CGRectMake(0,35, width, 35)];
-        _unitView.lineView.frame = CGRectMake(70,(_purchaseNum.frame.size.height-20)/2, 1, 20);
         _unitView.nameLabel.text = @"单     位";
-        _unitView.nameLabel.frame =CGRectMake(5,0,65,35);
         _unitField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _purchaseNum.frame.size.width-75, 35)];
         _unitField.tag = PC_UNIT_TYPE;
         _unitField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -126,8 +122,6 @@
         
         _linkmanView = [[CellView alloc] initWithFrame:CGRectMake(0, 70, width, 35)];
         _linkmanView.nameLabel.text = @"联 系 人";
-        _linkmanView.lineView.frame = CGRectMake(70,(_linkmanView.frame.size.height-20)/2, 1, 20);
-        _linkmanView.nameLabel.frame =CGRectMake(5,0,65,35);
         _linkManTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _linkmanView.frame.size.width-75, 35)];
         _linkManTextField.tag = PC_LINKMAN_TYPE;
         _linkManTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -166,8 +160,8 @@
 
         
         _markView = [[CellView alloc] initWithFrame:CGRectMake(0, 0, width, 35)];
-        _markView.nameLabel.text = @"标  签";
-        _markLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, _markView.frame.size.width-60-17, 35)];
+        _markView.nameLabel.text = @"标     签";
+        _markLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 0, _markView.frame.size.width-75-17, 35)];
         _markLabel.backgroundColor = [UIColor clearColor];
         [_markView addSubview:_markLabel];
         UIImageView *img3 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"]];

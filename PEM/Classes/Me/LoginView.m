@@ -25,10 +25,12 @@
         tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
         [view addGestureRecognizer:tap];
         
-        bgView =[[UIImageView alloc] initWithFrame:CGRectMake((kWidth-275)/2,95, 275, 250)];
+        bgView =[[UIImageView alloc] initWithFrame:CGRectMake((kWidth-275)/2,kHeight, 275, 250)];
         bgView.backgroundColor = HexRGB(0xffffff);
         bgView.userInteractionEnabled = YES;
         [self addSubview:bgView];
+        tap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick)];
+        [bgView addGestureRecognizer:tap1];
         
         UIImageView *userImg = [[UIImageView alloc] initWithFrame:CGRectMake(20, 27.5, 25, 23)];
         userImg.image = [UIImage imageNamed:@"regsiter_user_btn.png"];
@@ -42,7 +44,7 @@
         _userField.keyboardType = UIKeyboardTypeNumberPad;
         [bgView addSubview:_userField];
         
-        UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake(10,64.5,bgView.frame.size.width-10*2, 0.5)];
+        line1 = [[UIView alloc] initWithFrame:CGRectMake(10,64.5,bgView.frame.size.width-10*2, 0.5)];
         line1.backgroundColor = HexRGB(0x666666);
         [bgView addSubview:line1];
         
@@ -58,7 +60,7 @@
         _passwordField.secureTextEntry = YES;
         [bgView addSubview:_passwordField];
         
-        UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(10,114.5,bgView.frame.size.width-10*2, 0.5)];
+        line2 = [[UIView alloc] initWithFrame:CGRectMake(10,114.5,bgView.frame.size.width-10*2, 0.5)];
         line2.backgroundColor = HexRGB(0x666666);
         [bgView addSubview:line2];
 
@@ -97,10 +99,36 @@
         [registerBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
         [bgView addSubview:registerBtn];
         [self addSubview:bgView];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            bgView.frame = CGRectMake((kWidth-275)/2,95, 275, 250);
+        }];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
+
     }
     return self;
 }
 
+- (void)keyboardWillShow
+{
+    if (_iPhone4) {
+        CGRect frame = bgView.frame;
+        [UIView animateWithDuration:0.3 animations:^{
+            bgView.frame = CGRectMake(frame.origin.x,frame.origin.y-40, frame.size.width, frame.size.height);
+        }];
+    }
+}
+
+
+- (void)keyboardWillHiden
+{
+    if (_iPhone4) {
+        [UIView animateWithDuration:0.3 animations:^{
+            bgView.frame = CGRectMake((kWidth-275)/2,95, 275, 250);
+        }];
+    }
+}
 
 -(void)tapDown
 {
@@ -110,13 +138,31 @@
     [self dismissView];
 }
 
+- (void)tapClick
+{
+    for (UIView *subView in bgView.subviews) {
+        if ([subView isKindOfClass:[UITextField class]]) {
+            [subView  resignFirstResponder];
+        }
+    }
+}
+
 
 - (void)showView{
+    if (bgView.frame.origin.y == kHeight) {
+        [UIView animateWithDuration:0.3 animations:^{
+            bgView.frame = CGRectMake((kWidth-275)/2,95, 275, 250);
+        }];
+    }
     [[[UIApplication sharedApplication] keyWindow] addSubview:self];
 }
 
 - (void)dismissView{
-    [self removeFromSuperview];
+    [UIView animateWithDuration:0.3 animations:^{
+        bgView.frame = CGRectMake((kWidth-275)/2,kHeight, 275, 250);
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+    }];
 }
 
 - (void)buttonDown:(UIButton *)btn{
@@ -135,11 +181,20 @@
 
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
+    if (textField.tag == USERNAME_TYPE) {
+        line1.backgroundColor = HexRGB(0x069dd4);
+    }else{
+        line2.backgroundColor = HexRGB(0x069dd4);
+    }
 
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
-    
+    if (textField.tag == USERNAME_TYPE) {
+        line1.backgroundColor = HexRGB(0x666666);
+    }else{
+        line2.backgroundColor = HexRGB(0x666666);
+    }
 }
 
 
