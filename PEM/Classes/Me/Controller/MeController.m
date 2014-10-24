@@ -789,7 +789,8 @@
 - (void)clearPurchaseData
 {
     _purchaseView.titleTextField.text = @"";
-    _purchaseView.descriptionLabel.text = @"";
+    _purchaseView.descriptionLabel.text = @"十字以上";
+    _purchaseView.descriptionLabel.textColor = HexRGB(0x666666);
     demandDes = @"";
     _purchaseView.purchaseNumField.text = @"";
     _purchaseView.unitField.text = @"";
@@ -807,6 +808,7 @@
     _supplyView.unitField.text = @"";
     _supplyView.standardTextField.text = @"";
     _supplyView.descriptionLabel.text = @"十字以上";
+    _supplyView.descriptionLabel.textColor = HexRGB(0x666666);
     supplyDes = @"";
     _supplyView.headImage.image = nil;
     headImage = nil;
@@ -1066,9 +1068,11 @@
     }else if ([controller isKindOfClass:[DescriptionController class]]){
         if (isDemand) {
             demandDes = value;
+            _purchaseView.descriptionLabel.textColor = [UIColor blackColor];
             _purchaseView.descriptionLabel.text = value;
         }else{
             supplyDes = value;
+            _supplyView.descriptionLabel.textColor = [UIColor blackColor];
             _supplyView.descriptionLabel.text = value;
         }
     }else if([controller isKindOfClass:[HotTagsController class]]){

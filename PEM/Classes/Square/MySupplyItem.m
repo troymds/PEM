@@ -21,7 +21,11 @@
         int min_supply_num = [[dic objectForKey:@"min_supply_num"] intValue];
         _min_supply_num = [NSString stringWithFormat:@"%d",min_supply_num];
         _name = [dic objectForKey:@"name"];
-        _price = [dic objectForKey:@"price"];
+        if (isNull(dic, @"price")) {
+            _price = @"0";
+        }else{
+            _price = [dic objectForKey:@"price"];
+        }
         _read_num = [dic objectForKey:@"read_num"];
         _region = [dic objectForKey:@"region"];
         _unit = [dic objectForKey:@"unit"];
