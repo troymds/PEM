@@ -12,6 +12,11 @@
 
 
 @interface MessageController : UIViewController
+{
+
+    int currentTag;
+    NSString *currStr;
+}
 
 @property(nonatomic,assign)id <ChangeControllerDelegate> delegate;
 

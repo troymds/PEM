@@ -41,6 +41,7 @@
     
     
     int currentTag;
+    
     NSString *curStr;
 }
 @end
@@ -412,13 +413,15 @@
         [categoryButtTitle setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         categoryButtTitle.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
         [categoryButtTitle setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
-                categoryButtTitle.tag = [hotCategoryModel.cateid intValue]+100;
-        CategoryButt.tag=categoryButtTitle.tag;
         
 
         
         UIImageView *findImage =[[UIImageView alloc]init];
         findImage.frame =CGRectMake(20+c%4*(50+25), 152+c/4*(40+40), 50,50);
+        
+        categoryButtTitle.tag = [hotCategoryModel.cateid intValue]+100;
+        CategoryButt.tag=categoryButtTitle.tag;
+
         findImage.tag = CategoryButt.tag+10000;
         
         [_backScrollView addSubview:findImage];

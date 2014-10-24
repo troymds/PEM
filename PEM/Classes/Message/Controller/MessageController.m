@@ -53,7 +53,7 @@
     //    _searchImage.userInteractionEnabled = YES;
     //    _searchImage.image =[UIImage imageNamed:@"nav_searchhome.png"];
     
-    
+    currentTag =0;
     
     
     
@@ -124,9 +124,7 @@
         UIButton *button =[UIButton buttonWithType:UIButtonTypeCustom];
         
         button.frame = CGRectMake(but%3*(70+37), 0+but/3*(60+35), kWidth/3, 96);
-        button.tag =but+100;
         [_scrollView addSubview:button];
-        [button setBackgroundImage:[UIImage imageNamed:@"dibuhengtiao.png"] forState:UIControlStateHighlighted];
         UIButton *titleBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [titleBtn setTitle:cagegoryModel.nameGategory forState:UIControlStateNormal];
         [_scrollView addSubview:titleBtn];
@@ -134,7 +132,6 @@
         titleBtn.frame =CGRectMake(25+but%3*(70+40), 67+but/3*(60+35), 50, 30);
         [titleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         titleBtn.titleLabel.font =[UIFont systemFontOfSize:14];
-        button.tag = [cagegoryModel.idType intValue]+1000;
         [titleBtn addTarget:self action:@selector(itemsClick:) forControlEvents:UIControlEventTouchUpInside];
         [button addTarget:self action:@selector(itemsClick:) forControlEvents:UIControlEventTouchUpInside];
         button.titleLabel.text = titleBtn.titleLabel.text;
@@ -144,8 +141,12 @@
         UIImageView *findImage =[[UIImageView alloc]init];
         findImage.frame =CGRectMake(25+but%3*(70+40), 10+but/3*(60+35), 50, 50);
         [_scrollView addSubview:findImage];
-        findImage.tag = [cagegoryModel.idType intValue]+1000;
-        titleBtn.tag =findImage.tag;
+        
+        titleBtn.tag = [cagegoryModel.idType intValue]+1000;
+        button.tag=titleBtn.tag;
+        
+        findImage.tag = button.tag+100000;
+       
         findImage.userInteractionEnabled = NO;
         
         [findImage setImageWithURL:[NSURL URLWithString:cagegoryModel.imageGategpry]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
@@ -179,18 +180,77 @@
 
 }
 - (void)itemsClick:(UIButton *)sender
+
 {
-   
-        findViewController *menu = [[findViewController alloc] init];
-        menu.titleLabel =sender.titleLabel.text;
-        NSString *strId =[NSString stringWithFormat:@"%ld",sender.tag-1000];
-        menu.cateIndex =strId;
+ 
+        currentTag =(int) sender.tag+100000;
+       currStr=sender.titleLabel.text;
+    
+    for (UIView *view in [_scrollView subviews])
+    {
+        if (view.tag == currentTag)
+        {
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:0.3];
+            [UIView setAnimationDelegate:self];
+            
+            view.transform = CGAffineTransformScale([self transformForOrientation], 0.8, 0.8);;
+            
+            [UIView commitAnimations];
+            
+        }
+    }
+    [self performSelector:@selector(changeUI) withObject:nil afterDelay:0.3];
+}
 
+- (CGAffineTransform)transformForOrientation
+{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (UIInterfaceOrientationLandscapeLeft == orientation)
+    {
+        return CGAffineTransformMakeRotation(M_PI*1.5);
+    } else if (UIInterfaceOrientationLandscapeRight == orientation)
+    {
+        return CGAffineTransformMakeRotation(M_PI/2);
+    } else if (UIInterfaceOrientationPortraitUpsideDown == orientation)
+    {
+        return CGAffineTransformMakeRotation(-M_PI);
+    } else
+    {
+        return CGAffineTransformIdentity;
+    }
+}
 
-        [self.navigationController pushViewController:menu animated:YES];
-   
-
-
+-(void)changeUI{
+    
+    for (UIView *view in [_scrollView subviews])
+    {
+        if (view.tag == currentTag)
+        {
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:0.3];
+            [UIView setAnimationDelegate:self];
+            
+            view.transform = CGAffineTransformScale([self transformForOrientation], 1.0, 1.0);
+            
+            [UIView commitAnimations];
+        }
+    }
+    
+    
+    [self performSelector:@selector(goNextVC2) withObject:nil afterDelay:0.3];
+    
+}
+- (void)goNextVC2
+{
+    
+    findViewController *find =[[findViewController alloc]init];
+    find.titleLabel = currStr;
+    
+    NSString *strId =[NSString stringWithFormat:@"%d",currentTag-1000-100000];
+    find.cateIndex = strId;
+    [self.navigationController pushViewController:find animated:YES];
+    
 }
 -(void)searchBarBtn{
     SearchController *search =[[SearchController alloc]init];
