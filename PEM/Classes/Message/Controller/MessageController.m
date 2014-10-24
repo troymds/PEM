@@ -101,7 +101,7 @@
 
 -(void)addScrollView
 {
-    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
+    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, self.view.frame.size.height)];
     _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width, _categoryArray.count/3*(66+30)+10);
     _scrollView.showsHorizontalScrollIndicator=NO;
     _scrollView.showsVerticalScrollIndicator=NO;
@@ -166,7 +166,7 @@
     for (int l=0; l<_categoryArray.count/4+1; l++) {
         UIView *linex =[[UIView alloc]init];
         linex.backgroundColor =HexRGB(0xe6e3e4);
-        linex.frame =CGRectMake(0,95+l%9*(50+45) , 320, 1);
+        linex.frame =CGRectMake(0,95+l%9*(50+45) , kWidth, 1);
         [_scrollView addSubview:linex];
     }
     for (int i = 0; i<2; i++) {

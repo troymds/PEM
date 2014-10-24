@@ -77,9 +77,9 @@
     XQgetInfoDetailModel *xqModel =[demandArray objectAtIndex:0];
     if ([xqModel.verify_result isEqualToString:@"0"])
     {
-        UIView *failView=[[UIView alloc]initWithFrame:CGRectMake(0, -35, 320, 35)];
+        UIView *failView=[[UIView alloc]initWithFrame:CGRectMake(0, -35, kWidth, 35)];
         [self.view addSubview:failView];
-        UIView *failLin =[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 5)];
+        UIView *failLin =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 5)];
         failLin.backgroundColor =HexRGB(0xe6e3e4);
         failView.backgroundColor =HexRGB(0xffffff);
         [failView addSubview:failLin];
@@ -93,9 +93,9 @@
         [failBtn setTitleColor:HexRGB(0xff7300) forState:UIControlStateNormal];
         
     }else if([xqModel.verify_result isEqualToString:@"2"]){
-        UIView *failView=[[UIView alloc]initWithFrame:CGRectMake(0, -35, 320, 35)];
+        UIView *failView=[[UIView alloc]initWithFrame:CGRectMake(0, -35, kWidth, 35)];
         [self.view addSubview:failView];
-        UIView *failLin =[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 5)];
+        UIView *failLin =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 5)];
         failLin.backgroundColor =HexRGB(0xe6e3e4);
         failView.backgroundColor =HexRGB(0xffffff);
         [failView addSubview:failLin];
@@ -114,7 +114,7 @@
         [goBackBtn setImage:[UIImage imageNamed:@"home_Jump.png"] forState:UIControlStateNormal];
         [goBackBtn addTarget:self action:@selector(goBackFalseClick) forControlEvents:UIControlEventTouchUpInside];
         [UIView animateWithDuration:0.5 animations:^{
-            failView.frame =CGRectMake(0, 0, 320, 35);
+            failView.frame =CGRectMake(0, 0, kWidth, 35);
         }];
         
         
@@ -133,7 +133,7 @@
     CGFloat contentHeight =[xqModel.description sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(300, MAXFLOAT)].height;
     CGFloat titleHeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:CGSizeMake(300, MAXFLOAT)].height;
     
-    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, self.view.frame.size.height)];
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:_backScrollView];
@@ -171,7 +171,7 @@
     readLabel.font =[UIFont systemFontOfSize:12];
     
     UIView *line=[[UIView alloc]init];
-    line.frame =CGRectMake(0, titleHeight+53, 320, 1);
+    line.frame =CGRectMake(0, titleHeight+53, kWidth, 1);
     [_backScrollView addSubview:line];
     line.backgroundColor =[UIColor lightGrayColor];
     
@@ -189,7 +189,7 @@
     [_backScrollView addSubview:xinagLabel];
     xinagLabel.font =[UIFont systemFontOfSize:15];
     
-    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 120, 320, kHeight+100)];
+    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 120, kWidth, kHeight+100)];
     
     [_backScrollView addSubview:demandWebView];
     demandWebView.userInteractionEnabled = NO;
@@ -202,7 +202,7 @@
     
     UIView *backView =[[UIView alloc]init];
     backView.backgroundColor =[UIColor whiteColor];
-     backView .frame=CGRectMake(0, self.view.frame.size.height-80, 320, 80);
+     backView .frame=CGRectMake(0, self.view.frame.size.height-80, kWidth, 80);
 
     backView.backgroundColor =HexRGB(0xefeded);
 
@@ -228,7 +228,7 @@
 
     UIView *l =[[UIView alloc]init];
     [backView addSubview:l];
-    l.frame =CGRectMake(0, 44, 320, 1);
+    l.frame =CGRectMake(0, 44, kWidth, 1);
     l.backgroundColor =HexRGB(0xe6e3e4);
     
     UIButton *goCompany =[UIButton buttonWithType:UIButtonTypeCustom];
@@ -239,35 +239,25 @@
     [goCompany setImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"] forState:UIControlStateNormal];
     goCompany.imageEdgeInsets =UIEdgeInsetsMake(0, 280, 0, 0);
     [goCompany addTarget:self action:@selector(gotoCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    //name
-    UILabel *nameCopany =[[UILabel alloc]init];
-//    nameCopany.text = xqModel.company_name;
-    NSLog(@"%@",nameCopany);
-    nameCopany.backgroundColor =[UIColor clearColor];
-    CGFloat nameCompanyw ;
-    if ([nameCopany isKindOfClass:[NSNull class]]) {
-
-    }else{
-//        nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(16)] constrainedToSize:CGSizeMake(MAXFLOAT, 30)].width;
-
-    }
-    [backView addSubview:nameCopany];
-    nameCopany.frame =CGRectMake(20, 40, 210, 44);
-    nameCopany.font =[UIFont systemFontOfSize:PxFont(16)];
+    
+    
 
     //vip
-    UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(20+nameCompanyw,50, 18, 25)];
+    
+    UIImageView * _companyImgVip;
+    CGFloat nameCompanyw ;
+     _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(70,50, 18, 25)];
     
     if ([xqModel.vip_type isEqualToString:@"1"]) {
         _companyImgVip.image =[UIImage imageNamed:@"Vip4.png"];
     }
     else  if ([xqModel.vip_type isEqualToString:@"2"]) {
-        _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
+        _companyImgVip.image =[UIImage imageNamed:@"Vip3.png"];
         
     } else if([xqModel.vip_type isEqualToString:@"3"]) {
         _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
         
-    }else if([xqModel.vip_type isEqualToString:@"0"]){
+    }else if([xqModel.vip_type isEqualToString:@"4"]){
         
         _companyImgVip.image =[UIImage imageNamed:@"Vip1.png"];
     }
@@ -280,13 +270,52 @@
     }
     [backView addSubview:_companyImgVip];
     
+    //name
+    UILabel *nameCopany =[[UILabel alloc]init];
+    NSLog(@"%@",xqModel.company_name);
+    
+    nameCopany.backgroundColor =[UIColor clearColor];
+    [backView addSubview:nameCopany];
+    nameCopany.frame =CGRectMake(20, 40, 250, 44);
+    nameCopany.font =[UIFont systemFontOfSize:PxFont(18)];
+    
+    
+    if ([[SystemConfig sharedInstance].viptype isEqualToString:@"1"]) {
+        _companyImgVip.frame =CGRectMake(20+nameCompanyw,50, 18, 25);
+        
+        //        nameCopany.text = xqModel.company_name;
+        
+    }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"2"]) {
+        _companyImgVip.frame =CGRectMake(20+nameCompanyw,50, 18, 25);
+        
+        //        nameCopany.text = xqModel.company_name;
+        
+    }
+    else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"3"]) {
+        _companyImgVip.frame =CGRectMake(20+nameCompanyw,50, 18, 25);
+        
+        //        nameCopany.text = xqModel.company_name;
+        
+    }
+    else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"4"]) {
+        _companyImgVip.frame =CGRectMake(20+nameCompanyw,50, 18, 25);
+        
+        //        nameCopany.text = xqModel.company_name;
+        
+    }else {
+        nameCopany.text = @"xxx公司";
+        
+    }
+    
+
+    
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     
     float demandWebheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
-    _backScrollView.contentSize = CGSizeMake(320,demandWebheight+160);
-    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 120, 320, demandWebheight)];
+    _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+160);
+    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 120, kWidth, demandWebheight)];
     
 }
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
@@ -299,20 +328,27 @@
 -(void)phoneBtnClick:(UIButton *)sentder
 {
     
-    XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
+    
     if (![SystemConfig sharedInstance].isUserLogin) {
         
         LoginController *lvc =[[LoginController alloc] init];
         [self.navigationController pushViewController:lvc animated:YES];
 
         
-    }else if ([comID.vip_type isEqualToString:@"0"]) {
-    
-    
-    UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员:" message:@"只有普通会员及以上会员可以拨打求购电话，您需要升级才能使用本功能!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
-        [alert show];
+    }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
+      UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员:" message:@"只有普通会员及以上会员可以拨打求购电话，您需要升级才能使用本功能!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
+      [alert show];
 
-    }else{
+        
+  
+    }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]) {
+        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员:" message:@"只有普通会员及以上会员可以拨打求购电话，您需要升级才能使用本功能!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
+        [alert show];
+        
+        
+        
+    }
+    else{
 
         XQgetInfoDetailModel *xqModel =[demandArray objectAtIndex:0];
         
@@ -342,13 +378,22 @@
         [self.navigationController pushViewController:lvc animated:YES];
 
         
-    }else if ([comID.vip_type isEqualToString:@"0"]) {
+    }else  if([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]) {
         
         UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员" message:@"抱歉，体验会员不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
+        [alert show];
+                
         
+        
+    }else  if([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
+        
+        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员" message:@"抱歉，体验会员不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
         [alert show];
         
-    }else{
+        
+        
+    }
+    else{
     CompanyXQViewController *xqVC = [[CompanyXQViewController alloc]init];
     
     xqVC.companyID =comID.company_id;

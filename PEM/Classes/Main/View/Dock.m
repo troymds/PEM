@@ -17,7 +17,7 @@
     // 1.创建item
     DockItem *item = [[DockItem alloc] init];
     UIView *l =[[UIView alloc ]init];
-    l.frame = CGRectMake(0, 0, 320, 1);
+    l.frame = CGRectMake(0, 0, kWidth, 1);
     [item addSubview:l];
     l.backgroundColor =HexRGB(0xe6e3e4);
     // 文字

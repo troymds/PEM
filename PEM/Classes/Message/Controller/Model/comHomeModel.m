@@ -9,7 +9,7 @@
 #import "comHomeModel.h"
 
 @implementation comHomeModel
-@synthesize addr,image,infoarray,introduction,mainRun,name,tel,website,viptype;
+@synthesize addr,image,infoarray,introduction,mainRun,name,tel,website,viptype,e_url;
 
 - (instancetype)initWithDictionaryForComapny:(NSDictionary *)dic{
     
@@ -29,6 +29,8 @@
         
         self.website = dic[@"website"];
         self.infoarray = dic[@"infoarray"];
+        self.e_url = dic[@"e_url"];
+
         
         
         

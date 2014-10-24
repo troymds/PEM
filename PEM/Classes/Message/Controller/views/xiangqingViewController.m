@@ -75,8 +75,8 @@
     
     webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     
-    _gyWebView.frame = CGRectMake(0, 340, 320, webheight+10);
-    _backScrollView.contentSize = CGSizeMake(320,webheight+390);
+    _gyWebView.frame = CGRectMake(0, 325, kWidth, webheight+10);
+    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+380);
     
     
     
@@ -127,9 +127,9 @@
     
     if ([xqModel.verify_result isEqualToString:@"0"])
     {
-        UIView *failView=[[UIView alloc]initWithFrame:CGRectMake(0, -35, 320, 35)];
+        UIView *failView=[[UIView alloc]initWithFrame:CGRectMake(0, -35, kWidth, 35)];
         [self.view addSubview:failView];
-        UIView *failLin =[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 5)];
+        UIView *failLin =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 5)];
         failLin.backgroundColor =HexRGB(0xe6e3e4);
         failView.backgroundColor =HexRGB(0xffffff);
         [failView addSubview:failLin];
@@ -143,9 +143,9 @@
         [failBtn setTitleColor:HexRGB(0xff7300) forState:UIControlStateNormal];
         
     }else if([xqModel.verify_result isEqualToString:@"2"]){
-        UIView *failView=[[UIView alloc]initWithFrame:CGRectMake(0, -35, 320, 35)];
+        UIView *failView=[[UIView alloc]initWithFrame:CGRectMake(0, -35, kWidth, 35)];
         [self.view addSubview:failView];
-        UIView *failLin =[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 5)];
+        UIView *failLin =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 5)];
         failLin.backgroundColor =HexRGB(0xe6e3e4);
         failView.backgroundColor =HexRGB(0xffffff);
         [failView addSubview:failLin];
@@ -164,7 +164,7 @@
         [goBackBtn setImage:[UIImage imageNamed:@"home_Jump.png"] forState:UIControlStateNormal];
         [goBackBtn addTarget:self action:@selector(goBackFalseClick) forControlEvents:UIControlEventTouchUpInside];
         [UIView animateWithDuration:0.5 animations:^{
-            failView.frame =CGRectMake(0, 0, 320, 35);
+            failView.frame =CGRectMake(0, 0, kWidth, 35);
         }];
         
         
@@ -194,7 +194,7 @@
         
     }
 
-    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:_backScrollView];
@@ -231,7 +231,7 @@
 
     collectBtn.tag = 2000;
     [collectBtn addTarget:self action:@selector(collectionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    collectBtn.frame =CGRectMake(280, 200, 35, 35);
+    collectBtn.frame =CGRectMake(280, 185, 35, 35);
     
     
     
@@ -240,7 +240,7 @@
     [phonBtn setImage:[UIImage imageNamed:@"xunji1.png"] forState:UIControlStateNormal];
     [phonBtn setImage:[UIImage imageNamed:@"xunjia_selecte1.png"] forState:UIControlStateHighlighted];
 
-    phonBtn.frame =CGRectMake(240, 200, 35, 35);
+    phonBtn.frame =CGRectMake(240, 185, 35, 35);
     [phonBtn addTarget:self action:@selector(bodaBtn:) forControlEvents:UIControlEventTouchUpInside];
   
        
@@ -251,22 +251,26 @@
      //标题
     nameLable =[[UILabel alloc]init];
     nameLable.text = xqModel.titleGetInfo;
+    nameLable.backgroundColor =[UIColor clearColor];
     nameLable.numberOfLines = 3;
     nameLable.font =[UIFont systemFontOfSize:15];
 
     [_backScrollView addSubview:nameLable];
     nameLable.textColor =HexRGB(0x3a3a3a);
     
-    
-    
-    
-    
-   
-    //价格
+      //价格
     UILabel *picLabel =[[UILabel alloc]init];
-    picLabel.text =[NSString stringWithFormat:@"￥%@",xqModel.price];
+    
+    
+    if ([xqModel.price isEqualToString:@"0"]) {
+        picLabel.text=@"价格:面议";
+    }else{
+        picLabel.text =[NSString stringWithFormat:@"￥%@",xqModel.price];
+        
+    }
+
     picLabel.textColor =HexRGB(0xff7300);
-    picLabel.frame =CGRectMake(10,195+nameWeight,180, 20);
+    picLabel.frame =CGRectMake(10,175+nameWeight,180, 20);
     [_backScrollView addSubview:picLabel];
     picLabel.font =[UIFont systemFontOfSize:PxFont(30)];
 
@@ -276,9 +280,9 @@
         UILabel *linLabel =[[UILabel alloc]init];
         linLabel.text =labelArray[l];
         linLabel.backgroundColor =[UIColor clearColor];
+        linLabel.textAlignment =NSTextAlignmentCenter;
         
-        
-        linLabel.frame =CGRectMake(20+l%3*((kWidth-20)/3),225+nameWeight, (kWidth-40)/3, 20);
+        linLabel.frame =CGRectMake(20+l%3*((kWidth-30)/3),210+nameWeight, (kWidth-40)/3, 20);
         [_backScrollView addSubview:linLabel];
         
         linLabel.font =[UIFont systemFontOfSize:10];
@@ -289,7 +293,7 @@
     
     for (int i =0; i<2; i++) {
         UIView *line=[[UIView alloc]init];
-        line.frame =CGRectMake(0, 220+nameWeight+i%3*(30), 320, 1);
+        line.frame =CGRectMake(0, 205+nameWeight+i%3*(30), kWidth, 1);
         [_backScrollView addSubview:line];
         line.alpha = 0.5;
         line.backgroundColor =[UIColor lightGrayColor];
@@ -297,20 +301,19 @@
     
     
      li =[[UIView alloc]init];
-    li.frame =CGRectMake(230, 200, 1, 10+nameWeight);
+    li.frame =CGRectMake(230, 185, 1, 10+nameWeight);
     [_backScrollView addSubview:li];
     li.backgroundColor =[UIColor lightGrayColor];
     li.alpha = 0.5;
     
     UILabel *xinagq =[[UILabel alloc]init];
     xinagq.text =@"【产品详情】";
-    xinagq.frame =CGRectMake(5,260+nameWeight, 200, 20);
+    xinagq.frame =CGRectMake(5,245+nameWeight, 200, 20);
     [_backScrollView addSubview:xinagq];
     xinagq.font =[UIFont systemFontOfSize:PxFont(24)];
     
-    _gyWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 310+nameWeight, 320, 400)];
+    _gyWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 280+nameWeight, kWidth, 400)];
     [_gyWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:xqModel.description]]];
-    _gyWebView.backgroundColor =[UIColor redColor];
     _gyWebView.userInteractionEnabled = NO;
     _gyWebView.delegate =self;
     
@@ -319,7 +322,7 @@
 
     //底部
     UIButton  *forImage =[UIButton buttonWithType:UIButtonTypeCustom];
-    forImage.frame =CGRectMake(0, self.view.frame.size.height-44, 320, 44);
+    forImage.frame =CGRectMake(0, self.view.frame.size.height-44, kWidth, 44);
     [forImage addTarget:self action:@selector(goCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.view addSubview:forImage];
@@ -329,14 +332,13 @@
     UILabel *nameCopany =[[UILabel alloc]init];
     nameCopany.text = xqModel.company_name;
     nameCopany.backgroundColor =[UIColor clearColor];
-    CGFloat nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(16)] constrainedToSize:CGSizeMake(210, 30)].width;
+    CGFloat nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(210, 30)].width;
     [forImage addSubview:nameCopany];
     nameCopany.frame =CGRectMake(18, 0, 210, 44);
-    nameCopany.font =[UIFont systemFontOfSize:PxFont(16)];
+    nameCopany.font =[UIFont systemFontOfSize:PxFont(18)];
     
     UIButton *goCompany =[UIButton buttonWithType:UIButtonTypeCustom];
     [forImage addSubview:goCompany];
-    goCompany.titleLabel.font =[UIFont systemFontOfSize:PxFont(16)];
     [goCompany setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     goCompany.frame = CGRectMake(280, 0, 40, 44);
     [goCompany setImage:[UIImage imageNamed:@"home_Jump_Black_btn.png"] forState:UIControlStateNormal];
@@ -349,7 +351,7 @@
         _companyImgVip.image =[UIImage imageNamed:@"Vip4.png"];
     }
     else  if ([xqModel.vip_type isEqualToString:@"2"]) {
-        _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
+        _companyImgVip.image =[UIImage imageNamed:@"Vip3.png"];
         
     } else if([xqModel.vip_type isEqualToString:@"3"]) {
         _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
@@ -376,16 +378,15 @@
         phonBtn.hidden = YES;
         li.hidden = YES;
 
-        nameLable.frame =CGRectMake(10,185, 300, nameWeight);
+        nameLable.frame =CGRectMake(10,170, 300, nameWeight);
         
-        NSLog(@"%f",nameWeight);
         
     }else{
         collectBtn.hidden =NO;
         phonBtn.hidden = NO;
         li.hidden = NO;
 
-        nameLable.frame =CGRectMake(10,185, 220, nameWeight);
+        nameLable.frame =CGRectMake(10,170, 220, nameWeight);
         
         
     }

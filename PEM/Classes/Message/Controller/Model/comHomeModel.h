@@ -21,6 +21,8 @@
 @property (nonatomic, copy) NSArray *infoarray;
 @property (nonatomic, copy) NSString *website ;//网址
 @property (nonatomic, copy) NSString *viptype;
+@property (nonatomic, copy) NSString *e_url;
+
 
 
 - (instancetype)initWithDictionaryForComapny:(NSDictionary *)dic;

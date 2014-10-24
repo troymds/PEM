@@ -33,13 +33,9 @@
     [super viewDidLoad];
     self.title =@"企业新闻";
     
-    
-    
-    
-    
-    _backScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
+    _backScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
     [self.view addSubview:_backScrollView];
-    _backScrollView.contentSize = CGSizeMake(320, 800);
+    _backScrollView.contentSize = CGSizeMake(kWidth, 800);
     _backScrollView.showsVerticalScrollIndicator=NO;
     _backScrollView.userInteractionEnabled = YES;
     
@@ -52,11 +48,6 @@
     
 
 }
-
-
-
-
-
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     return YES;

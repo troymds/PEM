@@ -46,7 +46,6 @@ static SaveTempDataTool *shareInstance = nil;
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
     NSMutableArray *array = [unarchiver decodeObject];
     [unarchiver finishDecoding];
-    
     return array;
 }
 

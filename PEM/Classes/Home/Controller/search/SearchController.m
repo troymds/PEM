@@ -163,7 +163,7 @@
 
 - (void)addShowNoRecordView
 {
-    recordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 320, 44)];
+    recordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     recordLabel.textAlignment = NSTextAlignmentCenter;
     recordLabel.backgroundColor = [UIColor clearColor];
     recordLabel.text = @"没有历史记录！";
@@ -198,7 +198,7 @@
 {
     noDataBgView = [[UIView alloc] initWithFrame:_resultBgView.bounds];
     noDataBgView.backgroundColor = [UIColor whiteColor];
-    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, 320, 44)];
+    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     dataLabel.textAlignment = NSTextAlignmentCenter;
     dataLabel.backgroundColor = [UIColor clearColor];
     dataLabel.text = @"没有数据！";
@@ -584,8 +584,8 @@
 }
 -(void)addTableView
 {
-    _bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, 320, self.view.frame.size.height-64)];
-    _recTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, _bgView.frame.size.height) style:UITableViewStylePlain];
+    _bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64)];
+    _recTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, _bgView.frame.size.height) style:UITableViewStylePlain];
     
     _recTableView.delegate =self;
     _recTableView.dataSource =self;
@@ -745,7 +745,6 @@
         if (cell == nil)
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (indexPath.row == 0)
         {
@@ -833,26 +832,46 @@
                 
                 CGFloat nameCompanyw =[c.name sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(195, 50)].width;
                 cell.vipType.frame = CGRectMake(80+nameCompanyw, 11, 13, 18);
-                if ([c.rank isEqualToString:@"1"]) {
-                    cell.vipType.image  =[UIImage imageNamed:@"Vip4.png"];
+                
+                switch ([c.rank intValue]) {
+                    case -1:
+                    {
+                        cell.vipType.image = [UIImage imageNamed:@"Vip6.png"];
+                    }
+                        break;
+                    case 0:
+                    {
+                        cell.vipType.image = [UIImage imageNamed:@"Vip5.png"];
+                    }
+                        break;
+                    case 1:
+                    {
+                        cell.vipType.image = [UIImage imageNamed:@"Vip4.png"];
+                    }
+                        break;
+                    case 2:
+                    {
+                        cell.vipType.image = [UIImage imageNamed:@"Vip3.png"];
+                        
+                    }
+                        break;
+                    case 3:
+                    {
+                        cell.vipType.image = [UIImage imageNamed:@"Vip2.png"];
+                        
+                    }
+                        break;
+                    case 4:
+                    {
+                        cell.vipType.image = [UIImage imageNamed:@"Vip1.png"];
+                        
+                    }
+                        break;
+                        
+                    default:
+                        break;
                 }
-                else  if ([c.rank isEqualToString:@"2"]) {
-                   cell.vipType.image  =[UIImage imageNamed:@"Vip2.png"];
-                    
-                } else if([c.rank isEqualToString:@"3"]) {
-                   cell.vipType.image =[UIImage imageNamed:@"Vip2.png"];
-                    
-                }else if([c.rank isEqualToString:@"0"]){
-                    
-                   cell.vipType.image  =[UIImage imageNamed:@"Vip1.png"];
-                }
-                else if([c.rank isEqualToString:@"0"]){
-                    
-                   cell.vipType.image =[UIImage imageNamed:@"Vip5.png"];
-                }else if([c.rank isEqualToString:@"-1"]){
-                    
-                    cell.vipType.image  =[UIImage imageNamed:@"Vip6.png"];
-                }
+
 
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
@@ -919,7 +938,14 @@
                 cell.read_numLabel.text =[NSString stringWithFormat:@"浏览%@次",s.read_num];
                 [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
                 cell.supply_numLabel.text =[NSString stringWithFormat:@"%@件起批",s.min_supply_num];
-                cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
+                
+                
+                if ([s.price isEqualToString:@"0"]) {
+                    cell.priceLabel.text=@"面议";
+                }else{
+                    cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
+                    
+                }
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
 
@@ -946,7 +972,7 @@
     if (self.view == _bgView)
     {
         //    清楚历史记录
-        clearView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
+        clearView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 40)];
         UIButton *clearBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         clearBtn.frame =CGRectMake(30, 10, 260, 30);
         [clearBtn setTitle:@"清除历史记录" forState:UIControlStateNormal];
@@ -1000,7 +1026,7 @@
     
     if (self.view == _resultBgView)
     {
-        UIView *viewForHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+        UIView *viewForHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 44)];
         
         UIView *lin =[[UIView alloc]init];
         lin.frame =CGRectMake(10, 44, 310, 1);
@@ -1020,7 +1046,7 @@
     }
     else
     {
-        UIView *viewHistory = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 173)];
+        UIView *viewHistory = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 173)];
         UIImageView *historyImge =[[UIImageView alloc]initWithFrame:CGRectMake(24, 10, 25, 25)];
         historyImge.image =[UIImage imageNamed:@"home_history.png"] ;
         [viewHistory addSubview:historyImge];

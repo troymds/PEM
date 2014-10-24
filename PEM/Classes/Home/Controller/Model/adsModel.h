@@ -11,7 +11,8 @@
 @interface adsModel : NSObject
 @property (nonatomic, copy) NSString *idType;
 @property (nonatomic, copy) NSString *srcImage;
-@property (nonatomic, copy) NSString *adsid;
+@property (nonatomic, copy) NSString *content;
+
 
 -(instancetype)initWithDictionaryForAds:(NSDictionary *)dict;
 @end

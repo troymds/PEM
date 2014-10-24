@@ -9,12 +9,13 @@
 #import "adsModel.h"
 
 @implementation adsModel
-@synthesize idType,srcImage,adsid;
+@synthesize idType,srcImage,content;
 -(instancetype)initWithDictionaryForAds:(NSDictionary *)dict{
     if ([super self]) {
         self.idType =dict[@"type"];
         self.srcImage =dict[@"src"];
-        self.adsid =dict[@"content"];
+        self.content =dict[@"content"];
+        
 
     }
     return self;

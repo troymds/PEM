@@ -86,7 +86,7 @@
 //    像素
     
     linBackView =[[UIView alloc]init];
-    linBackView.frame=CGRectMake(0, 0, 320, 30);
+    linBackView.frame=CGRectMake(0, 0, kWidth, 30);
     linBackView.backgroundColor =HexRGB(0xe1e9e9);
     [self.view addSubview:linBackView];
     [self addLeftSegment];
@@ -161,7 +161,7 @@
 
 - (void)addShowNoDataView
 {
-    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, 320, 44)];
+    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     dataLabel.textAlignment = NSTextAlignmentCenter;
     dataLabel.backgroundColor = [UIColor clearColor];
     dataLabel.text = @"没有数据！";
@@ -315,11 +315,19 @@
      [_leftBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
    
     _leftBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -45, 0, 0);
-    _leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-100);
+    _leftBtn.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-105);
 
   }
 -(void)leftSegment{
-    leftBackView =[[UIView alloc]initWithFrame:CGRectMake(kWidth/8, 30, 95, 50)];
+    leftBackView =[[UIView alloc]initWithFrame:CGRectMake(kWidth/8-15, 30, 95, 50)];
+    
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:2];
+//    leftBackView.frame =CGRectMake(kWidth/8-15, 30, 95, 50);
+    leftBackView.transform = CGAffineTransformMakeTranslation(0, 10);
+    [UIView commitAnimations ];
+    
     [self.view addSubview:leftBackView];
     [self.view bringSubviewToFront:leftBackView];
     UIImageView *kuangImage =[[UIImageView alloc]init];
@@ -338,7 +346,7 @@
         UIButton * sear =[UIButton buttonWithType:UIButtonTypeCustom];
         [kuangImage addSubview:sear];
         [sear setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        sear.frame =CGRectMake(15, 39+l%3*(17+5), 97, 22);
+        sear.frame =CGRectMake(15, 37+l%3*(17+6), 97, 25);
         sear.titleLabel.font =[UIFont systemFontOfSize:14];
         [sear setTitle:sea[l] forState:UIControlStateNormal];
         sear.tag = 10+l;
@@ -362,7 +370,8 @@
     [_rigthBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
     [_rigthBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateSelected];
     _rigthBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -50, 0, 0);
-    _rigthBtn.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-75);
+    _rigthBtn.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-73);
+    
     
 }
 
@@ -379,7 +388,7 @@
     [_rightBtnDemand setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
     [_rightBtnDemand setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateSelected];
     _rightBtnDemand.titleEdgeInsets = UIEdgeInsetsMake(0, -50, 0, 0);
-    _rightBtnDemand.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-75);
+    _rightBtnDemand.imageEdgeInsets = UIEdgeInsetsMake(0,0,0,-73);
     
 }
 -(void)rightSegment{
@@ -406,7 +415,7 @@
         UIButton *supplyBtn=[UIButton buttonWithType:UIButtonTypeCustom];
         [rightImage addSubview:supplyBtn];
         [supplyBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        supplyBtn.frame =CGRectMake(15, 39+r%3*(17+5), 97, 22);
+        supplyBtn.frame =CGRectMake(15, 37+r%3*(17+6), 97, 25);
         supplyBtn.titleLabel.font =[UIFont systemFontOfSize:14];
         [supplyBtn setBackgroundImage:[UIImage imageNamed:@"blackBg.png"] forState:UIControlStateHighlighted];
         supplyBtn.tag = 50+r;
@@ -446,7 +455,7 @@
         UIButton *demandBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [rightImage addSubview:demandBtn];
         [demandBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        demandBtn.frame =CGRectMake(15, 39+r%3*(17+5), 97, 22);
+        demandBtn.frame =CGRectMake(15, 37+r%3*(17+6), 97, 25);
         demandBtn.titleLabel.font =[UIFont systemFontOfSize:14];
         [demandBtn setBackgroundImage:[UIImage imageNamed:@"blackBg.png"] forState:UIControlStateHighlighted];
         demandBtn.tag = 60+r;
@@ -833,7 +842,6 @@
         [cell.contentView addSubview:lineView];
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
               return cell;
 
     }else{
@@ -854,7 +862,12 @@
         cell.read_numLabel.text =[NSString stringWithFormat:@"浏览%@次",s.read_num];
         [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
         cell.supply_numLabel.text =[NSString stringWithFormat:@"%@起批",s.min_supply_num];
-        cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
+            if ([s.price isEqualToString:@"0"]) {
+                cell.priceLabel.text=@"面议";
+            }else{
+                cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
+
+            }
             dataLabel.hidden = YES;
             _tableView.hidden = NO;
         }else {
@@ -868,7 +881,6 @@
         [cell.contentView addSubview:lineView];
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
       return cell;
         

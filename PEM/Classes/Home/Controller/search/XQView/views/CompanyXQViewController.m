@@ -28,6 +28,7 @@
 #import "xiangqingViewController.h"
 #import "MJRefresh.h"
 #import "RemindView.h"
+#import "EbingooView.h"
 #define KHEIGHT_COMPANY  12
 
 @interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
@@ -75,7 +76,7 @@
     
     UIView *lin =[[UIView alloc]init];
     [self.view addSubview:lin];
-    lin.frame = CGRectMake(0, 30, 320, 1);
+    lin.frame = CGRectMake(0, 30, kWidth, 1);
     lin.backgroundColor =[UIColor lightGrayColor];
     lin.alpha = 0.5;
     
@@ -204,7 +205,7 @@
 }
 - (void)addShowNoDataView
 {
-    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, 320, 44)];
+    dataLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     dataLabel.textAlignment = NSTextAlignmentCenter;
     dataLabel.backgroundColor = [UIColor clearColor];
     dataLabel.text = @"没有数据！";
@@ -216,13 +217,10 @@
 
 - (void)supplyRequest
 {
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
+   
     //供求
     [supplyTool CompanyStatusesWithSuccesscategory:^(NSArray *statues) {
         
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         if (statues.count > 0) {
             
@@ -250,11 +248,8 @@
 }
 - (void)demandRequest
 {
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
+    
     [demandTool DemandCompanyStatusesWithSuccess:^(NSArray *statues) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if (statues.count > 0) {
             
             _conditionTableView.hidden = NO;
@@ -279,12 +274,9 @@
 }
 - (void)companyRequest
 {
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
+   
     //    公司企业
     [comPanyNEWTool statusesWithSuccessNew:^(NSArray *statues) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if (statues.count > 0) {
             
             _conditionTableView.hidden = NO;
@@ -326,7 +318,7 @@
 -(void)addCompanyHome
 {
     companyHom=[[UIView alloc]init];
-    companyHom.frame =CGRectMake(0, 0, 320,kHeight-32);
+    companyHom.frame =CGRectMake(0, 0, kWidth,kHeight-32);
     companyHom.backgroundColor =[UIColor whiteColor];
     [_BigCompanyScrollView addSubview:companyHom];
     [self addCompahyHomeUI];
@@ -371,14 +363,12 @@
     
 }
 
+
 #pragma mark  ------scrollview_delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    float x = scrollView.contentOffset.x/scrollView.frame.size.width;
-    
-    
-    
-    dataLabel.hidden = YES;
+//    float x = scrollView.contentOffset.x/scrollView.frame.size.width;
+       dataLabel.hidden = YES;
     if (scrollView.contentOffset.x <=0) {
         scrollView.contentOffset = CGPointMake(0, 0);
     }
@@ -537,26 +527,47 @@
             
             _companyImgVip.frame =CGRectMake(nameCompanww-180,17, 18, 25);
         }
-        if ([comHomeModel.viptype isEqualToString:@"1"]) {
-            _companyImgVip.image =[UIImage imageNamed:@"Vip4.png"];
+        
+        
+        switch ([comHomeModel.viptype intValue]) {
+            case -1:
+            {
+                _companyImgVip.image = [UIImage imageNamed:@"Vip6.png"];
+            }
+                break;
+            case 0:
+            {
+                _companyImgVip.image = [UIImage imageNamed:@"Vip5.png"];
+            }
+                break;
+            case 1:
+            {
+                _companyImgVip.image = [UIImage imageNamed:@"Vip4.png"];
+            }
+                break;
+            case 2:
+            {
+                _companyImgVip.image = [UIImage imageNamed:@"Vip3.png"];
+                
+            }
+                break;
+            case 3:
+            {
+                _companyImgVip.image = [UIImage imageNamed:@"Vip2.png"];
+                
+            }
+                break;
+            case 4:
+            {
+                _companyImgVip.image = [UIImage imageNamed:@"Vip1.png"];
+                
+            }
+                break;
+                
+            default:
+                break;
         }
-        else  if ([comHomeModel.viptype isEqualToString:@"2"]) {
-            _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
-            
-        } else if([comHomeModel.viptype isEqualToString:@"3"]) {
-            _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
-            
-        }else if([comHomeModel.viptype isEqualToString:@"0"]){
-            
-            _companyImgVip.image =[UIImage imageNamed:@"Vip1.png"];
-        }
-        else if([comHomeModel.viptype isEqualToString:@"0"]){
-            
-            _companyImgVip.image =[UIImage imageNamed:@"Vip5.png"];
-        }else if([comHomeModel.viptype isEqualToString:@"-1"]){
-            
-            _companyImgVip.image =[UIImage imageNamed:@"Vip6.png"];
-        }
+
         
         [_nameCompany addSubview:_companyImgVip];
         
@@ -564,7 +575,15 @@
         UIButton *company_E =[UIButton buttonWithType:UIButtonTypeCustom];
         [_companyHomeScrollView addSubview:company_E];
         company_E.frame = CGRectMake(130, 55, 100, 30);
-        [company_E setImage:[UIImage imageNamed:@"company_E_btn.png"] forState:UIControlStateNormal];
+        [company_E addTarget:self action:@selector(ebingooE) forControlEvents:UIControlEventTouchUpInside];
+        NSLog(@"----%@",comHomeModel.e_url);
+        if ([comHomeModel.e_url isEqualToString:@""]) {
+            [company_E setImage:[UIImage imageNamed:@"company_e_pre.png"] forState:UIControlStateNormal];
+        }else{
+            [company_E setImage:[UIImage imageNamed:@"company_E_btn.png"] forState:UIControlStateNormal];
+
+        }
+        
         
         //    电话
         UILabel*  _telphoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 74+KHEIGHT_COMPANY*2+10, kWidth-60, 15)];
@@ -667,28 +686,34 @@
                 if (comArr.count>0)
                 {
                     sdLagel.hidden =YES;
-                    
                     comPanyModel *comArrModel =[comArr objectAtIndex:a];
-                    UIButton * _comandBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+
                     
-                    
-                    [_companyHomeScrollView addSubview:_comandBtn];
-                    CGFloat cmwith =[comArrModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(200, 20)].width;
+                    UIButton * comandImage =[UIButton buttonWithType:UIButtonTypeCustom];
+                    comandImage.frame =CGRectMake (20, 74+KHEIGHT_COMPANY*14+86+keyContent+content+a%comArr.count*(30), 20, 20);
+                    [_companyHomeScrollView addSubview:comandImage];
+
                     if ([comArrModel.type isEqualToString:@"1"]) {
-                        [_comandBtn setImage:[UIImage imageNamed:@"company1.png"] forState:UIControlStateNormal];
+                        [comandImage setImage:[UIImage imageNamed:@"company1.png"] forState:UIControlStateNormal];
                     }else {
-                        [_comandBtn setImage:[UIImage imageNamed:@"company2.png"] forState:UIControlStateNormal];
+                        [comandImage setImage:[UIImage imageNamed:@"company2.png"] forState:UIControlStateNormal];
                     }
-                    
+                    [comandImage addTarget:self action:@selector(comandBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+
+                    UIButton * _comandBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+                    [_companyHomeScrollView addSubview:_comandBtn];
                     _comandBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
                     [_comandBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
                     [_comandBtn setTitle:comArrModel.name forState:UIControlStateNormal];
                     _comandBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);//设置title在button上的位置（上top，左left，下bottom，右right）
                     
-                    _comandBtn.frame =CGRectMake (20, 74+KHEIGHT_COMPANY*14+86+keyContent+content+a%comArr.count*(30), cmwith+20, 20);
+                    _comandBtn.frame =CGRectMake (30, 74+KHEIGHT_COMPANY*14+86+keyContent+content+a%comArr.count*(30), 220, 20);
+                    _comandBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
                     
                     _comandBtn.tag =1000+a;
+                    comandImage.tag = _comandBtn.tag;
                     UILabel *dateLabel =[[UILabel alloc]init];
+                    
                     dateLabel.text = comArrModel.time;
                     dateLabel.frame =CGRectMake (260, 74+KHEIGHT_COMPANY*14+86+keyContent+content+a%comArr.count*(30), 50, 20);
                     [_companyHomeScrollView addSubview:dateLabel];
@@ -723,7 +748,15 @@
     
     
 }
+#pragma mark -----ebingoo-E
+-(void)ebingooE{
+    comHomeModel *comHomeModel =[[_companyHomeArray objectAtIndex:0]objectAtIndex:0];
 
+    EbingooView *ebingView =[[EbingooView alloc]init];
+    ebingView.ebingooID =comHomeModel.e_url;
+    [self.navigationController pushViewController:ebingView animated:YES];
+    
+  }
 -(void)comandBtnClick:(UIButton *)comand
 {
     if (comArr.count > 0)
@@ -981,7 +1014,6 @@
             
             
             supplyCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            supplyCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             return supplyCell;
             
         }
@@ -994,7 +1026,6 @@
         if (cell == nil)
         {
             cell = [[conditionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             
             if (_companyNEWArray.count > 0)
             {

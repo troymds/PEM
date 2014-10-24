@@ -15,6 +15,7 @@
         NSMutableArray *statuses =[NSMutableArray array];
 
         NSDictionary *dict =d[@"response"];
+        
         if ([dict isKindOfClass:[NSNull class]])
         {}else{
             Status *s =[[Status alloc] initWithDict:dict];
