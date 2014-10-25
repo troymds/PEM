@@ -334,12 +334,14 @@
                 [HttpTool postWithPath:@"uploadImage" params:param success:^(id JSON) {
                     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                    NSDictionary *dic = [result objectForKey:@"response"];
-                    if ([[dic objectForKey:@"code"] intValue] == 100){
-                        _imgStr = [dic objectForKey:@"data"];
-                        [self updateData];
-                    }else{
-                        [RemindView showViewWithTitle:@"设置失败" location:MIDDLE];
+                    if ([result objectForKey:@"response"]) {
+                        NSDictionary *dic = [result objectForKey:@"response"];
+                        if ([[dic objectForKey:@"code"] intValue] == 100){
+                            _imgStr = [dic objectForKey:@"data"];
+                            [self updateData];
+                        }else{
+                            [RemindView showViewWithTitle:@"设置失败" location:MIDDLE];
+                        }
                     }
                 }failure:^(NSError *error){
                     [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
@@ -367,45 +369,47 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        if ([[dic objectForKey:@"code"] intValue] == 100){
-            [RemindView showViewWithTitle:@"设置成功" location:MIDDLE];
-            if ([SystemConfig sharedInstance].companyInfo){
-                //设置成功后更新单例中的企业数据
-                [SystemConfig sharedInstance].companyInfo.image = _imgStr;
-                [SystemConfig sharedInstance].companyInfo.company_name = _nameView.textField.text;
-                [SystemConfig sharedInstance].companyInfo.province_id = _provinceId;
-                [SystemConfig sharedInstance].companyInfo.province_name = provinceName;
-                [SystemConfig sharedInstance].companyInfo.city_id = _cityId;
-                [SystemConfig sharedInstance].companyInfo.city_name = cityName;
-                [SystemConfig sharedInstance].companyInfo.address = _areaView.textField.text;
-                [SystemConfig sharedInstance].companyInfo.company_tel = _phoneView.textField.text;
-                [SystemConfig sharedInstance].companyInfo.website = _websiteView.textField.text;
-                [SystemConfig sharedInstance].companyInfo.email = _emailView.textField.text;
-            }
-            
-            //隐藏掉可能存在的错误提示
-            remindLabel.text = @"";
-            [UIView animateWithDuration:0.3 animations:^{
-                finishBtn.frame = CGRectMake(21, bgView.frame.origin.y+bgView.frame.size.height+10, kWidth-21*2, 35);
-                if (isEditing) {
-                    [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
-                    
-                }else{
-                    [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
+        if (dic) {
+            if ([[dic objectForKey:@"code"] intValue] == 100){
+                [RemindView showViewWithTitle:@"设置成功" location:MIDDLE];
+                if ([SystemConfig sharedInstance].companyInfo){
+                    //设置成功后更新单例中的企业数据
+                    [SystemConfig sharedInstance].companyInfo.image = _imgStr;
+                    [SystemConfig sharedInstance].companyInfo.company_name = _nameView.textField.text;
+                    [SystemConfig sharedInstance].companyInfo.province_id = _provinceId;
+                    [SystemConfig sharedInstance].companyInfo.province_name = provinceName;
+                    [SystemConfig sharedInstance].companyInfo.city_id = _cityId;
+                    [SystemConfig sharedInstance].companyInfo.city_name = cityName;
+                    [SystemConfig sharedInstance].companyInfo.address = _areaView.textField.text;
+                    [SystemConfig sharedInstance].companyInfo.company_tel = _phoneView.textField.text;
+                    [SystemConfig sharedInstance].companyInfo.website = _websiteView.textField.text;
+                    [SystemConfig sharedInstance].companyInfo.email = _emailView.textField.text;
                 }
-            }];
-            if ([self.pushType isEqualToString:DERECT_SET_TYPE]){
-            }else  if([self.pushType isEqualToString:PUBLISH_TYPE]){
-                [self.navigationController popToRootViewControllerAnimated:YES];
-            }else{
-                //注册成功  跳转到登陆页面
-                UIViewController *vc = [self.navigationController.viewControllers objectAtIndex:1];
-                [self.navigationController popToViewController:vc animated:YES];
+                
+                //隐藏掉可能存在的错误提示
+                remindLabel.text = @"";
+                [UIView animateWithDuration:0.3 animations:^{
+                    finishBtn.frame = CGRectMake(21, bgView.frame.origin.y+bgView.frame.size.height+10, kWidth-21*2, 35);
+                    if (isEditing) {
+                        [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
+                        
+                    }else{
+                        [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
+                    }
+                }];
+                if ([self.pushType isEqualToString:DERECT_SET_TYPE]){
+                }else  if([self.pushType isEqualToString:PUBLISH_TYPE]){
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                }else{
+                    //注册成功  跳转到登陆页面
+                    UIViewController *vc = [self.navigationController.viewControllers objectAtIndex:1];
+                    [self.navigationController popToViewController:vc animated:YES];
+                }
+            }else if([[dic objectForKey:@"code"] intValue] == 101){
+                [RemindView showViewWithTitle:@"注册失败" location:MIDDLE];
+            }else if([[dic objectForKey:@"code"] intValue] == 102){
+                [RemindView showViewWithTitle:@"邮箱已被占用" location:MIDDLE];
             }
-        }else if([[dic objectForKey:@"code"] intValue] == 101){
-            [RemindView showViewWithTitle:@"注册失败" location:MIDDLE];
-        }else if([[dic objectForKey:@"code"] intValue] == 102){
-            [RemindView showViewWithTitle:@"邮箱已被占用" location:MIDDLE];
         }
         
     } failure:^(NSError *error) {

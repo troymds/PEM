@@ -107,7 +107,7 @@
         _priceTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0,width-75-20, 35)];
         _priceTextField.delegate = self;
         _priceTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        _priceTextField.keyboardType = UIKeyboardTypeNumberPad;
+        _priceTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         _priceTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _priceTextField.tag = PRICE_TYPE;
         [_priceView addSubview:_priceTextField];
@@ -129,7 +129,7 @@
         _standardTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _standardView.frame.size.width-75, 35)];
         _standardTextField.tag = STANDARD_TYPE;
         _standardTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        _standardTextField.keyboardType = UIKeyboardTypeNumberPad;
+        _standardTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         _standardTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _standardTextField.delegate = self;
         [_standardView addSubview:_standardTextField];

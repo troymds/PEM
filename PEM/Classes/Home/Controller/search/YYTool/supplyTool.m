@@ -22,16 +22,18 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if ([array isKindOfClass:[NSNull class]])
-        {
-            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
-        }else{
-
-         for (NSDictionary *dict in array) {
-        yySupplyModel *s =[[yySupplyModel alloc] initWithDictionaryForSupply:dict];
-        [statuses addObject:s];
-         }
-        }      success(statuses);
+        if (array) {
+            if ([array isKindOfClass:[NSNull class]])
+            {
+                [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
+            }else{
+                
+                for (NSDictionary *dict in array) {
+                    yySupplyModel *s =[[yySupplyModel alloc] initWithDictionaryForSupply:dict];
+                    [statuses addObject:s];
+                }
+            }      success(statuses);
+        }
         
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
@@ -51,20 +53,20 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-
-        if ([array isKindOfClass:[NSNull class]]){
-            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
-
-        }else{
-            for (NSDictionary *dict in array) {
-                yySupplyModel *s =[[yySupplyModel alloc] initWithDictionaryForSupply:dict];
+        if (array) {
+            if ([array isKindOfClass:[NSNull class]]){
+                [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
                 
-                [statuses addObject:s];
+            }else{
+                for (NSDictionary *dict in array) {
+                    yySupplyModel *s =[[yySupplyModel alloc] initWithDictionaryForSupply:dict];
+                    
+                    [statuses addObject:s];
+                }
+                
             }
-
+            success(statuses);
         }
-        success(statuses);
-
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -83,20 +85,21 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if ([array isKindOfClass:[NSNull class]]){
-            
-
-        }
-        else{
-            for (NSDictionary *dict in array) {
-                supplyCOM *s =[[supplyCOM alloc] initWithDictonary:dict];
+        if (array) {
+            if ([array isKindOfClass:[NSNull class]]){
                 
-                [statuses addObject:s];
+                
             }
-            
+            else{
+                for (NSDictionary *dict in array) {
+                    supplyCOM *s =[[supplyCOM alloc] initWithDictonary:dict];
+                    
+                    [statuses addObject:s];
+                }
+                
+            }
+            success(statuses);
         }
-        success(statuses);
-        
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

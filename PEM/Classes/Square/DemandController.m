@@ -68,15 +68,17 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        if ([[dic objectForKey:@"code"] intValue] ==100) {
-            NSDictionary *data = [dic objectForKey:@"data"];
-            DemandDetailItem *item = [[DemandDetailItem alloc] init];
-            [item setValuesForKeysWithDictionary:data];
-            if ([[data objectForKey:@"from"] isEqualToString:@"pc"]) {
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您当前求购信息是从PC端发布的,请到PC端修改" delegate:self cancelButtonTitle:nil otherButtonTitles:@"我知道了", nil];
-                [alertView show];
-            }else{
-                [self addDataToViewWithItem:item];
+        if (dic) {
+            if ([[dic objectForKey:@"code"] intValue] ==100) {
+                NSDictionary *data = [dic objectForKey:@"data"];
+                DemandDetailItem *item = [[DemandDetailItem alloc] init];
+                [item setValuesForKeysWithDictionary:data];
+                if ([[data objectForKey:@"from"] isEqualToString:@"pc"]) {
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您当前求购信息是从PC端发布的,请到PC端修改" delegate:self cancelButtonTitle:nil otherButtonTitles:@"我知道了", nil];
+                    [alertView show];
+                }else{
+                    [self addDataToViewWithItem:item];
+                }
             }
         }
     } failure:^(NSError *error) {
@@ -152,17 +154,19 @@
                 [HttpTool postWithPath:@"saveInfo" params:param  success:^(id JSON){
                     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                     NSDictionary *dic = [result objectForKey:@"response"];
-                    if ([[dic objectForKey:@"code"] intValue] == 100){
-                        
-                        //编辑成功，刷新原来列表界面
-                        MyPurchaseController *vc = [self.navigationController.viewControllers objectAtIndex:1];
-                        self.delegate = vc;
-                        if ([self.delegate respondsToSelector:@selector(reloadData)]) {
-                            [self.delegate reloadData];
+                    if (dic) {
+                        if ([[dic objectForKey:@"code"] intValue] == 100){
+                            
+                            //编辑成功，刷新原来列表界面
+                            MyPurchaseController *vc = [self.navigationController.viewControllers objectAtIndex:1];
+                            self.delegate = vc;
+                            if ([self.delegate respondsToSelector:@selector(reloadData)]) {
+                                [self.delegate reloadData];
+                            }
+                            [self.navigationController popToViewController:vc animated:YES];
+                        }else{
+                            [RemindView showViewWithTitle:@"编辑失败" location:MIDDLE];
                         }
-                        [self.navigationController popToViewController:vc animated:YES];
-                    }else{
-                        [RemindView showViewWithTitle:@"编辑失败" location:MIDDLE];
                     }
                 } failure:^(NSError *error) {
                     [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];

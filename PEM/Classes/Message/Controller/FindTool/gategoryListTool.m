@@ -20,15 +20,16 @@
         NSMutableArray *statuses =[NSMutableArray array];
         
         NSDictionary *array =d[@"response"];
-       
-        for (NSDictionary *dict in array) {
-            gategoryModel *s =[[gategoryModel alloc] initWithDictionaryForGategory:dict];
-             
-            [statuses addObject:s];
-
+        if (array) {
+            for (NSDictionary *dict in array) {
+                gategoryModel *s =[[gategoryModel alloc] initWithDictionaryForGategory:dict];
+                
+                [statuses addObject:s];
+                
+            }
+            success(statuses);
         }
-        success(statuses);
-        
+       
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

@@ -42,14 +42,16 @@
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:_uid,@"province", nil];
     [HttpTool postWithPath:@"getCityList" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSDictionary *dic = [result objectForKey:@"response"];
-        if ([[dic objectForKey:@"code"] intValue] == 100) {
-            NSArray *data = [dic objectForKey:@"data"];
-            for (NSDictionary *subDic in data){
-                AreaItem *item = [[AreaItem alloc] initWithDictionary:subDic];
-                [_dataArray addObject:item];
+        if ([result objectForKey:@"response"]) {
+            NSDictionary *dic = [result objectForKey:@"response"];
+            if ([[dic objectForKey:@"code"] intValue] == 100) {
+                NSArray *data = [dic objectForKey:@"data"];
+                for (NSDictionary *subDic in data){
+                    AreaItem *item = [[AreaItem alloc] initWithDictionary:subDic];
+                    [_dataArray addObject:item];
+                }
+                [_tableView reloadData];
             }
-            [_tableView reloadData];
         }
     } failure:^(NSError *error) {
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];

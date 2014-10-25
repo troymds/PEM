@@ -7,6 +7,8 @@
 //
 
 #import "bannerWebView.h"
+#import "xiangqingViewController.h"
+#import "qiugouXQ.h"
 
 @interface bannerWebView ()<UIWebViewDelegate,UIGestureRecognizerDelegate>
 {
@@ -26,7 +28,7 @@
 //    ebingoo.jumpToDemand(id)
 //    ebingoo.jumpToCompany(id)
     
-    bannerWevView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+    bannerWevView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     [self.view addSubview:bannerWevView];
     
     [bannerWevView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_bannerWebid]]];
@@ -39,15 +41,36 @@
     singleTap.delegate= self;
     singleTap.cancelsTouchesInView = NO;
     
+    
     //这个可以加到任何控件上,比如你只想响应WebView，我正好填满整个屏幕
     
-
-
 }
 
+
+- (void)jumpToSupply:(NSString *)infoId
+{
+    xiangqingViewController *detailVC = [[xiangqingViewController alloc] init];
+    [self.navigationController pushViewController:detailVC animated:YES];
+}
+- (void)jumpToDemand:(NSString *)infoId
+{
+    xiangqingViewController *detailVC = [[xiangqingViewController alloc] init];
+    [self.navigationController pushViewController:detailVC animated:YES];
+}
+- (void)jumpToCompany:(NSString *)infoId
+{
+    xiangqingViewController *detailVC = [[xiangqingViewController alloc] init];
+    [self.navigationController pushViewController:detailVC animated:YES];
+}
+
+
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-    NSLog(@"ddd44444444");
-    if (webView != bannerWevView) { return; }
+    NSString *title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    self.title = title;
+     if (webView != bannerWevView) { return; }
+    
+    qiugouXQ *qx= [[qiugouXQ alloc] init];
+    [self.navigationController pushViewController:qx animated:YES];
     
     
     if (![[bannerWevView stringByEvaluatingJavaScriptFromString:@"typeof WebViewJavascriptBridge == 'object'"] isEqualToString:@"true"]) {
@@ -71,9 +94,33 @@
     CGPoint point = [sender locationInView:self.view];
     NSLog(@"handleSingleTap!pointx:%f,y:%f",point.x,point.y);
 }
+
+
+
+
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    NSLog(@"dddddd");
+ 
+//    NSString *requestString = [[request URL] absoluteString];
+//    NSArray *components = [requestString componentsSeparatedByString:@"::"];
+//    if (components != nil && [components count] > 0) {
+//        NSString *pocotol = [components objectAtIndex:0];
+//        if ([pocotol isEqualToString:@"test"]) {
+//            NSString *commandStr = [components objectAtIndex:1];
+//            NSArray *commandArray = [commandStr componentsSeparatedByString:@":"];
+//            if (commandArray != nil && [commandArray count] > 0) {
+//                NSString *command = [commandArray objectAtIndex:0];
+//                if ([command isEqualToString:@"login"]) {
+//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"消息" message:@"网页发出了登录请求" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+//                    [alert show];
+//                }
+//            } return NO;
+//        }
+//    } return YES;
+    
+    
+    
+    NSLog(@"----dddddd");
 
     //判断是否是单击
     if (navigationType == UIWebViewNavigationTypeLinkClicked)

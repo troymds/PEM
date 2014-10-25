@@ -79,7 +79,7 @@
     if (isEidt) {
         if (![_textView.text isEqualToString:@""]) {
             if (_textView.text.length<10) {
-                [RemindView showViewWithTitle:@"描述信息最少为10字" location:MIDDLE];
+                [RemindView showViewWithTitle:@"描述信息最少为10字" location:TOP];
             }else{
                 if (_isSupply) {
                     if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {

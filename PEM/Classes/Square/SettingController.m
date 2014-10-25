@@ -68,7 +68,7 @@
     setView.delegate = self;
     [bgView1 addSubview:setView];
     
-    UIImageView *soreView1 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-36-7, 13, 7, 13)];
+    UIImageView *soreView1 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-20-7, 13, 7, 13)];
     soreView1.image =[UIImage imageNamed:@"next.png"];
     [setView addSubview:soreView1];
     
@@ -79,7 +79,7 @@
     aboutView.delegate = self;
     [bgView1 addSubview:aboutView];
     
-    UIImageView *soreView2 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-36-7, 13, 7, 13)];
+    UIImageView *soreView2 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-20-7, 13, 7, 13)];
     soreView2.image =[UIImage imageNamed:@"next.png"];
     [aboutView addSubview:soreView2];
 
@@ -127,7 +127,7 @@
     feedbackView.delegate = self;
     [bgView2 addSubview:feedbackView];
     
-    UIImageView *soreView3 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-36-7, 13, 7, 13)];
+    UIImageView *soreView3 = [[UIImageView alloc] initWithFrame:CGRectMake(kWidth-20-7, 13, 7, 13)];
     soreView3.image =[UIImage imageNamed:@"next.png"];
     [feedbackView addSubview:soreView3];
 

@@ -18,12 +18,11 @@
         NSMutableArray *statuses =[NSMutableArray array];
 
         NSDictionary *array =d[@"response"];
-        supplyWishlistidModel *s =[[supplyWishlistidModel alloc] initWithDictonary:array];
-            
+        if (d[@"response"]) {
+            supplyWishlistidModel *s =[[supplyWishlistidModel alloc] initWithDictonary:array];
             [statuses addObject:s];
-            
-        
-        success(statuses);
+            success(statuses);
+        }
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -44,11 +43,13 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
 
         NSDictionary *array =d[@"response"];
-        NSMutableArray *statuses =[NSMutableArray array];
-        supplyWishlistidModel *s =[[supplyWishlistidModel alloc] initWithDictonary:array];
-        
-        [statuses addObject:s];
-       success(statuses);
+        if (d[@"response"]) {
+            NSMutableArray *statuses =[NSMutableArray array];
+            supplyWishlistidModel *s =[[supplyWishlistidModel alloc] initWithDictonary:array];
+            
+            [statuses addObject:s];
+            success(statuses);
+        }
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

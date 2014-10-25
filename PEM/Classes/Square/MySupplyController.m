@@ -137,32 +137,34 @@
     [HttpTool postWithPath:@"getSupplyInfoList" params:params success:^(id JSON){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]){
-            if (isRefresh) {
-                if (_dataArray.count!=0) {
-                    [_dataArray removeAllObjects];
+        if ([result objectForKey:@"response"]) {
+            if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]){
+                if (isRefresh) {
+                    if (_dataArray.count!=0) {
+                        [_dataArray removeAllObjects];
+                    }
+                }
+                NSArray *arr = [result objectForKey:@"response"];
+                for (NSDictionary *dict in arr) {
+                    MySupplyItem *item = [[MySupplyItem alloc] initWithDictonary:dict];
+                    [_dataArray addObject:item];
+                }
+                [_tableView reloadData];
+            }else{
+                if (_dataArray.count == 0) {
+                    remindView.hidden = NO;
+                }else{
+                    [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
                 }
             }
-            NSArray *arr = [result objectForKey:@"response"];
-            for (NSDictionary *dict in arr) {
-                MySupplyItem *item = [[MySupplyItem alloc] initWithDictonary:dict];
-                [_dataArray addObject:item];
+            if (isLoad) {
+                isLoad = NO;
+                [MJFootView endRefreshing];
             }
-            [_tableView reloadData];
-        }else{
-            if (_dataArray.count == 0) {
-                remindView.hidden = NO;
-            }else{
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+            if (isRefresh) {
+                isRefresh = NO;
+                [MJHeadView endRefreshing];
             }
-        }
-        if (isLoad) {
-            isLoad = NO;
-            [MJFootView endRefreshing];
-        }
-        if (isRefresh) {
-            isRefresh = NO;
-            [MJHeadView endRefreshing];
         }
     } failure:^(NSError *error){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -236,16 +238,18 @@
     [HttpTool postWithPath:@"deleteInfo" params:params success:^(id JSON){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] == 100) {
-            [_dataArray removeObjectAtIndex:delIndex.row];
-            [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            
-            if ([_dataArray count] == 0) {
-                remindView.hidden = NO;
+        if ([result objectForKey:@"response"]) {
+            if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] == 100) {
+                [_dataArray removeObjectAtIndex:delIndex.row];
+                [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                
+                if ([_dataArray count] == 0) {
+                    remindView.hidden = NO;
+                }
+                
+            }else{
+                [RemindView showViewWithTitle:@"删除失败" location:MIDDLE];
             }
-
-        }else{
-            [RemindView showViewWithTitle:@"删除失败" location:MIDDLE];
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -262,14 +266,16 @@
     [HttpTool postWithPath:@"deleteInfo" params:params success:^(id JSON){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] == 100) {
-            [_dataArray removeObjectAtIndex:delIndex.row];
-            [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:delIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
-            if ([_dataArray count] == 0) {
-                remindView.hidden = NO;
+        if ([result objectForKey:@"response"]) {
+            if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] == 100) {
+                [_dataArray removeObjectAtIndex:delIndex.row];
+                [_tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:delIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+                if ([_dataArray count] == 0) {
+                    remindView.hidden = NO;
+                }
+            }else{
+                [RemindView showViewWithTitle:@"删除失败" location:MIDDLE];
             }
-        }else{
-            [RemindView showViewWithTitle:@"删除失败" location:MIDDLE];
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

@@ -41,7 +41,7 @@
         _userField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _userField.delegate = self;
         _userField.placeholder = @"请输入您的手机号";
-        _userField.keyboardType = UIKeyboardTypeNumberPad;
+        _userField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         [bgView addSubview:_userField];
         
         line1 = [[UIView alloc] initWithFrame:CGRectMake(10,64.5,bgView.frame.size.width-10*2, 0.5)];

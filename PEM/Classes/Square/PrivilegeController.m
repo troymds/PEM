@@ -100,9 +100,11 @@
         NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",updateType,@"apply_type", nil];
         [HttpTool postWithPath:@"applyVip" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100) {
-            [self showRemindView];
-        }
+            if ([result objectForKey:@"response"]) {
+                if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100) {
+                    [self showRemindView];
+                }
+            }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];

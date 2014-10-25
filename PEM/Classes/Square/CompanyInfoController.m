@@ -154,14 +154,16 @@
     [HttpTool postWithPath:@"getCompanyVipInfo" params:param success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSDictionary *dic = [result objectForKey:@"response"];
-        if (!isNull(result, @"response")) {
-            if ([[dic objectForKey:@"code"] intValue] ==100) {
-                NSDictionary *data = [dic objectForKey:@"data"];
-                VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-                [SystemConfig sharedInstance].vipInfo = vipInfo;
-                
-                _vipTypeLabel.text = [NSString stringWithFormat:@"等级:%@",[SystemConfig sharedInstance].vipInfo.vip_name];
+        if ([result objectForKey:@"response"]) {
+            NSDictionary *dic = [result objectForKey:@"response"];
+            if (!isNull(result, @"response")) {
+                if ([[dic objectForKey:@"code"] intValue] ==100) {
+                    NSDictionary *data = [dic objectForKey:@"data"];
+                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                    [SystemConfig sharedInstance].vipInfo = vipInfo;
+                    
+                    _vipTypeLabel.text = [NSString stringWithFormat:@"等级:%@",[SystemConfig sharedInstance].vipInfo.vip_name];
+                }
             }
         }
     } failure:^(NSError *error) {

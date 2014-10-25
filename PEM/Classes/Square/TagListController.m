@@ -41,22 +41,24 @@
     [HttpTool postWithPath:@"getTagInfoList" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        if ([[dic objectForKey:@"code"] intValue] == 100) {
-            if ([[dic objectForKey:@"data"] isKindOfClass:[NSNull class]]){
-                UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
-                view.backgroundColor = HexRGB(0xe9f0f5);
-                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
-                label.text = @"没有数据!";
-                label.center = view.center;
-                [view addSubview:label];
-                [self.view addSubview:view];
-            }else{
-                NSArray *dataArr = [dic objectForKey:@"data"];
-                for (NSDictionary *subDic in dataArr) {
-                    TagInfoItem *item = [[TagInfoItem alloc] initWithDictionary:subDic];
-                    [_dataArray addObject:item];
+        if (dic) {
+            if ([[dic objectForKey:@"code"] intValue] == 100) {
+                if ([[dic objectForKey:@"data"] isKindOfClass:[NSNull class]]){
+                    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+                    view.backgroundColor = HexRGB(0xe9f0f5);
+                    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
+                    label.text = @"没有数据!";
+                    label.center = view.center;
+                    [view addSubview:label];
+                    [self.view addSubview:view];
+                }else{
+                    NSArray *dataArr = [dic objectForKey:@"data"];
+                    for (NSDictionary *subDic in dataArr) {
+                        TagInfoItem *item = [[TagInfoItem alloc] initWithDictionary:subDic];
+                        [_dataArray addObject:item];
+                    }
+                    [_tableView reloadData];
                 }
-                [_tableView reloadData];
             }
         }
     } failure:^(NSError *error) {

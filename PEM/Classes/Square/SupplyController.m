@@ -190,16 +190,18 @@
     [HttpTool postWithPath:@"getInfoDetail" params:param success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        if ([[dic objectForKey:@"code"] intValue] == 100) {
-            NSDictionary *data = [dic objectForKey:@"data"];
-            SupplyDetailItem *item = [[SupplyDetailItem alloc] init];
-            [item setValuesForKeysWithDictionary:data];
-            if ([[data objectForKey:@"from"] isEqualToString:@"pc"]) {
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您当前供应信息是从PC端发布的,请到PC端修改" delegate:self cancelButtonTitle:nil otherButtonTitles:@"我知道了", nil];
-                alertView.tag = 3000;
-                [alertView show];
-            }else{
-                [self addDataWithItem:item];
+        if (dic) {
+            if ([[dic objectForKey:@"code"] intValue] == 100) {
+                NSDictionary *data = [dic objectForKey:@"data"];
+                SupplyDetailItem *item = [[SupplyDetailItem alloc] init];
+                [item setValuesForKeysWithDictionary:data];
+                if ([[data objectForKey:@"from"] isEqualToString:@"pc"]) {
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您当前供应信息是从PC端发布的,请到PC端修改" delegate:self cancelButtonTitle:nil otherButtonTitles:@"我知道了", nil];
+                    alertView.tag = 3000;
+                    [alertView show];
+                }else{
+                    [self addDataWithItem:item];
+                }
             }
         }
     } failure:^(NSError *error) {
@@ -389,16 +391,18 @@
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
             NSDictionary *dic = [result objectForKey:@"response"];
-            if ([[dic objectForKey:@"code"] intValue] == 100){
-                //编辑成功，刷新原来列表界面
-                MySupplyController *vc = [self.navigationController.viewControllers objectAtIndex:1];
-                self.delegate = vc;
-                if ([self.delegate respondsToSelector:@selector(reloadData)]) {
-                    [self.delegate reloadData];
+            if (dic) {
+                if ([[dic objectForKey:@"code"] intValue] == 100){
+                    //编辑成功，刷新原来列表界面
+                    MySupplyController *vc = [self.navigationController.viewControllers objectAtIndex:1];
+                    self.delegate = vc;
+                    if ([self.delegate respondsToSelector:@selector(reloadData)]) {
+                        [self.delegate reloadData];
+                    }
+                    [self.navigationController popToViewController:vc animated:YES];
+                }else{
+                    [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
                 }
-                [self.navigationController popToViewController:vc animated:YES];
-            }else{
-                [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
             }
         } failure:^(NSError *error){
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -423,34 +427,37 @@
         [HttpTool postWithPath:@"uploadImage" params:param success:^(id JSON){
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-            if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100){
-                imageUrl = [[result objectForKey:@"response"] objectForKey:@"data"];
-                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"2",@"type",[SystemConfig sharedInstance].company_id,@"company_id",supplyCateItem.uid,@"category_id",region,@"region_name",apply3D,@"apply3D",_supplyView.priceTextField.text,@"price",_supplyView.standardTextField.text,@"min_sell_num",_supplyView.titleTextField.text,@"title",supplyDes,@"description",_supplyView.linkManTextField.text,@"contacts",_supplyView.phoneNumTextField.text,@"contacts_phone",imageUrl,@"image_url",_supplyView.unitField.text,@"unit", nil];
-                
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.labelText =@"发布中...";
-                [HttpTool postWithPath:@"saveInfo" params:param success:^(id JSON) {
-                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                    NSDictionary *dic = [result objectForKey:@"response"];
-                    if ([[dic objectForKey:@"code"] intValue] == 100){
-                        //编辑成功，刷新原来列表界面
-                        MySupplyController *vc = [self.navigationController.viewControllers objectAtIndex:1];
-                        self.delegate = vc;
-                        if ([self.delegate respondsToSelector:@selector(reloadData)]) {
-                            [self.delegate reloadData];
+            NSDictionary *dic = [result objectForKey:@"response"];
+            if (dic) {
+                if ([[dic objectForKey:@"code"] intValue] ==100){
+                    imageUrl = [[result objectForKey:@"response"] objectForKey:@"data"];
+                    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"2",@"type",[SystemConfig sharedInstance].company_id,@"company_id",supplyCateItem.uid,@"category_id",region,@"region_name",apply3D,@"apply3D",_supplyView.priceTextField.text,@"price",_supplyView.standardTextField.text,@"min_sell_num",_supplyView.titleTextField.text,@"title",supplyDes,@"description",_supplyView.linkManTextField.text,@"contacts",_supplyView.phoneNumTextField.text,@"contacts_phone",imageUrl,@"image_url",_supplyView.unitField.text,@"unit", nil];
+                    
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.labelText =@"发布中...";
+                    [HttpTool postWithPath:@"saveInfo" params:param success:^(id JSON) {
+                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                        NSDictionary *dic = [result objectForKey:@"response"];
+                        if ([[dic objectForKey:@"code"] intValue] == 100){
+                            //编辑成功，刷新原来列表界面
+                            MySupplyController *vc = [self.navigationController.viewControllers objectAtIndex:1];
+                            self.delegate = vc;
+                            if ([self.delegate respondsToSelector:@selector(reloadData)]) {
+                                [self.delegate reloadData];
+                            }
+                            [self.navigationController popToViewController:vc animated:YES];
+                        }else{
+                            [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
                         }
-                        [self.navigationController popToViewController:vc animated:YES];
-                    }else{
-                        [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
-                    }
-                } failure:^(NSError *error){
-                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-                }];
-                
-            }else{
-                [RemindView showViewWithTitle:@"上传图片失败" location:MIDDLE];
+                    } failure:^(NSError *error){
+                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                    }];
+                    
+                }else{
+                    [RemindView showViewWithTitle:@"上传图片失败" location:MIDDLE];
+                }
             }
         } failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

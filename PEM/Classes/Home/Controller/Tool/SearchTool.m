@@ -29,7 +29,9 @@
         
         NSDictionary *array =d[@"response"];
         if ([array isKindOfClass:[NSNull class]])
-        {}else{
+        {
+            
+        }else{
         for (NSDictionary *dict in array) {
             yyCompanyModel *s =[[yyCompanyModel alloc] initWithDictionaryForCompany:dict];
             

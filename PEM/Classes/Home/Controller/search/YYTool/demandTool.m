@@ -21,24 +21,23 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if (![array isKindOfClass:[NSNull class]])
-        { for (NSDictionary *dict in array) {
-            yyDemandModel *s =[[yyDemandModel alloc] initWithDictionaryFordemand:dict];
-            
-            [statuses addObject:s];
-            
-        }
-            success(statuses);
-
-        }
+        if (array) {
+            if (![array isKindOfClass:[NSNull class]])
+            { for (NSDictionary *dict in array) {
+                yyDemandModel *s =[[yyDemandModel alloc] initWithDictionaryFordemand:dict];
+                
+                [statuses addObject:s];
+                
+            }
+                success(statuses);
+                
+            }
             else{
-
-            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
-
-
+                
+                [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
+                
+            }
         }
-    
-
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -58,17 +57,18 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if (![array isKindOfClass:[NSNull class]]) {
-            for (NSDictionary *dict in array) {
-                yyDemandModel *s =[[yyDemandModel alloc] initWithDictionaryFordemand:dict];
-                
-                [statuses addObject:s];
+        if (array) {
+            if (![array isKindOfClass:[NSNull class]]) {
+                for (NSDictionary *dict in array) {
+                    yyDemandModel *s =[[yyDemandModel alloc] initWithDictionaryFordemand:dict];
+                    
+                    [statuses addObject:s];
+                }
+                success(statuses);
+            }else{
+                [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
             }
-            success(statuses);
-        }else{
-            [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
         }
-        
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -88,17 +88,18 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if ([array isKindOfClass:[NSNull class]]){
-                    }else{
-            for (NSDictionary *dict in array) {
-                demandCOM *s =[[demandCOM alloc] initWithDictonary:dict];
-
-                [statuses addObject:s];
+        if (array) {
+            if ([array isKindOfClass:[NSNull class]]){
+            }else{
+                for (NSDictionary *dict in array) {
+                    demandCOM *s =[[demandCOM alloc] initWithDictonary:dict];
+                    
+                    [statuses addObject:s];
+                }
+                
             }
-            
+            success(statuses);
         }
-        success(statuses);
-        
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

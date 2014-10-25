@@ -60,15 +60,17 @@
     [HttpTool postWithPath:@"getCategoryList" params:nil success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSArray *array = [NSArray arrayWithArray:[dic objectForKey:@"response"]];
-        for (NSDictionary *subDic in array) {
-            CategoryItem *item = [[CategoryItem alloc] initWithDic:subDic];
-            [_dataArray addObject:item];
+        if ([dic objectForKey:@"response"]) {
+            NSArray *array = [NSArray arrayWithArray:[dic objectForKey:@"response"]];
+            for (NSDictionary *subDic in array) {
+                CategoryItem *item = [[CategoryItem alloc] initWithDic:subDic];
+                [_dataArray addObject:item];
+            }
+            [_tableView reloadData];
         }
-        [_tableView reloadData];
-        } failure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
 

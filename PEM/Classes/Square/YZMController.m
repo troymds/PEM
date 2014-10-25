@@ -210,16 +210,18 @@
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                 NSDictionary *dic = [result objectForKey:@"response"];
-                int code = [[dic objectForKey:@"code"] intValue];
-                if (code == 100){
-                    [SystemConfig sharedInstance].company_id = [dic objectForKey:@"company_id"];
-                    CompanySetController *csc = [[CompanySetController alloc] init];
-                    csc.pushType = self.pushType;
-                    [self.navigationController pushViewController:csc animated:YES];
-                }else if(code ==103){
-                    [RemindView showViewWithTitle:@"该号码已被注册过" location:MIDDLE];
-                }else{
-                    [RemindView showViewWithTitle:@"注册失败" location:MIDDLE];
+                if (dic) {
+                    int code = [[dic objectForKey:@"code"] intValue];
+                    if (code == 100){
+                        [SystemConfig sharedInstance].company_id = [dic objectForKey:@"company_id"];
+                        CompanySetController *csc = [[CompanySetController alloc] init];
+                        csc.pushType = self.pushType;
+                        [self.navigationController pushViewController:csc animated:YES];
+                    }else if(code ==103){
+                        [RemindView showViewWithTitle:@"该号码已被注册过" location:MIDDLE];
+                    }else{
+                        [RemindView showViewWithTitle:@"注册失败" location:MIDDLE];
+                    }
                 }
             } failure:^(NSError *error) {
                 NSLog(@"%@",error);

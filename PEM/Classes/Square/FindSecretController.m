@@ -80,6 +80,9 @@
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
             NSDictionary *dic = [result objectForKey:@"response"];
+            if (dic) {
+                
+            }
             if ([[dic objectForKey:@"code"] intValue]==100) {
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"找回密码" message:@"我们已发送修改密码的链接到您的注册邮箱中,请您注意查收" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
                 alertView.delegate = self;

@@ -15,7 +15,7 @@
         [allParams setDictionary:params];
     }
     NSString *time =[DateManeger getCurrentTimeStamps];
-    NSString *uuid = [SystemConfig sharedInstance].uuidStr;
+    NSString *uuid = [SystemConfig sharedInstance].uuidStr; 
     NSString *md5 = [NSString stringWithFormat:@"%@%@%@",uuid,time,@"hdy782634j23487sdfkjw3486"];
     md5 = [md5 md5Encrypt];
         

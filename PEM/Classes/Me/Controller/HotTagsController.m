@@ -52,12 +52,23 @@
     [scrollView setContentSize:CGSizeMake(kWidth, scrollView.frame.size.height)];
     [self.view  addSubview:scrollView];
     
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
     
     [self addView];
     [self addNavBarButton];
     [self loadData];
 }
+
+
+//- (void)keyboardWillShow:(NSNotification *)notify
+//{
+//    NSDictionary *userInfo = [notify userInfo];
+//    NSValue *value = [userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey];
+//    CGSize size = [value CGRectValue].size;
+//    NSLog(@"-----------%f",size.height);
+//}
+//
 
 - (void)keyboardWillHiden
 {
@@ -68,15 +79,11 @@
         }];
     }else{
         [UIView animateWithDuration:0.2 animations:^{
-            [scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.size.height+bottomView.frame.origin.y+20)];
+            [scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.size.height+bottomView.frame.origin.y+50)];
         }];
     }
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    NSLog(@"----%f",scrollView.contentOffset.y);
-}
 
 - (void)addNavBarButton{
     // 创建按钮
@@ -104,9 +111,9 @@
     hotLabel.textColor = HexRGB(0x3a3a3a);
     hotLabel.font = [UIFont systemFontOfSize:PxFont(24)];
     [scrollView addSubview:hotLabel];
-    
     bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 130, kWidth,70)];
     bottomView.backgroundColor = HexRGB(0xffffff);
+    
     [scrollView addSubview:bottomView];
     
     UIImageView *addTagImg = [[UIImageView alloc] initWithFrame:CGRectMake(19, 0, 20, 16)];
@@ -280,13 +287,6 @@
         [scrollView setContentSize:CGSizeMake(kWidth, bottomView.frame.size.height+bottomView.frame.origin.y+20)];
     }
     if (isEditing) {
-//        CGFloat y;
-//        if (_iPhone4) {
-//            y = 100;
-//        }else if (_iPhone5){
-//            y = 150;
-//        }
-//        [scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-y) animated:YES];
         int distance = scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
         if (distance < 240) {
             [scrollView setContentSize:CGSizeMake(kWidth, bottomView.frame.origin.y+bottomView.frame.size.height+240)];

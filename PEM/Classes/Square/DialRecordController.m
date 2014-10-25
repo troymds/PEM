@@ -47,24 +47,26 @@
     [HttpTool postWithPath:@"getCallRecord" params:params success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]) {
-            NSArray *arr = [result objectForKey:@"response"];
-            for (NSDictionary *dic in arr) {
-                if ([[dic objectForKey:@"type"] intValue] !=0) {
-                    CallRecordItem *item = [[CallRecordItem alloc] initWithDictionary:dic];
-                    [_dataArray addObject:item];
+        if ([result objectForKey:@"response"]) {
+            if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]) {
+                NSArray *arr = [result objectForKey:@"response"];
+                for (NSDictionary *dic in arr) {
+                    if ([[dic objectForKey:@"type"] intValue] !=0) {
+                        CallRecordItem *item = [[CallRecordItem alloc] initWithDictionary:dic];
+                        [_dataArray addObject:item];
+                    }
                 }
+                [_tableView reloadData];
+            }else{
+                UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+                view.backgroundColor = HexRGB(0xffffff);
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 180, 20)];
+                label.textAlignment = NSTextAlignmentCenter;
+                label.text = @"没有拨号记录!";
+                label.center = view.center;
+                [view addSubview:label];
+                [self.view addSubview:view];
             }
-            [_tableView reloadData];
-        }else{
-            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
-            view.backgroundColor = HexRGB(0xffffff);
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 180, 20)];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.text = @"没有拨号记录!";
-            label.center = view.center;
-            [view addSubview:label];
-            [self.view addSubview:view];
         }
     } failure:^(NSError *error){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

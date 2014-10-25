@@ -84,7 +84,7 @@
     _phoneNumField = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, kWidth-25*2-30, 43)];
     _phoneNumField.placeholder = @"请输入您的手机号";
     _phoneNumField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    _phoneNumField.keyboardType = UIKeyboardTypeNumberPad;
+    _phoneNumField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     _phoneNumField.delegate = self;
     [view addSubview:_phoneNumField];
 
@@ -109,14 +109,16 @@
             [HttpTool postWithPath:@"getYzm" params:param success:^(id JSON) {
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                 NSDictionary *dic = [result objectForKey:@"response"];
-                if ([[dic objectForKey:@"code"] intValue] == 100) {
-                    YZMController *yzm = [[YZMController alloc] init];
-                    yzm.phoneNum = _phoneNumField.text;
-                    yzm.pushType = self.pushType;
-                    [self.navigationController pushViewController:yzm animated:YES];
-                }else{
-                    NSString *msg = [dic objectForKey:@"msg"];
-                    [RemindView showViewWithTitle:msg location:TOP];
+                if (dic) {
+                    if ([[dic objectForKey:@"code"] intValue] == 100) {
+                        YZMController *yzm = [[YZMController alloc] init];
+                        yzm.phoneNum = _phoneNumField.text;
+                        yzm.pushType = self.pushType;
+                        [self.navigationController pushViewController:yzm animated:YES];
+                    }else{
+                        NSString *msg = [dic objectForKey:@"msg"];
+                        [RemindView showViewWithTitle:msg location:TOP];
+                    }
                 }
             } failure:^(NSError *error) {
                 NSLog(@"%@",error);

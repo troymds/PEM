@@ -94,11 +94,13 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        if (!isNull(result, @"response")) {
-            if ([[dic objectForKey:@"code"] intValue] ==100) {
-                NSDictionary *data = [dic objectForKey:@"data"];
-                VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-                [SystemConfig sharedInstance].vipInfo = vipInfo;
+        if (dic) {
+            if (!isNull(result, @"response")) {
+                if ([[dic objectForKey:@"code"] intValue] ==100) {
+                    NSDictionary *data = [dic objectForKey:@"data"];
+                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                    [SystemConfig sharedInstance].vipInfo = vipInfo;
+                }
             }
         }
     } failure:^(NSError *error) {
@@ -152,13 +154,15 @@
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
             NSDictionary *dic = [result objectForKey:@"response"];
-            NSInteger code = [[dic objectForKey:@"code"] integerValue];
-            if (code == 100) {
-                [RemindView showViewWithTitle:@"保存成功" location:TOP];
-            }else if(code ==101){
-                [RemindView showViewWithTitle:@"保存失败" location:TOP];
-            }else if(code ==102){
-                [RemindView showViewWithTitle:[dic objectForKey:@"msg"] location:TOP];
+            if (dic) {
+                NSInteger code = [[dic objectForKey:@"code"] integerValue];
+                if (code == 100) {
+                    [RemindView showViewWithTitle:@"保存成功" location:TOP];
+                }else if(code ==101){
+                    [RemindView showViewWithTitle:@"保存失败" location:TOP];
+                }else if(code ==102){
+                    [RemindView showViewWithTitle:[dic objectForKey:@"msg"] location:TOP];
+                }
             }
         } failure:^(NSError *error) {
             NSLog(@"%@",error);
@@ -176,28 +180,30 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        if ([[dic objectForKey:@"code"] intValue] == 100) {
-            if ([[dic objectForKey:@"data"] isKindOfClass:[NSNull class]]) {
-                remindLabel.hidden = NO;
-                if ([SystemConfig sharedInstance].vipInfo) {
-                    _maxNum = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
-                }
-            }else{
-                NSArray *dataArr = [dic objectForKey:@"data"];
-                
-                int num = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
-                _maxNum = [dataArr count] + num;
-                
-                NSMutableArray *arr = [NSMutableArray array];
-                for (NSDictionary *dic in dataArr){
-                    TagItem *item = [[TagItem alloc] initWithDictionary:dic];
-                    [arr addObject:dic];
-                    NSString *no_read = item.no_read;
-                    if ([no_read intValue] > 100) {
-                        no_read = @"99+";
+        if (dic) {
+            if ([[dic objectForKey:@"code"] intValue] == 100) {
+                if ([[dic objectForKey:@"data"] isKindOfClass:[NSNull class]]) {
+                    remindLabel.hidden = NO;
+                    if ([SystemConfig sharedInstance].vipInfo) {
+                        _maxNum = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
                     }
-                     [self addBtnWithTitle:item.name withId:item.uid withMessage:([item.no_read intValue] !=0) messgaeNum:no_read];
-                    [_dataArray addObject:item];
+                }else{
+                    NSArray *dataArr = [dic objectForKey:@"data"];
+                    
+                    int num = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
+                    _maxNum = [dataArr count] + num;
+                    
+                    NSMutableArray *arr = [NSMutableArray array];
+                    for (NSDictionary *dic in dataArr){
+                        TagItem *item = [[TagItem alloc] initWithDictionary:dic];
+                        [arr addObject:dic];
+                        NSString *no_read = item.no_read;
+                        if ([no_read intValue] > 100) {
+                            no_read = @"99+";
+                        }
+                        [self addBtnWithTitle:item.name withId:item.uid withMessage:([item.no_read intValue] !=0) messgaeNum:no_read];
+                        [_dataArray addObject:item];
+                    }
                 }
             }
         }

@@ -80,52 +80,52 @@
     }
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
-    
-    
     [HttpTool postWithPath:@"getWishlist" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        if (isRefresh) {
-            if (_dataArray.count!=0) {
-                [_dataArray removeAllObjects];
+        if ([result objectForKey:@"response"]) {
+            if (isRefresh) {
+                if (_dataArray.count!=0) {
+                    [_dataArray removeAllObjects];
+                }
             }
-        }
-        if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]){
-            
-            NSArray *arr = [result objectForKey:@"response"];
-            for (NSDictionary *dic in arr) {
-                MyFavoriteItem *item = [[MyFavoriteItem alloc] initWithDictionary:dic];
-                [_dataArray addObject:item];
+            if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]){
+                
+                NSArray *arr = [result objectForKey:@"response"];
+                for (NSDictionary *dic in arr) {
+                    MyFavoriteItem *item = [[MyFavoriteItem alloc] initWithDictionary:dic];
+                    [_dataArray addObject:item];
+                }
+                [_tableView reloadData];
+            }else{
+                if (_dataArray.count ==0){
+                    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+                    view.backgroundColor = HexRGB(0xffffff);
+                    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
+                    label.backgroundColor = [UIColor clearColor];
+                    label.textAlignment = NSTextAlignmentCenter;
+                    label.text = @"没有收藏!";
+                    label.center = view.center;
+                    [view addSubview:label];
+                    [self.view addSubview:view];
+                }else{
+                    [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                    
+                }
+            }
+            if (isLoad) {
+                isLoad = NO;
+                [MJFootView endRefreshing];
+            }
+            if (isRefresh) {
+                isRefresh = NO;
+                [MJHeadView endRefreshing];
             }
             [_tableView reloadData];
-        }else{
-            if (_dataArray.count ==0){
-                UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
-                view.backgroundColor = HexRGB(0xffffff);
-                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
-                label.backgroundColor = [UIColor clearColor];
-                label.textAlignment = NSTextAlignmentCenter;
-                label.text = @"没有收藏!";
-                label.center = view.center;
-                [view addSubview:label];
-                [self.view addSubview:view];
-            }else{
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-                
-            }
         }
-        if (isLoad) {
-            isLoad = NO;
-            [MJFootView endRefreshing];
-        }
-        if (isRefresh) {
-            isRefresh = NO;
-            [MJHeadView endRefreshing];
-        }
-        [_tableView reloadData];
     } failure:^(NSError *error){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-        NSLog(@"%@",error);
     }];
 }
 
@@ -150,7 +150,7 @@
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,94, kWidth-20, 1)];
     lineView.backgroundColor = HexRGB(0xd5d5d5);
     [cell.contentView addSubview:lineView];
-
+    
     return cell;
 }
 

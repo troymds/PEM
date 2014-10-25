@@ -32,10 +32,10 @@
         view.alpha = 0.0;
         [self addSubview:view];
         
-        CGSize size = [AdaptationSize getSizeFromString:message Font:[UIFont systemFontOfSize:14] withHight:CGFLOAT_MAX withWidth:233];
+        CGSize size = [AdaptationSize getSizeFromString:message Font:[UIFont systemFontOfSize:14] withHight:CGFLOAT_MAX withWidth:kWidth-40-40];
 
         
-        bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-40,56+40+size.height+35)];
+        bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-40,56+40+size.height+40)];
         bgView.backgroundColor = HexRGB(0xffffff);
         bgView.center = self.center;
         [self addSubview:bgView];
@@ -58,11 +58,11 @@
         _messageLabel.textColor = HexRGB(0x565656);
         [bgView addSubview:_messageLabel];
         
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,bgView.frame.size.height-35,kWidth-40, 1)];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,bgView.frame.size.height-40,kWidth-40, 1)];
         line.backgroundColor = HexRGB(0xefeded);
         [bgView addSubview:line];
         
-        UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake((kWidth-40)/2,bgView.frame.size.height-35, 1, 35)];
+        UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake((kWidth-40)/2,bgView.frame.size.height-40, 1, 40)];
         line1.backgroundColor = HexRGB(0xefeded);
         [bgView addSubview:line1];
         
@@ -73,7 +73,7 @@
         [_otherButton setBackgroundImage:[UIImage imageNamed:@"action_btn.png"] forState:UIControlStateHighlighted];
         _otherButton.tag = 0;
         [_otherButton addTarget:self action:@selector(actionButtonDown:) forControlEvents:UIControlEventTouchUpInside];
-        _otherButton.frame = CGRectMake(0, bgView.frame.size.height-35,(kWidth-40)/2, 35);
+        _otherButton.frame = CGRectMake(0, bgView.frame.size.height-40,(kWidth-40)/2, 40);
         [bgView addSubview:_otherButton];
         
         _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -82,7 +82,7 @@
         [_cancelButton setTitleColor:HexRGB(0x000000) forState:UIControlStateNormal];
         [_cancelButton setBackgroundImage:[UIImage imageNamed:@"action_btn.png"] forState:UIControlStateHighlighted];
         [_cancelButton addTarget:self action:@selector(actionButtonDown:) forControlEvents:UIControlEventTouchUpInside];
-        _cancelButton.frame = CGRectMake(273/2, bgView.frame.size.height-35,(kWidth-40)/2, 35);
+        _cancelButton.frame = CGRectMake(bgView.frame.size.width/2, bgView.frame.size.height-40,(kWidth-40)/2, 40);
         [bgView addSubview:_cancelButton];
         
         self.delegate = delegate;

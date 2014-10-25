@@ -76,7 +76,7 @@
     _userNameField = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, kWidth-25*2-30, 43)];
     _userNameField.placeholder = @"请输入您的手机号";
     _userNameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    _userNameField.keyboardType = UIKeyboardTypeNumberPad;
+    _userNameField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     _userNameField.delegate = self;
     [bgView addSubview:_userNameField];
     
@@ -166,37 +166,39 @@
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                 NSDictionary *dic = [result objectForKey:@"response"];
-                NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
-                if ([code isEqualToString:@"100"]){
-                    
-                    [[NSUserDefaults standardUserDefaults] setObject:_userNameField.text forKey:@"userName"];
-                    [[NSUserDefaults standardUserDefaults] setObject:_secretField.text forKey:@"secret"];
-                    
-                    NSDictionary *data = [dic objectForKey:@"data"];
-                    
-                    [SystemConfig sharedInstance].isUserLogin = YES;
-                    if (isNull(data, @"company_id")){
-                        [SystemConfig sharedInstance].company_id = @"-1";
+                if (dic) {
+                    NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
+                    if ([code isEqualToString:@"100"]){
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:_userNameField.text forKey:@"userName"];
+                        [[NSUserDefaults standardUserDefaults] setObject:_secretField.text forKey:@"secret"];
+                        
+                        NSDictionary *data = [dic objectForKey:@"data"];
+                        
+                        [SystemConfig sharedInstance].isUserLogin = YES;
+                        if (isNull(data, @"company_id")){
+                            [SystemConfig sharedInstance].company_id = @"-1";
+                        }else{
+                            int company_id = [[data objectForKey:@"company_id"] intValue];
+                            [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                        }
+                        if (isNull(data, @"viptype")) {
+                            [SystemConfig sharedInstance].viptype = @"-3";
+                        }else{
+                            NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
+                            [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                        }
+                        
+                        CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
+                        [SystemConfig sharedInstance].companyInfo = item;
+                        
+                        NSString *companyId = [NSString stringWithFormat:@"%d",[[data objectForKey:@"company_id"] intValue]];
+                        
+                        [self getVipInfo:companyId];
+                        
                     }else{
-                        int company_id = [[data objectForKey:@"company_id"] intValue];
-                        [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                        [RemindView showViewWithTitle:@"用户名或密码错误" location:BELLOW];
                     }
-                    if (isNull(data, @"viptype")) {
-                        [SystemConfig sharedInstance].viptype = @"-3";
-                    }else{
-                        NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
-                        [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
-                    }
-                    
-                    CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
-                    [SystemConfig sharedInstance].companyInfo = item;
-                    
-                    NSString *companyId = [NSString stringWithFormat:@"%d",[[data objectForKey:@"company_id"] intValue]];
-
-                    [self getVipInfo:companyId];
-            
-                    }else{
-                    [RemindView showViewWithTitle:@"用户名或密码错误" location:BELLOW];
                 }
                 
             } failure:^(NSError *error) {
@@ -226,14 +228,16 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        if (!isNull(result, @"response")) {
-            if ([[dic objectForKey:@"code"] intValue] ==100) {
-                NSDictionary *data = [dic objectForKey:@"data"];
-                VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-                [SystemConfig sharedInstance].vipInfo = vipInfo;
-                [self loginSucess];
-            }else{
-                [self loginSucess];
+        if (dic) {
+            if (!isNull(result, @"response")) {
+                if ([[dic objectForKey:@"code"] intValue] ==100) {
+                    NSDictionary *data = [dic objectForKey:@"data"];
+                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                    [SystemConfig sharedInstance].vipInfo = vipInfo;
+                    [self loginSucess];
+                }else{
+                    [self loginSucess];
+                }
             }
         }
     } failure:^(NSError *error) {

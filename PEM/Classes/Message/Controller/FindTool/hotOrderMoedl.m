@@ -20,15 +20,16 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if (![array isKindOfClass:[NSNull class]]){
-            for (NSDictionary *dict in array) {
-                yySupplyModel *s =[[yySupplyModel alloc] initWithDictionaryForSupply:dict];
-                
-                [statuses addObject:s];
+        if (array) {
+            if (![array isKindOfClass:[NSNull class]]){
+                for (NSDictionary *dict in array) {
+                    yySupplyModel *s =[[yySupplyModel alloc] initWithDictionaryForSupply:dict];
+                    
+                    [statuses addObject:s];
+                }
             }
+            success(statuses);
         }
-        success(statuses);
-        
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -46,16 +47,17 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if (![array isKindOfClass:[NSNull class]]){
-            for (NSDictionary *dict in array) {
-                yyDemandModel *s =[[yyDemandModel alloc] initWithDictionaryFordemand:dict];
+        if (array) {
+            if (![array isKindOfClass:[NSNull class]]){
+                for (NSDictionary *dict in array) {
+                    yyDemandModel *s =[[yyDemandModel alloc] initWithDictionaryFordemand:dict];
+                    
+                    [statuses addObject:s];
+                }
                 
-                [statuses addObject:s];
             }
-            
+            success(statuses);
         }
-        success(statuses);
-        
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

@@ -101,7 +101,7 @@
         _purchaseNumField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _purchaseNum.frame.size.width-75, 35)];
         _purchaseNumField.tag = PC_PURCHASE_TYPE;
         _purchaseNumField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        _purchaseNumField.keyboardType = UIKeyboardTypeNumberPad;
+        _purchaseNumField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         _purchaseNumField.font = [UIFont systemFontOfSize:PxFont(20)];
         _purchaseNumField.placeholder = @"求购物品的数量";
         _purchaseNumField.delegate = self;

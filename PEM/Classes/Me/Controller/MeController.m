@@ -215,33 +215,35 @@
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                 NSDictionary *dic = [result objectForKey:@"response"];
-                NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
-                if ([code isEqualToString:@"100"]){
-                    
-                    [[NSUserDefaults standardUserDefaults] setObject:_loginView.userField.text forKey:@"userName"];
-                    [[NSUserDefaults standardUserDefaults] setObject:_loginView.passwordField.text forKey:@"secret"];
-
-                    NSDictionary *data = [dic objectForKey:@"data"];
-                    [SystemConfig sharedInstance].isUserLogin = YES;
-                    if (isNull(data, @"company_id")){
-                        [SystemConfig sharedInstance].company_id = @"-1";
+                if (dic) {
+                    NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
+                    if ([code isEqualToString:@"100"]){
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:_loginView.userField.text forKey:@"userName"];
+                        [[NSUserDefaults standardUserDefaults] setObject:_loginView.passwordField.text forKey:@"secret"];
+                        
+                        NSDictionary *data = [dic objectForKey:@"data"];
+                        [SystemConfig sharedInstance].isUserLogin = YES;
+                        if (isNull(data, @"company_id")){
+                            [SystemConfig sharedInstance].company_id = @"-1";
+                        }else{
+                            int company_id = [[data objectForKey:@"company_id"] intValue];
+                            [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                        }
+                        if (isNull(data, @"viptype")) {
+                            [SystemConfig sharedInstance].viptype = @"-3";
+                        }else{
+                            NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
+                            [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                        }
+                        CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
+                        [SystemConfig sharedInstance].companyInfo = item;
+                        
+                        [self getVipInfo:[SystemConfig sharedInstance].company_id];
+                        
                     }else{
-                        int company_id = [[data objectForKey:@"company_id"] intValue];
-                        [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                        [RemindView showViewWithTitle:@"用户名或密码错误" location:MIDDLE];
                     }
-                    if (isNull(data, @"viptype")) {
-                        [SystemConfig sharedInstance].viptype = @"-3";
-                    }else{
-                        NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
-                        [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
-                    }
-                    CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
-                    [SystemConfig sharedInstance].companyInfo = item;
-                    
-                    [self getVipInfo:[SystemConfig sharedInstance].company_id];
-                    
-                }else{
-                    [RemindView showViewWithTitle:@"用户名或密码错误" location:MIDDLE];
                 }
             }failure:^(NSError *error){
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -407,13 +409,15 @@
                     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                     NSDictionary *dic = [result objectForKey:@"response"];
-                    if ([[dic objectForKey:@"code"] intValue] == 100){
-                        [activeField resignFirstResponder];
-                        MyPurchaseController *pc = [[MyPurchaseController alloc] init];
-                        [self.navigationController pushViewController:pc animated:YES];
-                        [self clearPurchaseData];
-                    }else{
-                        [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+                    if (dic) {
+                        if ([[dic objectForKey:@"code"] intValue] == 100){
+                            [activeField resignFirstResponder];
+                            MyPurchaseController *pc = [[MyPurchaseController alloc] init];
+                            [self.navigationController pushViewController:pc animated:YES];
+                            [self clearPurchaseData];
+                        }else{
+                            [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+                        }
                     }
                 } failure:^(NSError *error) {
                     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -535,16 +539,15 @@
         case 3003:
         {
             if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
-                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"尊敬的体验会员,普通会员及以上可单独购买上传次数" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
+                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"尊敬的体验会员,您没有权限上传全景图片\n1.普通会员及以上会员可单独购买上传次数\n2.金牌会员赠送1次\n3.铂金会员赠送5次" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
                 _upTDView.tag =1000;
                 [_upTDView showView];
             }else{
                 int display_3d_num = [[SystemConfig sharedInstance].vipInfo.display_3d_num intValue];
                 if (display_3d_num <= 0) {
-                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您还不能上传全景图片或上传全景图片数量已用完,要上传全景图片,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
-                    actionSheet.tag = 1001;
-                    [actionSheet showView];
-                }else{
+                    UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您好!您还不能上传全景图片或上传全景图片数量已用完,要上传全景图片,可到网页端单独购买" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+                    [view show];
+                 }else{
                     btn.selected = !btn.selected;
                     if (btn.selected) {
                         isShowTD = YES;
@@ -592,37 +595,39 @@
     [HttpTool postWithPath:@"uploadImage" params:param success:^(id JSON){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100 ){
-            imageUrl = [[result objectForKey:@"response"] objectForKey:@"data"];
-            NSString *apply3D;
-            if (isShowTD){
-                apply3D = @"1";
-            }else{
-                apply3D = @"0";
-            }
-            NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"2",@"type",[SystemConfig sharedInstance].company_id,@"company_id",supplyCateItem.uid,@"category_id",region,@"region_name",apply3D,@"apply3D",_supplyView.priceTextField.text,@"price",_supplyView.standardTextField.text,@"min_sell_num",_supplyView.titleTextField.text,@"title",supplyDes,@"description",_supplyView.linkManTextField.text,@"contacts",_supplyView.phoneNumTextField.text,@"contacts_phone",imageUrl,@"image_url",_supplyView.unitField.text,@"unit", nil];
-            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.dimBackground = NO;
-            hud.labelText = @"发布中...";
-            [HttpTool postWithPath:@"saveInfo" params:params success:^(id JSON) {
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                NSDictionary *dic = [result objectForKey:@"response"];
-                if ([[dic objectForKey:@"code"] intValue] == 100){
-                    [self clearSupplyData];
-                    [activeField resignFirstResponder];
-                    MySupplyController *sc = [[MySupplyController alloc] init];
-                    [self.navigationController pushViewController:sc animated:YES];
+        if ([result objectForKey:@"response"]) {
+            if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100 ){
+                imageUrl = [[result objectForKey:@"response"] objectForKey:@"data"];
+                NSString *apply3D;
+                if (isShowTD){
+                    apply3D = @"1";
                 }else{
-                    [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+                    apply3D = @"0";
                 }
-            } failure:^(NSError *error){
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            }];
-            
-        }else{
-            [RemindView showViewWithTitle:@"上传图片失败" location:MIDDLE];
+                NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@"2",@"type",[SystemConfig sharedInstance].company_id,@"company_id",supplyCateItem.uid,@"category_id",region,@"region_name",apply3D,@"apply3D",_supplyView.priceTextField.text,@"price",_supplyView.standardTextField.text,@"min_sell_num",_supplyView.titleTextField.text,@"title",supplyDes,@"description",_supplyView.linkManTextField.text,@"contacts",_supplyView.phoneNumTextField.text,@"contacts_phone",imageUrl,@"image_url",_supplyView.unitField.text,@"unit", nil];
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.dimBackground = NO;
+                hud.labelText = @"发布中...";
+                [HttpTool postWithPath:@"saveInfo" params:params success:^(id JSON) {
+                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                    NSDictionary *dic = [result objectForKey:@"response"];
+                    if ([[dic objectForKey:@"code"] intValue] == 100){
+                        [self clearSupplyData];
+                        [activeField resignFirstResponder];
+                        MySupplyController *sc = [[MySupplyController alloc] init];
+                        [self.navigationController pushViewController:sc animated:YES];
+                    }else{
+                        [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+                    }
+                } failure:^(NSError *error){
+                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                }];
+                
+            }else{
+                [RemindView showViewWithTitle:@"上传图片失败" location:MIDDLE];
+            }
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -960,14 +965,16 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        if (!isNull(result, @"response")) {
-            if ([[dic objectForKey:@"code"] intValue] ==100) {
-                NSDictionary *data = [dic objectForKey:@"data"];
-                VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-                [SystemConfig sharedInstance].vipInfo = vipInfo;
-                [_loginView dismissView];
-            }else{
-                [_loginView dismissView];
+        if (dic) {
+            if (!isNull(result, @"response")) {
+                if ([[dic objectForKey:@"code"] intValue] ==100) {
+                    NSDictionary *data = [dic objectForKey:@"data"];
+                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                    [SystemConfig sharedInstance].vipInfo = vipInfo;
+                    [_loginView dismissView];
+                }else{
+                    [_loginView dismissView];
+                }
             }
         }
     } failure:^(NSError *error) {

@@ -123,27 +123,29 @@
             [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
                 NSDictionary *dic = [result objectForKey:@"response"];
-                NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
-                if ([code isEqualToString:@"100"]){
-                    NSDictionary *data = [dic objectForKey:@"data"];
-                    
-                    [SystemConfig sharedInstance].isUserLogin = YES;
-                    if (isNull(data, @"company_id")){
-                        [SystemConfig sharedInstance].company_id = @"-1";
-                    }else{
-                        int company_id = [[data objectForKey:@"company_id"] intValue];
-                        [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                if (dic) {
+                    NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
+                    if ([code isEqualToString:@"100"]){
+                        NSDictionary *data = [dic objectForKey:@"data"];
+                        
+                        [SystemConfig sharedInstance].isUserLogin = YES;
+                        if (isNull(data, @"company_id")){
+                            [SystemConfig sharedInstance].company_id = @"-1";
+                        }else{
+                            int company_id = [[data objectForKey:@"company_id"] intValue];
+                            [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                        }
+                        if (isNull(data, @"viptype")) {
+                            [SystemConfig sharedInstance].viptype = @"-3";
+                        }else{
+                            NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
+                            [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                        }
+                        CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
+                        [SystemConfig sharedInstance].companyInfo = item;
+                        
+                        [self getVipInfo:[SystemConfig sharedInstance].company_id];
                     }
-                    if (isNull(data, @"viptype")) {
-                        [SystemConfig sharedInstance].viptype = @"-3";
-                    }else{
-                        NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
-                        [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
-                    }
-                    CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
-                    [SystemConfig sharedInstance].companyInfo = item;
-                    
-                    [self getVipInfo:[SystemConfig sharedInstance].company_id];
                 }
             }failure:^(NSError *error){
                 NSLog(@"%@",error);
@@ -160,11 +162,13 @@
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        if (!isNull(result, @"response")) {
-            if ([[dic objectForKey:@"code"] intValue] ==100) {
-                NSDictionary *data = [dic objectForKey:@"data"];
-                VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-                [SystemConfig sharedInstance].vipInfo = vipInfo;
+        if (dic) {
+            if (!isNull(result, @"response")) {
+                if ([[dic objectForKey:@"code"] intValue] ==100) {
+                    NSDictionary *data = [dic objectForKey:@"data"];
+                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                    [SystemConfig sharedInstance].vipInfo = vipInfo;
+                }
             }
         }
     } failure:^(NSError *error) {

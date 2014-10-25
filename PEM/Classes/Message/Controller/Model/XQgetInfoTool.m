@@ -20,20 +20,18 @@
         [dic setObject:[SystemConfig sharedInstance].company_id forKey:@"company_id"];
     }
     [HttpTool postWithPath:@"getInfoDetail" params:dic success:^(id JSON) {
-    NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
-        NSDictionary *array =[d[@"response"]objectForKey:@"data"];
-         if (![array isKindOfClass:[NSNull class]]){
-        XQgetInfoDetailModel *s =[[XQgetInfoDetailModel alloc] initWithDictionaryForGategory:array];
-            [statuses addObject:s];
-         success(statuses);
-
-
+        if (d[@"response"]) {
+            NSDictionary *array =[d[@"response"]objectForKey:@"data"];
+            if (![array isKindOfClass:[NSNull class]]){
+                XQgetInfoDetailModel *s =[[XQgetInfoDetailModel alloc] initWithDictionaryForGategory:array];
+                [statuses addObject:s];
+                success(statuses);
+                
+            }
         }
-    }
-   
-
-        failure:^(NSError *error) {
+    }failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
         }
@@ -41,6 +39,7 @@
     
     
 }
+
 + (void)statusesWithSuccessNew:(StatusSuccessBlock)success newFailure:(StatusFailureBlock)failure NewCompanyid:(NSString *)companyid
 {
     
@@ -49,25 +48,26 @@
         
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
-
-        NSDictionary *comPanyArray =d[@"response"];
-        if (![comPanyArray isKindOfClass:[NSNull class]]){
-
-        comHomeModel *s =[[comHomeModel alloc]initWithDictionaryForComapny:comPanyArray];
         
-        [statuses addObject:s];
-        success(statuses);
-
+        NSDictionary *comPanyArray =d[@"response"];
+        if (comPanyArray) {
+            if (![comPanyArray isKindOfClass:[NSNull class]]){
+                
+                comHomeModel *s =[[comHomeModel alloc]initWithDictionaryForComapny:comPanyArray];
+                
+                [statuses addObject:s];
+                success(statuses);
+            }
+            
         }
-    }
-        failure:^(NSError *error) {
+    }failure:^(NSError *error) {
         if (failure==nil)return ; {
-        failure(error);
-
-}
-        }];
-
+            failure(error);
+        }
+    }];
+    
     
 }
+
 
 @end

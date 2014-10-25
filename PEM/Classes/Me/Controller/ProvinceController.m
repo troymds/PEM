@@ -49,19 +49,20 @@
         [HttpTool postWithPath:@"getProvinceList" params:nil success:^(id JSON) {
             NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
             NSDictionary *dic = [result objectForKey:@"response"];
-            if ([[dic objectForKey:@"code"] intValue] == 100) {
-                NSArray *data = [dic objectForKey:@"data"];
-                NSMutableArray *mutableArray = [[NSMutableArray alloc] init];
-                for (NSDictionary *subDic in data){
-                    AreaItem *item = [[AreaItem alloc] initWithDictionary:subDic];
-                    [_dataArray addObject:item];
-                    [mutableArray addObject:subDic];
+            if (dic) {
+                if ([[dic objectForKey:@"code"] intValue] == 100) {
+                    NSArray *data = [dic objectForKey:@"data"];
+                    NSMutableArray *mutableArray = [[NSMutableArray alloc] init];
+                    for (NSDictionary *subDic in data){
+                        AreaItem *item = [[AreaItem alloc] initWithDictionary:subDic];
+                        [_dataArray addObject:item];
+                        [mutableArray addObject:subDic];
+                    }
+                    NSArray *arr = [NSArray arrayWithArray:[mutableArray copy]];
+                    [FileManager writeArray:arr toFile:@"provinces"];
+                    [_tableView reloadData];
                 }
-                NSArray *arr = [NSArray arrayWithArray:[mutableArray copy]];
-                [FileManager writeArray:arr toFile:@"provinces"];
-                [_tableView reloadData];
             }
-            
         } failure:^(NSError *error) {
             NSLog(@"%@",error);
         }];

@@ -56,12 +56,14 @@
             NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",_textView.text,@"content", nil];
             [HttpTool postWithPath:@"addAdvice" params:param success:^(id JSON) {
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                NSDictionary *dic = [result objectForKey:@"response"];
-                if ([[dic objectForKey:@"code"] intValue] ==100){
-                    [self.navigationController popViewControllerAnimated:YES];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"advice" object:nil];
-                }else{
-                    [RemindView showViewWithTitle:@"反馈失败" location:MIDDLE];
+                if ([result objectForKey:@"response"]) {
+                    NSDictionary *dic = [result objectForKey:@"response"];
+                    if ([[dic objectForKey:@"code"] intValue] ==100){
+                        [self.navigationController popViewControllerAnimated:YES];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"advice" object:nil];
+                    }else{
+                        [RemindView showViewWithTitle:@"反馈失败" location:MIDDLE];
+                    }
                 }
             } failure:^(NSError *error) {
                 [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
@@ -136,12 +138,14 @@
             NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",_textView.text,@"content", nil];
             [HttpTool postWithPath:@"addAdvice" params:param success:^(id JSON) {
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                NSDictionary *dic = [result objectForKey:@"response"];
-                if ([[dic objectForKey:@"code"] intValue] ==100){
-                    [self.navigationController popViewControllerAnimated:YES];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"advice" object:nil];
-                }else{
-                    [RemindView showViewWithTitle:@"反馈失败" location:MIDDLE];
+                if ([result objectForKey:@"response"]) {
+                    NSDictionary *dic = [result objectForKey:@"response"];
+                    if ([[dic objectForKey:@"code"] intValue] ==100){
+                        [self.navigationController popViewControllerAnimated:YES];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"advice" object:nil];
+                    }else{
+                        [RemindView showViewWithTitle:@"反馈失败" location:MIDDLE];
+                    }
                 }
             } failure:^(NSError *error) {
                 [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
