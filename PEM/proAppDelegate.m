@@ -161,6 +161,8 @@
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
+        NSLog(@"%@",dic);
+
         if (dic) {
             if (!isNull(result, @"response")) {
                 if ([[dic objectForKey:@"code"] intValue] ==100) {

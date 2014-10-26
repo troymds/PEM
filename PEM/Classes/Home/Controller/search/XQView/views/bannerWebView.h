@@ -7,11 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WebViewJavascriptBridge.h"
 
 @interface bannerWebView : UIViewController
-{
-    WebViewJavascriptBridge *_bridge;
-}
+
 @property(nonatomic ,strong)NSString *bannerWebid;
 @end

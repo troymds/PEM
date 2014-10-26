@@ -321,6 +321,7 @@
 
 
 - (void)buttonClick{
+    [activeField resignFirstResponder];
     if ([self checkOut]){
         if (isExistImg){
             if (isModifyImg) {
@@ -421,7 +422,44 @@
 
 
 - (BOOL)checkOut{
-    if (_phoneView.textField.text.length!=0) {
+    if (_nameView.textField.text.length==0) {
+        NSString *textStr = @"请输入企业名称";
+        CGSize size = [AdaptationSize getSizeFromString:textStr Font:[UIFont systemFontOfSize:11] withHight:CGFLOAT_MAX withWidth:kWidth-21*2];
+        remindLabel.frame = CGRectMake(21, remindLabel.frame.origin.y,kWidth-21*2,size.height);
+        finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
+        remindLabel.text = textStr;
+        finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            if (isEditing) {
+                [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
+                
+            }else{
+                [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
+            }
+        }];
+
+        return NO;
+    }
+    if (_phoneView.textField.text.length==0) {
+        NSString *textStr = @"请输入企业电话,如固话:010-88888888或手机号:138********";
+        CGSize size = [AdaptationSize getSizeFromString:textStr Font:[UIFont systemFontOfSize:11] withHight:CGFLOAT_MAX withWidth:kWidth-21*2];
+        remindLabel.frame = CGRectMake(21, remindLabel.frame.origin.y,kWidth-21*2,size.height);
+        finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
+        remindLabel.text = textStr;
+        finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            if (isEditing) {
+                [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
+                
+            }else{
+                [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
+            }
+        }];
+
+        return NO;
+    }else{
         if (![self isValidPhoneNum:_phoneView.textField.text]) {
             NSString *textStr = @"请输入正确的号码格式,如固话:010-88888888或手机号:138********";
             CGSize size = [AdaptationSize getSizeFromString:textStr Font:[UIFont systemFontOfSize:11] withHight:CGFLOAT_MAX withWidth:kWidth-21*2];
@@ -429,7 +467,7 @@
             finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
             remindLabel.text = textStr;
             finishBtn.frame = CGRectMake(finishBtn.frame.origin.x, remindLabel.frame.origin.y+remindLabel.frame.size.height+10, finishBtn.frame.size.width, finishBtn.frame.size.height);
-    
+            
             [UIView animateWithDuration:0.3 animations:^{
                 if (isEditing) {
                     [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
@@ -438,7 +476,6 @@
                     [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
                 }
             }];
-
             return NO;
         }
     }

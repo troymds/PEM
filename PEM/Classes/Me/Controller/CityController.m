@@ -39,8 +39,11 @@
 
 - (void)loadData
 {
+    MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    HUD.labelText = @"加载中...";
     NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:_uid,@"province", nil];
     [HttpTool postWithPath:@"getCityList" params:param success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         if ([result objectForKey:@"response"]) {
             NSDictionary *dic = [result objectForKey:@"response"];
@@ -54,6 +57,7 @@
             }
         }
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 

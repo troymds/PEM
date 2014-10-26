@@ -12,8 +12,6 @@
 		0402127A19FA56A9007B1600 /* vip_2_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0402127619FA56A9007B1600 /* vip_2_info@2x.png */; };
 		0402127B19FA56A9007B1600 /* vip_3_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0402127719FA56A9007B1600 /* vip_3_info@2x.png */; };
 		0402127C19FA56A9007B1600 /* vip_4_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0402127819FA56A9007B1600 /* vip_4_info@2x.png */; };
-		042E0F0A19FBEF01007353F0 /* WebViewJavascriptBridge.js.txt in Resources */ = {isa = PBXBuildFile; fileRef = 042E0F0819FBEF01007353F0 /* WebViewJavascriptBridge.js.txt */; };
-		042E0F0B19FBEF01007353F0 /* WebViewJavascriptBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 042E0F0919FBEF01007353F0 /* WebViewJavascriptBridge.m */; };
 		045C5BA219F8051000EC34F5 /* UIScrollView+UITouch.m in Sources */ = {isa = PBXBuildFile; fileRef = 045C5BA119F8051000EC34F5 /* UIScrollView+UITouch.m */; };
 		0471EA1819ED3AA800060640 /* BuyTagController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0471EA1719ED3AA800060640 /* BuyTagController.m */; };
 		0481D71E19EBDF3000C3278D /* update@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0481D71D19EBDF3000C3278D /* update@2x.png */; };
@@ -156,7 +154,6 @@
 		04D2CEE719EE4BEB0016862F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AB4F7B19EE202C006F2893 /* libsqlite3.dylib */; };
 		04EE097719D056000064B27C /* off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04EE097519D056000064B27C /* off@2x.png */; };
 		04EE097819D056000064B27C /* on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04EE097619D056000064B27C /* on@2x.png */; };
-		04F3EF9919FB926000B0EAE4 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F3EF9819FB926000B0EAE4 /* Reachability.m */; };
 		04FD20C719F6697700EDCCD2 /* cancel_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FD20C319F6697700EDCCD2 /* cancel_pre@2x.png */; };
 		04FD20C819F6697700EDCCD2 /* cancel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FD20C419F6697700EDCCD2 /* cancel@2x.png */; };
 		04FD20C919F6697700EDCCD2 /* finish1_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04FD20C519F6697700EDCCD2 /* finish1_pre@2x.png */; };
@@ -446,9 +443,6 @@
 		0402127619FA56A9007B1600 /* vip_2_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip_2_info@2x.png"; sourceTree = "<group>"; };
 		0402127719FA56A9007B1600 /* vip_3_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip_3_info@2x.png"; sourceTree = "<group>"; };
 		0402127819FA56A9007B1600 /* vip_4_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip_4_info@2x.png"; sourceTree = "<group>"; };
-		042E0F0719FBEF01007353F0 /* WebViewJavascriptBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewJavascriptBridge.h; sourceTree = "<group>"; };
-		042E0F0819FBEF01007353F0 /* WebViewJavascriptBridge.js.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = WebViewJavascriptBridge.js.txt; sourceTree = "<group>"; };
-		042E0F0919FBEF01007353F0 /* WebViewJavascriptBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewJavascriptBridge.m; sourceTree = "<group>"; };
 		045C5BA019F8051000EC34F5 /* UIScrollView+UITouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UITouch.h"; sourceTree = "<group>"; };
 		045C5BA119F8051000EC34F5 /* UIScrollView+UITouch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UITouch.m"; sourceTree = "<group>"; };
 		0471EA1619ED3AA800060640 /* BuyTagController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyTagController.h; sourceTree = "<group>"; };
@@ -674,8 +668,6 @@
 		04D2CEC719EE46BD0016862F /* ShareSDKShareActionSheet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKShareActionSheet.framework; sourceTree = "<group>"; };
 		04EE097519D056000064B27C /* off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "off@2x.png"; sourceTree = "<group>"; };
 		04EE097619D056000064B27C /* on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "on@2x.png"; sourceTree = "<group>"; };
-		04F3EF9719FB926000B0EAE4 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		04F3EF9819FB926000B0EAE4 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		04FD20C319F6697700EDCCD2 /* cancel_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel_pre@2x.png"; sourceTree = "<group>"; };
 		04FD20C419F6697700EDCCD2 /* cancel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel@2x.png"; sourceTree = "<group>"; };
 		04FD20C519F6697700EDCCD2 /* finish1_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "finish1_pre@2x.png"; sourceTree = "<group>"; };
@@ -1212,16 +1204,6 @@
 				04AF26DF19E8B17C001B29CB /* CityController.m */,
 			);
 			name = SubController;
-			sourceTree = "<group>";
-		};
-		042E0F0619FBEF01007353F0 /* WebViewJavascriptBridge */ = {
-			isa = PBXGroup;
-			children = (
-				042E0F0719FBEF01007353F0 /* WebViewJavascriptBridge.h */,
-				042E0F0819FBEF01007353F0 /* WebViewJavascriptBridge.js.txt */,
-				042E0F0919FBEF01007353F0 /* WebViewJavascriptBridge.m */,
-			);
-			path = WebViewJavascriptBridge;
 			sourceTree = "<group>";
 		};
 		04A3BBA419C05ADB00B2217B /* Model */ = {
@@ -1887,9 +1869,6 @@
 		55B5D28B199AECAC002A9750 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				042E0F0619FBEF01007353F0 /* WebViewJavascriptBridge */,
-				04F3EF9719FB926000B0EAE4 /* Reachability.h */,
-				04F3EF9819FB926000B0EAE4 /* Reachability.m */,
 				55E8C10219D3A6AD003F1685 /* AdaptationSize.h */,
 				55E8C10319D3A6AD003F1685 /* AdaptationSize.m */,
 				04AE446019D7B4A500E4D83C /* FileManager.h */,
@@ -2670,7 +2649,6 @@
 				55B5E3A519E8E11F00594E29 /* fail.png in Resources */,
 				55B921C319D51C8F00A5CF84 /* Default.png in Resources */,
 				04A3BC5F19C05C2100B2217B /* home_login@2x.png in Resources */,
-				042E0F0A19FBEF01007353F0 /* WebViewJavascriptBridge.js.txt in Resources */,
 				55DA328119ADB8C400A5A3CE /* shouye.png in Resources */,
 				55D2FB4C19BFEF5200248CAF /* bg_homeCodition.png in Resources */,
 				55E8C0FB19D3A66A003F1685 /* finish_pre@2x.png in Resources */,
@@ -2752,7 +2730,6 @@
 				55B8B4F719CD257700FF86AD /* supplyCOM.m in Sources */,
 				04AF265D19E8B129001B29CB /* SubscribController.m in Sources */,
 				5588E27C19EE66FF0095D362 /* SearchDenamdModel.m in Sources */,
-				042E0F0B19FBEF01007353F0 /* WebViewJavascriptBridge.m in Sources */,
 				04AF26B119E8B150001B29CB /* SupplyDetailItem.m in Sources */,
 				04AF26E419E8B17C001B29CB /* HotTagsController.m in Sources */,
 				04AF268C19E8B13D001B29CB /* SetImageView.m in Sources */,
@@ -2766,7 +2743,6 @@
 				5588E27F19EE67140095D362 /* SearchCompanyModel.m in Sources */,
 				045C5BA219F8051000EC34F5 /* UIScrollView+UITouch.m in Sources */,
 				55C10D6919CC1EC7002498DD /* comPanyNEWTool.m in Sources */,
-				04F3EF9919FB926000B0EAE4 /* Reachability.m in Sources */,
 				555422A119C6BD9500C9DF9E /* conditionTool.m in Sources */,
 				55B5104719F73930009F9008 /* UIImageView+AFNetworking.m in Sources */,
 				55B5D25E199AEB19002A9750 /* proAppDelegate.m in Sources */,

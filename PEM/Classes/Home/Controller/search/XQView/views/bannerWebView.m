@@ -22,7 +22,7 @@
     
     [super viewDidLoad];
     
-//    如果返回值为一个链接,则通过 webView 加载一下,同时需要点击 webView 中链接里跳回原生态 APP 里。
+//    如果返回值为一个链接,则通过 webView 加载一下,同时需要点击 webView中链接里跳回原生态 APP 里。
 //    跳转分别调用三种方法
 //    ebingoo.jumpToSupply(id)
 //    ebingoo.jumpToDemand(id)
@@ -31,12 +31,12 @@
     bannerWevView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     [self.view addSubview:bannerWevView];
     
-    
     [bannerWevView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_bannerWebid]]];
     bannerWevView.userInteractionEnabled = YES;
     bannerWevView.scrollView.bounces = NO;
     bannerWevView.delegate =self;
     
+
     
     UITapGestureRecognizer* singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
     singleTap.delegate= self;
@@ -44,7 +44,6 @@
     
     
     //这个可以加到任何控件上,比如你只想响应WebView，我正好填满整个屏幕
-    
 }
 
 
@@ -81,8 +80,9 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    
-    
+    NSString *url = [[request URL] absoluteString];
+    NSLog(@"%@",_bannerWebid);
+    NSLog(@"%@",url);
     NSLog(@"----dddddd");
 
     //判断是否是单击
