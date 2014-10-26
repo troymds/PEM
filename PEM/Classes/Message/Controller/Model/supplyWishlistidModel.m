@@ -14,7 +14,12 @@
     if (self = [super init]) {
         
         self.code =[NSString stringWithFormat:@"%d",[dic[@"code"] intValue]];
-
+        
+        if ([dic objectForKey:@"data"]) {
+            if (!isNull([dic objectForKey:@"data"], @"wishlistid")) {
+                _wishlistId = [[dic objectForKey:@"data"] objectForKey:@"wishlistid"];
+            }
+        }
     }
     return self;
 }

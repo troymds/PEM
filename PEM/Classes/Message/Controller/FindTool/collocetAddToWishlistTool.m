@@ -16,7 +16,6 @@
     [HttpTool postWithPath:@"addToWishlist" params:dic success:^(id JSON) {
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
-
         NSDictionary *array =d[@"response"];
         if (d[@"response"]) {
             supplyWishlistidModel *s =[[supplyWishlistidModel alloc] initWithDictonary:array];

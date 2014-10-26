@@ -412,6 +412,7 @@
 -(void)collectionBtnClick:(UIButton *)collect{
 
        if (collect.selected ==YES) {
+           NSLog(@"%@",_wishlist_id);
         [collocetAddToWishlistTool cancleWishlistStatusesWithSuccesscategory:^(NSArray *statues) {
             [_wishlistidArray addObjectsFromArray:statues];
             
@@ -444,11 +445,11 @@
             [_loginView showView];
         }else{
             
-            
             [collocetAddToWishlistTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
                 supplyWishlistidModel *model = [statues objectAtIndex:0];
                 if ([model.code intValue] == 100) {
                     collect.selected = !collect.selected;
+                    _wishlist_id = model.wishlistId;
                     [RemindView showViewWithTitle:@"收藏成功!" location:BELLOW];
                     
                     if ([self.delegate respondsToSelector:@selector(reloadData)]) {

@@ -10,6 +10,8 @@
 
 @interface supplyWishlistidModel : NSObject
 @property (nonatomic,copy) NSString *code;
+@property (nonatomic,copy) NSString *msg;
+@property (nonatomic,copy) NSString *wishlistId;
 
 
 
