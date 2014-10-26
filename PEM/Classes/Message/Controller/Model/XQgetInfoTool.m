@@ -21,6 +21,7 @@
     }
     [HttpTool postWithPath:@"getInfoDetail" params:dic success:^(id JSON) {
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",d);
         NSMutableArray *statuses =[NSMutableArray array];
         if (d[@"response"]) {
             NSDictionary *array =[d[@"response"]objectForKey:@"data"];

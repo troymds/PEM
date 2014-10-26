@@ -31,6 +31,7 @@
     bannerWevView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     [self.view addSubview:bannerWevView];
     
+    
     [bannerWevView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_bannerWebid]]];
     bannerWevView.userInteractionEnabled = YES;
     bannerWevView.scrollView.bounces = NO;
@@ -47,30 +48,10 @@
 }
 
 
-- (void)jumpToSupply:(NSString *)infoId
-{
-    xiangqingViewController *detailVC = [[xiangqingViewController alloc] init];
-    [self.navigationController pushViewController:detailVC animated:YES];
-}
-- (void)jumpToDemand:(NSString *)infoId
-{
-    xiangqingViewController *detailVC = [[xiangqingViewController alloc] init];
-    [self.navigationController pushViewController:detailVC animated:YES];
-}
-- (void)jumpToCompany:(NSString *)infoId
-{
-    xiangqingViewController *detailVC = [[xiangqingViewController alloc] init];
-    [self.navigationController pushViewController:detailVC animated:YES];
-}
-
-
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     NSString *title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
     self.title = title;
      if (webView != bannerWevView) { return; }
-    
-    qiugouXQ *qx= [[qiugouXQ alloc] init];
-    [self.navigationController pushViewController:qx animated:YES];
     
     
     if (![[bannerWevView stringByEvaluatingJavaScriptFromString:@"typeof WebViewJavascriptBridge == 'object'"] isEqualToString:@"true"]) {
@@ -100,24 +81,6 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
- 
-//    NSString *requestString = [[request URL] absoluteString];
-//    NSArray *components = [requestString componentsSeparatedByString:@"::"];
-//    if (components != nil && [components count] > 0) {
-//        NSString *pocotol = [components objectAtIndex:0];
-//        if ([pocotol isEqualToString:@"test"]) {
-//            NSString *commandStr = [components objectAtIndex:1];
-//            NSArray *commandArray = [commandStr componentsSeparatedByString:@":"];
-//            if (commandArray != nil && [commandArray count] > 0) {
-//                NSString *command = [commandArray objectAtIndex:0];
-//                if ([command isEqualToString:@"login"]) {
-//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"消息" message:@"网页发出了登录请求" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-//                    [alert show];
-//                }
-//            } return NO;
-//        }
-//    } return YES;
-    
     
     
     NSLog(@"----dddddd");

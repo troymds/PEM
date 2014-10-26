@@ -76,7 +76,6 @@
 {
     
     webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
-    
     _gyWebView.frame = CGRectMake(0, 325, kWidth, webheight+10);
     _backScrollView.contentSize = CGSizeMake(kWidth,webheight+380);
     
@@ -98,9 +97,8 @@
         [self addAabstract];
         [self showNewStatusCount];
         XQgetInfoDetailModel *xq = [statues objectAtIndex:0];
-        if ([SystemConfig sharedInstance].isUserLogin) {
-            _wishlist_id = xq.wishlistid;
-        }
+        _wishlist_id = xq.wishlistid;
+        //判断收藏按钮的应该显示的状态
         UIButton *button = (UIButton *)[self.view viewWithTag:2000];
         if ([xq.xqinwishlist isEqualToString:@"1"]) {
             button.selected = YES;
@@ -414,13 +412,11 @@
 -(void)collectionBtnClick:(UIButton *)collect{
 
        if (collect.selected ==YES) {
- 
         [collocetAddToWishlistTool cancleWishlistStatusesWithSuccesscategory:^(NSArray *statues) {
             [_wishlistidArray addObjectsFromArray:statues];
             
 
              supplyWishlistidModel *supWishlist =[_wishlistidArray objectAtIndex:0];
-
             if ([supWishlist.code isEqualToString:@"100"]) {
                 [RemindView showViewWithTitle:@"取消收藏成功！" location:BELLOW];
                 

@@ -103,19 +103,20 @@
         [UIView animateWithDuration:0.3 animations:^{
             bgView.frame = CGRectMake((kWidth-275)/2,95, 275, 250);
         }];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
-
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
+//
     }
     return self;
 }
 
 - (void)keyboardWillShow
 {
+    NSLog(@"keyboardwillshow");
     if (_iPhone4) {
         CGRect frame = bgView.frame;
         [UIView animateWithDuration:0.3 animations:^{
-            bgView.frame = CGRectMake(frame.origin.x,frame.origin.y-40, frame.size.width, frame.size.height);
+            bgView.frame = CGRectMake(frame.origin.x,55, frame.size.width, frame.size.height);
         }];
     }
 }

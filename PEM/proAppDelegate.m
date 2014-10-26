@@ -19,7 +19,6 @@
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "WeiboSDK.h"
 #import "WXApi.h"
-#import "Reachability1.h"
 
 @implementation proAppDelegate
 

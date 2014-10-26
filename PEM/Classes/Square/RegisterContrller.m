@@ -54,11 +54,21 @@
 }
 
 - (void)login{
-    if ([self.pushType isEqualToString:UPDATE_TYPE]) {
-       LoginController *loginVC =  [[LoginController alloc] init];
-        loginVC.pushType = UPDATE_TYPE;
-        [self.navigationController pushViewController:loginVC animated:YES];
-    }else{
+
+    NSArray *array = self.navigationController.viewControllers;
+    int count = 0;
+    for (UIViewController *controller in array) {
+        if ([controller isKindOfClass:[LoginController class]]) {
+            [self.navigationController popToViewController:controller animated:YES];
+            break;
+        }
+        count++;
+    }
+    if (count == [array count]) {
+        LoginController *vc = [[LoginController alloc] init];
+        NSMutableArray *mutableArr = [NSMutableArray arrayWithArray:array];
+        [mutableArr insertObject:vc atIndex:[array count]-1];
+        self.navigationController.viewControllers = mutableArr;
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
