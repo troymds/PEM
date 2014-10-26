@@ -168,6 +168,8 @@
                                     }
                                     else if (state == SSResponseStateFail)
                                     {
+                                        UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:@"分享失败" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                                        [alertView show];
                                         NSLog(NSLocalizedString(@"TEXT_SHARE_FAI", @"发布失败!error code == %d, error code == %@"), [error errorCode], [error errorDescription]);
                                     }
                                 }];

@@ -103,33 +103,10 @@
         [UIView animateWithDuration:0.3 animations:^{
             bgView.frame = CGRectMake((kWidth-275)/2,95, 275, 250);
         }];
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
-//
     }
     return self;
 }
 
-- (void)keyboardWillShow
-{
-    NSLog(@"keyboardwillshow");
-    if (_iPhone4) {
-        CGRect frame = bgView.frame;
-        [UIView animateWithDuration:0.3 animations:^{
-            bgView.frame = CGRectMake(frame.origin.x,55, frame.size.width, frame.size.height);
-        }];
-    }
-}
-
-
-- (void)keyboardWillHiden
-{
-    if (_iPhone4) {
-        [UIView animateWithDuration:0.3 animations:^{
-            bgView.frame = CGRectMake((kWidth-275)/2,95, 275, 250);
-        }];
-    }
-}
 
 -(void)tapDown
 {
@@ -144,6 +121,10 @@
     for (UIView *subView in bgView.subviews) {
         if ([subView isKindOfClass:[UITextField class]]) {
             [subView  resignFirstResponder];
+            CGRect frame = bgView.frame;
+            [UIView animateWithDuration:0.3 animations:^{
+                bgView.frame = CGRectMake(frame.origin.x,95, frame.size.width, frame.size.height);
+            }];
         }
     }
 }
@@ -182,6 +163,12 @@
 
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
+    if (_iPhone4) {
+        CGRect frame = bgView.frame;
+        [UIView animateWithDuration:0.3 animations:^{
+            bgView.frame = CGRectMake(frame.origin.x,55, frame.size.width, frame.size.height);
+        }];
+    }
     if (textField.tag == USERNAME_TYPE) {
         line1.backgroundColor = HexRGB(0x069dd4);
     }else{
