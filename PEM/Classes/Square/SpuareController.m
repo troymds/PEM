@@ -297,7 +297,7 @@
      {
          if (state == SSPublishContentStateSuccess)
          {
-             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
              [alertView show];
          }
          else if (state == SSPublishContentStateFail)
