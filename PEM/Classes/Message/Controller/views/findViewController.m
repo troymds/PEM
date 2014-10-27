@@ -175,13 +175,11 @@
 
 -(void)loadViewStatuses:(MJRefreshBaseView *)refreshView{
     
-    [self addMBprogressView];
    
 
     if (_supplyBtnPice.tag==50) {
         [_tableView reloadData];
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
@@ -207,7 +205,6 @@
         [_tableView reloadData];
         
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
@@ -236,7 +233,6 @@
         [_tableView reloadData];
         
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
@@ -265,7 +261,6 @@
         [_tableView reloadData];
         
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;

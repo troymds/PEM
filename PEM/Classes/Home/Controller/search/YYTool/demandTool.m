@@ -34,7 +34,6 @@
             }
             else{
                 
-                [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
                 
             }
         }
@@ -66,7 +65,6 @@
                 }
                 success(statuses);
             }else{
-                [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
             }
         }
     } failure:^(NSError *error) {

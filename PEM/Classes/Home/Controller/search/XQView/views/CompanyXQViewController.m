@@ -26,7 +26,7 @@
 #import "comContent.h"
 #import "qiugouXQ.h"
 #import "xiangqingViewController.h"
-#import "MJRefresh.h"
+
 #import "RemindView.h"
 #import "EbingooView.h"
 #define KHEIGHT_COMPANY  12
@@ -69,7 +69,7 @@
     [self addBigCompanyScrollView];
     [self addCompanyButton];
     
-    [self addRefreshViews];
+    
     
     
     [self loadViewStatusesHome];
@@ -92,6 +92,7 @@
     [self addSupplyDemandView];
     [self addChooseBtn];
     
+    [self addRefreshViews];
 }
 
 
@@ -99,17 +100,18 @@
 - (void)addRefreshViews
 {
     // 1.下拉刷新
-    MJRefreshHeaderView *header = [MJRefreshHeaderView header];
-    header.scrollView = _conditionTableView;
+    header = [MJRefreshHeaderView header];
+    //header.scrollView = _conditionTableView;
     header.delegate = self;
-    [header beginRefreshing];
+    //[header beginRefreshing];
     
     // 2.上拉加载更多
-    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
-    header.scrollView = _conditionTableView;
+    footer = [MJRefreshFooterView footer];
+    //footer.scrollView = _conditionTableView;
     
     footer.delegate = self;
 }
+
 
 #pragma mark 刷新代理方法
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
@@ -168,35 +170,33 @@
 -(void)loadViewStatuce:(MJRefreshBaseView *)refreshLoading
 {
     // 显示指示器
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
+//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    hud.labelText = @"正在加载中...";
+//    hud.dimBackground = YES;
     
     if (![companyID isEqualToString:@""])
     {
-        if (_selectedBtn.tag == 20)
+        if (_selectedBtn.tag == 22)
         {
-            [self supplyRequest];
+            if (_chooseSelected.tag == 30)
+            {
+                [self supplyRequest];
+            }else
+            {
+                [self demandRequest];
+            }
+            if (_companyNEWArray.count ==0) {
+                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+            }
             
-
         }
         else if(_selectedBtn.tag == 21)
         {
             [self companyRequest];
-            if (_companyDemandArray.count ==0) {
+            if (_companyDemandArray.count ==0)
+            {
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-                
             }
-        }
-        
-        else if(_selectedBtn.tag == 22)
-        {
-            [self demandRequest];
-            if (_companyNEWArray.count ==0) {
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-                
-            }
-
         }
     }
     
@@ -221,7 +221,6 @@
     //供求
     [supplyTool CompanyStatusesWithSuccesscategory:^(NSArray *statues) {
         
-        
         if (statues.count > 0) {
             
             _supplyANDdemandTableView.hidden = NO;
@@ -239,6 +238,7 @@
         [_companySupplyArray addObjectsFromArray:statues];
         
         [self tableReloadData];
+        
     } CompanyId:companyID CompanyFailure:^(NSError *error) {
         
         
@@ -252,11 +252,11 @@
     [demandTool DemandCompanyStatusesWithSuccess:^(NSArray *statues) {
         if (statues.count > 0) {
             
-            _conditionTableView.hidden = NO;
+            _supplyANDdemandTableView.hidden = NO;
             dataLabel.hidden = YES;
         }else if(statues.count==0){
             dataLabel.hidden = NO;
-            _conditionTableView.hidden = YES;
+            _supplyANDdemandTableView.hidden = YES;
             
         }
         if (_companyDemandArray.count>0)
@@ -291,7 +291,10 @@
             [_companyNEWArray removeAllObjects];
         }
         [_companyNEWArray addObjectsFromArray:statues];
-        [self tableReloadData];
+        
+
+        [self tableReloadData1];
+        //[_conditionTableView reloadData];
     } NewFailure:^(NSError *error) {
         
     } CompanyID:companyID ];
@@ -299,13 +302,17 @@
     
     
 }
+
 #pragma mark背景scrollview
--(void)addBigCompanyScrollView{
+-(void)addBigCompanyScrollView
+{
     _BigCompanyScrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0, 32, kWidth, kHeight-32-64)];
     _BigCompanyScrollView.contentSize = CGSizeMake(kWidth*3, _BigCompanyScrollView.frame.size.height);
     _BigCompanyScrollView.showsHorizontalScrollIndicator = NO;
     _BigCompanyScrollView.showsVerticalScrollIndicator = NO;
     _BigCompanyScrollView.pagingEnabled = YES;
+    _BigCompanyScrollView.bounces = NO;
+    _BigCompanyScrollView.tag = 9999;
     _BigCompanyScrollView.userInteractionEnabled = YES;
 //    _BigCompanyScrollView.bounces = NO;
     
@@ -331,9 +338,11 @@
     conditionView.backgroundColor =[UIColor whiteColor];
     
     [_BigCompanyScrollView addSubview:conditionView];
+    [_BigCompanyScrollView bringSubviewToFront:conditionView];
     
+
     
-    _conditionTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, conditionView.frame.size.height-44) style:UITableViewStylePlain];
+    _conditionTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-32-44) style:UITableViewStylePlain];
     _conditionTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [conditionView addSubview:_conditionTableView];
     _conditionTableView.backgroundColor =[UIColor whiteColor];
@@ -352,7 +361,7 @@
     [_BigCompanyScrollView addSubview:suplyANDdemandView];
     
     
-    _supplyANDdemandTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, conditionView.frame.size.height-110) style:UITableViewStylePlain];
+    _supplyANDdemandTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, suplyANDdemandView.frame.size.height-110) style:UITableViewStylePlain];
     _supplyANDdemandTableView.backgroundColor =[UIColor whiteColor];
     _supplyANDdemandTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [suplyANDdemandView addSubview:_supplyANDdemandTableView];
@@ -368,76 +377,88 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 //    float x = scrollView.contentOffset.x/scrollView.frame.size.width;
-       dataLabel.hidden = YES;
-    if (scrollView.contentOffset.x <=0) {
-        scrollView.contentOffset = CGPointMake(0, 0);
-    }
     
-    if (scrollView.contentOffset.x >= kWidth*2) {
-        scrollView.contentOffset = CGPointMake(kWidth*2, 0);
-    }
-    
-    [UIView animateWithDuration:0.01 animations:^{
-        _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,30, kWidth/3, 2);
-    }];
-    if (scrollView.contentOffset.x == 0) {
-        
-        for (UIView *subView in companyBackView.subviews) {
-            if ([subView isKindOfClass:[UIButton class]]) {
-                UIButton *btn = (UIButton *)subView;
-                if (btn.tag == 20) {
-                    _selectedBtn = btn;
-                    _selectedBtn.selected = YES;
-                }else{
-                    btn.selected = NO;
-                }
-            }
-        }
-        
-    }
-    
-    else if (scrollView.contentOffset.x == kWidth)
+
+    if (scrollView.tag == 9999)
     {
-        
-        [self companyRequest];
-        for (UIView *subView in companyBackView.subviews) {
-            if ([subView isKindOfClass:[UIButton class]]) {
-                UIButton *btn = (UIButton *)subView;
-                if (btn.tag == 21) {
-                    _selectedBtn = btn;
-                    _selectedBtn.selected = YES;
-                }else{
-                    btn.selected = NO;
-                }
-            }
+        dataLabel.hidden = YES;
+        if (scrollView.contentOffset.x <=0) {
+            scrollView.contentOffset = CGPointMake(0, 0);
         }
         
-    }
-    else if (scrollView.contentOffset.x == kWidth*2) {
+        if (scrollView.contentOffset.x >= kWidth*2) {
+            scrollView.contentOffset = CGPointMake(kWidth*2, 0);
+        }
         
-
-        for (UIView *subView in companyBackView.subviews) {
-            if ([subView isKindOfClass:[UIButton class]]) {
-                UIButton *btn = (UIButton *)subView;
-                if (btn.tag == 22)
-                {
-                    _selectedBtn = btn;
-                    _selectedBtn.selected = YES;
-                    if (_chooseSelected.tag == 31)
-                    {
-                        [self demandRequest];
+        [UIView animateWithDuration:0.01 animations:^{
+            _orangLin.frame = CGRectMake(scrollView.contentOffset.x/3,30, kWidth/3, 2);
+        }];
+        if (scrollView.contentOffset.x == 0) {
+            
+            for (UIView *subView in companyBackView.subviews) {
+                if ([subView isKindOfClass:[UIButton class]]) {
+                    UIButton *btn = (UIButton *)subView;
+                    if (btn.tag == 20) {
+                        _selectedBtn = btn;
+                        _selectedBtn.selected = YES;
                     }else{
-                        [self supplyRequest];
+                        btn.selected = NO;
                     }
-
-                }else{
-                    btn.selected = NO;
                 }
             }
+            
         }
         
-        
+        else if (scrollView.contentOffset.x == kWidth)
+        {
+            header.scrollView = _conditionTableView;
+            footer.scrollView = _conditionTableView;
+            [self companyRequest];
+            for (UIView *subView in companyBackView.subviews) {
+                if ([subView isKindOfClass:[UIButton class]]) {
+                    UIButton *btn = (UIButton *)subView;
+                    if (btn.tag == 21) {
+                        _selectedBtn = btn;
+                        _selectedBtn.selected = YES;
+                    }else{
+                        btn.selected = NO;
+                    }
+                }
+            }
+            
+        }
+        else if (scrollView.contentOffset.x == kWidth*2) {
+            
+            header.scrollView = _supplyANDdemandTableView;
+            header.scrollView = _supplyANDdemandTableView;
+            for (UIView *subView in companyBackView.subviews) {
+                if ([subView isKindOfClass:[UIButton class]]) {
+                    UIButton *btn = (UIButton *)subView;
+                    if (btn.tag == 22)
+                    {
+                        _selectedBtn = btn;
+                        _selectedBtn.selected = YES;
+                        if (_chooseSelected.tag == 31)
+                        {
+                            [self demandRequest];
+                        }else{
+                            [self supplyRequest];
+                        }
+                        
+                    }else{
+                        btn.selected = NO;
+                    }
+                }
+            }
+            
+            
+        }
+
+    }else
+    {
+        return;
     }
+    
 }
 
 
@@ -447,7 +468,6 @@
 {
     if (_companyHomeArray.count>0)
     {
-        
         comHomeModel *comHomeModel =[[_companyHomeArray objectAtIndex:0]objectAtIndex:0];
         
         UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-90, 44)];
@@ -455,19 +475,43 @@
         navBgView.backgroundColor =[UIColor clearColor];
         UIButton *navBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [navBgView addSubview:navBtn];
-        [navBtn setTitle:comHomeModel.name forState:UIControlStateNormal];
-        navBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
-        [navBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal ];
+        
+        
+        CGFloat nameCompanyw = 0;
+        CGFloat nameCompanyy = 0;
+        CGFloat nameCompanww = 0;
+        if (![comHomeModel.name isKindOfClass:[NSNull class]])
+        {
+            [navBtn setTitle:comHomeModel.name forState:UIControlStateNormal];
+            navBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
+            [navBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal ];
+            
+            
+            nameCompanyw =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, 50)].width;
+            nameCompanyy =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
+            
+            nameCompanww =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(MAXFLOAT, 50)].width;
+            
+
+        }else
+        {
+        
+            
+        }
+        
         navBtn.frame = CGRectMake(0, 0, kWidth-90, 44);
         
+        CGFloat keyContent = 0;
+        if (![comHomeModel.mainRun isKindOfClass:[NSNull class]])
+        {
+            keyContent =[comHomeModel.mainRun sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT) ].height;
+        }
         
-        CGFloat keyContent =[comHomeModel.mainRun sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT) ].height;
-        CGFloat content =[comHomeModel.introduction sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT)].height;
-        CGFloat nameCompanyw =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, 50)].width;
-         CGFloat nameCompanyy =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(180, MAXFLOAT)].height;
-        
-        CGFloat nameCompanww =[comHomeModel.name sizeWithFont:[UIFont systemFontOfSize:PxFont(20)] constrainedToSize:CGSizeMake(MAXFLOAT, 50)].width;
-        
+        CGFloat content = 0;
+        if (![comHomeModel.introduction isKindOfClass:[NSNull class]])
+        {
+            content =[comHomeModel.introduction sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(280, MAXFLOAT)].height;
+        }
         
         
         
@@ -509,21 +553,39 @@
         
         
         UIImageView*  _companyImage = [[UIImageView alloc] initWithFrame:CGRectMake(15, 6, 105, 74)];
-        [_companyImage setImageWithURL:[NSURL URLWithString:comHomeModel.image] placeholderImage:[UIImage imageNamed:@"loading.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
+        
+        if (![comHomeModel.image isKindOfClass:[NSNull class]])
+        {
+            [_companyImage setImageWithURL:[NSURL URLWithString:comHomeModel.image] placeholderImage:[UIImage imageNamed:@"loading.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
+        }
+        
+        
         [_companyHomeScrollView addSubview:_companyImage];
         //名字
-        UILabel* _nameCompany = [[UILabel alloc] initWithFrame:CGRectMake(125, KHEIGHT_COMPANY, 180, nameCompanyy)];
-        _nameCompany.text = comHomeModel.name;
-        _nameCompany.backgroundColor =[UIColor clearColor];
-        _nameCompany.numberOfLines = 2;
-        _nameCompany.font =[UIFont systemFontOfSize:PxFont(20)];
-        [_companyHomeScrollView addSubview:_nameCompany];
+        UILabel* _nameCompany = [[UILabel alloc] initWithFrame:CGRectMake(130, 8, 180, nameCompanyy)];
+        
+               [_companyHomeScrollView addSubview:_nameCompany];
         
         
         //vip
         UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(nameCompanyw, nameCompanyy-20, 18, 25)];
         _companyImgVip.backgroundColor =[UIColor clearColor];
-        if (nameCompanyw== 180) {
+        
+        
+        if (![comHomeModel.name isKindOfClass:[NSNull class]])
+        {
+            _nameCompany.text = comHomeModel.name;
+            
+            _nameCompany.backgroundColor=[UIColor redColor];
+            _nameCompany.backgroundColor =[UIColor clearColor];
+            _nameCompany.numberOfLines = 2;
+            _nameCompany.font =[UIFont systemFontOfSize:PxFont(20)];
+        }else{
+            _companyImgVip.frame =CGRectMake(nameCompanww-180,8, 18, 25);
+
+        }
+
+        if (nameCompanyw>=170) {
             
             _companyImgVip.frame =CGRectMake(nameCompanww-180,17, 18, 25);
         }
@@ -574,10 +636,9 @@
 //        企业详情E平台
         UIButton *company_E =[UIButton buttonWithType:UIButtonTypeCustom];
         [_companyHomeScrollView addSubview:company_E];
-        company_E.frame = CGRectMake(130, 55, 100, 30);
+        company_E.frame = CGRectMake(120, 55, 100, 30);
         [company_E addTarget:self action:@selector(ebingooE) forControlEvents:UIControlEventTouchUpInside];
-        NSLog(@"----%@",comHomeModel.e_url);
-        if ([comHomeModel.e_url isEqualToString:@""]) {
+        if ([comHomeModel.e_url isKindOfClass:[NSNull class]]) {
             [company_E setImage:[UIImage imageNamed:@"company_e_pre.png"] forState:UIControlStateNormal];
         }else{
             [company_E setImage:[UIImage imageNamed:@"company_E_btn.png"] forState:UIControlStateNormal];
@@ -652,21 +713,30 @@
             }
             //        主营范围
             UILabel * _keyLabel =[[UILabel alloc]init];
-            _keyLabel.text =comHomeModel.mainRun;
-            [_companyHomeScrollView addSubview:_keyLabel];
-            _keyLabel.numberOfLines = 0;
-            _keyLabel.frame =CGRectMake(17, 74+KHEIGHT_COMPANY*8+46, 280, keyContent+15);
-            _keyLabel.font =[UIFont systemFontOfSize:PxFont(18)];
-            _keyLabel.textColor = HexRGB(0x666666);
             
+            if (![comHomeModel.mainRun isKindOfClass:[NSNull class]])
+            {
+                _keyLabel.text =comHomeModel.mainRun;
+                _keyLabel.numberOfLines = 0;
+                _keyLabel.frame =CGRectMake(17, 74+KHEIGHT_COMPANY*8+46, 280, keyContent+15);
+                _keyLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+                _keyLabel.textColor = HexRGB(0x666666);
+            }
+            
+            [_companyHomeScrollView addSubview:_keyLabel];
             
             //        内容简介
+            
             UILabel* _contentLabel =[[UILabel alloc]init];
-            _contentLabel.text =comHomeModel.introduction;
+            
+            if (![comHomeModel.introduction isKindOfClass:[NSNull class]])
+            {
+                _contentLabel.text =comHomeModel.introduction;
+                _contentLabel.numberOfLines = 0;
+                _contentLabel.textColor = HexRGB(0x666666);
+                _contentLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+            }
             [_companyHomeScrollView addSubview:_contentLabel];
-            _contentLabel.numberOfLines = 0;
-            _contentLabel.textColor = HexRGB(0x666666);
-            _contentLabel.font =[UIFont systemFontOfSize:PxFont(18)];
             
             _contentLabel.frame =CGRectMake(17, 74+KHEIGHT_COMPANY*11+66+keyContent, 280, content+15);
             
@@ -754,7 +824,10 @@
 
     EbingooView *ebingView =[[EbingooView alloc]init];
     ebingView.ebingooID =comHomeModel.e_url;
-    [self.navigationController pushViewController:ebingView animated:YES];
+    if (![comHomeModel.e_url isKindOfClass:[NSNull class]]) {
+        [self.navigationController pushViewController:ebingView animated:YES];
+
+    }
     
   }
 -(void)comandBtnClick:(UIButton *)comand
@@ -831,7 +904,7 @@
         [self demandRequest];
     }
     
-    [_conditionTableView reloadData];
+    [_supplyANDdemandTableView reloadData];
     
 }
 
@@ -843,10 +916,11 @@
     [self.view addSubview:companyBackView];
     companyBackView.backgroundColor =HexRGB(0xe1e9e9);
     for (int i=0; i<2; i++) {
-        UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/3+i%3*(75+32), 5, 1, 20)];
+        UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/3+i%3*(75+32), 8, 1, 14)];
         [companyBackView addSubview:companyBackLine];
         
         companyBackLine.backgroundColor =[UIColor lightGrayColor];
+        companyBackLine.alpha = 0.5;
         
     }
     for (int p=0; p<3; p++)
@@ -892,12 +966,16 @@
     }
     else if(company.tag ==21)
     {
+        header.scrollView = _conditionTableView;
+        header.scrollView = _conditionTableView;
         _BigCompanyScrollView.contentOffset = CGPointMake(kWidth, 0);
         //[_BigCompanyScrollView scrollRectToVisible:CGRectMake(kWidth, 0, kWidth, _BigCompanyScrollView.frame.size.height) animated:YES];
         [self companyRequest];
     }
     else if(company.tag ==22)
     {
+        header.scrollView = _supplyANDdemandTableView;
+        footer.scrollView = _supplyANDdemandTableView;
         _BigCompanyScrollView.contentOffset = CGPointMake(kWidth*2, 0);
         //[_BigCompanyScrollView scrollRectToVisible:CGRectMake(kWidth*2, 0, kWidth, _BigCompanyScrollView.frame.size.height) animated:YES];
         if (_chooseSelected.tag == 31)
@@ -921,8 +999,14 @@
 - (void)tableReloadData
 {
     [_refreshView endRefreshing];
-    [_conditionTableView reloadData];
+    //[_conditionTableView reloadData];
     [_supplyANDdemandTableView reloadData];
+}
+- (void)tableReloadData1
+{
+    [_refreshView endRefreshing];
+    [_conditionTableView reloadData];
+    //[_supplyANDdemandTableView reloadData];
 }
 
 
@@ -957,12 +1041,21 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 90  ;
+    if(_selectedBtn.tag==22)
+    {
+        return 90  ;
+    }else
+    {
+        return 70;
+    }
+    
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (_selectedBtn.tag ==21) {
         
         return _companyNEWArray.count;
+        NSLog(@"1111111%ld",(long)_companyNEWArray.count);
+
     }else if (_selectedBtn.tag ==22)
     {
         if (_chooseSelected.tag==31) {
@@ -984,6 +1077,7 @@
         demandCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
         if(_chooseSelected.tag==31)
         {
+
             if (!cell)
             {
                 cell =[[demandCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
@@ -1021,22 +1115,30 @@
         return cell;
     }else
     {
+
         static NSString *cellID = @"Cell";
         conditionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (cell == nil)
         {
             cell = [[conditionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-            if (_companyNEWArray.count > 0)
-            {
-                comContent *conNew =[_companyNEWArray objectAtIndex:indexPath.row];
-                
-                cell.TitleLabel.text =conNew.title;
-                cell.dateLabel.text =conNew.create_time;
-                cell.contentLabel.text =conNew.description;
-            }
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        if (_companyNEWArray.count > 0)
+        {
+            comContent *conNew =[_companyNEWArray objectAtIndex:indexPath.row];
+            
+            cell.TitleLabel.text =conNew.title;
+            cell.dateLabel.text =conNew.create_time;
+            cell.contentLabel.text =conNew.description;
+            
+            UIView *cellLine = [[UIView alloc] initWithFrame:CGRectMake(10, 69, kWidth - 20, 1)];
+            cellLine.backgroundColor = HexRGB(0xd5d5d5);
+            [cell.contentView addSubview:cellLine];
+            
+        }
+
+
         return cell;
     }
     

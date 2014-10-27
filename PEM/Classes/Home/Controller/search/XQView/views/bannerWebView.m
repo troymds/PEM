@@ -9,6 +9,7 @@
 #import "bannerWebView.h"
 #import "xiangqingViewController.h"
 #import "qiugouXQ.h"
+#import "CompanyXQViewController.h"
 
 @interface bannerWebView ()<UIWebViewDelegate,UIGestureRecognizerDelegate>
 {
@@ -22,13 +23,13 @@
     
     [super viewDidLoad];
     
-//    如果返回值为一个链接,则通过 webView 加载一下,同时需要点击 webView中链接里跳回原生态 APP 里。
+//    如果返回值为一个链接,则通过 webView 加载一下,同时需要点击 webView 中链接里跳回原生态 APP 里。
 //    跳转分别调用三种方法
 //    ebingoo.jumpToSupply(id)
 //    ebingoo.jumpToDemand(id)
 //    ebingoo.jumpToCompany(id)
     
-    bannerWevView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+    bannerWevView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
     [self.view addSubview:bannerWevView];
     
     [bannerWevView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_bannerWebid]]];
@@ -36,68 +37,160 @@
     bannerWevView.scrollView.bounces = NO;
     bannerWevView.delegate =self;
     
+//    
+//    WebScriptObject *obj = (WebScriptObject *)JSArray;
+//    
+//    NSUInteger count = [[obj valueForKey:@"length"] integerValue];
+//    
+//    NSMutableArray *a = [NSMutableArray array];
+//    
+//    for (NSUInteger i = 0; i < count; i++) {
+//        
+//        NSString *item = [obj webScriptValueAtIndex:i];
+//        
+//        NSLog(@"item:%@", item);
+    
 
     
-    UITapGestureRecognizer* singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-    singleTap.delegate= self;
-    singleTap.cancelsTouchesInView = NO;
-    
-    
-    //这个可以加到任何控件上,比如你只想响应WebView，我正好填满整个屏幕
+    [self addTapOnWebView];
+
+
 }
-
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
+    NSString *currentURL = [webView stringByEvaluatingJavaScriptFromString:@"document.location.href"];
+    
     NSString *title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
-    self.title = title;
-     if (webView != bannerWevView) { return; }
+    self.title =title;
     
     
-    if (![[bannerWevView stringByEvaluatingJavaScriptFromString:@"typeof WebViewJavascriptBridge == 'object'"] isEqualToString:@"true"]) {
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"ebingoo.jumpToSupply" ofType:@"id"];
-        
-        
-
-        NSString *js = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-        [bannerWevView stringByEvaluatingJavaScriptFromString:js];
-    }
+//    NSString *location = [[webView window] valueForKeyPath:@"ebingoo.jumpToSupply"];
+    
+//    NSLog(@"%@-----%@",currentURL,location);
     
 
 }
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognize
+
+
+
+
+-(void)addTapOnWebView
+{
+    UITapGestureRecognizer* singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [bannerWevView addGestureRecognizer:singleTap];
+    singleTap.delegate = self;
+    singleTap.cancelsTouchesInView = NO;
+}
+
+#pragma mark- TapGestureRecognizer
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return YES;
 }
 
--(void)handleSingleTap:(UITapGestureRecognizer *)sender{
-    
-    CGPoint point = [sender locationInView:self.view];
-    NSLog(@"handleSingleTap!pointx:%f,y:%f",point.x,point.y);
-}
-
-
-
-
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+-(void)handleSingleTap:(UITapGestureRecognizer *)sender
 {
-    NSString *url = [[request URL] absoluteString];
-    NSLog(@"%@",_bannerWebid);
-    NSLog(@"%@",url);
-    NSLog(@"----dddddd");
-
-    //判断是否是单击
-    if (navigationType == UIWebViewNavigationTypeLinkClicked)
+    CGPoint pt = [sender locationInView:bannerWevView];
+   //NSString *imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).href", pt.x, pt.y];
+    
+   //NSString *imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", pt.x, pt.y];
+    NSString *imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).href", pt.x, pt.y];
+    _dataStr = [bannerWevView stringByEvaluatingJavaScriptFromString:imgURL];
+    NSLog(@"image url=%@", _dataStr);
+    
+    if (_dataStr.length > 0)
     {
-        NSURL *url = [request URL];
-        
-        if([[UIApplication sharedApplication]canOpenURL:url])
+        if ([_dataStr rangeOfString:@"jumpToSupply"].location != NSNotFound )
         {
-            [[UIApplication sharedApplication]openURL:url];
+            NSString *str = [[_dataStr componentsSeparatedByString:@"jumpToSupply"] objectAtIndex:1];
+            
+            str = [self subStringFromDataStr:str];
+            xiangqingViewController *xiangQingVC = [[xiangqingViewController alloc] init];
+            
+            xiangQingVC.supplyIndex = str;
+            [self.navigationController pushViewController:xiangQingVC animated:YES];
+            
+        }else if ([_dataStr rangeOfString:@"jumpToDemand"].location != NSNotFound )
+        {
+            NSString *str = [[_dataStr componentsSeparatedByString:@"jumpToDemand"] objectAtIndex:1];
+            
+            str = [self subStringFromDataStr:str];
+            qiugouXQ *qiuGouVC = [[qiugouXQ alloc] init];
+            qiuGouVC.demandIndex = str;
+            
+            [self.navigationController pushViewController:qiuGouVC animated:YES];
         }
-        return NO;
+        else if([_dataStr rangeOfString:@"jumpToCompany"].location != NSNotFound )
+        {
+            NSString *str = [[_dataStr componentsSeparatedByString:@"jumpToCompany"] objectAtIndex:1];
+            
+            str = [self subStringFromDataStr:str];
+            CompanyXQViewController *comXQVC = [[CompanyXQViewController alloc] init];
+            comXQVC.companyID = str;
+            
+            [self.navigationController pushViewController:comXQVC animated:YES];
+        }else
+        {
+            
+        }
     }
-    return YES;
+    
 }
+
+- (NSString *)subStringFromDataStr:(NSString *)dataStr
+{
+    dataStr = [dataStr stringByReplacingOccurrencesOfString:@"(" withString:@""];
+    dataStr = [dataStr stringByReplacingOccurrencesOfString:@")" withString:@""];
+    return dataStr;
+}
+
+//- (void)webViewDidFinishLoad:(UIWebView *)webView {
+//    NSLog(@"ddd44444444");
+//    if (webView != bannerWevView) { return; }
+//    
+//    
+//    if (![[bannerWevView stringByEvaluatingJavaScriptFromString:@"typeof WebViewJavascriptBridge == 'object'"] isEqualToString:@"true"]) {
+//        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"ebingoo.jumpToSupply" ofType:@"id"];
+//        
+//        
+//
+//        NSString *js = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+//        [bannerWevView stringByEvaluatingJavaScriptFromString:js];
+//    }
+//    
+//
+//}
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognize
+//{
+//    return YES;
+//}
+//
+//-(void)handleSingleTap:(UITapGestureRecognizer *)sender{
+//    
+//    CGPoint point = [sender locationInView:self.view];
+//    NSLog(@"handleSingleTap!pointx:%f,y:%f",point.x,point.y);
+//}
+
+//- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+//{
+//    NSLog(@"dddddd");
+//
+//    //判断是否是单击
+//    if (navigationType == UIWebViewNavigationTypeBackForward)
+//    {
+//        NSURL *url = [request URL];
+//        NSLog(@"dddddd%@",url);
+//
+//        
+//        if([[UIApplication sharedApplication]canOpenURL:url])
+//        {
+//            [[UIApplication sharedApplication]openURL:url];
+//        }
+//        return NO;
+//    }
+//    return YES;
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
