@@ -173,30 +173,28 @@
             break;
         case UPPDATE_TYPE:
         {
-//            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"ios",@"os", nil];
-//            [HttpTool postWithPath:@"getNewestVersion" params:param success:^(id JSON) {
-//                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-//                NSDictionary *dic = [result objectForKey:@"response"];
-//                if (dic) {
-//                    NSString *key = (NSString *)kCFBundleVersionKey;
-//                    NSString *version = [NSBundle mainBundle].infoDictionary[key];
-//                    NSString *current = [dic objectForKey:@"version_code"];
-//                    if ([current isEqualToString:version]) {
-//                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"版本更新" message:@"您当前已是最新版本" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
-//                        alertView.tag = 1000;
-//                        [alertView show];
-//                    }else{
-//                        _url = [dic objectForKey:@"url"];
-//                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"检测到新版本" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"立即升级", nil];
-//                        alertView.tag = 1001;
-//                        [alertView show];
-//                    }
-//                }
-//            } failure:^(NSError *error) {
-//                NSLog(@"%@",error);
-//            }];
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"当前版本为最新版本" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alertView show];
+            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"ios",@"os", nil];
+            [HttpTool postWithPath:@"getNewestVersion" params:param success:^(id JSON) {
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSDictionary *dic = [result objectForKey:@"response"];
+                if (dic) {
+                    NSString *key = (NSString *)kCFBundleVersionKey;
+                    NSString *version = [NSBundle mainBundle].infoDictionary[key];
+                    NSString *current = [dic objectForKey:@"version"];
+                    if ([current isEqualToString:version]) {
+                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"版本更新" message:@"您当前已是最新版本" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
+                        alertView.tag = 1000;
+                        [alertView show];
+                    }else{
+                        _url = [dic objectForKey:@"url"];
+                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"检测到新版本" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"立即升级", nil];
+                        alertView.tag = 1001;
+                        [alertView show];
+                    }
+                }
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error);
+            }];
         }
             break;
         case DELEDATE_TYPE:
