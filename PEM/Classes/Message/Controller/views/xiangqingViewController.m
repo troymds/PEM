@@ -419,7 +419,7 @@
 
              supplyWishlistidModel *supWishlist =[_wishlistidArray objectAtIndex:0];
             if ([supWishlist.code isEqualToString:@"100"]) {
-                [RemindView showViewWithTitle:@"取消收藏成功！" location:BELLOW];
+                [RemindView showViewWithTitle:@"取消收藏成功!" location:BELLOW];
                 
                 //如果是从我的收藏页面进来的  取消收藏时刷新我的收藏页面
                 if ([self.delegate respondsToSelector:@selector(reloadData)]) {
@@ -429,10 +429,10 @@
                 collect.selected = !collect.selected;
                 
             }else{
-                [RemindView showViewWithTitle:@"取消收藏失败！" location:BELLOW];
+                [RemindView showViewWithTitle:supWishlist.msg location:BELLOW];
 
             }
-
+            
         }companyID:[SystemConfig sharedInstance].company_id wishlistidID:_wishlist_id wishlistFailure:^(NSError *error) {
             
         }];
@@ -457,7 +457,7 @@
                     }
 
                 }else{
-                    [RemindView showViewWithTitle:@"收藏失败!" location:BELLOW];
+                    [RemindView showViewWithTitle:model.msg location:BELLOW];
                 }
                 
                 
