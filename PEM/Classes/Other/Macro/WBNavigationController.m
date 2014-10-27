@@ -16,7 +16,13 @@
     
     // 2.设置导航栏的背景图片
     bar.backgroundColor =RGBNAVbackGroundColor;
-     [bar setBackgroundImage:[UIImage imageNamed:@"nav_bgimg.png"] forBarMetrics:UIBarMetricsDefault];
+    if (IsIos7) {
+        [bar setBackgroundImage:[UIImage imageNamed:@"nav_bgimge.png"] forBarMetrics:UIBarMetricsDefault];
+
+    }else{
+        [bar setBackgroundImage:[UIImage imageNamed:@"nav_bgimg.png"] forBarMetrics:UIBarMetricsDefault];
+
+    }
     // 3.设置导航栏文字的主题
     [bar setTitleTextAttributes:@{
       UITextAttributeTextColor : [UIColor blackColor],

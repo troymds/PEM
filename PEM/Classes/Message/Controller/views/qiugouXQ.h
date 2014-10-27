@@ -1,5 +1,5 @@
 //
-//  qiugouXQ.h
+//  ;
 //  PEM
 //
 //  Created by YY on 14-8-28.
@@ -10,6 +10,9 @@
 
 @interface qiugouXQ : UIViewController{
     UIWebView* demandWebView ;
+    UIView *_phoneViewName;
+    UIView *nameView;
+    
 }
 @property(nonatomic ,weak)NSString *demandIndex;
 @property(nonatomic ,strong)NSMutableArray *demandArray;

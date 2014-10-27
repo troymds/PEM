@@ -17,9 +17,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"企业E平台";
-    UIWebView *ebingooWeb =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+    UIWebView *ebingooWeb =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     [self.view addSubview:ebingooWeb];
-    ebingooWeb.scrollView.bounces = NO;
     
     [ebingooWeb loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_ebingooID]]];
     ebingooWeb.delegate =self;

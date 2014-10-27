@@ -19,7 +19,7 @@
 #import "RemindView.h"
 #import "RegisterContrller.h"
 #import "FindSecretController.h"
-
+#import "HttpTool.h"
 @interface phoneView ()
 
 @end
@@ -77,7 +77,14 @@
     
     webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     _gyWebView.frame = CGRectMake(0, 325, kWidth, webheight+10);
-    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+380);
+    
+    if (webheight<450) {
+        _backScrollView.contentSize = CGSizeMake(kWidth,kHeight+200);
+        
+    }else {
+        _backScrollView.contentSize = CGSizeMake(kWidth,webheight+500);
+        
+    }
     
     
     
@@ -234,7 +241,7 @@
     collectBtn.frame =CGRectMake(280, 185, 35, 35);
     
     
-    
+//    拨号
      phonBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     [_backScrollView addSubview:phonBtn];
     [phonBtn setImage:[UIImage imageNamed:@"xunji1.png"] forState:UIControlStateNormal];
@@ -295,16 +302,14 @@
         UIView *line=[[UIView alloc]init];
         line.frame =CGRectMake(0, 205+nameWeight+i%3*(30), kWidth, 1);
         [_backScrollView addSubview:line];
-        line.alpha = 0.5;
-        line.backgroundColor =[UIColor lightGrayColor];
+        line.backgroundColor =HexRGB(0xe6e3e4);
     }
     
     
      li =[[UIView alloc]init];
     li.frame =CGRectMake(230, 185, 1, 10+nameWeight);
     [_backScrollView addSubview:li];
-    li.backgroundColor =[UIColor lightGrayColor];
-    li.alpha = 0.5;
+    li.backgroundColor =HexRGB(0xe6e3e4);
     
     UILabel *xinagq =[[UILabel alloc]init];
     xinagq.text =@"【产品详情】";
@@ -356,7 +361,7 @@
     } else if([xqModel.vip_type isEqualToString:@"3"]) {
         _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
         
-    }else if([xqModel.vip_type isEqualToString:@"0"]){
+    }else if([xqModel.vip_type isEqualToString:@"1"]){
         
         _companyImgVip.image =[UIImage imageNamed:@"Vip1.png"];
     }
@@ -392,7 +397,70 @@
     }
 
   }
-#pragma mark webView
+#pragma mark 拨号蒙版
+-(void)addphoneViewName
+{
+    XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
+
+    _phoneViewName = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+    _phoneViewName.backgroundColor =[UIColor lightGrayColor];
+    _phoneViewName.alpha = 0.3;
+    [self.view addSubview:_phoneViewName];
+    
+   nameView =[[UIView alloc]initWithFrame:CGRectMake((kWidth-260)/2, (kHeight-100)/2, 260, 100)];
+    nameView.backgroundColor =[UIColor whiteColor];
+    [self.view addSubview:nameView];
+    
+    
+    UILabel *nameLabel =[[UILabel alloc]initWithFrame:CGRectMake(15, 10, 260, 30)];
+    nameLabel.textColor = HexRGB(0x069dd4);
+    [nameView addSubview:nameLabel];
+    nameLabel.font =[UIFont systemFontOfSize:20];
+    nameLabel.text =xqModel.contacts;
+    
+    UIView *nameLine =[[UIView alloc]initWithFrame:CGRectMake(0, 50, 260, 1)];
+    nameLine.backgroundColor =HexRGB(0x069dd4);
+    [nameView addSubview:nameLine];
+    
+    
+    
+    for (int p=0; p<2; p++) {
+        NSArray *sureArr =@[@"确定",@"取消"];
+        
+        UIButton *phoneBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+        [nameView addSubview:phoneBtn];
+        
+        phoneBtn.frame =CGRectMake(35+p%3*100, 50, 70, 50);
+        [phoneBtn addTarget:self action:@selector(surePhoneBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [phoneBtn setTitle:sureArr[p] forState:UIControlStateNormal];
+        
+        [phoneBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        phoneBtn.tag = 44+p;
+        
+        
+        UIView *leftLine =[[UIView alloc]initWithFrame:CGRectMake(p%3*259,0, 1, 100)];
+        leftLine.backgroundColor =HexRGB(0xe6e3e4);
+        
+        [nameView addSubview:leftLine];
+        
+        
+        UIView *upLine =[[UIView alloc]initWithFrame:CGRectMake(0,p%3*99, 260, 1)];
+        upLine.backgroundColor =HexRGB(0xe6e3e4);
+        
+        [nameView addSubview:upLine];
+
+
+        
+      
+    }
+
+    
+    UIView *upLine =[[UIView alloc]initWithFrame:CGRectMake(130,51, 1, 49)];
+    upLine.backgroundColor =HexRGB(0xe6e3e4);
+    
+    [nameView addSubview:upLine];
+    
+}
 
 
 
@@ -412,7 +480,6 @@
 -(void)collectionBtnClick:(UIButton *)collect{
 
        if (collect.selected ==YES) {
-           NSLog(@"%@",_wishlist_id);
         [collocetAddToWishlistTool cancleWishlistStatusesWithSuccesscategory:^(NSArray *statues) {
             [_wishlistidArray addObjectsFromArray:statues];
             
@@ -566,19 +633,12 @@
     }];
     
 }
-
--(void)bodaBtn:(UIButton *)sender
-{
-    if (![SystemConfig sharedInstance].isUserLogin) {
-        if (!_loginView) {
-            CGRect frame = [UIScreen mainScreen].bounds;
-            _loginView = [[LoginView alloc] initWithFrame:frame];
-            _loginView.delegate = self;
-        }
-        [_loginView showView];
-    }else{
-    XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
-           [phoneView callPhoneNumber:xqModel.phone_num
+-(void)surePhoneBtnClick:(UIButton *)sure{
+    if (sure.tag ==44) {
+        [_phoneViewName removeFromSuperview];
+        [nameView removeFromSuperview];
+        XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
+        [phoneView callPhoneNumber:xqModel.phone_num
                               call:^(NSTimeInterval duration) {
                                   NSLog(@"User made a call of %.1f seconds", duration);
                                   
@@ -592,8 +652,26 @@
                                       
                                   }];
                               }];
-        
-        
+    }else{
+        [_phoneViewName removeFromSuperview];
+        [nameView removeFromSuperview];
+    }
+   
+    
+    
+
+}
+-(void)bodaBtn:(UIButton *)sender
+{
+    if (![SystemConfig sharedInstance].isUserLogin) {
+        if (!_loginView) {
+            CGRect frame = [UIScreen mainScreen].bounds;
+            _loginView = [[LoginView alloc] initWithFrame:frame];
+            _loginView.delegate = self;
+        }
+        [_loginView showView];
+    }else{
+        [self addphoneViewName];
 
    }
 }
