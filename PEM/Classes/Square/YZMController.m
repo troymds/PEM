@@ -58,15 +58,25 @@
 }
 
 - (void)login{
-    if ([self.pushType isEqualToString:UPDATE_TYPE]) {
-        LoginController *loginVC = [[LoginController alloc] init];
-        loginVC.pushType = UPDATE_TYPE;
-        [self.navigationController pushViewController:loginVC animated:YES];
-    }else if([self.pushType isEqualToString:PUBLISH_TYPE]){
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    }else{
-        UIViewController *vc = [self.navigationController.viewControllers objectAtIndex:1];
-        [self.navigationController popToViewController:vc animated:YES];
+    NSArray *array = self.navigationController.viewControllers;
+    int count = 0;
+    for (UIViewController *controller in array) {
+        if ([controller isKindOfClass:[LoginController class]]) {
+            [self.navigationController popToViewController:controller  animated:YES];
+            break;
+        }
+        count++;
+    }
+    if (count == array.count) {
+        LoginController *lg = [[LoginController alloc] init];
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:array];
+        [arr insertObject:lg atIndex:array.count-2];
+        self.navigationController.viewControllers = arr;
+        for (UIViewController *viewController in self.navigationController.viewControllers) {
+            if ([viewController isKindOfClass:[LoginController class]]) {
+                [self.navigationController popToViewController:viewController animated:YES];
+            }
+        }
     }
 }
 
@@ -215,7 +225,6 @@
                     if (code == 100){
                         [SystemConfig sharedInstance].company_id = [dic objectForKey:@"company_id"];
                         CompanySetController *csc = [[CompanySetController alloc] init];
-                        csc.pushType = self.pushType;
                         [self.navigationController pushViewController:csc animated:YES];
                     }else if(code ==103){
                         [RemindView showViewWithTitle:@"该号码已被注册过" location:MIDDLE];

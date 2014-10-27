@@ -71,22 +71,22 @@
 
 
 
-#define SUPPLY_DATA  @"supplyData"
-#define PURCHASE_DATA @"purchaseData"
+//#define SUPPLY_DATA  @"supplyData"
+//#define PURCHASE_DATA @"purchaseData"
 
-//从哪里进入的登录界面
-#define SETTING_TYPE @"companySetting"
-#define DIRECT_TYPE @"loginBtn"
-#define MENU_TYPE @"nemu"
-
-//进入注册界面的类型
-#define UPDATE_TYPE @"update"   //特权页面进入注册界面
-#define PUBLISH_TYPE @"publish" //发布页面进入注册页面
-
-
-//进入企业设置界面的类型
-#define DERECT_SET_TYPE @"derectSet"      //企业设置直接进入
-#define NONDERECT_SET_TYPE @"otherSet"    //其他界面进入
+////从哪里进入的登录界面
+//#define SETTING_TYPE @"companySetting"
+//#define DIRECT_TYPE @"loginBtn"
+//#define MENU_TYPE @"nemu"
+//
+////进入注册界面的类型
+//#define UPDATE_TYPE @"update"   //特权页面进入注册界面
+//#define PUBLISH_TYPE @"publish" //发布页面进入注册页面
+//
+//
+////进入企业设置界面的类型
+//#define DERECT_SET_TYPE @"derectSet"      //企业设置直接进入
+//#define NONDERECT_SET_TYPE @"otherSet"    //其他界面进入
 
 
 

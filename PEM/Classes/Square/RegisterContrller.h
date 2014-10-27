@@ -13,6 +13,4 @@
     UITextField *_phoneNumField;
 }
 
-@property (nonatomic,copy) NSString *pushType;
-
 @end

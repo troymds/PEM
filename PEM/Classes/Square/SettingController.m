@@ -162,7 +162,6 @@
         case SET_TYPE:
         {
             CompanySetController *csc = [[CompanySetController alloc] init];
-            csc.pushType = DERECT_SET_TYPE;
             [self.navigationController pushViewController:csc animated:YES];
         }
             break;

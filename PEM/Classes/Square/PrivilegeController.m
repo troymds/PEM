@@ -94,7 +94,6 @@
 {
     if (![SystemConfig sharedInstance].isUserLogin) {
         RegisterContrller *rc = [[RegisterContrller alloc] init];
-        rc.pushType = UPDATE_TYPE;
         [self.navigationController pushViewController:rc animated:YES];
     }else{
         NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",updateType,@"apply_type", nil];

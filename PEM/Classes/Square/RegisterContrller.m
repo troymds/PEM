@@ -123,7 +123,6 @@
                     if ([[dic objectForKey:@"code"] intValue] == 100) {
                         YZMController *yzm = [[YZMController alloc] init];
                         yzm.phoneNum = _phoneNumField.text;
-                        yzm.pushType = self.pushType;
                         [self.navigationController pushViewController:yzm animated:YES];
                     }else{
                         NSString *msg = [dic objectForKey:@"msg"];

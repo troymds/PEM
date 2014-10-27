@@ -120,7 +120,6 @@
 {
     if (![SystemConfig sharedInstance].isUserLogin){
         LoginController *loginVC = [[LoginController alloc] init];
-        loginVC.pushType = MENU_TYPE;
         [self.navigationController pushViewController:loginVC animated:YES];
     }else{
         CompanySetController *csc = [[CompanySetController alloc] init];
@@ -176,7 +175,6 @@
     }else{
         if (![SystemConfig sharedInstance].isUserLogin){
             LoginController *loginVC = [[LoginController alloc] init];
-            loginVC.pushType = MENU_TYPE;
             [self.navigationController pushViewController:loginVC animated:YES];
         }else{
             switch (btn.tag) {
@@ -235,12 +233,10 @@
 - (void)buttonClick:(UIButton *)btn{
     if (![SystemConfig sharedInstance].isUserLogin){
         LoginController *loginVC = [[LoginController alloc] init];
-        loginVC.pushType = MENU_TYPE;
         [self.navigationController pushViewController:loginVC animated:YES];
     }else{
         if (btn.tag == 20000) {
             LoginController *loginVc = [[LoginController alloc] init];
-            loginVc.pushType = DIRECT_TYPE;
             [self.navigationController pushViewController:loginVc animated:YES];
         }else if (btn.tag == 40000){
             MySupplyController *msc = [[MySupplyController alloc] init];

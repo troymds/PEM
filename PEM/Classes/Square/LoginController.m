@@ -234,36 +234,16 @@
                     NSDictionary *data = [dic objectForKey:@"data"];
                     VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].vipInfo = vipInfo;
-                    [self loginSucess];
+                    [self.navigationController popViewControllerAnimated:YES];
                 }else{
-                    [self loginSucess];
+                    [self.navigationController popViewControllerAnimated:YES];
                 }
             }
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSLog(@"%@",error);
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
-
-}
-
-//登录成功后页面跳转处理
-- (void)loginSucess
-{
-    //判断从哪里跳到的登录界面 从而跳转到到相应页面
-    if ([self.pushType isEqualToString:DIRECT_TYPE]){
-        [self.navigationController popViewControllerAnimated:YES];
-    }else if([self.pushType isEqualToString:SETTING_TYPE]){
-        CompanySetController *setVC = [[CompanySetController alloc] init];
-        [self.navigationController pushViewController:setVC animated:YES];
-    }else if([self.pushType isEqualToString:UPDATE_TYPE]){
-        PrivilegeController *priVC = (PrivilegeController *)[self.navigationController.viewControllers objectAtIndex:1];
-        [self.navigationController popToViewController:priVC animated:YES];
-    }else if ([self.pushType isEqualToString:MENU_TYPE]){
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    }else{
-        [self.navigationController popToRootViewControllerAnimated:YES];
-    }
 
 }
 

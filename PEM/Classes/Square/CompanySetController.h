@@ -50,7 +50,5 @@
 }
 
 @property (nonatomic,strong) ProImageView *iconImage;
-@property (nonatomic,copy) NSString *pushType;
-
 
 @end

@@ -15,6 +15,4 @@
     UIButton *_loginBtn;
     UIView *_bgView;
 }
-
-@property (nonatomic,copy) NSString *pushType;    //判断从哪里进入的登录页面
 @end

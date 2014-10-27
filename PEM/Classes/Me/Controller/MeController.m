@@ -262,7 +262,6 @@
         case REGIST_TYPE:
         {
             RegisterContrller *rsc = [[RegisterContrller alloc] init];
-            rsc.pushType = PUBLISH_TYPE;
             [self.navigationController pushViewController:rsc animated:YES];
         }
             break;

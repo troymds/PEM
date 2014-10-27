@@ -16,6 +16,8 @@
 #import "RemindView.h"
 #import "CityController.h"
 #import "AdaptationSize.h"
+#import "LoginController.h"
+#import "CompanyInfoController.h"
 
 #define SETICON_TYPE 6000
 #define ICON_TYPE 6001
@@ -398,14 +400,8 @@
                         [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
                     }
                 }];
-                if ([self.pushType isEqualToString:DERECT_SET_TYPE]){
-                }else  if([self.pushType isEqualToString:PUBLISH_TYPE]){
-                    [self.navigationController popToRootViewControllerAnimated:YES];
-                }else{
-                    //注册成功  跳转到登陆页面
-                    UIViewController *vc = [self.navigationController.viewControllers objectAtIndex:1];
-                    [self.navigationController popToViewController:vc animated:YES];
-                }
+                //注册成功后  判断是否有要跳转回的界面
+                [self back];
             }else if([[dic objectForKey:@"code"] intValue] == 101){
                 [RemindView showViewWithTitle:@"注册失败" location:MIDDLE];
             }else if([[dic objectForKey:@"code"] intValue] == 102){
@@ -418,6 +414,21 @@
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 
+}
+
+- (void)back
+{
+    NSArray *array = self.navigationController.viewControllers;
+    for (UIViewController *controller in array) {
+        if ([controller isKindOfClass:[LoginController class]]) {
+            [self.navigationController popToViewController:controller animated:YES];
+            break;
+        }
+        if ([controller isKindOfClass:[CompanyInfoController class]]) {
+            [self.navigationController popToViewController:controller animated:YES];
+            break;
+        }
+    }
 }
 
 

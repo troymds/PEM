@@ -20,6 +20,5 @@
 }
 
 @property (nonatomic,copy) NSString *phoneNum;
-@property (nonatomic,copy) NSString *pushType;
 
 @end
