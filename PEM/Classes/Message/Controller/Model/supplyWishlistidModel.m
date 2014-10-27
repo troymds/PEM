@@ -20,6 +20,9 @@
                 _wishlistId = [[dic objectForKey:@"data"] objectForKey:@"wishlistid"];
             }
         }
+        if ([dic objectForKey:@"msg"]) {
+            _msg = [dic objectForKey:@"msg"];
+        }
     }
     return self;
 }
