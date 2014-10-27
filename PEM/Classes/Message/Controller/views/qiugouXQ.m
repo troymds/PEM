@@ -55,13 +55,7 @@
 }
 -(void)loadStatusView{
     
-    // 显示指示器
-//    
-//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-//    hud.labelText = @"正在加载中...";
-//    hud.dimBackground = YES;
-//    
-    [XQgetInfoTool statusesWithSuccess:^(NSArray *statues) {
+        [XQgetInfoTool statusesWithSuccess:^(NSArray *statues) {
         [demandArray addObjectsFromArray:statues];
         [self addAabstract];
         [self showNewStatusCount];
@@ -174,7 +168,7 @@
     UIView *line=[[UIView alloc]init];
     line.frame =CGRectMake(0, titleHeight+53, kWidth, 1);
     [_backScrollView addSubview:line];
-    line.backgroundColor =[UIColor lightGrayColor];
+    line.backgroundColor =HexRGB(0xe6e3e4);
     
     UILabel *xinagq =[[UILabel alloc]init];
     xinagq.text =@"【产品详情】";
@@ -190,7 +184,7 @@
     [_backScrollView addSubview:xinagLabel];
     xinagLabel.font =[UIFont systemFontOfSize:15];
     
-    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 120, kWidth, kHeight+100)];
+    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 120, kWidth, kHeight-164)];
     
     [_backScrollView addSubview:demandWebView];
     demandWebView.userInteractionEnabled = NO;
@@ -246,7 +240,7 @@
     //vip
     
     UIImageView * _companyImgVip;
-    CGFloat nameCompanyw ;
+    CGFloat nameCompanyw=0 ;
      _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(70,50, 18, 25)];
     
     if ([xqModel.vip_type isEqualToString:@"1"]) {
@@ -272,39 +266,68 @@
     [backView addSubview:_companyImgVip];
     
     //name
+    if (![xqModel.company_name isKindOfClass:[NSNull class]]){
+        nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(250, 50)].width;
+
+    }else{
+        
+    }
     UILabel *nameCopany =[[UILabel alloc]init];
-    NSLog(@"%@",xqModel.company_name);
     
     nameCopany.backgroundColor =[UIColor clearColor];
-    [backView addSubview:nameCopany];
-    nameCopany.frame =CGRectMake(20, 40, 250, 44);
-    nameCopany.font =[UIFont systemFontOfSize:PxFont(18)];
     
+    [backView addSubview:nameCopany];
+    nameCopany.frame =CGRectMake(20, 40, nameCompanyw, 44);
+    nameCopany.font =[UIFont systemFontOfSize:PxFont(18)];
+    if (![xqModel.company_name isKindOfClass:[NSNull class]]){
+        nameCopany.text = xqModel.company_name;
+
+    }else{
+        nameCopany.text = @"";
+    }
     
     if ([[SystemConfig sharedInstance].viptype isEqualToString:@"1"]) {
         _companyImgVip.frame =CGRectMake(20+nameCompanyw,50, 18, 25);
         
-        //        nameCopany.text = xqModel.company_name;
-        
+        if (![xqModel.company_name isKindOfClass:[NSNull class]]){
+            nameCopany.text = xqModel.company_name;
+            
+        }else{
+            nameCopany.text = @"";
+        }
     }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"2"]) {
         _companyImgVip.frame =CGRectMake(20+nameCompanyw,50, 18, 25);
         
-        //        nameCopany.text = xqModel.company_name;
-        
+        if (![xqModel.company_name isKindOfClass:[NSNull class]]){
+            nameCopany.text = xqModel.company_name;
+            
+        }else{
+            nameCopany.text = @"";
+        }
     }
     else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"3"]) {
         _companyImgVip.frame =CGRectMake(20+nameCompanyw,50, 18, 25);
         
-        //        nameCopany.text = xqModel.company_name;
-        
+        if (![xqModel.company_name isKindOfClass:[NSNull class]]){
+            nameCopany.text = xqModel.company_name;
+            
+        }else{
+            nameCopany.text = @"";
+        }
     }
     else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"4"]) {
         _companyImgVip.frame =CGRectMake(20+nameCompanyw,50, 18, 25);
         
-        //        nameCopany.text = xqModel.company_name;
-        
+        if (![xqModel.company_name isKindOfClass:[NSNull class]]){
+            nameCopany.text = xqModel.company_name;
+            
+        }else{
+            nameCopany.text = @"";
+        }
     }else {
         nameCopany.text = @"xxx公司";
+        nameCopany.frame =CGRectMake(20, 40, 250, 44);
+
         
     }
     
@@ -312,11 +335,91 @@
     
 }
 
+#pragma mark 拨号蒙版
+-(void)addphoneViewName
+{
+    XQgetInfoDetailModel *xqModel =[demandArray objectAtIndex:0];
+    
+    _phoneViewName = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+    _phoneViewName.backgroundColor =[UIColor lightGrayColor];
+    _phoneViewName.alpha = 0.3;
+    [self.view addSubview:_phoneViewName];
+    
+    nameView =[[UIView alloc]initWithFrame:CGRectMake((kWidth-260)/2, (kHeight-100)/2, 260, 100)];
+    nameView.backgroundColor =[UIColor whiteColor];
+    [self.view addSubview:nameView];
+    
+    
+    UILabel *nameLabel =[[UILabel alloc]initWithFrame:CGRectMake(15, 10, 260, 30)];
+    nameLabel.textColor = HexRGB(0x069dd4);
+    [nameView addSubview:nameLabel];
+    nameLabel.font =[UIFont systemFontOfSize:20];
+    if (![xqModel.contacts isKindOfClass:[NSNull class]]){
+        nameLabel.text =xqModel.contacts;
+        
+    }else{
+        nameLabel.text = @"";
+    }
+    
+    UIView *nameLine =[[UIView alloc]initWithFrame:CGRectMake(0, 50, 260, 1)];
+    nameLine.backgroundColor =HexRGB(0x069dd4);
+    [nameView addSubview:nameLine];
+    
+    
+    
+    for (int p=0; p<2; p++) {
+        NSArray *sureArr =@[@"确定",@"取消"];
+        
+        UIButton *phoneBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+        [nameView addSubview:phoneBtn];
+        
+        phoneBtn.frame =CGRectMake(35+p%3*100, 50, 70, 50);
+        [phoneBtn addTarget:self action:@selector(surePhoneBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [phoneBtn setTitle:sureArr[p] forState:UIControlStateNormal];
+        
+        [phoneBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        phoneBtn.tag = 44+p;
+        
+        
+        UIView *leftLine =[[UIView alloc]initWithFrame:CGRectMake(p%3*259,0, 1, 100)];
+        leftLine.backgroundColor =HexRGB(0xe6e3e4);
+        
+        [nameView addSubview:leftLine];
+        
+        
+        UIView *upLine =[[UIView alloc]initWithFrame:CGRectMake(0,p%3*99, 260, 1)];
+        upLine.backgroundColor =HexRGB(0xe6e3e4);
+        
+        [nameView addSubview:upLine];
+        
+        
+        
+        
+    }
+    
+    
+    UIView *upLine =[[UIView alloc]initWithFrame:CGRectMake(130,51, 1, 49)];
+    upLine.backgroundColor =HexRGB(0xe6e3e4);
+    
+    [nameView addSubview:upLine];
+    
+}
+
+
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     
     float demandWebheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
-    _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+160);
     demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 120, kWidth, demandWebheight)];
+    
+    
+    if (demandWebheight<500) {
+        _backScrollView.contentSize = CGSizeMake(kWidth,kHeight);
+        
+    }else {
+        _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+160);
+        
+    }
+
     
 }
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
@@ -325,52 +428,64 @@
     return YES;
 }
 
+-(void)surePhoneBtnClick:(UIButton *)sure{
+    if (sure.tag ==44) {
+        if (![SystemConfig sharedInstance].isUserLogin) {
+            
+            LoginController *lvc =[[LoginController alloc] init];
+            [self.navigationController pushViewController:lvc animated:YES];
+            
+            
+        }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
+            [_phoneViewName removeFromSuperview];
+            [nameView removeFromSuperview];
+            UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员:" message:@"只有普通会员及以上会员可以拨打求购电话，您需要升级才能使用本功能!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
+            [alert show];
+            
+            
+            
+        }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]) {
+            [_phoneViewName removeFromSuperview];
+            [nameView removeFromSuperview];
+            UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员:" message:@"只有普通会员及以上会员可以拨打求购电话，您需要升级才能使用本功能!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
+            [alert show];
+            
+            
+            
+        }
+        else{
+            
+            XQgetInfoDetailModel *xqModel =[demandArray objectAtIndex:0];
+            
+            [phoneView callPhoneNumber:xqModel.phone_num
+                                  call:^(NSTimeInterval duration) {
+                                      NSLog(@"User made a call of %.1f seconds", duration);
+                                      
+                                  } cancel:^{
+                                      NSLog(@"User cancelled the call");
+                                  } finish:^{
+                                      NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"call_id",xqModel.company_id,@"to_id",xqModel.info_id,@"info_id", nil];
+                                      [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
+                                          
+                                      } failure:^(NSError *error) {
+                                          
+                                      }];
+                                      
+                                  }];
+            
+        }
+        
+
+    }else {
+        [_phoneViewName removeFromSuperview];
+        [nameView removeFromSuperview];
+    }
+}
 
 -(void)phoneBtnClick:(UIButton *)sentder
 {
     
-    
-    if (![SystemConfig sharedInstance].isUserLogin) {
-        
-        LoginController *lvc =[[LoginController alloc] init];
-        [self.navigationController pushViewController:lvc animated:YES];
-
-        
-    }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
-      UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员:" message:@"只有普通会员及以上会员可以拨打求购电话，您需要升级才能使用本功能!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
-      [alert show];
-
-        
-  
-    }else if ([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]) {
-        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员:" message:@"只有普通会员及以上会员可以拨打求购电话，您需要升级才能使用本功能!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
-        [alert show];
-        
-        
-        
-    }
-    else{
-
-        XQgetInfoDetailModel *xqModel =[demandArray objectAtIndex:0];
-        
-        [phoneView callPhoneNumber:xqModel.phone_num
-                              call:^(NSTimeInterval duration) {
-                                  NSLog(@"User made a call of %.1f seconds", duration);
-                                  
-                              } cancel:^{
-                                  NSLog(@"User cancelled the call");
-                              } finish:^{
-                                  NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"call_id",xqModel.company_id,@"to_id",xqModel.info_id,@"info_id", nil];
-                                  [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
-                                      
-                                  } failure:^(NSError *error) {
-                                      
-                                  }];
-
-                              }];
-
-    }
-
+    [self addphoneViewName];
     
     
 
@@ -388,14 +503,14 @@
 
         
     }else  if([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]) {
-        
+       
         UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员" message:@"抱歉，体验会员不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
         [alert show];
                 
         
         
-    }else  if([[SystemConfig sharedInstance].viptype isEqualToString:@"2"]) {
-        
+    }else  if([[SystemConfig sharedInstance].viptype isEqualToString:@"3"]) {
+       
         UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员" message:@"抱歉，体验会员不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
         [alert show];
         
@@ -414,6 +529,8 @@
     if (buttonIndex ==0) {
         PrivilegeController *lvc =[[PrivilegeController alloc] init];
         [self.navigationController pushViewController:lvc animated:YES];
-    }
+      
+    }else{
+            }
 }
 @end

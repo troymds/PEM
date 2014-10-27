@@ -46,14 +46,13 @@
        
        
        
-        newWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 1000)];
+        newWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
        
-       NSLog(@"-------fffff------dddddddd%f",newWebView.frame.size.height);
 
        [self.view addSubview:newWebView];
        [newWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_urlNstr]]];
        newWebView.delegate = self;
-       newWebView.backgroundColor =[UIColor whiteColor];
+       newWebView.backgroundColor =[UIColor clearColor];
        
 
        

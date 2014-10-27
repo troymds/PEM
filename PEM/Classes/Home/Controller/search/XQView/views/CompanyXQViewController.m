@@ -77,8 +77,7 @@
     UIView *lin =[[UIView alloc]init];
     [self.view addSubview:lin];
     lin.frame = CGRectMake(0, 30, kWidth, 1);
-    lin.backgroundColor =[UIColor lightGrayColor];
-    lin.alpha = 0.5;
+    lin.backgroundColor =HexRGB(0xe6e3e4);
     
     _orangLin =[[UIView alloc]init];
     [self.view addSubview:_orangLin];
@@ -862,8 +861,7 @@
     UIView *linview =[[UIView alloc]initWithFrame:CGRectMake(0,0, kWidth, 1)];
     [chooseBackView addSubview:linview];
     
-    linview.backgroundColor =[UIColor lightGrayColor];
-    linview.alpha = 0.5;
+    linview.backgroundColor =HexRGB(0xe6e3e4);
     for (int btn=0; btn<2; btn++)
     {
         NSArray *titleArray =@[@"供应信息",@"求购信息"];
@@ -919,8 +917,7 @@
         UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/3+i%3*(75+32), 8, 1, 14)];
         [companyBackView addSubview:companyBackLine];
         
-        companyBackLine.backgroundColor =[UIColor lightGrayColor];
-        companyBackLine.alpha = 0.5;
+        companyBackLine.backgroundColor =HexRGB(0xe6e3e4);
         
     }
     for (int p=0; p<3; p++)

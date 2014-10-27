@@ -1027,8 +1027,7 @@
         UIView *lin =[[UIView alloc]init];
         lin.frame =CGRectMake(10, 44, 310, 1);
         [viewForHeader addSubview:lin];
-        lin.backgroundColor =[UIColor lightGrayColor];
-        lin.alpha = 0.3;
+        lin.backgroundColor =HexRGB(0xe6e3e4);
         
         UILabel *idLabel =[[UILabel alloc]initWithFrame:CGRectMake(15, 0, 290, 44)];
         idLabel.text =[NSString stringWithFormat:@"关键词: %@",_searchTextField.text];

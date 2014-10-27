@@ -25,6 +25,9 @@
     UILabel *nameLable;
     
     LoginView *_loginView;
+    
+    UIView *_phoneViewName;//拨号蒙版
+    UIView *nameView;
 
 }
 @property (nonatomic, weak) NSString *supplyIndex;

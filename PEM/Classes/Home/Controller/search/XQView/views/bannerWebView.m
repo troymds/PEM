@@ -29,12 +29,11 @@
 //    ebingoo.jumpToDemand(id)
 //    ebingoo.jumpToCompany(id)
     
-    bannerWevView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+    bannerWevView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     [self.view addSubview:bannerWevView];
-    
+    bannerWevView.backgroundColor =[UIColor clearColor];
     [bannerWevView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_bannerWebid]]];
     bannerWevView.userInteractionEnabled = YES;
-    bannerWevView.scrollView.bounces = NO;
     bannerWevView.delegate =self;
     
 //     
@@ -58,15 +57,10 @@
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-    NSString *currentURL = [webView stringByEvaluatingJavaScriptFromString:@"document.location.href"];
     
     NSString *title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
     self.title =title;
     
-    
-//    NSString *location = [[webView window] valueForKeyPath:@"ebingoo.jumpToSupply"];
-    
-//    NSLog(@"%@-----%@",currentURL,location);
     
 
 }
@@ -88,13 +82,48 @@
 {
     return YES;
 }
+- (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType
+// //这个方法是网页中的每一个请求都会被触发的
+{
+    NSString *urlString = [[request URL] absoluteString];
+    NSLog(@"iiiiii   %@",urlString);
+    NSArray *urlComps = [urlString
+                         componentsSeparatedByString:@"/ebingoo."];
+    NSLog(@"ddddd%@",urlComps);
+    NSLog(@"-------%d",urlComps.count);
+    if([urlComps count]>1)
+    {
+        //    ebingoo.jumpToSupply(id)
+        //    ebingoo.jumpToDemand(id)
+        //    ebingoo.jumpToCompany(id)
+        NSString *str = [urlComps objectAtIndex:1];
+        NSString *info_id = [[str componentsSeparatedByString:@"("] objectAtIndex:1];
+        info_id = [[info_id componentsSeparatedByString:@")"] objectAtIndex:0];
+        NSLog(@"info_id:%@",info_id);
+        NSArray *arr = [str componentsSeparatedByString:@"("];
+        NSString *methordStr = [arr objectAtIndex:0];
+        if ([methordStr isEqualToString:@"jumpToSupply"]) {
+            xiangqingViewController *xq = [[xiangqingViewController alloc] init];
+            xq.supplyIndex = info_id;
+            [self.navigationController pushViewController:xq animated:YES];
+        }else if ([methordStr isEqualToString:@"jumpToDemand"]){
+            qiugouXQ *qx = [[qiugouXQ alloc] init];
+            qx.demandIndex = info_id;
+            [self.navigationController pushViewController:qx animated:YES];
+        }else if ([methordStr isEqualToString:@"jumpToCompany"]){
+            CompanyXQViewController *comXQVC = [[CompanyXQViewController alloc] init];
+            comXQVC.companyID = info_id;
+            [self.navigationController pushViewController:comXQVC animated:YES];
 
+        }
+        return NO;
+    }; 
+    return YES; 
+}
 -(void)handleSingleTap:(UITapGestureRecognizer *)sender
 {
     CGPoint pt = [sender locationInView:bannerWevView];
-   //NSString *imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).href", pt.x, pt.y];
     
-   //NSString *imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).src", pt.x, pt.y];
     NSString *imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).href", pt.x, pt.y];
     _dataStr = [bannerWevView stringByEvaluatingJavaScriptFromString:imgURL];
     NSLog(@"image url=%@", _dataStr);
@@ -145,52 +174,6 @@
     return dataStr;
 }
 
-//- (void)webViewDidFinishLoad:(UIWebView *)webView {
-//    NSLog(@"ddd44444444");
-//    if (webView != bannerWevView) { return; }
-//    
-//    
-//    if (![[bannerWevView stringByEvaluatingJavaScriptFromString:@"typeof WebViewJavascriptBridge == 'object'"] isEqualToString:@"true"]) {
-//        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"ebingoo.jumpToSupply" ofType:@"id"];
-//        
-//        
-//
-//        NSString *js = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-//        [bannerWevView stringByEvaluatingJavaScriptFromString:js];
-//    }
-//    
-//
-//}
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognize
-//{
-//    return YES;
-//}
-//
-//-(void)handleSingleTap:(UITapGestureRecognizer *)sender{
-//    
-//    CGPoint point = [sender locationInView:self.view];
-//    NSLog(@"handleSingleTap!pointx:%f,y:%f",point.x,point.y);
-//}
-
-//- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-//{
-//    NSLog(@"dddddd");
-//
-//    //判断是否是单击
-//    if (navigationType == UIWebViewNavigationTypeBackForward)
-//    {
-//        NSURL *url = [request URL];
-//        NSLog(@"dddddd%@",url);
-//
-//        
-//        if([[UIApplication sharedApplication]canOpenURL:url])
-//        {
-//            [[UIApplication sharedApplication]openURL:url];
-//        }
-//        return NO;
-//    }
-//    return YES;
-//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

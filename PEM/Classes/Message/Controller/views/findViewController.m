@@ -321,8 +321,11 @@
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:2];
 //    leftBackView.frame =CGRectMake(kWidth/8-15, 30, 95, 50);
-    leftBackView.transform = CGAffineTransformMakeTranslation(0, 10);
+//    leftBackView.transform = CGAffineTransformMakeScale( 1, 2);
     [UIView commitAnimations ];
+   leftBackView.transform = CGAffineTransformTranslate(leftBackView.transform, 0, .5);
+    
+
     
     [self.view addSubview:leftBackView];
     [self.view bringSubviewToFront:leftBackView];

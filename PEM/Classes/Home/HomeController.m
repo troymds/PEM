@@ -72,8 +72,11 @@
     [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
     
         
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(zbarSdk:)];
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:@selector(lo)];
+    if (IsIos7) {
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(zbarSdk:)];
+    }else {
+        
+    }    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:@selector(lo)];
     self.view.userInteractionEnabled = YES;
     
     
@@ -101,11 +104,6 @@
     [self.navigationController pushViewController:qrcode animated:YES];
     
 
-}
-#pragma mark -=---判断网络是否连接
--(void)downloadFailed:(HttpTool *)request{
-    NSLog(@"FFFFFFF");
-    [Loading loadingFailure];
 }
 #pragma mark 加载微博数据
 - (void)loadNewData
@@ -534,7 +532,6 @@
         //    供应
         
         UIImageView *sadImage =[[UIImageView alloc]init];
-        sadImage.backgroundColor =[UIColor cyanColor];
         [_backScrollView addSubview:sadImage];
         
         UIButton *suBigBtn =[UIButton buttonWithType:UIButtonTypeCustom];
