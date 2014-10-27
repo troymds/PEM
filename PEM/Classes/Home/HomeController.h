@@ -10,6 +10,8 @@
 @interface HomeController : UIViewController
 {
     NSTimer *_timer;
+    NSArray *imageArray;
+    int currentPage;
 }
 
 @property(nonatomic,strong)NSMutableArray *hotImageArray;

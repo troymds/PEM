@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface bannerWebView : UIViewController
-
 @property(nonatomic ,strong)NSString *bannerWebid;
+@property(nonatomic ,assign)int currentTag;
+@property(nonatomic , strong)NSString *dataStr;
+
 @end

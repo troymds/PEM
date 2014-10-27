@@ -15,6 +15,7 @@
 #import "DemandController.h"
 #import "PrivilegeController.h"
 #import "LoginController.h"
+#import "HttpTool.h"
 @interface qiugouXQ ()<UIWebViewDelegate>
 {
     UIScrollView *_backScrollView;
@@ -393,7 +394,7 @@
                 
         
         
-    }else  if([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
+    }else  if([[SystemConfig sharedInstance].viptype isEqualToString:@"2"]) {
         
         UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员" message:@"抱歉，体验会员不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
         [alert show];

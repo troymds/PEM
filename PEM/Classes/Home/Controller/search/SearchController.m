@@ -241,10 +241,6 @@
 
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    // 显示指示器
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
     
     // 获取数据
     if (self.view == _resultBgView)

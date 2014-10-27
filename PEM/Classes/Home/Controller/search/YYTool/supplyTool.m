@@ -25,7 +25,6 @@
         if (array) {
             if ([array isKindOfClass:[NSNull class]])
             {
-                [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
             }else{
                 
                 for (NSDictionary *dict in array) {
@@ -55,7 +54,6 @@
         NSDictionary *array =d[@"response"];
         if (array) {
             if ([array isKindOfClass:[NSNull class]]){
-                [RemindView showViewWithTitle:@"没有数据！" location:BELLOW];
                 
             }else{
                 for (NSDictionary *dict in array) {

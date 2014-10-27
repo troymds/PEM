@@ -91,6 +91,7 @@
     [self loadNewData];
     
     currentTag = 0;
+    
 }
 -(void)lo{
     
@@ -125,9 +126,7 @@
             HotCategoryModel *hotModel = [[HotCategoryModel alloc] initWithDictionaryForHotCate:dict];
             
             [_hotImageArray addObject:hotModel];
-            
-            
-            
+
         }
         TodayNumModel *todayModel = [[TodayNumModel alloc] initWithTodayNumDictionary:statusModel.todayNumDictionary];
         [_tadyNumArray addObject:todayModel];
@@ -168,41 +167,53 @@
     {
         adsModel *ads =[tody objectAtIndex:i];
         [slideImages addObject:ads.srcImage];
+    }
+    
+    
+    NSMutableArray *tempArray=[NSMutableArray arrayWithArray:slideImages];
+    [tempArray insertObject:[slideImages objectAtIndex:([slideImages count]-1)] atIndex:0];
+    [tempArray addObject:[slideImages objectAtIndex:0]];
+    imageArray=[NSArray arrayWithArray:tempArray];
+    
+    NSUInteger pageCount=[imageArray count];
+    for (int i=0; i<pageCount; i++)
+    {
+        NSString *imgURL=[imageArray objectAtIndex:i];
         UIImageView *imageView = [[UIImageView alloc] init];
         imageView.userInteractionEnabled = YES;
-        [imageView setImageWithURL:[NSURL URLWithString:ads.srcImage]  placeholderImage:[UIImage imageNamed:@"load_big.png"]];
+        [imageView setImageWithURL:[NSURL URLWithString:imgURL]  placeholderImage:[UIImage imageNamed:@"load_big.png"]];
         imageView.tag = 230+i;
         
-        imageView.frame = CGRectMake((kWidth * i) + kWidth, 0, kWidth, 118);
+        imageView.frame = CGRectMake((kWidth * i), 0, kWidth, 118);
         [scrollView addSubview:imageView]; // 首页是第0页,默认从第1页开始的。所以+kWidth。。。
         
         UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
         [imageView addGestureRecognizer:tap];
         
-        
     }
+
+    
     // 取数组最后一张图片 放在第0页
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[slideImages objectAtIndex:([slideImages count]-1)]]];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[imageArray objectAtIndex:([imageArray count]-1)]]];
     
     imageView.frame = CGRectMake(0, 0, kWidth, 118); // 添加最后1页在首页 循环
     [scrollView addSubview:imageView];
     // 取数组第一张图片 放在最后1页
-    imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[slideImages objectAtIndex:0]]];
-    imageView.frame = CGRectMake((kWidth * ([slideImages count] + 1)) , 0, kWidth, 118); // 添加第1页在最后 循环
+    imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[imageArray objectAtIndex:0]]];
+    imageView.frame = CGRectMake((kWidth * ([imageArray count] + 1)) , 0, kWidth, 118); // 添加第1页在最后 循环
     [scrollView addSubview:imageView];
     
-    [scrollView setContentSize:CGSizeMake(kWidth * ([slideImages count] + 2), 118)]; //  +上第1页和第4页  原理：4-[1-2-3-4]-1
+    [scrollView setContentSize:CGSizeMake(kWidth * ([imageArray count] + 2), 118)]; //  +上第1页和第4页  原理：4-[1-2-3-4]-1
     [scrollView setContentOffset:CGPointMake(0, 0)];
-    [self.scrollView scrollRectToVisible:CGRectMake(kWidth,0,kWidth,460) animated:NO]; // 默认从序号1位置放第1页 ，序号0位置位置放第4页
-    
+    [self.scrollView scrollRectToVisible:CGRectMake(kWidth,0,kWidth,kWidth*2) animated:NO]; // 默认从序号1位置放第1页 ，序号0位置位置放第4页
     
     
     self.pageControl = [[UIPageControl alloc]init];
-    pageControl.frame = CGRectMake(kWidth*0.5, 108, 1, 1);
+    pageControl.frame = CGRectMake((kWidth-100)*0.5, 99, 100, 10);
     
     pageControl.currentPageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_page_on.png"]];
     pageControl.pageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_page_off.png"]];
-    pageControl.numberOfPages = [tody count];
+    pageControl.numberOfPages = pageCount - 2;
     pageControl.currentPage = 0;
     [pageControl addTarget:self action:@selector(turnPage) forControlEvents:UIControlEventValueChanged];
     [_backScrollView addSubview:pageControl];
@@ -212,8 +223,9 @@
     
 }
 
--(void)tapGesture:(UITapGestureRecognizer *)img{
-    adsModel *model = [adsImage objectAtIndex:img.view.tag-230];
+-(void)tapGesture:(UITapGestureRecognizer *)img
+{
+    adsModel *model = [adsImage objectAtIndex:img.view.tag-230-1];
     if ([model.idType isEqualToString:@"1"]) {
         xiangqingViewController *xiq =[[xiangqingViewController alloc]init];
         xiq.supplyIndex = model.content;
@@ -231,7 +243,9 @@
         [self.navigationController pushViewController:comXQ animated:YES];
     }
     else{
+        
         bannerWebView *bannerView =[[bannerWebView alloc]init];
+        //bannerView.currentTag = img.view.tag-230-1;
         bannerView.bannerWebid =model.content;
         [self.navigationController pushViewController:bannerView animated:YES];
        
@@ -244,33 +258,41 @@
     _timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(runTimePage) userInfo:nil repeats:YES];
 }
 
+
 #pragma mark -  scrollviewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)sender
 {
-    CGFloat pagewidth = self.scrollView.frame.size.width;
-    int page = floor((self.scrollView.contentOffset.x - pagewidth/([slideImages count]+2))/pagewidth)+1;
-    page --;  // 默认从第二页开始
-    pageControl.currentPage = page;
+//    CGFloat pagewidth = self.scrollView.frame.size.width;
+//    int page = floor((self.scrollView.contentOffset.x - pagewidth/([slideImages count]+2))/pagewidth)+1;
+//    page --;  // 默认从第二页开始
+//    pageControl.currentPage = page;
+    
+    CGFloat pageWidth = self.scrollView.frame.size.width;
+    int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    currentPage = page;
+    
+    pageControl.currentPage=(page-1);
+    
+    
 }
 // scrollview 委托函数
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    CGFloat pagewidth = self.scrollView.frame.size.width;
-    int currentPage = floor((self.scrollView.contentOffset.x - pagewidth/ ([slideImages count]+2)) / pagewidth) + 1;
-    //    int currentPage_ = (int)self.scrollView.contentOffset.x/kWidth; // 和上面两行效果一样
     if (currentPage==0)
     {
-        [self.scrollView scrollRectToVisible:CGRectMake(kWidth * [slideImages count],0,kWidth,460) animated:NO]; // 序号0 最后1页
+        self.scrollView.contentOffset = CGPointMake(kWidth * ([imageArray count] - 2), 0);
     }
-    else if (currentPage==([slideImages count]+1))
+    if (currentPage==([imageArray count] - 1))
     {
-        [self.scrollView scrollRectToVisible:CGRectMake(kWidth,0,kWidth,460) animated:NO]; // 最后+1,循环第1页
+        self.scrollView.contentOffset = CGPointMake(kWidth, 0);
     }
+    
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [_timer invalidate];
+    
 }
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
@@ -282,6 +304,7 @@
 - (void)turnPage
 {
     NSInteger page = pageControl.currentPage; // 获取当前的page
+    
     [self.scrollView scrollRectToVisible:CGRectMake(kWidth*(page+1),0,kWidth,118) animated:YES]; // 触摸pagecontroller那个点点 往后翻一页 +1
     
 }
@@ -315,6 +338,7 @@
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.backgroundColor = HexRGB(0xffffff);
+    
     [_backScrollView addSubview:scrollView];
     
     _backScrollView.showsVerticalScrollIndicator = NO;
@@ -419,11 +443,11 @@
         UIImageView *findImage =[[UIImageView alloc]init];
         findImage.frame =CGRectMake(20+c%4*(50+25), 152+c/4*(40+40), 50,50);
         
-        categoryButtTitle.tag = [hotCategoryModel.cateid intValue]+100;
-        CategoryButt.tag=categoryButtTitle.tag;
+        CategoryButt.tag=[hotCategoryModel.cateid intValue]+100;
 
         findImage.tag = CategoryButt.tag+10000;
-        
+        categoryButtTitle.tag =findImage.tag ;
+
         [_backScrollView addSubview:findImage];
         findImage.userInteractionEnabled = NO;
         [findImage setImageWithURL:[NSURL URLWithString:hotCategoryModel.image]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
@@ -452,6 +476,7 @@
     [moreTitle addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     moreBtn.tag = 88;
 
+    moreTitle.tag = moreBtn.tag;
 
     
 }
@@ -506,7 +531,6 @@
         //广告图片 热门求购
         HotSupplyModel *supplyArr =[supply objectAtIndex:s];
         
-        
         //    供应
         
         UIImageView *sadImage =[[UIImageView alloc]init];
@@ -523,7 +547,8 @@
         sadImage.frame =CGRectMake(225, 393+s%3*(10+61), 85, 61);
         suBigBtn.frame =CGRectMake(0, 394+s%3*(10+61), kWidth, 61);
         
-        if (s ==0) {
+        if (s ==0)
+        {
             sadImage.frame =CGRectMake(10, 339+s%3*(5), 300, 118);
             suBigBtn.frame=CGRectMake(0, 0, 300, 118);
             [sadImage addSubview:suBigBtn];
@@ -539,7 +564,8 @@
         TitleLabel.text =supplyArr.title;
         TitleLabel.frame =CGRectMake(20, 458+s%3*(10+61), 250, 40);
         [_backScrollView addSubview:TitleLabel];
-        if (s==2) {
+        if (s==2)
+        {
             TitleLabel.frame =CGRectMake(0, 0, 0, 0);
         }
         TitleLabel.backgroundColor =[UIColor clearColor];

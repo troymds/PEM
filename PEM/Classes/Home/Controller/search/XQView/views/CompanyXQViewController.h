@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MJRefresh.h"
 
 @interface CompanyXQViewController : UIViewController{
     
@@ -25,6 +26,8 @@
     UIScrollView *_BigCompanyScrollView;
     UIView *companyBackView;
     
+    MJRefreshHeaderView *header;
+    MJRefreshFooterView *footer;
     
 
 }
