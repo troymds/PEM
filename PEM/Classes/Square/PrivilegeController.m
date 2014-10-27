@@ -161,7 +161,7 @@
             
         }else if(vipType == 1){
             rightImg.image = [UIImage imageNamed:@"vip_1_info.png"];
-            rightImg.frame = CGRectMake(22,24,229,369);
+            rightImg.frame = CGRectMake(22,24,234,369);
             upPowerBtn.hidden = YES;
             if (rightImg.frame.origin.y+rightImg.frame.size.height < _scrollView.frame.size.height) {
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,_scrollView.frame.size.height)];
@@ -179,7 +179,7 @@
             }
         }else if(vipType == 3){
             rightImg.image = [UIImage imageNamed:@"vip_3_info.png"];
-            rightImg.frame = CGRectMake(22,24,229,369);
+            rightImg.frame = CGRectMake(22,24,229,410);
             upPowerBtn.hidden = YES;
             if (rightImg.frame.origin.y+rightImg.frame.size.height < _scrollView.frame.size.height) {
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,_scrollView.frame.size.height)];
@@ -188,7 +188,7 @@
             }
         }else if(vipType == 4){
             rightImg.image = [UIImage imageNamed:@"vip_4_info.png"];
-            rightImg.frame = CGRectMake(22,24,229,369);
+            rightImg.frame = CGRectMake(22,24,230,409);
             upPowerBtn.hidden = YES;
             if (rightImg.frame.origin.y+rightImg.frame.size.height < _scrollView.frame.size.height) {
                 [_scrollView setContentSize:CGSizeMake(kWidth-60,_scrollView.frame.size.height)];
@@ -266,7 +266,7 @@
         case 1002:
         {
             rightImg.image = [UIImage imageNamed:@"vip_1_info.png"];
-            rightImg.frame = CGRectMake(22,24,229,369);
+            rightImg.frame = CGRectMake(22,24,234,369);
             
             upPowerBtn.frame = CGRectMake(22,rightImg.frame.origin.y+rightImg.frame.size.height,_scrollView.frame.size.width-22*2,35);
             upPowerBtn.hidden = NO;
@@ -327,7 +327,7 @@
         case 1004:
         {
             rightImg.image = [UIImage imageNamed:@"vip_3_info.png"];
-            rightImg.frame = CGRectMake(22,24,229,369);
+            rightImg.frame = CGRectMake(22,24,229,410);
             
             upPowerBtn.frame = CGRectMake(22,rightImg.frame.origin.y+rightImg.frame.size.height,_scrollView.frame.size.width-22*2,35);
             upPowerBtn.hidden = NO;
@@ -357,7 +357,7 @@
         case 1005:
         {
             rightImg.image = [UIImage imageNamed:@"vip_4_info.png"];
-            rightImg.frame = CGRectMake(22,24,229,369);
+            rightImg.frame = CGRectMake(22,24,230,409);
             
             upPowerBtn.frame = CGRectMake(22,rightImg.frame.origin.y+rightImg.frame.size.height,_scrollView.frame.size.width-22*2,35);
             upPowerBtn.hidden = NO;

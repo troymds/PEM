@@ -100,12 +100,13 @@
                     NSDictionary *data = [dic objectForKey:@"data"];
                     VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].vipInfo = vipInfo;
+                    _maxNum = [vipInfo.tag_num intValue]+[_dataArray count];
                 }
             }
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSLog(@"%@",error);
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
     
 }
@@ -182,17 +183,24 @@
         NSDictionary *dic = [result objectForKey:@"response"];
         if (dic) {
             if ([[dic objectForKey:@"code"] intValue] == 100) {
+                //当data为空时  表示当前用户没订阅过标签 其剩余标签数即用户当前所能订阅的最大标签数
                 if ([[dic objectForKey:@"data"] isKindOfClass:[NSNull class]]) {
                     remindLabel.hidden = NO;
+                    //如果已经获取到vip信息
                     if ([SystemConfig sharedInstance].vipInfo) {
                         _maxNum = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
+                    }else{
+                        [self getVipInfo];
                     }
                 }else{
+                    //当data不为空时,及用户订阅过标签 用户已经订阅的标签数加上剩余的标签数 就是当前用户所能订阅的最大标签数
                     NSArray *dataArr = [dic objectForKey:@"data"];
-                    
-                    int num = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
-                    _maxNum = [dataArr count] + num;
-                    
+                    if ([SystemConfig sharedInstance].vipInfo) {
+                        int num = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
+                        _maxNum = [dataArr count] + num;
+                    }else{
+                        [self getVipInfo];
+                    }
                     NSMutableArray *arr = [NSMutableArray array];
                     for (NSDictionary *dic in dataArr){
                         TagItem *item = [[TagItem alloc] initWithDictionary:dic];
@@ -318,7 +326,6 @@
     if (distanse < 250) {
         [UIView animateWithDuration:0.2 animations:^{
             [_scrollView setContentSize:CGSizeMake(kWidth,_scrollView.contentSize.height+150)];
-            //            _scrollView.contentOffset = contentOffset;
         }];
     }
     if (_iPhone4) {

@@ -144,34 +144,37 @@
 //         NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"ShareSDK"  ofType:@"jpg"];
         
 //        构造分享内容
-        id<ISSContent> publishContent = [ShareSDK content:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-                                           defaultContent:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-                                                    image:nil
-                                                    title:@"Ebingoo"
-                                                      url:@"www.ebingoo.com"
-                                              description:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-                                                mediaType:SSPublishContentMediaTypeNews];
         
-        [ShareSDK showShareActionSheet:nil
-                             shareList:nil
-                               content:publishContent
-                         statusBarTips:YES
-                           authOptions:nil
-                          shareOptions: nil
-                                result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-                                    if (state == SSResponseStateSuccess)
-                                    {
-                                        
-                                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功!" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                                        [alertView show];
-                                    }
-                                    else if (state == SSResponseStateFail)
-                                    {
-                                        UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:@"分享失败" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                                        [alertView show];
-                                        NSLog(NSLocalizedString(@"TEXT_SHARE_FAI", @"发布失败!error code == %d, error code == %@"), [error errorCode], [error errorDescription]);
-                                    }
-                                }];
+        [self share];
+        
+//        id<ISSContent> publishContent = [ShareSDK content:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
+//                                           defaultContent:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
+//                                                    image:nil
+//                                                    title:@"Ebingoo"
+//                                                      url:@"www.ebingoo.com"
+//                                              description:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
+//                                                mediaType:SSPublishContentMediaTypeNews];
+//        
+//        [ShareSDK showShareActionSheet:nil
+//                             shareList:nil
+//                               content:publishContent
+//                         statusBarTips:YES
+//                           authOptions:nil
+//                          shareOptions: nil
+//                                result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+//                                    if (state == SSPublishContentStateSuccess)
+//                                    {
+//                                        
+//                                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功!" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//                                        [alertView show];
+//                                    }
+//                                    else if (state == SSPublishContentStateFail)
+//                                    {
+//                                        UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:@"分享失败" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//                                        [alertView show];
+//                                        NSLog(NSLocalizedString(@"TEXT_SHARE_FAI", @"发布失败!error code == %d, error code == %@"), [error errorCode], [error errorDescription]);
+//                                    }
+//                                }];
     }else{
         if (![SystemConfig sharedInstance].isUserLogin){
             LoginController *loginVC = [[LoginController alloc] init];
@@ -226,6 +229,101 @@
             }
         }
     }
+}
+
+- (void)share
+{
+    //分享的 底ViewControoler
+    id<ISSContainer> container = [ShareSDK container];
+    
+    [container setIPhoneContainerWithViewController:self];
+    
+    NSArray *shareList = [ShareSDK getShareListWithType:
+                          ShareTypeSinaWeibo,
+                          ShareTypeQQ,
+                          ShareTypeQQSpace,
+                          ShareTypeWeixiSession,
+                          ShareTypeWeixiTimeline,
+                          ShareTypeWeixiFav,
+                          ShareTypeSMS,
+                          nil];
+    
+    //分享的内容
+    id<ISSContent> publishContent = nil;
+    NSString *contentString = @"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com";
+    NSString *urlString     = @"www.ebingoo.com";
+    NSString *description   = @"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com";
+    id<ISSCAttachment> shareImage = nil;
+    UIImage *img = [UIImage imageNamed:@"http://pic.hxygchina.com:15001/35f131a1f4f94fd5b3e973deff452800_20x20.jpg"];//[activityObj.images firstObject];
+    SSPublishContentMediaType shareType = SSPublishContentMediaTypeText;
+    if (img) {
+        shareImage = [ShareSDK jpegImageWithImage:img quality:1.0];
+        shareType = SSPublishContentMediaTypeNews;
+    }
+    
+    publishContent = [ShareSDK content:contentString
+                        defaultContent:@""
+                                 image:nil
+                                 title:@"易宾购"
+                                   url:urlString
+                           description:description
+                             mediaType:shareType];
+    
+    id<ISSShareOptions> shareOptions =
+    [ShareSDK defaultShareOptionsWithTitle:@""
+                           oneKeyShareList:shareList
+                        cameraButtonHidden:YES
+                       mentionButtonHidden:NO
+                         topicButtonHidden:NO
+                            qqButtonHidden:NO
+                     wxSessionButtonHidden:NO
+                    wxTimelineButtonHidden:NO
+                      showKeyboardOnAppear:NO
+                         shareViewDelegate:nil
+                       friendsViewDelegate:nil
+                     picViewerViewDelegate:nil];
+    
+    //弹出分享菜单
+    [ShareSDK showShareActionSheet:container
+                         shareList:shareList
+                           content:publishContent
+                     statusBarTips:YES
+                       authOptions:nil
+                      shareOptions:shareOptions
+                            result:^(ShareType type,
+                                     SSResponseState state,
+                                     id<ISSPlatformShareInfo> statusInfo,
+                                     id<ICMErrorInfo> error, BOOL end)
+     {
+         if (state == SSPublishContentStateSuccess)
+         {
+             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+             [alertView show];
+         }
+         else if (state == SSPublishContentStateFail)
+         {
+
+             NSString *msg = [error errorDescription];
+             if ([msg rangeOfString:@"WeChat"].location !=NSNotFound) {
+                 if ([error errorCode] == -22003) {
+                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装微信,请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                     [alertView show];
+                 }
+             }
+             if ([msg rangeOfString:@"QQ"].location !=NSNotFound) {
+                 if ([error errorCode] == -24002) {
+                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装QQ,请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                     [alertView show];
+                 }
+             }
+             if ([msg rangeOfString:@"QZONE"].location !=NSNotFound) {
+                 if ([error errorCode] == 6004) {
+                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装QQ或者QQ空间客户端，请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                     [alertView show];
+                 }
+             }
+         }
+     }];
 }
 
 

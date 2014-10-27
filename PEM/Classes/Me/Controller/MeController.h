@@ -53,6 +53,8 @@
     
     BOOL needCheck;             //判断当scrollview滚动时是否需要 检查能否发布供应信息
     BOOL isEditing;              //判断键盘是否在界面上
+    BOOL canPublish;            //判断是否能发布供应信息
+    
 }
 
 

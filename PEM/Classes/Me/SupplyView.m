@@ -269,7 +269,7 @@
             }
         }else{
             remindLabel.frame = CGRectMake(0, 0, _remindView.frame.size.width, 30);
-            button.frame = CGRectMake(size.width-remindLabel.frame.size.width, 15, btnSize.width,15);
+            button.frame = CGRectMake(size.width-_remindView.frame.size.width, 15, btnSize.width,15);
         }
     
         UIView *btnLine = [[UIView alloc] initWithFrame:CGRectMake(button.frame.origin.x,button.frame.origin.y+button.frame.size.height-1,btnSize.width,0.5)];

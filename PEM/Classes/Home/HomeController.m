@@ -679,7 +679,6 @@
             view.transform = CGAffineTransformScale([self transformForOrientation], 0.8, 0.8);;
 
             [UIView commitAnimations];
-
         }
     }
     [self performSelector:@selector(changeUI) withObject:nil afterDelay:0.3];

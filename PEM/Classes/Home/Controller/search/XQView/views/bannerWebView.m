@@ -37,7 +37,7 @@
     bannerWevView.scrollView.bounces = NO;
     bannerWevView.delegate =self;
     
-//    
+//     
 //    WebScriptObject *obj = (WebScriptObject *)JSArray;
 //    
 //    NSUInteger count = [[obj valueForKey:@"length"] integerValue];
