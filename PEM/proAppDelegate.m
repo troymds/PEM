@@ -97,7 +97,7 @@
                        tencentOAuthCls:[TencentOAuth class]];
     
     //添加微信应用 注册网址 http://open.weixin.qq.com
-    [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885"
+    [ShareSDK connectWeChatWithAppId:WXAppId
                            wechatCls:[WXApi class]];
     
     //短信分享
@@ -121,6 +121,7 @@
             NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:userName,@"phonenum",passWord,@"password", nil];
             [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSLog(@"%@",result);
                 NSDictionary *dic = [result objectForKey:@"response"];
                 if (dic) {
                     NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];

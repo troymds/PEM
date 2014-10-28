@@ -9,7 +9,7 @@
 #import "NewfeatureController.h"
 #import "UIImage+MJ.h"
 #import "MainController.h"
-#import "RegisterContrller.h"
+#import "NewRegisterController.h"
 #import "WBNavigationController.h"
 #define kCount 5
 @interface NewfeatureController ()<UIScrollViewDelegate,UINavigationControllerDelegate>
@@ -114,6 +114,15 @@
     self.view.window.rootViewController =[[RegisterContrller alloc]init];
    
     
+//    self.view.window.rootViewController =[[RegisterContrller alloc]init];
+    //用storyboard控制显示的控件
+    NewRegisterController *rc = [[NewRegisterController alloc] init];
+    WBNavigationController *wb = [[WBNavigationController alloc] initWithRootViewController:rc];
+    [self presentViewController:wb animated:YES completion:nil];
+//    UIStoryboard* board = [UIStoryboard storyboardWithName:@"regist" bundle:nil];
+//    WBNavigationController * nav = [board instantiateViewControllerWithIdentifier:@"nav"];
+//    [self presentViewController:nav animated:YES completion:nil];
+//     self.view.window.rootViewController = nav;
        }
 
 

@@ -11,7 +11,6 @@
 @interface AdviceController : UIViewController<UITextViewDelegate>
 {
     UITextView *_textView;
-    UIButton *_button;
     BOOL isEdit;   //判断是否进行了编辑
 }
 

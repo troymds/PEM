@@ -1,37 +1,28 @@
 //
-//  RegisterContrller.m
+//  NewRegisterController.m
 //  PEM
 //
-//  Created by tianj on 14-8-27.
+//  Created by tianj on 14-10-28.
 //  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
 //
 
-#import "RegisterContrller.h"
+#import "NewRegisterController.h"
 #import "HttpTool.h"
-#import "YZMController.h"
+#import "NewYZMController.h"
 #import "UIBarButtonItem+MJ.h"
-#import "LoginController.h"
+#import "NewLoginController.h"
 #import "RemindView.h"
 #import "HttpTool.h"
 
-@interface RegisterContrller ()
+@interface NewRegisterController ()
 
 @end
 
-@implementation RegisterContrller
+@implementation NewRegisterController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view.
     if (IsIos7) {
         self.edgesForExtendedLayout =  UIRectEdgeNone;
     }
@@ -51,28 +42,37 @@
     [btn addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
     self.navigationItem.rightBarButtonItem = item;
-    
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithIcon:@"nav_return.png" highlightedIcon:@"nav_return_pre.png" target:self action:@selector(backItem)];
     [self addView];
-    // Do any additional setup after loading the view.
+
+}
+
+-(void)backItem{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)login{
-
+    
+    
     NSArray *array = self.navigationController.viewControllers;
     int count = 0;
     for (UIViewController *controller in array) {
-        if ([controller isKindOfClass:[LoginController class]]) {
-            [self.navigationController popToViewController:controller animated:YES];
+        if ([controller isKindOfClass:[NewLoginController class]]) {
+            [self.navigationController popToViewController:controller  animated:YES];
             break;
         }
         count++;
     }
-    if (count == [array count]) {
-        LoginController *vc = [[LoginController alloc] init];
-        NSMutableArray *mutableArr = [NSMutableArray arrayWithArray:array];
-        [mutableArr insertObject:vc atIndex:[array count]-1];
-        self.navigationController.viewControllers = mutableArr;
-        [self.navigationController popViewControllerAnimated:YES];
+    if (count == array.count) {
+        NewLoginController *lg = [[NewLoginController alloc] init];
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:array];
+        [arr insertObject:lg atIndex:array.count-1];
+        self.navigationController.viewControllers = arr;
+        for (UIViewController *viewController in self.navigationController.viewControllers) {
+            if ([viewController isKindOfClass:[NewLoginController class]]) {
+                [self.navigationController popToViewController:viewController animated:YES];
+            }
+        }
     }
 }
 
@@ -83,7 +83,7 @@
     image.image = [UIImage imageNamed:@"logo.png"];
     image.center = CGPointMake(kWidth/2, 45);
     [self.view addSubview:image];
-
+    
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(25,91, kWidth-25*2, 43)];
     view.layer.borderColor = HexRGB(0xced2d8).CGColor;
     view.layer.borderWidth= 1.0f;
@@ -100,7 +100,7 @@
     _phoneNumField.keyboardType = UIKeyboardTypePhonePad;
     _phoneNumField.delegate = self;
     [view addSubview:_phoneNumField];
-
+    
     
     UIButton *getBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     getBtn.frame = CGRectMake(25, 150, kWidth-25*2, 35);
@@ -109,7 +109,7 @@
     [getBtn setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
     [getBtn setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
     [getBtn setTitleColor:HexRGB(0xffffff) forState:UIControlStateNormal];
-
+    
     [self.view addSubview:getBtn];
 }
 
@@ -124,7 +124,7 @@
                 NSDictionary *dic = [result objectForKey:@"response"];
                 if (dic) {
                     if ([[dic objectForKey:@"code"] intValue] == 100) {
-                        YZMController *yzm = [[YZMController alloc] init];
+                        NewYZMController *yzm = [[NewYZMController alloc] init];
                         yzm.phoneNum = _phoneNumField.text;
                         [self.navigationController pushViewController:yzm animated:YES];
                     }else{
@@ -159,7 +159,7 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789\n"] invertedSet];
     NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
-   BOOL basic = [string isEqualToString:filtered];
+    BOOL basic = [string isEqualToString:filtered];
     if (!basic) {
         return NO;
     }
@@ -179,8 +179,7 @@
 }
 
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -189,8 +188,7 @@
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }

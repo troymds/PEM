@@ -23,6 +23,7 @@
 #import "UIImageView+WebCache.h"
 #import "HttpTool.h"
 #import "BaseNumItem.h"
+#import "EplatFormController.h"
 #import <ShareSDK/ShareSDK.h>
 
 @interface SpuareController ()
@@ -74,6 +75,11 @@
         }failure:^(NSError *error){
             NSLog(@"error:%@",error);
         }];
+        if ([SystemConfig sharedInstance].companyInfo.e_url.length!=0) {
+            rightBtn.hidden = NO;
+        }else{
+            rightBtn.hidden = YES;
+        }
     }else{
         _headView.headerImage.image = [UIImage imageNamed:@"company_default.png"];
         _headView.supplayLabel.text = @"0";
@@ -83,6 +89,7 @@
         _headView.nameLabel.hidden = YES;
         _headView.registerBtn.hidden = NO;
         _headView.markImg.image = nil;
+        rightBtn.hidden = YES;
     }
 }
 
@@ -112,6 +119,26 @@
     [self.view addSubview:_scrollView];
     [_scrollView setContentSize:CGSizeMake(kWidth, _headView.frame.size.height+_squareView.frame.size.height)];
     
+    
+    // 创建按钮
+    rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    // 设置普通背景图片
+    [rightBtn setTitle:@"E平台" forState:UIControlStateNormal];
+    [rightBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    [rightBtn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
+    // 设置尺寸
+    rightBtn.frame = CGRectMake(10, 10,52, 24);
+    [rightBtn addTarget:self action:@selector(leftItemClick) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    self.navigationItem.rightBarButtonItem = item;
+}
+
+- (void)leftItemClick
+{
+    EplatFormController *plat = [[EplatFormController alloc] init];
+    plat.e_url = [SystemConfig sharedInstance].companyInfo.e_url;
+    [self.navigationController pushViewController:plat animated:YES];
 }
 
 //点击头像触发
@@ -141,40 +168,10 @@
         PrivilegeController *pvc = [[PrivilegeController alloc] init];
         [self.navigationController pushViewController:pvc animated:YES];
     }else if(btn.tag == SHARE_TYPE){
-//         NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"ShareSDK"  ofType:@"jpg"];
         
-//        构造分享内容
-        
+         //构造分享内容
         [self share];
         
-//        id<ISSContent> publishContent = [ShareSDK content:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                           defaultContent:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                                    image:nil
-//                                                    title:@"Ebingoo"
-//                                                      url:@"www.ebingoo.com"
-//                                              description:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                                mediaType:SSPublishContentMediaTypeNews];
-//        
-//        [ShareSDK showShareActionSheet:nil
-//                             shareList:nil
-//                               content:publishContent
-//                         statusBarTips:YES
-//                           authOptions:nil
-//                          shareOptions: nil
-//                                result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-//                                    if (state == SSPublishContentStateSuccess)
-//                                    {
-//                                        
-//                                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功!" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-//                                        [alertView show];
-//                                    }
-//                                    else if (state == SSPublishContentStateFail)
-//                                    {
-//                                        UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:@"分享失败" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-//                                        [alertView show];
-//                                        NSLog(NSLocalizedString(@"TEXT_SHARE_FAI", @"发布失败!error code == %d, error code == %@"), [error errorCode], [error errorDescription]);
-//                                    }
-//                                }];
     }else{
         if (![SystemConfig sharedInstance].isUserLogin){
             LoginController *loginVC = [[LoginController alloc] init];
@@ -253,13 +250,8 @@
     NSString *contentString = @"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com";
     NSString *urlString     = @"www.ebingoo.com";
     NSString *description   = @"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com";
-    id<ISSCAttachment> shareImage = nil;
-    UIImage *img = [UIImage imageNamed:@"http://pic.hxygchina.com:15001/35f131a1f4f94fd5b3e973deff452800_20x20.jpg"];//[activityObj.images firstObject];
+    
     SSPublishContentMediaType shareType = SSPublishContentMediaTypeText;
-    if (img) {
-        shareImage = [ShareSDK jpegImageWithImage:img quality:1.0];
-        shareType = SSPublishContentMediaTypeNews;
-    }
     
     publishContent = [ShareSDK content:contentString
                         defaultContent:@""

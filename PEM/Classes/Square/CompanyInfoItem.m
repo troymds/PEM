@@ -82,7 +82,12 @@
             _website = @"";
         }else{
             _website = [dic objectForKey:@"website"];
-        }                
+        }
+        if (isNull(dic, @"e_url")) {
+            _e_url = @"";
+        }else{
+            _e_url = [dic objectForKey:@"e_url"];
+        }
     }
     return self;
 }

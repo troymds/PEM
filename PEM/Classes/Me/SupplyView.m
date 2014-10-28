@@ -129,7 +129,7 @@
         _standardTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _standardView.frame.size.width-75, 35)];
         _standardTextField.tag = STANDARD_TYPE;
         _standardTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        _standardTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+        _standardTextField.keyboardType = UIKeyboardTypeNumberPad;
         _standardTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _standardTextField.delegate = self;
         [_standardView addSubview:_standardTextField];
@@ -140,7 +140,7 @@
 
         _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 0,width-75-17, 35)];
         _descriptionLabel.backgroundColor = [UIColor clearColor];
-        _descriptionLabel.textColor = HexRGB(0x666666);
+        _descriptionLabel.textColor = HexRGB(0xd5d5d5);
         _descriptionLabel.font = [UIFont systemFontOfSize:PxFont(20)];
         _descriptionLabel.text = @"10字以上";
         [_descriptionView addSubview:_descriptionLabel];

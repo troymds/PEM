@@ -1,12 +1,12 @@
 //
-//  CompanySetController.m
+//  NewCompanySeController.m
 //  PEM
 //
-//  Created by tianj on 14-8-28.
+//  Created by tianj on 14-10-28.
 //  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
 //
 
-#import "CompanySetController.h"
+#import "NewCompanySeController.h"
 #import "SetCellView.h"
 #import "HttpTool.h"
 #import "SystemConfig.h"
@@ -16,8 +16,9 @@
 #import "RemindView.h"
 #import "CityController.h"
 #import "AdaptationSize.h"
-#import "LoginController.h"
+#import "NewLoginController.h"
 #import "CompanyInfoController.h"
+#import "UIBarButtonItem+MJ.h"
 
 #define SETICON_TYPE 6000
 #define ICON_TYPE 6001
@@ -29,40 +30,32 @@
 #define PROVINCE_TYPE 6007
 #define CITY_TYPE 6008
 
-@interface CompanySetController ()
+@interface NewCompanySeController ()
 
 @end
 
-@implementation CompanySetController
+@implementation NewCompanySeController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view.
     if (IsIos7) {
         self.edgesForExtendedLayout =  UIRectEdgeNone;
     }
-
+    
     self.title = @"企业设置";
     self.view.backgroundColor = HexRGB(0xffffff);
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithIcon:@"nav_return.png" highlightedIcon:@"nav_return_pre.png" target:self action:@selector(backItem)];
 
     // Do any additional setup after loading the view.
     [self addView];
-    
-    if ([SystemConfig sharedInstance].isUserLogin){
-        //若处于登录状态 将企业信息显示在页面上进行修改
-        [self loadInfoData:[SystemConfig sharedInstance].companyInfo];
-    }
-
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
+
+}
+
+- (void)backItem
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)keyboardWillHiden{
@@ -85,7 +78,7 @@
     _iconSetView.layer.borderWidth = 1.0f;
     _iconSetView.layer.masksToBounds = YES;
     _iconSetView.layer.cornerRadius = 6.0;
-
+    
     
     _iconSetView.tag = SETICON_TYPE;
     UILabel *iconLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 38, 90, 20)];
@@ -120,13 +113,13 @@
         line.backgroundColor = HexRGB(0xd5d5d5);
         [bgView addSubview:line];
     }
-
+    
     _nameView = [[SetCellView alloc] initWithFrame:CGRectMake(0, 0, kWidth-42, 40)];
     _nameView.titleLabel.text = @"企业名称";
     _nameView.textField.delegate = self;
     _nameView.textField.tag = NAME_TYPE;
     [bgView addSubview:_nameView];
-
+    
     
     _areaView = [[SetCellView alloc] initWithFrame:CGRectMake(0,120, kWidth-42, 40)];
     _areaView.titleLabel.text = @"具体街道";
@@ -145,22 +138,21 @@
     _cityView.areaBtn.tag = 2001;
     [_cityView.areaBtn addTarget:self action:@selector(areaBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:_cityView];
-
+    
     
     _phoneView = [[SetCellView alloc] initWithFrame:CGRectMake(0, 160, kWidth-42, 40)];
     _phoneView.titleLabel.text = @"企业电话";
     _phoneView.textField.delegate = self;
-    _phoneView.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     _phoneView.textField.tag = PHONE_TYPE;
     [bgView addSubview:_phoneView];
-
+    
     
     _websiteView = [[SetCellView alloc] initWithFrame:CGRectMake(0, 200, kWidth-42, 40)];
     _websiteView.titleLabel.text = @"企业网址";
     _websiteView.textField.delegate = self;
     _websiteView.textField.tag = WEBSITE_TYPE;
     [bgView addSubview:_websiteView];
-
+    
     
     _emailView = [[SetCellView alloc] initWithFrame:CGRectMake(0, 240, kWidth-42, 40)];
     _emailView.titleLabel.text = @"企业邮箱";
@@ -204,7 +196,7 @@
         }else {
             [RemindView showViewWithTitle:@"请选择省份" location:MIDDLE];
         }
-     }
+    }
 }
 
 - (void)selectedWith:(NSString *)province uid:(NSString *)uid
@@ -218,7 +210,7 @@
     _provinceView.contentLabel.text = province;
     provinceName = province;
     _provinceId = uid;
-
+    
 }
 
 - (void)selectCity:(NSString *)province withId:(NSString *)uid
@@ -227,29 +219,6 @@
     cityName = province;
     _cityId = uid;
 }
-
-- (void)loadInfoData:(CompanyInfoItem *)item{
-    //如果以前上传过图片  则显示图片
-    if (item.image&&item.image.length!=0){
-        [_iconImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"company_default.png"]];
-        isExistImg = YES;
-        _imgStr = item.image;
-    }
-    _nameView.textField.text = item.company_name;
-    _areaView.textField.text = item.address;
-    _websiteView.textField.text = item.website;
-    _emailView.textField.text = item.email;
-    _phoneView.textField.text = item.company_tel;
-    _provinceView.contentLabel.text = item.province_name;
-    _cityView.contentLabel.text = item.city_name;
-    
-    
-    provinceName = item.province_name;
-    cityName = item.city_name;
-    _provinceId = item.province_id;
-    _cityId = item.city_id;
-}
-
 
 #pragma mark textField_delegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -291,14 +260,14 @@
     switch (textField.tag) {
         case NAME_TYPE:
             
-                break;
+            break;
         case AREA_TYPE:
             y = y+40*3;
-
+            
             break;
         case PHONE_TYPE:
             y = y+40*4;
-
+            
             break;
         case WEBSITE_TYPE:
             y = y+40*5;
@@ -306,7 +275,7 @@
         case EMAIL_TYPE:
             y = y+40*6;
             break;
-     
+            
         default:
             break;
     }
@@ -322,33 +291,30 @@
     [activeField resignFirstResponder];
     if ([self checkOut]){
         if (isExistImg){
-            if (isModifyImg) {
-                //第一次设置 或再次修改了图片时要上传图片
-                MBProgressHUD *hud= [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.dimBackground = NO;
-                NSData *data = UIImagePNGRepresentation(_iconImage.image);
-                NSString *s = [GTMBase64 stringByEncodingData:data];
-                NSString *string = [NSString stringWithFormat:@"data:image/png;base64,%@",s];
-                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:string,@"image", nil];
-                [HttpTool postWithPath:@"uploadImage" params:param success:^(id JSON) {
-                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                    if ([result objectForKey:@"response"]) {
-                        NSDictionary *dic = [result objectForKey:@"response"];
-                        if ([[dic objectForKey:@"code"] intValue] == 100){
-                            _imgStr = [dic objectForKey:@"data"];
-                            [self updateData];
-                        }else{
-                            [RemindView showViewWithTitle:@"设置失败" location:MIDDLE];
-                        }
+            //第一次设置 或再次修改了图片时要上传图片
+            MBProgressHUD *hud= [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.dimBackground = NO;
+            NSData *data = UIImagePNGRepresentation(_iconImage.image);
+            NSString *s = [GTMBase64 stringByEncodingData:data];
+            NSString *string = [NSString stringWithFormat:@"data:image/png;base64,%@",s];
+            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:string,@"image", nil];
+            [HttpTool postWithPath:@"uploadImage" params:param success:^(id JSON) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                if ([result objectForKey:@"response"]) {
+                    NSDictionary *dic = [result objectForKey:@"response"];
+                    if ([[dic objectForKey:@"code"] intValue] == 100){
+                        _imgStr = [dic objectForKey:@"data"];
+                        [self updateData];
+                    }else{
+                        [RemindView showViewWithTitle:@"设置失败" location:MIDDLE];
                     }
+                }
                 }failure:^(NSError *error){
-                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-                }];
-            }else{
-                [self updateData];
-            }
-         }else{
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+            
+        }else{
             //没有图片 直接上传数据
             [self updateData];
         }
@@ -371,20 +337,6 @@
         if (dic) {
             if ([[dic objectForKey:@"code"] intValue] == 100){
                 [RemindView showViewWithTitle:@"设置成功" location:MIDDLE];
-                if ([SystemConfig sharedInstance].companyInfo){
-                    //设置成功后更新单例中的企业数据
-                    [SystemConfig sharedInstance].companyInfo.image = _imgStr;
-                    [SystemConfig sharedInstance].companyInfo.company_name = _nameView.textField.text;
-                    [SystemConfig sharedInstance].companyInfo.province_id = _provinceId;
-                    [SystemConfig sharedInstance].companyInfo.province_name = provinceName;
-                    [SystemConfig sharedInstance].companyInfo.city_id = _cityId;
-                    [SystemConfig sharedInstance].companyInfo.city_name = cityName;
-                    [SystemConfig sharedInstance].companyInfo.address = _areaView.textField.text;
-                    [SystemConfig sharedInstance].companyInfo.company_tel = _phoneView.textField.text;
-                    [SystemConfig sharedInstance].companyInfo.website = _websiteView.textField.text;
-                    [SystemConfig sharedInstance].companyInfo.email = _emailView.textField.text;
-                }
-                
                 //隐藏掉可能存在的错误提示
                 remindLabel.text = @"";
                 [UIView animateWithDuration:0.3 animations:^{
@@ -397,7 +349,7 @@
                     }
                 }];
                 //注册成功后  判断是否有要跳转回的界面
-                [self back];
+                [self setSucess];
             }else if([[dic objectForKey:@"code"] intValue] == 101){
                 [RemindView showViewWithTitle:@"注册失败" location:MIDDLE];
             }else if([[dic objectForKey:@"code"] intValue] == 102){
@@ -409,24 +361,28 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
-
+    
 }
 
-- (void)back
+
+- (void)setSucess
 {
     NSArray *array = self.navigationController.viewControllers;
-    for (UIViewController *controller in array) {
-        if ([controller isKindOfClass:[LoginController class]]) {
-            [self.navigationController popToViewController:controller animated:YES];
-            break;
+    int count=0;
+    for (UIViewController *viewController in array) {
+        if ([viewController isKindOfClass:[NewLoginController class]]) {
+            [self.navigationController popToViewController:viewController animated:YES];
         }
-        if ([controller isKindOfClass:[CompanyInfoController class]]) {
-            [self.navigationController popToViewController:controller animated:YES];
-            break;
-        }
+        count++;
+    }
+    if (count== array.count) {
+        NewLoginController *new = [[NewLoginController alloc] init];
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:array];
+        [arr insertObject:new atIndex:0];
+        self.navigationController.viewControllers = arr;
+        [self.navigationController popToViewController:new animated:YES];
     }
 }
-
 
 - (BOOL)checkOut{
     if (_nameView.textField.text.length==0) {
@@ -445,7 +401,7 @@
                 [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
             }
         }];
-
+        
         return NO;
     }
     if (_phoneView.textField.text.length==0) {
@@ -464,7 +420,7 @@
                 [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
             }
         }];
-
+        
         return NO;
     }else{
         if (![self isValidPhoneNum:_phoneView.textField.text]) {
@@ -498,12 +454,12 @@
         [UIView animateWithDuration:0.3 animations:^{
             if (isEditing) {
                 [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20+240)];
-
+                
             }else{
                 [_scrollView setContentSize:CGSizeMake(kWidth, finishBtn.frame.origin.y+finishBtn.frame.size.height+20)];
             }
         }];
-
+        
         return NO;
     }
     if (![self isValidateEmail:_emailView.textField.text]) {
@@ -557,7 +513,6 @@
     UIImage *portraitImg = [info objectForKey:@"UIImagePickerControllerEditedImage"];
     _iconImage.image = portraitImg;
     isExistImg = YES;
-    isModifyImg = YES;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -592,8 +547,7 @@
 }
 
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -602,8 +556,7 @@
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }

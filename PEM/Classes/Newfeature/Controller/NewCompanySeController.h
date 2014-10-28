@@ -1,0 +1,53 @@
+//
+//  NewCompanySeController.h
+//  PEM
+//
+//  Created by tianj on 14-10-28.
+//  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ProImageView.h"
+#import "SetAreaView.h"
+#import "ProvinceController.h"
+#import "CityController.h"
+
+@class SetCellView;
+
+@interface NewCompanySeController : UIViewController<ProImageViewDelegate,UITextFieldDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,ProvinceDelegate,CityDelegate>
+{
+    UIScrollView *_scrollView;
+    ProImageView *_iconSetView;
+    SetCellView *_areaView;
+    SetCellView *_emailView;
+    SetCellView *_websiteView;
+    SetCellView *_phoneView;
+    SetCellView *_nameView;
+    SetAreaView *_provinceView;
+    SetAreaView *_cityView;
+    UIView *bgView;
+    NSString *_imgStr;       //图片url
+    
+    NSString  *_provinceId;    //所选省份的id
+    NSString *_cityId;  //所选城市的id
+    NSString *provinceName;   //省份名称
+    NSString *cityName;
+    
+    CGPoint _offset;              //scrollview的偏移量
+    
+    BOOL isExistImg;           //判断企业设置中头像是否存在 使用默认头像则表示不存在
+    
+    UITextField *activeField;    //当前处于编辑状态的输入框
+    
+    UILabel *remindLabel;       //错误提醒文字
+    
+    UIButton *finishBtn;      //完成按钮
+    BOOL isEditing;        //键盘是否在窗口上
+    
+    int height;          //键盘高度
+}
+
+@property (nonatomic,strong) ProImageView *iconImage;
+
+
+@end

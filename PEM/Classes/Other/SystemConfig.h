@@ -20,6 +20,7 @@
 @property (nonatomic,copy) NSString *company_id;    //登录后的公司ID
 @property (nonatomic,strong) CompanyInfoItem *companyInfo;    //登录用户公司基本信息
 @property (nonatomic,strong) VipInfoItem *vipInfo;   //vip用户相关信息
+@property (nonatomic,assign) long maxTagNum;        //用户可订阅的最大标签数
 
 + (SystemConfig *)sharedInstance;
 
