@@ -100,7 +100,6 @@
             [imageView addSubview:login];
             
             imageView.userInteractionEnabled = YES;
-
         }
     }
 }
