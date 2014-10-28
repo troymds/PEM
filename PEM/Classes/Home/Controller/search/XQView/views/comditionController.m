@@ -64,15 +64,6 @@
 
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    
-//    webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
-//    newWebView.frame = CGRectMake(0, 0, kWidth, webheight+100);
-    
-    
-    
-}
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     return YES;

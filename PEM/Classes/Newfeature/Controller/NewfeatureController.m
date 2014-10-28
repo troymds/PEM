@@ -14,7 +14,6 @@
 #define kCount 5
 @interface NewfeatureController ()<UIScrollViewDelegate,UINavigationControllerDelegate>
 {
-    UIPageControl *_page;
     UIScrollView *_scroll;
 
 }
@@ -42,7 +41,6 @@
     [super viewDidLoad];
     [self addScrollView];
     [self addScrollImages];
-    [self addPageControl];
 }
 
 #pragma mark 添加滚动视图
@@ -52,9 +50,10 @@
     scroll.frame = self.view.bounds;
     scroll.showsHorizontalScrollIndicator = NO; // 隐藏水平滚动条
     CGSize size = scroll.frame.size;
-    scroll.contentSize = CGSizeMake(size.width * kCount, 480); // 内容尺寸
+    scroll.contentSize = CGSizeMake(size.width * kCount, kHeight); // 内容尺寸
     scroll.pagingEnabled = YES; // 分页
     scroll.delegate = self;
+    scroll.bounces = NO;
     [self.view addSubview:scroll];
     _scroll = scroll;
 }
@@ -67,7 +66,7 @@
     for (int i = 0; i<kCount; i++) {
         UIImageView *imageView = [[UIImageView alloc] init];
         // 1.显示图片
-        NSString *name = [NSString stringWithFormat:@"new_tex%d.jpg", i+1 ];
+        NSString *name = [NSString stringWithFormat:@"new_tex%d.png", i+1 ];
         imageView.image = [UIImage imageNamed:name];
         // 2.设置frame
         imageView.frame = CGRectMake(i * size.width, 0, size.width, size.height);
@@ -113,30 +112,12 @@
 -(void)login:(UIButton *)btn {
     [UIApplication sharedApplication].statusBarHidden =NO;
     self.view.window.rootViewController =[[RegisterContrller alloc]init];
-
+   
     
        }
-#pragma mark 添加分页指示器
-- (void)addPageControl
-{
-    CGSize size = self.view.frame.size;
-    UIPageControl *page = [[UIPageControl alloc] init];
-    page.center = CGPointMake(size.width * 0.5, size.height * 0.95);
-    page.numberOfPages = kCount;
-    page.currentPageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_page_on.png"]];
-    page.pageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_page_off.png"]];
-    page.bounds = CGRectMake(0, 0, 150, 0);
-    [self.view addSubview:page];
-    _page = page;
-}
 
 
 
-#pragma mark - 滚动代理方法
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    _page.currentPage = scrollView.contentOffset.x / scrollView.frame.size.width;
-}
 
 
 

@@ -15,6 +15,7 @@
 #import "gategoryModel.h"
 #import "MainController.h"
 #import "UIImageView+WebCache.h"
+#import "QRCodeViewController.h"
 @interface MessageController ()
 {
     UIScrollView *_scrollView;
@@ -50,14 +51,16 @@
     self.navigationItem.titleView =_searchImage;
     [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateNormal];
     [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
-    //    _searchImage.userInteractionEnabled = YES;
-    //    _searchImage.image =[UIImage imageNamed:@"nav_searchhome.png"];
     
     currentTag =0;
     
     
     
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(lo)];
+    if (IsIos7) {
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(zbarSdk:)];
+    }else {
+        
+    }
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:@selector(logoImage)];
     self.view.userInteractionEnabled = YES;
 
@@ -71,7 +74,10 @@
 }
 
 
--(void)lo{
+-(void)zbarSdk:(UIButton *)sdk{
+    QRCodeViewController *qrcode =[[QRCodeViewController alloc]init];
+    [self.navigationController pushViewController:qrcode animated:YES];
+    
     
 }
 -(void)logoImage{
@@ -136,7 +142,7 @@
         [button addTarget:self action:@selector(itemsClick:) forControlEvents:UIControlEventTouchUpInside];
         button.titleLabel.text = titleBtn.titleLabel.text;
 
-        titleBtn.tag =button.tag;
+        
 
         UIImageView *findImage =[[UIImageView alloc]init];
         findImage.frame =CGRectMake(25+but%3*(70+40), 10+but/3*(60+35), 50, 50);
@@ -146,7 +152,7 @@
         button.tag=titleBtn.tag;
         
         findImage.tag = button.tag+100000;
-       
+        titleBtn.tag =findImage.tag;
         findImage.userInteractionEnabled = NO;
         
         [findImage setImageWithURL:[NSURL URLWithString:cagegoryModel.imageGategpry]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];

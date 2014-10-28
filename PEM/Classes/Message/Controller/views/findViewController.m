@@ -317,16 +317,6 @@
 -(void)leftSegment{
     leftBackView =[[UIView alloc]initWithFrame:CGRectMake(kWidth/8-15, 30, 95, 50)];
     
-    
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:2];
-//    leftBackView.frame =CGRectMake(kWidth/8-15, 30, 95, 50);
-//    leftBackView.transform = CGAffineTransformMakeScale( 1, 2);
-    [UIView commitAnimations ];
-   leftBackView.transform = CGAffineTransformTranslate(leftBackView.transform, 0, .5);
-    
-
-    
     [self.view addSubview:leftBackView];
     [self.view bringSubviewToFront:leftBackView];
     UIImageView *kuangImage =[[UIImageView alloc]init];
@@ -346,6 +336,7 @@
         [kuangImage addSubview:sear];
         [sear setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         sear.frame =CGRectMake(15, 37+l%3*(17+6), 97, 25);
+        
         sear.titleLabel.font =[UIFont systemFontOfSize:14];
         [sear setTitle:sea[l] forState:UIControlStateNormal];
         sear.tag = 10+l;
@@ -618,7 +609,6 @@
         [_CateSupplyArray removeAllObjects];
         [_tableView reloadData];
         
-//        [self addMBprogressView];
         
     }else{
         [self addMBprogressView];
@@ -655,7 +645,7 @@
 
 -(void)rightSegmentBtnClick:(UIButton *)sender
 {
-    
+    [self addMBprogressView];
     _supplyBtnPice.tag = sender.tag;
 
     sender.selected =!sender.selected;

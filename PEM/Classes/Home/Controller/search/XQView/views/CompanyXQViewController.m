@@ -84,7 +84,6 @@
     _orangLin.frame =CGRectMake(0, 30, 107, 2);
     _orangLin.backgroundColor =HexRGB(0x069dd4);
     
-    //_selectedBtn = [[UIButton alloc]init];
     [self addShowNoDataView];
 
     [self addCompanyConditionView];
@@ -100,14 +99,10 @@
 {
     // 1.下拉刷新
     header = [MJRefreshHeaderView header];
-    //header.scrollView = _conditionTableView;
     header.delegate = self;
-    //[header beginRefreshing];
     
     // 2.上拉加载更多
     footer = [MJRefreshFooterView footer];
-    //footer.scrollView = _conditionTableView;
-    
     footer.delegate = self;
 }
 
@@ -168,10 +163,6 @@
 #pragma mark---status
 -(void)loadViewStatuce:(MJRefreshBaseView *)refreshLoading
 {
-    // 显示指示器
-//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-//    hud.labelText = @"正在加载中...";
-//    hud.dimBackground = YES;
     
     if (![companyID isEqualToString:@""])
     {
@@ -354,7 +345,7 @@
 //供求信息
 -(void)addSupplyDemandView{
     
-    suplyANDdemandView =[[UIView alloc]initWithFrame:CGRectMake(kWidth*2, 0, kWidth, kHeight-32-64)];
+    suplyANDdemandView =[[UIView alloc]initWithFrame:CGRectMake(kWidth*2, 0, kWidth, kHeight-32)];
     suplyANDdemandView.backgroundColor =[UIColor whiteColor];
     
     [_BigCompanyScrollView addSubview:suplyANDdemandView];
@@ -375,8 +366,6 @@
 #pragma mark  ------scrollview_delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//    float x = scrollView.contentOffset.x/scrollView.frame.size.width;
-    
 
     if (scrollView.tag == 9999)
     {
@@ -855,9 +844,9 @@
 -(void)addChooseBtn
 {
     
-    chooseBackView =[[UIView alloc]initWithFrame:CGRectMake(0, suplyANDdemandView.frame.size.height-44, kWidth, 44)];
-    [suplyANDdemandView addSubview:chooseBackView];
+    chooseBackView =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-64-30-44, kWidth, 44)];
     chooseBackView.backgroundColor =[UIColor whiteColor];
+    [suplyANDdemandView addSubview:chooseBackView];
     UIView *linview =[[UIView alloc]initWithFrame:CGRectMake(0,0, kWidth, 1)];
     [chooseBackView addSubview:linview];
     
