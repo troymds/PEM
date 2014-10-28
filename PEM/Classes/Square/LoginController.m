@@ -79,7 +79,7 @@
     _userNameField = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, kWidth-25*2-30, 43)];
     _userNameField.placeholder = @"请输入您的手机号";
     _userNameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    _userNameField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    _userNameField.keyboardType = UIKeyboardTypePhonePad;
     _userNameField.delegate = self;
     [bgView addSubview:_userNameField];
     

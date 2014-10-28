@@ -67,7 +67,6 @@
     [HttpTool postWithPath:@"getInfoDetail" params:param success:^(id JSON){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         if (dic) {
             if ([[dic objectForKey:@"code"] intValue] ==100) {

@@ -67,7 +67,7 @@
         _descriptionView.nameLabel.text = @"描     述";
         _descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(75, 0, width-75-25, 35)];
         _descriptionLabel.font = [UIFont systemFontOfSize:PxFont(20)];
-        _descriptionLabel.textColor = HexRGB(0x666666);
+        _descriptionLabel.textColor = HexRGB(0xd5d5d5);
         _descriptionLabel.backgroundColor = [UIColor clearColor];
         _descriptionLabel.text = @"10字以上";
         [_descriptionView addSubview:_descriptionLabel];
@@ -101,7 +101,7 @@
         _purchaseNumField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _purchaseNum.frame.size.width-75, 35)];
         _purchaseNumField.tag = PC_PURCHASE_TYPE;
         _purchaseNumField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        _purchaseNumField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+        _purchaseNumField.keyboardType = UIKeyboardTypeNumberPad;
         _purchaseNumField.font = [UIFont systemFontOfSize:PxFont(20)];
         _purchaseNumField.placeholder = @"求购物品的数量";
         _purchaseNumField.delegate = self;

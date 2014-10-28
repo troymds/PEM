@@ -198,7 +198,7 @@
 {
     NSInteger distance = 5;
     CGSize size = [AdaptationSize getSizeFromString:title Font:[UIFont systemFontOfSize:15] withHight:20 withWidth:CGFLOAT_MAX];
-    if (x+space+size.width+distance*2 > kWidth-20) {
+    if (x+size.width+distance*2 > kWidth-20) {
         currentRow++;
         x = 20;
     }

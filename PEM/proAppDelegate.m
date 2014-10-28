@@ -97,7 +97,7 @@
                        tencentOAuthCls:[TencentOAuth class]];
     
     //添加微信应用 注册网址 http://open.weixin.qq.com
-    [ShareSDK connectWeChatWithAppId:@"wx4868b35061f87885"
+    [ShareSDK connectWeChatWithAppId:WXAppId
                            wechatCls:[WXApi class]];
     
     //短信分享

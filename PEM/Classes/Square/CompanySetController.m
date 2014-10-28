@@ -150,6 +150,7 @@
     _phoneView = [[SetCellView alloc] initWithFrame:CGRectMake(0, 160, kWidth-42, 40)];
     _phoneView.titleLabel.text = @"企业电话";
     _phoneView.textField.delegate = self;
+    _phoneView.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     _phoneView.textField.tag = PHONE_TYPE;
     [bgView addSubview:_phoneView];
 

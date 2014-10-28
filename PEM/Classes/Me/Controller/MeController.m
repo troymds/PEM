@@ -818,7 +818,7 @@
 {
     _purchaseView.titleTextField.text = @"";
     _purchaseView.descriptionLabel.text = @"十字以上";
-    _purchaseView.descriptionLabel.textColor = HexRGB(0x666666);
+    _purchaseView.descriptionLabel.textColor = HexRGB(0xd5d5d5);
     demandDes = @"";
     _purchaseView.purchaseNumField.text = @"";
     _purchaseView.unitField.text = @"";
@@ -836,7 +836,7 @@
     _supplyView.unitField.text = @"";
     _supplyView.standardTextField.text = @"";
     _supplyView.descriptionLabel.text = @"十字以上";
-    _supplyView.descriptionLabel.textColor = HexRGB(0x666666);
+    _supplyView.descriptionLabel.textColor = HexRGB(0xd5d5d5);
     supplyDes = @"";
     _supplyView.headImage.image = nil;
     headImage = nil;

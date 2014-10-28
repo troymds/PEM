@@ -104,15 +104,6 @@
     
     [self.view addSubview:label1];
     [self.view addSubview:_textView];
-    _button = [UIButton buttonWithType:UIButtonTypeCustom];
-    _button.frame = CGRectMake(23, 255, kWidth-46, 35);
-    [_button setTitle:@"发 布" forState:UIControlStateNormal];
-    [_button setTitleColor:HexRGB(0xffffff) forState:UIControlStateNormal];
-    [_button setBackgroundImage:[UIImage imageNamed:@"finish.png"] forState:UIControlStateNormal];
-    [_button setBackgroundImage:[UIImage imageNamed:@"finish_pre.png"] forState:UIControlStateHighlighted];
-    [_button addTarget:self action:@selector(btnDown) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_button];
-
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView{
@@ -129,33 +120,6 @@
         return NO;
     }
     return YES;
-}
-
-
-- (void)btnDown{
-    if (isEdit) {
-        if (![_textView.text isEqualToString:@""]) {
-            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",_textView.text,@"content", nil];
-            [HttpTool postWithPath:@"addAdvice" params:param success:^(id JSON) {
-                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                if ([result objectForKey:@"response"]) {
-                    NSDictionary *dic = [result objectForKey:@"response"];
-                    if ([[dic objectForKey:@"code"] intValue] ==100){
-                        [self.navigationController popViewControllerAnimated:YES];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"advice" object:nil];
-                    }else{
-                        [RemindView showViewWithTitle:@"反馈失败" location:MIDDLE];
-                    }
-                }
-            } failure:^(NSError *error) {
-                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            }];
-        }else{
-            [RemindView showViewWithTitle:@"请输入您的宝贵意见!" location:MIDDLE];
-        }
-    }else{
-        [RemindView showViewWithTitle:@"请输入您的宝贵意见!" location:MIDDLE];
-    }
 }
 
 

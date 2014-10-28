@@ -13,6 +13,7 @@
 #import "TagListController.h"
 #import "RemindView.h"
 #import "BuyTagController.h"
+#import "PrivilegeController.h"
 
 
 
@@ -266,7 +267,7 @@
     [_scrollView addSubview:hotLabel];
     
     UIButton *managerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    managerBtn.frame =CGRectMake(kWidth-25-60, 19, 80, 16);
+    managerBtn.frame =CGRectMake(kWidth-20-80,16, 80, 30);
     [managerBtn setTitle:@"【管理】" forState:UIControlStateNormal];
     [managerBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
     managerBtn.backgroundColor = [UIColor clearColor];
@@ -340,7 +341,7 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    
+
 }
 
 
@@ -392,11 +393,8 @@
                     addField.text = @"";
                 }
             }else{
-        
-//                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签,想订阅更多标签,请单独购买",_maxNum] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"单独购买", nil];
-//                [alertView show];
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签",_maxNum] delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
-                [alertView show];
+                MyActionSheetView *sheetView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签",_maxNum] delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                [sheetView showView];
             }
         }
     }
@@ -449,6 +447,12 @@
         BuyTagController *tagVc = [[BuyTagController alloc] init];
         [self.navigationController pushViewController:tagVc animated:YES];
     }
+}
+
+- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView
+{
+    PrivilegeController *pri = [[PrivilegeController alloc] init];
+    [self.navigationController pushViewController:pri animated:YES];
 }
 
 
