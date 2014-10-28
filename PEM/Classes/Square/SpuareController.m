@@ -262,30 +262,22 @@
      {
          if (state == SSPublishContentStateSuccess)
          {
-             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功!" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
              [alertView show];
          }
          else if (state == SSPublishContentStateFail)
          {
-
-             NSString *msg = [error errorDescription];
-             if ([msg rangeOfString:@"WeChat"].location !=NSNotFound) {
+             if ([error errorCode] == -22003) {
                  if ([error errorCode] == -22003) {
                      UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装微信,请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                      [alertView show];
                  }
-             }
-             if ([msg rangeOfString:@"QQ"].location !=NSNotFound) {
-                 if ([error errorCode] == -24002) {
-                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装QQ,请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                     [alertView show];
-                 }
-             }
-             if ([msg rangeOfString:@"QZONE"].location !=NSNotFound) {
-                 if ([error errorCode] == 6004) {
-                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装QQ或者QQ空间客户端，请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                     [alertView show];
-                 }
+             }else if ([error errorCode] == -24002){
+                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装QQ,请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                 [alertView show];
+             }else if ([error errorCode] == -6004){
+                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享失败" message:@"尚未安装QQ或者QQ空间客户端，请安装后重试！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                 [alertView show];
              }
          }
      }];

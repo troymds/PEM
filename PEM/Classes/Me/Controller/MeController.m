@@ -190,7 +190,7 @@
                         NSLog(@"%@",error);
                     }];
                 }else{
-                    NSString *message = @"您好,您的发布供应次数已用完次数已用完,要想发布更多,请选择立即升级";
+                    NSString *message = @"您好,您的发布供应次数已用完,要想发布更多,请选择立即升级";
                     MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
                     [actionView showView];
                 }
