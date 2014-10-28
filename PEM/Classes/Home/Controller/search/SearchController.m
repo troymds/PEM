@@ -274,10 +274,6 @@
 }
 - (void)supplyRequest
 {
-    if (_supllyArray.count!=0) {
-        [_supllyArray removeAllObjects];
-        [_resultTableView reloadData];
-    }
     
     if (_currentKeyString.length>0)
     {
@@ -303,7 +299,6 @@
     {
         [supplyTool statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
             if (statues.count<=0)
             {
                 noDataBgView.hidden = NO;
@@ -327,10 +322,7 @@
 }
 - (void)demandRequest
 {
-    if (_demandArray.count!=0) {
-        [_demandArray removeAllObjects];
-        [_resultTableView reloadData];
-    }
+
     if (_searchTextField.text.length>0)
     {
         [SearchTool searchWithDemandSuccessBlock:^(NSArray *search) {
@@ -378,10 +370,10 @@
 }
 - (void)companyRequest
 {
-    if (_compangyArray.count!=0) {
-        [_compangyArray removeAllObjects];
-        [_resultTableView reloadData];
-    }
+//    if (_compangyArray.count!=0) {
+//        [_compangyArray removeAllObjects];
+//        [_resultTableView reloadData];
+//    }
     
     if (_currentKeyString.length > 0)
     {
@@ -605,6 +597,7 @@
                 SearchCompanyModel *searchResult = [_searchComanyArray objectAtIndex:indexPath.row-1];
                 _searchTextField.text = searchResult.searchKeyword;
                 _currentKeyString = searchResult.searchKeyword;
+                
             }
         }
         else if (currentSelectedBtnTag == 201)
@@ -627,6 +620,7 @@
         }
         
              [self searchToGo];
+
 
     }
     
@@ -777,6 +771,8 @@
                     history.hidden = NO;
                     SearchCompanyModel *resultModel =  [_searchComanyArray objectAtIndex:indexPath.row-1];
                     cell.textLabel.text = resultModel.searchKeyword;
+                    cell.textLabel.textColor = HexRGB(0x666666);
+
                 }
                 else{
                     history.hidden =YES;
@@ -788,6 +784,7 @@
                     history.hidden = NO;
                     SearchDenamdModel *resultModel =  [_searchDemandArray objectAtIndex:indexPath.row-1];
                     cell.textLabel.text = resultModel.searchKeyword;
+                    cell.textLabel.textColor = HexRGB(0x666666);
                 }
                 else{
                     history.hidden =YES;
@@ -799,6 +796,8 @@
                     history.hidden = NO;
                     SearchResultModel *resultModel =  [_searchSupplyArray objectAtIndex:indexPath.row-1];
                     cell.textLabel.text = resultModel.searchKeyword;
+                    cell.textLabel.textColor = HexRGB(0x666666);
+
                 }
                 else{
                     history.hidden =YES;
@@ -1141,6 +1140,7 @@
 
 -(void)searchBtn:(UIButton *)sear
 {
+
     [_demandArray removeAllObjects];
     [_supllyArray removeAllObjects];
     [_compangyArray removeAllObjects];
@@ -1229,13 +1229,32 @@
         
         
     }
-    //self.view = _resultBgView;
     
     [self bigBtnClick:sear];
 
     
     [self searchToGo];
+    
 }
+
+-(void)removerThreeArray{
+    if (_compangyArray.count!=0) {
+        [_compangyArray removeAllObjects];
+        [_resultTableView reloadData];
+    }
+    if (_supllyArray.count!=0) {
+        [_supllyArray removeAllObjects];
+        [_resultTableView reloadData];
+    }
+    if (_demandArray.count!=0) {
+        [_demandArray removeAllObjects];
+        [_resultTableView reloadData];
+    }
+    
+    
+}
+
+
 - (void)searchToGo
 {
     
@@ -1254,12 +1273,17 @@
         if (currentSelectedBtnTag == 202)
         {
             [self companyRequest];
+            [self removerThreeArray];
         }else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
+            [self removerThreeArray];
+
         }else
         {
             [self supplyRequest];
+            [self removerThreeArray];
+
         }
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

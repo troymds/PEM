@@ -23,11 +23,6 @@
     
     [super viewDidLoad];
     
-//    如果返回值为一个链接,则通过 webView 加载一下,同时需要点击 webView 中链接里跳回原生态 APP 里。
-//    跳转分别调用三种方法
-//    ebingoo.jumpToSupply(id)
-//    ebingoo.jumpToDemand(id)
-//    ebingoo.jumpToCompany(id)
     
     bannerWevView =[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     [self.view addSubview:bannerWevView];
@@ -35,21 +30,6 @@
     [bannerWevView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_bannerWebid]]];
     bannerWevView.userInteractionEnabled = YES;
     bannerWevView.delegate =self;
-    
-//     
-//    WebScriptObject *obj = (WebScriptObject *)JSArray;
-//    
-//    NSUInteger count = [[obj valueForKey:@"length"] integerValue];
-//    
-//    NSMutableArray *a = [NSMutableArray array];
-//    
-//    for (NSUInteger i = 0; i < count; i++) {
-//        
-//        NSString *item = [obj webScriptValueAtIndex:i];
-//        
-//        NSLog(@"item:%@", item);
-    
-
     
     [self addTapOnWebView];
 
@@ -86,20 +66,12 @@
 // //这个方法是网页中的每一个请求都会被触发的
 {
     NSString *urlString = [[request URL] absoluteString];
-    NSLog(@"iiiiii   %@",urlString);
-    NSArray *urlComps = [urlString
-                         componentsSeparatedByString:@"/ebingoo."];
-    NSLog(@"ddddd%@",urlComps);
-    NSLog(@"-------%d",urlComps.count);
+    NSArray *urlComps = [urlString componentsSeparatedByString:@"/ebingoo."];
     if([urlComps count]>1)
     {
-        //    ebingoo.jumpToSupply(id)
-        //    ebingoo.jumpToDemand(id)
-        //    ebingoo.jumpToCompany(id)
         NSString *str = [urlComps objectAtIndex:1];
         NSString *info_id = [[str componentsSeparatedByString:@"("] objectAtIndex:1];
         info_id = [[info_id componentsSeparatedByString:@")"] objectAtIndex:0];
-        NSLog(@"info_id:%@",info_id);
         NSArray *arr = [str componentsSeparatedByString:@"("];
         NSString *methordStr = [arr objectAtIndex:0];
         if ([methordStr isEqualToString:@"jumpToSupply"]) {
@@ -126,7 +98,6 @@
     
     NSString *imgURL = [NSString stringWithFormat:@"document.elementFromPoint(%f, %f).href", pt.x, pt.y];
     _dataStr = [bannerWevView stringByEvaluatingJavaScriptFromString:imgURL];
-    NSLog(@"image url=%@", _dataStr);
     
     if (_dataStr.length > 0)
     {

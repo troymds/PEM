@@ -75,7 +75,12 @@
         // {0, 20}, {320, 460}
         // 2.拉长导航控制器的view
         CGRect frame = navigationController.view.frame;
-        frame.size.height = [UIScreen mainScreen].applicationFrame.size.height+20;
+        if (IsIos7) {
+            frame.size.height = [UIScreen mainScreen].applicationFrame.size.height+20;
+        }else{
+            frame.size.height = [UIScreen mainScreen].applicationFrame.size.height;
+        }
+
         navigationController.view.frame = frame;
         
         // 3.添加Dock到根控制器的view上面
@@ -123,8 +128,12 @@
     if (viewController == root) {
         // 1.让导航控制器view的高度还原
         CGRect frame = navigationController.view.frame;
+        if (IsIos7) {
+            frame.size.height = [UIScreen mainScreen].applicationFrame.size.height+20 - _dock.frame.size.height;
+        }else{
+            frame.size.height = [UIScreen mainScreen].applicationFrame.size.height - _dock.frame.size.height;
+        }
         
-        frame.size.height = [UIScreen mainScreen].applicationFrame.size.height+20 - _dock.frame.size.height;
         navigationController.view.frame = frame;
         
         // 2.添加Dock到mainView上面

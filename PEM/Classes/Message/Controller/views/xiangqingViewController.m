@@ -76,15 +76,9 @@
 {
     
     webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
-    _gyWebView.frame = CGRectMake(0, 325, kWidth, webheight+10);
-    
-    if (webheight<450) {
-        _backScrollView.contentSize = CGSizeMake(kWidth,kHeight+200);
-        
-    }else {
-        _backScrollView.contentSize = CGSizeMake(kWidth,webheight+500);
-        
-    }
+    _gyWebView.frame = CGRectMake(0, 320, kWidth, webheight+100);
+   
+    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+500);
     
     
     
@@ -194,10 +188,10 @@
     CGFloat nameWeight;
     if ([[SystemConfig sharedInstance].company_id isEqualToString:xqModel.company_id]) {
         
-        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(300, 60)].height;
+        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:22] constrainedToSize:CGSizeMake(300, 60)].height;
         
     }else{
-        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(125, 60)].height;
+        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:22] constrainedToSize:CGSizeMake(125, 60)].height;
         
     }
 
@@ -260,7 +254,7 @@
     nameLable.text = xqModel.titleGetInfo;
     nameLable.backgroundColor =[UIColor clearColor];
     nameLable.numberOfLines = 3;
-    nameLable.font =[UIFont systemFontOfSize:15];
+    nameLable.font =[UIFont systemFontOfSize:22];
 
     [_backScrollView addSubview:nameLable];
     nameLable.textColor =HexRGB(0x3a3a3a);
@@ -313,12 +307,14 @@
     
     UILabel *xinagq =[[UILabel alloc]init];
     xinagq.text =@"【产品详情】";
+    xinagq.textColor =HexRGB(0x69dd4);
     xinagq.frame =CGRectMake(5,245+nameWeight, 200, 20);
     [_backScrollView addSubview:xinagq];
     xinagq.font =[UIFont systemFontOfSize:PxFont(24)];
     
-    _gyWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 280+nameWeight, kWidth, 400)];
+    _gyWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 250+nameWeight, kWidth, kHeight-250-nameWeight-64)];
     [_gyWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:xqModel.description]]];
+    _gyWebView.backgroundColor =[UIColor redColor];
     _gyWebView.userInteractionEnabled = NO;
     _gyWebView.delegate =self;
     

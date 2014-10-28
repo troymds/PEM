@@ -175,8 +175,8 @@
     xinagq.frame =CGRectMake(5,titleHeight+60, 200, 20);
     [_backScrollView addSubview:xinagq];
     xinagq.font =[UIFont systemFontOfSize:15];
-    xinagq.textColor =RGBNAVbackGroundColor;
-    
+    xinagq.textColor =HexRGB(0x69dd4);;
+
     UILabel *xinagLabel =[[UILabel alloc]init];
     xinagLabel.text =xqModel.description;
     xinagLabel.numberOfLines =0;
