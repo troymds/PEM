@@ -440,8 +440,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0402126C19F9E819007B1600 /* action_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action_btn@2x.png"; sourceTree = "<group>"; };
-		0402126D19F9E819007B1600 /* left_item@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left_item@2x.png"; sourceTree = "<group>"; };
+		0402126C19F9E819007B1600 /* action_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "action_btn@2x.png"; path = "images/action_btn@2x.png"; sourceTree = "<group>"; };
+		0402126D19F9E819007B1600 /* left_item@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_item@2x.png"; path = "images/left_item@2x.png"; sourceTree = "<group>"; };
 		0402127519FA56A9007B1600 /* vip_1_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip_1_info@2x.png"; sourceTree = "<group>"; };
 		0402127619FA56A9007B1600 /* vip_2_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip_2_info@2x.png"; sourceTree = "<group>"; };
 		0402127819FA56A9007B1600 /* vip_4_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip_4_info@2x.png"; sourceTree = "<group>"; };
@@ -1336,6 +1336,8 @@
 		04AA6F3519C84EF4002A5009 /* SquareImages */ = {
 			isa = PBXGroup;
 			children = (
+				0402126C19F9E819007B1600 /* action_btn@2x.png */,
+				0402126D19F9E819007B1600 /* left_item@2x.png */,
 				0402127519FA56A9007B1600 /* vip_1_info@2x.png */,
 				0402127619FA56A9007B1600 /* vip_2_info@2x.png */,
 				04AA21C419FF5FAE00A18DC6 /* vip_3_info@2x.png */,
@@ -2278,8 +2280,6 @@
 				04A3BC5C19C05C1C00B2217B /* home_login_pre@2x.png */,
 				04A3BC5A19C05C0C00B2217B /* home_display_btn@2x.png */,
 				04A3BC5819C05C0500B2217B /* nav_setting@2x.png */,
-				0402126C19F9E819007B1600 /* action_btn@2x.png */,
-				0402126D19F9E819007B1600 /* left_item@2x.png */,
 			);
 			path = images;
 			sourceTree = "<group>";
