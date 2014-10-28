@@ -36,6 +36,10 @@
 		04A3BC8D19C05C8D00B2217B /* login_ok_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A3BC8919C05C8D00B2217B /* login_ok_pre@2x.png */; };
 		04A93AA319B70D17007542A7 /* home_Jump_blue_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A93A9F19B70D17007542A7 /* home_Jump_blue_btn.png */; };
 		04A93AA419B70D17007542A7 /* home_Jump_blue_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04A93AA019B70D17007542A7 /* home_Jump_blue_btn@2x.png */; };
+		04AA21B719FF2BF700A18DC6 /* NewRegisterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AA21B619FF2BF700A18DC6 /* NewRegisterController.m */; };
+		04AA21BD19FF328400A18DC6 /* NewLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AA21BC19FF328400A18DC6 /* NewLoginController.m */; };
+		04AA21C019FF415A00A18DC6 /* NewYZMController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AA21BF19FF415A00A18DC6 /* NewYZMController.m */; };
+		04AA21C319FF41EF00A18DC6 /* NewCompanySeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AA21C219FF41EF00A18DC6 /* NewCompanySeController.m */; };
 		04AA6F3419C84E30002A5009 /* Provineces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04AA6F3319C84E30002A5009 /* Provineces.plist */; };
 		04AA702519C8506E002A5009 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AA702319C8506E002A5009 /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		04AADCEA19EB723900801D2B /* VipInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AADCE919EB723900801D2B /* VipInfoItem.m */; };
@@ -469,6 +473,14 @@
 		04A3BC8919C05C8D00B2217B /* login_ok_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_ok_pre@2x.png"; sourceTree = "<group>"; };
 		04A93A9F19B70D17007542A7 /* home_Jump_blue_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_Jump_blue_btn.png; sourceTree = "<group>"; };
 		04A93AA019B70D17007542A7 /* home_Jump_blue_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home_Jump_blue_btn@2x.png"; sourceTree = "<group>"; };
+		04AA21B519FF2BF700A18DC6 /* NewRegisterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewRegisterController.h; sourceTree = "<group>"; };
+		04AA21B619FF2BF700A18DC6 /* NewRegisterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewRegisterController.m; sourceTree = "<group>"; };
+		04AA21BB19FF328400A18DC6 /* NewLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewLoginController.h; sourceTree = "<group>"; };
+		04AA21BC19FF328400A18DC6 /* NewLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewLoginController.m; sourceTree = "<group>"; };
+		04AA21BE19FF415A00A18DC6 /* NewYZMController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewYZMController.h; sourceTree = "<group>"; };
+		04AA21BF19FF415A00A18DC6 /* NewYZMController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewYZMController.m; sourceTree = "<group>"; };
+		04AA21C119FF41EF00A18DC6 /* NewCompanySeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCompanySeController.h; sourceTree = "<group>"; };
+		04AA21C219FF41EF00A18DC6 /* NewCompanySeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCompanySeController.m; sourceTree = "<group>"; };
 		04AA6F3319C84E30002A5009 /* Provineces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Provineces.plist; sourceTree = "<group>"; };
 		04AA702219C8506E002A5009 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
 		04AA702319C8506E002A5009 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
@@ -1864,6 +1876,14 @@
 			children = (
 				55B5D350199AED8D002A9750 /* NewfeatureController.h */,
 				55B5D351199AED8D002A9750 /* NewfeatureController.m */,
+				04AA21B519FF2BF700A18DC6 /* NewRegisterController.h */,
+				04AA21B619FF2BF700A18DC6 /* NewRegisterController.m */,
+				04AA21BE19FF415A00A18DC6 /* NewYZMController.h */,
+				04AA21BF19FF415A00A18DC6 /* NewYZMController.m */,
+				04AA21BB19FF328400A18DC6 /* NewLoginController.h */,
+				04AA21BC19FF328400A18DC6 /* NewLoginController.m */,
+				04AA21C119FF41EF00A18DC6 /* NewCompanySeController.h */,
+				04AA21C219FF41EF00A18DC6 /* NewCompanySeController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2745,6 +2765,8 @@
 				045C5BA219F8051000EC34F5 /* UIScrollView+UITouch.m in Sources */,
 				55C10D6919CC1EC7002498DD /* comPanyNEWTool.m in Sources */,
 				555422A119C6BD9500C9DF9E /* conditionTool.m in Sources */,
+				04AA21C019FF415A00A18DC6 /* NewYZMController.m in Sources */,
+				04AA21BD19FF328400A18DC6 /* NewLoginController.m in Sources */,
 				55B5104719F73930009F9008 /* UIImageView+AFNetworking.m in Sources */,
 				55B5D25E199AEB19002A9750 /* proAppDelegate.m in Sources */,
 				04AF268E19E8B13D001B29CB /* SetAreaView.m in Sources */,
@@ -2833,12 +2855,14 @@
 				55E1AFB519A6E1D60095F9C2 /* MoreController.m in Sources */,
 				04AF26E319E8B17C001B29CB /* TDImageController.m in Sources */,
 				04AF261719E8B0F9001B29CB /* MyFavoriteItem.m in Sources */,
+				04AA21C319FF41EF00A18DC6 /* NewCompanySeController.m in Sources */,
 				55B7821519F4F17800EC9508 /* DimensionalCodeViewController.m in Sources */,
 				04AF26CD19E8B15E001B29CB /* MyActionSheetView.m in Sources */,
 				55D8974519AC62DA001EAF9F /* MJRefreshBaseView.m in Sources */,
 				04AF269619E8B13D001B29CB /* InfoCellView.m in Sources */,
 				554E1F8919D0FA7A0024879C /* SearchModel.m in Sources */,
 				5591C5E819FDEAA700F82380 /* CompanyXQViewController.m in Sources */,
+				04AA21B719FF2BF700A18DC6 /* NewRegisterController.m in Sources */,
 				04AF26AD19E8B150001B29CB /* AccountItem.m in Sources */,
 				04AF268A19E8B13D001B29CB /* Square.m in Sources */,
 				55CFB98419C16FB200FF14F8 /* findSupplyCel.m in Sources */,

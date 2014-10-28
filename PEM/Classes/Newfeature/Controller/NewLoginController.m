@@ -1,55 +1,55 @@
 //
-//  LoginController.m
+//  NewLoginController.m
 //  PEM
 //
-//  Created by tianj on 14-8-26.
+//  Created by tianj on 14-10-28.
 //  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
 //
 
-#import "LoginController.h"
+#import "NewLoginController.h"
 #import "HttpTool.h"
 #import "SystemConfig.h"
-#import "CompanySetController.h"
 #import "PrivilegeController.h"
 #import "RemindView.h"
-#import "RegisterContrller.h"
+#import "NewRegisterController.h"
 #import "FindSecretController.h"
 #import "CompanyInfoItem.h"
 #import "VipInfoItem.h"
+#import "UIBarButtonItem+MJ.h"
+#import "MainController.h"
 
 
 #define LOGIN_TYPE 3000
 #define FIND_TYPE 3001
 #define REGISTER_TYPE 3002
 
-@interface LoginController ()
+
+@interface NewLoginController ()
 
 @end
 
-@implementation LoginController
+@implementation NewLoginController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
     [super viewDidLoad];
     if (IsIos7) {
         self.edgesForExtendedLayout =  UIRectEdgeNone;
     }
     self.title = @"登 录";
     self.view.backgroundColor = HexRGB(0xffffff);
-    [self addView];
     
-    // Do any additional setup after loading the view.
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithIcon:@"nav_return.png" highlightedIcon:@"nav_return_pre.png" target:self action:@selector(backItem)];
+
+    [self addView];
+
 }
 
+- (void)backItem
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 - (void)addView
 {
     
@@ -86,7 +86,7 @@
     UIImageView *passwordView = [[UIImageView alloc] initWithFrame:CGRectMake(13, 53.5,17, 22)];
     passwordView.image = [UIImage imageNamed:@"regsiter_Password_btn.png"];
     [bgView addSubview:passwordView];
-
+    
     
     _secretField = [[UITextField alloc] initWithFrame:CGRectMake(40, 43, kWidth-25*2-40, 43)];
     _secretField.placeholder = @"请输入密码";
@@ -112,7 +112,7 @@
     [_loginBtn setTitle:@"登  录" forState:UIControlStateNormal];
     [_loginBtn setTitleColor:HexRGB(0xffffff) forState:UIControlStateNormal];
     _loginBtn.titleLabel.font = [UIFont systemFontOfSize:PxFont(30)];
-
+    
     [self.view addSubview:_loginBtn];
     
     UIButton *findBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -207,13 +207,13 @@
                 [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                 NSLog(@"%@",error);
             }];
-
+            
         }
     }else if(btn.tag == FIND_TYPE){
         FindSecretController *findVC = [[FindSecretController alloc] init];
         [self.navigationController pushViewController:findVC animated:YES];
     }else{
-        RegisterContrller *rc = [[RegisterContrller alloc] init];
+        NewRegisterController *rc = [[NewRegisterController alloc] init];
         [self.navigationController pushViewController:rc animated:YES];
     }
 }
@@ -235,9 +235,11 @@
                     NSDictionary *data = [dic objectForKey:@"data"];
                     VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].vipInfo = vipInfo;
-                    [self.navigationController popViewControllerAnimated:YES];
+                    [UIApplication sharedApplication].statusBarHidden =NO;
+                    self.view.window.rootViewController =[[MainController alloc]init];
                 }else{
-                    [self.navigationController popViewControllerAnimated:YES];
+                    [UIApplication sharedApplication].statusBarHidden =NO;
+                    self.view.window.rootViewController =[[MainController alloc]init];
                 }
             }
         }
@@ -245,7 +247,7 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
-
+    
 }
 
 - (BOOL)checkOut{
@@ -255,7 +257,7 @@
     }
     if (_secretField.text.length==0){
         [RemindView showViewWithTitle:@"请输入密码" location:BELLOW];
-
+        
         return NO;
     }
     return YES;
@@ -266,8 +268,8 @@
     [viewController.navigationController popToViewController:self animated:YES];
 }
 
-- (void)didReceiveMemoryWarning
-{
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -276,8 +278,7 @@
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }

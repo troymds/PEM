@@ -1,45 +1,36 @@
 //
-//  YZMController.m
+//  NewYZMController.m
 //  PEM
 //
-//  Created by tianj on 14-9-1.
+//  Created by tianj on 14-10-28.
 //  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
 //
 
-#import "YZMController.h"
+#import "NewYZMController.h"
 #import "HttpTool.h"
+#import "UIBarButtonItem+MJ.h"
 #import "SystemConfig.h"
-#import "CompanySetController.h"
+#import "NewCompanySeController.h"
 #import "RemindView.h"
-#import "LoginController.h"
+#import "NewLoginController.h"
 
-
-@interface YZMController ()
+@interface NewYZMController ()
 
 @end
 
-@implementation YZMController
+@implementation NewYZMController
 
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
     [super viewDidLoad];
     if (IsIos7) {
         self.edgesForExtendedLayout =  UIRectEdgeNone;
     }
-
+    
     self.title = @"免费注册";
     self.view.backgroundColor = HexRGB(0xffffff);
-
+    
     // Do any additional setup after loading the view.
     // 创建按钮
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -55,29 +46,35 @@
     [btn addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
     self.navigationItem.rightBarButtonItem = item;
+    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithIcon:@"nav_return.png" highlightedIcon:@"nav_return_pre.png" target:self action:@selector(backItem)];
 
+    
     [self getYZM];
     [self addView];
-    
+
 }
 
+- (void)backItem
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (void)login{
     NSArray *array = self.navigationController.viewControllers;
     int count = 0;
     for (UIViewController *controller in array) {
-        if ([controller isKindOfClass:[LoginController class]]) {
+        if ([controller isKindOfClass:[NewLoginController class]]) {
             [self.navigationController popToViewController:controller  animated:YES];
             break;
         }
         count++;
     }
     if (count == array.count) {
-        LoginController *lg = [[LoginController alloc] init];
+        NewLoginController *lg = [[NewLoginController alloc] init];
         NSMutableArray *arr = [NSMutableArray arrayWithArray:array];
         [arr insertObject:lg atIndex:array.count-2];
         self.navigationController.viewControllers = arr;
         for (UIViewController *viewController in self.navigationController.viewControllers) {
-            if ([viewController isKindOfClass:[LoginController class]]) {
+            if ([viewController isKindOfClass:[NewLoginController class]]) {
                 [self.navigationController popToViewController:viewController animated:YES];
             }
         }
@@ -199,7 +196,6 @@
             }
         }
     }
-
 }
 
 
@@ -228,7 +224,7 @@
                     int code = [[dic objectForKey:@"code"] intValue];
                     if (code == 100){
                         [SystemConfig sharedInstance].company_id = [dic objectForKey:@"company_id"];
-                        CompanySetController *csc = [[CompanySetController alloc] init];
+                        NewCompanySeController *csc = [[NewCompanySeController alloc] init];
                         [self.navigationController pushViewController:csc animated:YES];
                     }else if(code ==103){
                         [RemindView showViewWithTitle:@"该号码已被注册过" location:MIDDLE];
@@ -257,8 +253,8 @@
     return YES;
 }
 
-- (void)didReceiveMemoryWarning
-{
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -267,8 +263,7 @@
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }

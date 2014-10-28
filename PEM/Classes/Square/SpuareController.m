@@ -141,40 +141,10 @@
         PrivilegeController *pvc = [[PrivilegeController alloc] init];
         [self.navigationController pushViewController:pvc animated:YES];
     }else if(btn.tag == SHARE_TYPE){
-//         NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"ShareSDK"  ofType:@"jpg"];
         
-//        构造分享内容
-        
+         //构造分享内容
         [self share];
         
-//        id<ISSContent> publishContent = [ShareSDK content:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                           defaultContent:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                                    image:nil
-//                                                    title:@"Ebingoo"
-//                                                      url:@"www.ebingoo.com"
-//                                              description:@"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com"
-//                                                mediaType:SSPublishContentMediaTypeNews];
-//        
-//        [ShareSDK showShareActionSheet:nil
-//                             shareList:nil
-//                               content:publishContent
-//                         statusBarTips:YES
-//                           authOptions:nil
-//                          shareOptions: nil
-//                                result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-//                                    if (state == SSPublishContentStateSuccess)
-//                                    {
-//                                        
-//                                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功!" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-//                                        [alertView show];
-//                                    }
-//                                    else if (state == SSPublishContentStateFail)
-//                                    {
-//                                        UIAlertView *alertView  = [[UIAlertView alloc] initWithTitle:@"分享失败" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-//                                        [alertView show];
-//                                        NSLog(NSLocalizedString(@"TEXT_SHARE_FAI", @"发布失败!error code == %d, error code == %@"), [error errorCode], [error errorDescription]);
-//                                    }
-//                                }];
     }else{
         if (![SystemConfig sharedInstance].isUserLogin){
             LoginController *loginVC = [[LoginController alloc] init];
@@ -253,13 +223,8 @@
     NSString *contentString = @"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com";
     NSString *urlString     = @"www.ebingoo.com";
     NSString *description   = @"Ebingoo--指尖商机 用手指做生意.打造全新电商平台。网址：www.ebingoo.com";
-    id<ISSCAttachment> shareImage = nil;
-    UIImage *img = [UIImage imageNamed:@"http://pic.hxygchina.com:15001/35f131a1f4f94fd5b3e973deff452800_20x20.jpg"];//[activityObj.images firstObject];
+    
     SSPublishContentMediaType shareType = SSPublishContentMediaTypeText;
-    if (img) {
-        shareImage = [ShareSDK jpegImageWithImage:img quality:1.0];
-        shareType = SSPublishContentMediaTypeNews;
-    }
     
     publishContent = [ShareSDK content:contentString
                         defaultContent:@""
