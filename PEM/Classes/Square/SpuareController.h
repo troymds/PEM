@@ -19,6 +19,7 @@
     UIScrollView *_scrollView;
     HeaderView *_headView;
     Square *_squareView;
+    UIButton *rightBtn;
 }
 
 

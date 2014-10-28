@@ -23,6 +23,7 @@
 #import "UIImageView+WebCache.h"
 #import "HttpTool.h"
 #import "BaseNumItem.h"
+#import "EplatFormController.h"
 #import <ShareSDK/ShareSDK.h>
 
 @interface SpuareController ()
@@ -74,6 +75,11 @@
         }failure:^(NSError *error){
             NSLog(@"error:%@",error);
         }];
+        if ([SystemConfig sharedInstance].companyInfo.e_url.length!=0) {
+            rightBtn.hidden = NO;
+        }else{
+            rightBtn.hidden = YES;
+        }
     }else{
         _headView.headerImage.image = [UIImage imageNamed:@"company_default.png"];
         _headView.supplayLabel.text = @"0";
@@ -83,6 +89,7 @@
         _headView.nameLabel.hidden = YES;
         _headView.registerBtn.hidden = NO;
         _headView.markImg.image = nil;
+        rightBtn.hidden = YES;
     }
 }
 
@@ -112,6 +119,26 @@
     [self.view addSubview:_scrollView];
     [_scrollView setContentSize:CGSizeMake(kWidth, _headView.frame.size.height+_squareView.frame.size.height)];
     
+    
+    // 创建按钮
+    rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    // 设置普通背景图片
+    [rightBtn setTitle:@"E平台" forState:UIControlStateNormal];
+    [rightBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+    [rightBtn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
+    // 设置尺寸
+    rightBtn.frame = CGRectMake(10, 10,52, 24);
+    [rightBtn addTarget:self action:@selector(leftItemClick) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    self.navigationItem.rightBarButtonItem = item;
+}
+
+- (void)leftItemClick
+{
+    EplatFormController *plat = [[EplatFormController alloc] init];
+    plat.e_url = [SystemConfig sharedInstance].companyInfo.e_url;
+    [self.navigationController pushViewController:plat animated:YES];
 }
 
 //点击头像触发

@@ -154,6 +154,7 @@
 - (void)showView
 {
     [[[UIApplication sharedApplication] keyWindow] addSubview:self];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:self];
 }
 
 

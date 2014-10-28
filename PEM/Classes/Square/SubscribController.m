@@ -40,7 +40,7 @@
     // Do any additional setup after loading the view.
     
     
-    space = 20;
+    space = 10;
     bottomSpace = kHeight-64-105;
     currentRow = 0;
     x =20;
@@ -63,8 +63,13 @@
     remindLabel.textColor = HexRGB(0x3a3a3a);
     remindLabel.hidden = YES;
     [_scrollView addSubview:remindLabel];
-
-    
+    if ([[SystemConfig sharedInstance].viptype isEqualToString:@"4"]) {
+        _maxNum = LONG_MAX;
+    }else{
+        if ([SystemConfig sharedInstance].maxTagNum) {
+            _maxNum = [SystemConfig sharedInstance].maxTagNum;
+        }
+    }
     [self addNavBarButton];
     [self loadData];
     [self addView];
@@ -101,7 +106,10 @@
                     NSDictionary *data = [dic objectForKey:@"data"];
                     VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].vipInfo = vipInfo;
+                    
                     _maxNum = [vipInfo.tag_num intValue]+[_dataArray count];
+                    NSLog(@"----%d",_maxNum);
+                    [SystemConfig sharedInstance].maxTagNum = _maxNum;
                 }
             }
         }
@@ -187,21 +195,19 @@
                 //当data为空时  表示当前用户没订阅过标签 其剩余标签数即用户当前所能订阅的最大标签数
                 if ([[dic objectForKey:@"data"] isKindOfClass:[NSNull class]]) {
                     remindLabel.hidden = NO;
-                    //如果已经获取到vip信息
-                    if ([SystemConfig sharedInstance].vipInfo) {
-                        _maxNum = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
-                    }else{
-                        [self getVipInfo];
+                    if (![[SystemConfig sharedInstance].viptype isEqualToString:@"4"]) {
+                        if (![SystemConfig sharedInstance].maxTagNum) {
+                            if ([SystemConfig sharedInstance].vipInfo) {
+                                _maxNum = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
+                                [SystemConfig sharedInstance].maxTagNum = _maxNum;
+                            }else{
+                                [self getVipInfo];
+                            }
+                        }
                     }
                 }else{
                     //当data不为空时,及用户订阅过标签 用户已经订阅的标签数加上剩余的标签数 就是当前用户所能订阅的最大标签数
                     NSArray *dataArr = [dic objectForKey:@"data"];
-                    if ([SystemConfig sharedInstance].vipInfo) {
-                        int num = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
-                        _maxNum = [dataArr count] + num;
-                    }else{
-                        [self getVipInfo];
-                    }
                     NSMutableArray *arr = [NSMutableArray array];
                     for (NSDictionary *dic in dataArr){
                         TagItem *item = [[TagItem alloc] initWithDictionary:dic];
@@ -212,6 +218,16 @@
                         }
                         [self addBtnWithTitle:item.name withId:item.uid withMessage:([item.no_read intValue] !=0) messgaeNum:no_read];
                         [_dataArray addObject:item];
+                    }
+                    if (![[SystemConfig sharedInstance].viptype isEqualToString:@"4"]) {
+                        if (![SystemConfig sharedInstance].maxTagNum) {
+                            if ([SystemConfig sharedInstance].vipInfo) {
+                                _maxNum = [[SystemConfig sharedInstance].vipInfo.tag_num intValue]+[_dataArray count];
+                                [SystemConfig sharedInstance].maxTagNum = _maxNum;
+                            }else{
+                                [self getVipInfo];
+                            }
+                        }
                     }
                 }
             }
@@ -393,7 +409,7 @@
                     addField.text = @"";
                 }
             }else{
-                MyActionSheetView *sheetView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签",_maxNum] delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                MyActionSheetView *sheetView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签,升级后可订阅更多标签",_maxNum] delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
                 [sheetView showView];
             }
         }

@@ -171,6 +171,7 @@
                     [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
                         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                        NSLog(@"%@",result);
                         if ([result objectForKey:@"response"]) {
                             NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
                             if ([code intValue] ==100) {

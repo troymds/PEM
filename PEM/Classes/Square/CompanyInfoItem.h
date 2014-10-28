@@ -23,6 +23,7 @@
 @property (nonatomic,copy) NSString *province_name;
 @property (nonatomic,copy) NSString *viptype;
 @property (nonatomic,copy) NSString *website;
+@property (nonatomic,copy) NSString *e_url;
 
 
 - (id)initWithDictionary:(NSDictionary *)dic;
