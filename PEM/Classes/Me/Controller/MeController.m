@@ -73,6 +73,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 }
 
+#pragma mark add view
 - (void)addView
 {
     bgScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,40, kWidth, kHeight-64-40-44)];
@@ -107,6 +108,36 @@
     [_supplyScrollView setContentSize:CGSizeMake(kWidth, 565)];
     [_supplyScrollView addSubview:_supplyView];
 }
+
+//添加发布求购、发布供应按钮
+- (void)addBtn{
+    CGFloat width = self.view.frame.size.width/2;
+    NSArray *arr = [NSArray arrayWithObjects:@"发布求购",@"发布供应",nil];
+    for (int i = 0; i<2; i++) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn setTitle:[arr objectAtIndex:i] forState:UIControlStateNormal];
+        if (i == 0) {
+            btn.selected = YES;
+        }
+        btn.tag = 2000+i;
+        [btn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
+        [btn setTitleColor:HexRGB(0x18b0e7) forState:UIControlStateSelected];
+        btn.titleLabel.font = [UIFont systemFontOfSize:14];
+        btn.backgroundColor = [UIColor clearColor];
+        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        btn.frame = CGRectMake(width*i, 0, width, 40);
+        [self.view addSubview:btn];
+    }
+    
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 39, kWidth, 1)];
+    lineView.backgroundColor = HexRGB(0x808080);
+    [self.view addSubview:lineView];
+    
+    sliderLine = [[UIView alloc] initWithFrame:CGRectMake(0,38, kWidth/2, 2)];
+    sliderLine.backgroundColor = HexRGB(0x18b0e7);
+    [self.view addSubview:sliderLine];
+}
+
 
 
 #pragma mark  scrollview_delegate
@@ -171,7 +202,6 @@
                     [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
                         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                        NSLog(@"%@",result);
                         if ([result objectForKey:@"response"]) {
                             NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
                             if ([code intValue] ==100) {
@@ -292,35 +322,6 @@
     }
 }
 
-//添加发布求购、发布供应按钮
-- (void)addBtn{
-    CGFloat width = self.view.frame.size.width/2;
-    NSArray *arr = [NSArray arrayWithObjects:@"发布求购",@"发布供应",nil];
-    for (int i = 0; i<2; i++) {
-        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [btn setTitle:[arr objectAtIndex:i] forState:UIControlStateNormal];
-        if (i == 0) {
-            btn.selected = YES;
-        }
-        btn.tag = 2000+i;
-        [btn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
-        [btn setTitleColor:HexRGB(0x18b0e7) forState:UIControlStateSelected];
-        btn.titleLabel.font = [UIFont systemFontOfSize:14];
-        btn.backgroundColor = [UIColor clearColor];
-        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-        btn.frame = CGRectMake(width*i, 0, width, 40);
-        [self.view addSubview:btn];
-    }
-    
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 39, kWidth, 1)];
-    lineView.backgroundColor = HexRGB(0x808080);
-    [self.view addSubview:lineView];
-    
-    sliderLine = [[UIView alloc] initWithFrame:CGRectMake(0,38, kWidth/2, 2)];
-    sliderLine.backgroundColor = HexRGB(0x18b0e7);
-    [self.view addSubview:sliderLine];
-}
-
 
 //发布求购、发布供应按钮点击触发
 - (void)btnClick:(UIButton *)btn{
@@ -406,76 +407,17 @@
         case 3001:
         {
             //发布求购信息
-            //判断上传数据是否完整
             if ([self checkPurchaseData]){
-                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.dimBackground = NO;
-                hud.labelText = @"发布中...";
-                NSString *tags;
-                if (_purchaseView.markLabel.text) {
-                    tags = _purchaseView.markLabel.text;
-                }else{
-                    tags = @"";
-                }
-                NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",demandCateItem.uid,@"category_id",_purchaseView.titleTextField.text,@"title",demandDes,@"description",_purchaseView.phoneNumTextField.text,@"contacts_phone",_purchaseView.linkManTextField.text,@"contacts",tags,@"tags",@"1",@"type",_purchaseView.unitField.text,@"unit",_purchaseView.purchaseNumField.text,@"buy_num",nil];
-                [HttpTool postWithPath:@"saveInfo" params:param  success:^(id JSON){
-                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                    NSDictionary *dic = [result objectForKey:@"response"];
-                    if (dic) {
-                        if ([[dic objectForKey:@"code"] intValue] == 100){
-                            [activeField resignFirstResponder];
-                            MyPurchaseController *pc = [[MyPurchaseController alloc] init];
-                            [self.navigationController pushViewController:pc animated:YES];
-                            [self clearPurchaseData];
-                        }else{
-                            [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
-                        }
-                    }
-                } failure:^(NSError *error) {
-                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-                }];
+                [self updateDemandData];
             }
         }
             break;
         case 3002:
         {
-            //发布供应信息
+            //检验所填信息是否完整
             if ([self checkSuppayData]){
-                int vipType = [[SystemConfig sharedInstance].viptype intValue];
-                //当会员类型小于等于0时  检查是否能发布供应信息
-                if (vipType <= 0 ) {
-                    //判断是否可以发布供应信息
-                    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
-                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                    hud.dimBackground = NO;
-                    [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
-                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                        if ([result objectForKey:@"response"]) {
-                            NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
-                            if ([code intValue] ==100) {
-                                int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
-                                if (data == 0) {
-                                    //不能发布信息
-                                    NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
-                                    MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                                    [actionView showView];
-                                }else{
-                                    [self publishSupplyInfo];
-                                }
-                            }else{
-                                [RemindView showViewWithTitle:@"操作失败" location:MIDDLE];
-                            }
-                        }
-                    } failure:^(NSError *error) {
-                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-                    }];
-                }else{
-                    [self publishSupplyInfo];
-                }
+                //检查是否能够发布供应信息
+                [self canPublishSupply];
             }
         }
             break;
@@ -590,9 +532,78 @@
     }
 }
 
+//上传求购信息
+- (void)updateDemandData{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.dimBackground = NO;
+    hud.labelText = @"发布中...";
+    NSString *tags;
+    if (_purchaseView.markLabel.text) {
+        tags = _purchaseView.markLabel.text;
+    }else{
+        tags = @"";
+    }
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",demandCateItem.uid,@"category_id",_purchaseView.titleTextField.text,@"title",demandDes,@"description",_purchaseView.phoneNumTextField.text,@"contacts_phone",_purchaseView.linkManTextField.text,@"contacts",tags,@"tags",@"1",@"type",_purchaseView.unitField.text,@"unit",_purchaseView.purchaseNumField.text,@"buy_num",nil];
+    [HttpTool postWithPath:@"saveInfo" params:param  success:^(id JSON){
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if (dic) {
+            if ([[dic objectForKey:@"code"] intValue] == 100){
+                [activeField resignFirstResponder];
+                MyPurchaseController *pc = [[MyPurchaseController alloc] init];
+                [self.navigationController pushViewController:pc animated:YES];
+                [self clearPurchaseData];
+            }else{
+                [RemindView showViewWithTitle:@"发布失败" location:MIDDLE];
+            }
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
+}
+
+//判断能否发布供应信息
+- (void)canPublishSupply
+{
+    int vipType = [[SystemConfig sharedInstance].viptype intValue];
+    //当会员类型 >0时 表示一定可以发布供应信息 否则检查是否能够发布
+    if (vipType <= 0 ) {
+        //判断是否可以发布供应信息
+        NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.dimBackground = NO;
+        [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+            if ([result objectForKey:@"response"]) {
+                NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
+                if ([code intValue] ==100) {
+                    int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
+                    if (data == 0) {
+                        //不能发布信息
+                        NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
+                        MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                        [actionView showView];
+                    }else{
+                        [self updateSupplyData];
+                    }
+                }else{
+                    [RemindView showViewWithTitle:@"操作失败" location:MIDDLE];
+                }
+            }
+        } failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+    }else{
+        [self updateSupplyData];
+    }
+}
 
 //发布供应信息
-- (void)publishSupplyInfo
+- (void)updateSupplyData
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.dimBackground = NO;
@@ -793,10 +804,11 @@
 //    isEditing = NO;
 //
 //}
-
+#pragma mark keyboard_NSNotification
 - (void)keyboardWillShow
 {
     isEditing = YES;
+    
 }
 
 
@@ -814,6 +826,7 @@
     }
 }
 
+#pragma mark check data
 //发布求购成功后，清空页面数据
 - (void)clearPurchaseData
 {
