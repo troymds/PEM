@@ -103,9 +103,6 @@
         if (self.callBlock != nil) {
             self.callBlock(-([self.callStartTime timeIntervalSinceNow]) - kCallSetupTime);
         }
-        if (self.backBlock !=nil) {
-            self.backBlock();
-        }
         // reset the start timer
         self.callStartTime = nil;
         
@@ -113,6 +110,9 @@
         
         // user didn't start the call
         self.cancelBlock();
+    }
+    if (self.backBlock !=nil) {
+        self.backBlock();
     }
 }
 

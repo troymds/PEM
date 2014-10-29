@@ -86,7 +86,8 @@
         [bgView addSubview:_cancelButton];
         
         self.delegate = delegate;
-        
+        window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        window.windowLevel = UIWindowLevelStatusBar;
         
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:0.1];
@@ -153,8 +154,8 @@
 
 - (void)showView
 {
-    [[[UIApplication sharedApplication] keyWindow] addSubview:self];
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:self];
+    [window addSubview:self];
+    [window makeKeyAndVisible];
 }
 
 

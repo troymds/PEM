@@ -133,11 +133,9 @@
         
         _phoneNumView = [[CellView alloc] initWithFrame:CGRectMake(0, 105, width, 35)];
         _phoneNumView.nameLabel.text = @"电     话";
-        _phoneNumView.lineView.frame = CGRectMake(70,(_phoneNumView.frame.size.height-20)/2, 1, 20);
-        _phoneNumView.nameLabel.frame =CGRectMake(5,0,65,35);
-
         _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _phoneNumView.frame.size.width-75, 35)];
         _phoneNumTextField.tag = PC_PHONENUM_TYPE;
+        _phoneNumTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         _phoneNumTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _phoneNumTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _phoneNumTextField.placeholder = @"请输入正确的手机号码";

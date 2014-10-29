@@ -25,6 +25,7 @@
     UIButton *_otherButton;
     UIView *bgView;
     UIView *view;
+    UIWindow *window;
 }
 
 @property (nonatomic,weak) id <MyActionSheetViewDelegate> delegate;
