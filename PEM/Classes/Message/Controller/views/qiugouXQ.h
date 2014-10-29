@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface qiugouXQ : UIViewController{
+@interface qiugouXQ : UIViewController<UIWebViewDelegate>{
     UIWebView* demandWebView ;
     UIView *_phoneViewName;
     UIView *nameView;
-    
+    UIScrollView *_backScrollView;
+    float demandWebheight;
 }
 @property(nonatomic ,weak)NSString *demandIndex;
 @property(nonatomic ,strong)NSMutableArray *demandArray;

@@ -13,6 +13,6 @@ typedef void (^StatusFailureBlock)(NSError *error);
 @interface XQgetInfoTool : NSObject
 
 + (void)statusesWithSuccess:(StatusSuccessBlock)success failure:(StatusFailureBlock)failure infoID:(NSString *)infoid;
-+ (void)statusesWithSuccessNew:(StatusSuccessBlock)success newFailure:(StatusFailureBlock)failure NewCompanyid:(NSString *)companyid;
++ (void)statusesWithSuccessNew:(StatusSuccessBlock)success newFailure:(StatusFailureBlock)failure NewCompanyid:(NSString *)companyid loginId:(NSString *)loginid ;
 
 @end

@@ -10,7 +10,6 @@
 #import "ReloadDataDelegate.h"
 #import "LoginView.h"
 
-
 @interface xiangqingViewController : UIViewController<UIWebViewDelegate,LoginViewDelegate>
 {
     float webheight;

@@ -26,9 +26,12 @@
 #import "comContent.h"
 #import "qiugouXQ.h"
 #import "xiangqingViewController.h"
-
+#import "SystemConfig.h"
+#import "PrivilegeController.h"
 #import "RemindView.h"
 #import "EbingooView.h"
+#import "LoginView.h"
+#import "HttpTool.h"
 #define KHEIGHT_COMPANY  12
 
 @interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
@@ -91,6 +94,7 @@
     [self addChooseBtn];
     
     [self addRefreshViews];
+    
 }
 
 
@@ -155,7 +159,7 @@
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         } newFailure:^(NSError *error) {
             
-        } NewCompanyid:companyID];
+        } NewCompanyid:companyID loginId:[SystemConfig sharedInstance].company_id];
         
     }
 }
@@ -517,27 +521,6 @@
             _companyHomeScrollView.contentSize = CGSizeMake(kWidth,74+KHEIGHT_COMPANY*12+66+keyContent+content+comArr.count*30+180);
             
         }
-//        线条
-        for (int li=0; li<4; li++) {
-            UIImageView *linView =[[UIImageView alloc]init];
-            [_companyHomeScrollView addSubview:linView];
-            linView.image =[UIImage imageNamed:@"bg_homeCodition.png"];
-            
-                if (li==0) {
-                    linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY, kWidth, 10);
-                    
-                }
-                if (li==1) {
-                    linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY*5+40, kWidth, 10);
-                }if (li==2) {
-                    linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY*9+50+keyContent, kWidth, 10);;
-                }
-            if (li==3) {
-                linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY*12+66+keyContent+content, kWidth, 10);;
-            }
-            
-            
-        }
         
         
         UIImageView*  _companyImage = [[UIImageView alloc] initWithFrame:CGRectMake(15, 6, 105, 74)];
@@ -578,6 +561,9 @@
             _companyImgVip.frame =CGRectMake(nameCompanww-180,17, 18, 25);
         }
         
+        if ([comHomeModel.viptype isKindOfClass:[NSNull class]]) {
+            
+        }else{
         
         switch ([comHomeModel.viptype intValue]) {
             case -1:
@@ -618,7 +604,7 @@
                 break;
         }
 
-        
+        }
         [_nameCompany addSubview:_companyImgVip];
         
 //        企业详情E平台
@@ -634,6 +620,29 @@
         }
         
         
+        //        线条
+        for (int li=0; li<4; li++) {
+            UIImageView *linView =[[UIImageView alloc]init];
+            [_companyHomeScrollView addSubview:linView];
+            linView.image =[UIImage imageNamed:@"bg_homeCodition.png"];
+            
+            if (li==0) {
+                linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY, kWidth, 10);
+                
+            }
+            if (li==1) {
+                linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY*5+40, kWidth, 10);
+            }if (li==2) {
+                linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY*9+50+keyContent, kWidth, 10);;
+            }
+            if (li==3) {
+                linView.frame =CGRectMake(0,74+KHEIGHT_COMPANY*12+66+keyContent+content, kWidth, 10);;
+            }
+            
+            
+        }
+
+        
         //    电话
         UILabel*  _telphoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 74+KHEIGHT_COMPANY*2+10, kWidth-60, 15)];
         _telphoneLabel.text =[NSString stringWithFormat:@"电话:%@",comHomeModel.tel];
@@ -644,7 +653,9 @@
         UIImageView *_telphoneImage =[[UIImageView alloc]initWithFrame:CGRectMake(22, 74+KHEIGHT_COMPANY*2+10, 12, 12 )];
         [_companyHomeScrollView addSubview:_telphoneImage];
         _telphoneImage.image =[UIImage imageNamed:@"phone_pany.png"];
+        [_companyHomeScrollView addSubview:_telphoneLabel];
 
+       
 
         //    网址
         UILabel * _urlLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 74+KHEIGHT_COMPANY*3+20, kWidth-60, 15)];
@@ -673,11 +684,56 @@
         [_companyHomeScrollView addSubview:_addessImage];
         _addessImage.image =[UIImage imageNamed:@"place_company.png"];
         
+        
+        
+        
+        if ([comHomeModel.tel isKindOfClass:[NSNull class]]) {
+            _telphoneLabel.hidden = YES;
+            _telphoneImage.hidden = YES;
+        }else{
+            if ([comHomeModel.addr isEqualToString:@""]) {
+                _addessLabel.hidden = YES;
+                _addessImage.hidden = YES;
+                
+            }else{
+                _addessLabel.hidden = NO;
+                _addessImage.hidden = NO;
+                
+            }
 
+        }
+        if ([comHomeModel.website isKindOfClass:[NSNull class]]) {
+            _urlLabel.hidden = YES;
+            _urlImage.hidden = YES;
+        }else{
+            if ([comHomeModel.addr isEqualToString:@""]) {
+                _addessLabel.hidden = YES;
+                _addessImage.hidden = YES;
+                
+            }else{
+                _addessLabel.hidden = NO;
+                _addessImage.hidden = NO;
+                
+            }
+
+        }
+        if ([comHomeModel.addr isKindOfClass:[NSNull class]]) {
+            _addessLabel.hidden = YES;
+            _addessImage.hidden = YES;
+            
+        }else{
+            if ([comHomeModel.addr isEqualToString:@""]) {
+                _addessLabel.hidden = YES;
+                _addessImage.hidden = YES;
+
+            }else{
+                _addessLabel.hidden = NO;
+                _addessImage.hidden = NO;
+
+            }
+            
+        }
         
-        
-        
-        [_companyHomeScrollView addSubview:_telphoneLabel];
         
         
         NSArray *array =@[@"【主营范围】",@"【公司简介】",@"【近期供求】",];
@@ -888,14 +944,140 @@
         [self supplyRequest];
     }else
     {
-        [self demandRequest];
+        if (![SystemConfig sharedInstance].isUserLogin) {
+            _loginView = [[LoginView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            _loginView.delegate = self;
+            [_loginView showView];
+           
+        }
+      else if([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
+            UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"温馨提示:" message:@"抱歉，您的级别不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
+            [alert show];
+        }
+      
+       else{
+            [self demandRequest];
+
+        }
     }
     
     [_supplyANDdemandTableView reloadData];
     
 }
 
+- (void)btnDown:(UIButton *)btn
+{
+    switch (btn.tag){
+            //登陆
+        case LOGIN_TYPE:
+        {
+            NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:_loginView.userField.text,@"phonenum",_loginView.passwordField.text,@"password", nil];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.labelText = @"登录中...";
+            [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+                NSDictionary *dic = [result objectForKey:@"response"];
+                if (dic) {
+                    NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
+                    if ([code isEqualToString:@"100"]){
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:_loginView.userField.text forKey:@"userName"];
+                        [[NSUserDefaults standardUserDefaults] setObject:_loginView.passwordField.text forKey:@"secret"];
+                        
+                        NSDictionary *data = [dic objectForKey:@"data"];
+                        [SystemConfig sharedInstance].isUserLogin = YES;
+                        if (isNull(data, @"company_id")){
+                            [SystemConfig sharedInstance].company_id = @"-1";
+                        }else{
+                            int company_id = [[data objectForKey:@"company_id"] intValue];
+                            [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                        }
+                        if (isNull(data, @"viptype")) {
+                            [SystemConfig sharedInstance].viptype = @"-3";
+                        }else{
+                            NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
+                            [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                        }
+                        CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
+                        [SystemConfig sharedInstance].companyInfo = item;
+                        
+                        [self getVipInfo:[SystemConfig sharedInstance].company_id];
+                        
+                    }else{
+                        [RemindView showViewWithTitle:@"用户名或密码错误" location:MIDDLE];
+                    }
+                }
+            }failure:^(NSError *error){
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }
+            break;
+            //寻找密码
+        case FIND_TYPE:
+        {
+            FindSecretController *fsc = [[FindSecretController alloc] init];
+            [self.navigationController pushViewController:fsc animated:YES];
+        }
+            break;
+            //注册
+        case REGIST_TYPE:
+        {
+            RegisterContrller *rsc = [[RegisterContrller alloc] init];
+            [self.navigationController pushViewController:rsc animated:YES];
+        }
+            break;
+        default:
+            break;
+    }
+    
+}
 
+//获取用户VIP信息
+- (void)getVipInfo:(NSString *)company_id
+{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.dimBackground = NO;
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
+    [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if (dic) {
+            if (!isNull(result, @"response")) {
+                if ([[dic objectForKey:@"code"] intValue] ==100) {
+                    NSDictionary *data = [dic objectForKey:@"data"];
+                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                    [SystemConfig sharedInstance].vipInfo = vipInfo;
+                    [_loginView dismissView];
+
+                    [self loadViewStatusesHome];
+//                    [_supplyANDdemandTableView reloadData];
+                }else{
+                    [_loginView dismissView];
+                    [self loadViewStatusesHome];
+//                    [_supplyANDdemandTableView reloadData];
+
+                }
+            }
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSLog(@"%@",error);
+    }];
+    
+}
+
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex ==0) {
+        PrivilegeController *lvc =[[PrivilegeController alloc] init];
+        [self.navigationController pushViewController:lvc animated:YES];
+        
+    }else{
+    }
+}
 #pragma mark threeButton
 -(void)addCompanyButton
 {
@@ -948,14 +1130,12 @@
     {
         dataLabel.hidden = YES;
         _BigCompanyScrollView.contentOffset = CGPointMake(0, 0);
-       // [_BigCompanyScrollView scrollRectToVisible:CGRectMake(0, 0, kWidth, _BigCompanyScrollView.frame.size.height) animated:YES];
     }
     else if(company.tag ==21)
     {
         header.scrollView = _conditionTableView;
         header.scrollView = _conditionTableView;
         _BigCompanyScrollView.contentOffset = CGPointMake(kWidth, 0);
-        //[_BigCompanyScrollView scrollRectToVisible:CGRectMake(kWidth, 0, kWidth, _BigCompanyScrollView.frame.size.height) animated:YES];
         [self companyRequest];
     }
     else if(company.tag ==22)
@@ -963,7 +1143,6 @@
         header.scrollView = _supplyANDdemandTableView;
         footer.scrollView = _supplyANDdemandTableView;
         _BigCompanyScrollView.contentOffset = CGPointMake(kWidth*2, 0);
-        //[_BigCompanyScrollView scrollRectToVisible:CGRectMake(kWidth*2, 0, kWidth, _BigCompanyScrollView.frame.size.height) animated:YES];
         if (_chooseSelected.tag == 31)
         {
             [self demandRequest];
@@ -1040,7 +1219,6 @@
     if (_selectedBtn.tag ==21) {
         
         return _companyNEWArray.count;
-        NSLog(@"1111111%ld",(long)_companyNEWArray.count);
 
     }else if (_selectedBtn.tag ==22)
     {
@@ -1052,7 +1230,7 @@
             return _companySupplyArray.count;
         }
     }
-    return 10;
+    return 0;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

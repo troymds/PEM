@@ -28,7 +28,8 @@
 #import "MessageController.h"
 #import "QRCodeViewController.h"
 #import "bannerWebView.h"
-@interface HomeController ()<UIScrollViewDelegate>
+#import "SDWebImageManager.h"
+@interface HomeController ()<UIScrollViewDelegate,SDWebImageManagerDelegate>
 {
     UIScrollView *_backScrollView;
     UIImageView *_smallImgView;
@@ -72,12 +73,9 @@
     [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
     
         
-    if (IsIos7) {
-        self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(zbarSdk:)];
-    }else {
-        
-    }
-    self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:@selector(lo)];
+    
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(zbarSdk:)];
+      self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:@selector(lo)];
     self.view.userInteractionEnabled = YES;
     
     
@@ -95,6 +93,10 @@
     [self loadNewData];
     
     currentTag = 0;
+    
+    
+    
+    
     
 }
 -(void)lo{
@@ -160,6 +162,7 @@
 
 -(void)addADSimageBtn:(NSMutableArray *)tody
 {
+    
     
     // 创建图片 imageview
     for (int i = 0;i<[tody count];i++)
@@ -414,19 +417,14 @@
 
 
 
-#pragma mark 添加八个按钮
+#pragma mark 添七个按钮
 -(void)addCategorybutton:(NSMutableArray *)btnImgArray
 {
     for (int c=0; c<7; c++)
     {
         
-        UIButton *CategoryButt =[UIButton buttonWithType:UIButtonTypeCustom];
-        CategoryButt.frame =CGRectMake(20+c%4*(50+25), 152+c/4*(40+40), 50,50);
         HotCategoryModel *hotCategoryModel = [btnImgArray objectAtIndex:c];
-        
-        
-        [_backScrollView addSubview:CategoryButt];
-        [CategoryButt setTitle:hotCategoryModel.name forState:UIControlStateNormal  ];
+
         
         UIButton *categoryButtTitle =[UIButton buttonWithType:UIButtonTypeCustom];
         
@@ -442,18 +440,25 @@
         UIImageView *findImage =[[UIImageView alloc]init];
         findImage.frame =CGRectMake(20+c%4*(50+25), 152+c/4*(40+40), 50,50);
         
+        
+        [_backScrollView addSubview:findImage];
+        
+        UIButton *CategoryButt =[UIButton buttonWithType:UIButtonTypeCustom];
+        CategoryButt.frame =CGRectMake(20+c%4*(50+25), 152+c/4*(40+40), 50,70);
+        [CategoryButt setTitle:hotCategoryModel.name forState:UIControlStateNormal  ];
+        [CategoryButt setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+        [_backScrollView addSubview:CategoryButt];
+        
         CategoryButt.tag=[hotCategoryModel.cateid intValue]+100;
-
+        
         findImage.tag = CategoryButt.tag+10000;
         categoryButtTitle.tag =findImage.tag ;
 
-        [_backScrollView addSubview:findImage];
         findImage.userInteractionEnabled = NO;
         [findImage setImageWithURL:[NSURL URLWithString:hotCategoryModel.image]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
         
-        
-        [categoryButtTitle addTarget:self action:@selector(categoryBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [CategoryButt addTarget:self action:@selector(categoryBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+
 
         
        
@@ -551,9 +556,9 @@
             suBigBtn.frame=CGRectMake(0, 0, 300, 118);
             [sadImage addSubview:suBigBtn];
             
-            [sadImage setImageWithURL:[NSURL URLWithString:supplyArr.image] placeholderImage:[UIImage imageNamed:@"load_big"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
+            [sadImage setImageWithURL:[NSURL URLWithString:supplyArr.image] placeholderImage:[UIImage imageNamed:@"load_big.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
         }
-        [sadImage setImageWithURL:[NSURL URLWithString:supplyArr.image] placeholderImage:[UIImage imageNamed:@"log.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
+        [sadImage setImageWithURL:[NSURL URLWithString:supplyArr.image] placeholderImage:[UIImage imageNamed:@"load_big.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
         
         
         //中标题
@@ -591,7 +596,6 @@
         UIImageView *adImage =[[UIImageView alloc]init];
         [_backScrollView addSubview:adImage];
         adImage.userInteractionEnabled = YES;
-        adImage.backgroundColor =[UIColor redColor];
         UIButton *deBigBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         
         deBigBtn.frame =CGRectMake(0, 690+d%3*(10+61), kWidth, 61);
@@ -604,7 +608,7 @@
             deBigBtn.frame =CGRectMake(0, 0, 300, 118);
             [adImage addSubview:deBigBtn];
         }
-        [adImage setImageWithURL:[NSURL URLWithString:demandArr.image] placeholderImage:[UIImage imageNamed:@"loading.png"]];
+        [adImage setImageWithURL:[NSURL URLWithString:demandArr.image] placeholderImage:[UIImage imageNamed:@"load_big.png"]];
         
         
         
@@ -661,7 +665,6 @@
 //八宫格
 -(void)categoryBtnClick:(UIButton *)cate
 {
-
     currentTag =(int) cate.tag+10000;
     
     curStr = cate.titleLabel.text;

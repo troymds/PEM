@@ -76,8 +76,9 @@
 {
     
     webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
+    
     _gyWebView.frame = CGRectMake(0, 320, kWidth, webheight+100);
-   
+
     _backScrollView.contentSize = CGSizeMake(kWidth,webheight+500);
     
     
@@ -186,13 +187,16 @@
 #pragma mark计算宽高
     XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
     CGFloat nameWeight;
-    if ([[SystemConfig sharedInstance].company_id isEqualToString:xqModel.company_id]) {
+//    if ([[SystemConfig sharedInstance].company_id isEqualToString:xqModel.company_id]) {
+//        
+//        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:PxFont(22)] constrainedToSize:CGSizeMake(300, 60)].height;
+//        
+//    }else{
+        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:PxFont(22)] constrainedToSize:CGSizeMake(125, 60)].height;
         
-        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:22] constrainedToSize:CGSizeMake(300, 60)].height;
-        
-    }else{
-        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:22] constrainedToSize:CGSizeMake(125, 60)].height;
-        
+//    }
+    if (nameWeight <20) {
+        nameWeight = nameWeight+20;
     }
 
     _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
@@ -232,7 +236,7 @@
 
     collectBtn.tag = 2000;
     [collectBtn addTarget:self action:@selector(collectionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    collectBtn.frame =CGRectMake(280, 185, 35, 35);
+    collectBtn.frame =CGRectMake(280, 150+nameWeight, 35, 35);
     
     
 //    拨号
@@ -241,20 +245,21 @@
     [phonBtn setImage:[UIImage imageNamed:@"xunji1.png"] forState:UIControlStateNormal];
     [phonBtn setImage:[UIImage imageNamed:@"xunjia_selecte1.png"] forState:UIControlStateHighlighted];
 
-    phonBtn.frame =CGRectMake(240, 185, 35, 35);
+    phonBtn.frame =CGRectMake(240, 150+nameWeight, 35, 35);
     [phonBtn addTarget:self action:@selector(bodaBtn:) forControlEvents:UIControlEventTouchUpInside];
-  
-       
+    
     
     
     
 
      //标题
+    
+    
     nameLable =[[UILabel alloc]init];
     nameLable.text = xqModel.titleGetInfo;
     nameLable.backgroundColor =[UIColor clearColor];
     nameLable.numberOfLines = 3;
-    nameLable.font =[UIFont systemFontOfSize:22];
+    nameLable.font =[UIFont systemFontOfSize:PxFont(22)];
 
     [_backScrollView addSubview:nameLable];
     nameLable.textColor =HexRGB(0x3a3a3a);
@@ -271,9 +276,9 @@
     }
 
     picLabel.textColor =HexRGB(0xff7300);
-    picLabel.frame =CGRectMake(10,175+nameWeight,180, 20);
+    picLabel.frame =CGRectMake(10,170+nameWeight,180, 20);
     [_backScrollView addSubview:picLabel];
-    picLabel.font =[UIFont systemFontOfSize:PxFont(30)];
+    picLabel.font =[UIFont systemFontOfSize:PxFont(25)];
 
     //    起价
     for (int l=0; l<3; l++) {
@@ -281,8 +286,15 @@
         UILabel *linLabel =[[UILabel alloc]init];
         linLabel.text =labelArray[l];
         linLabel.backgroundColor =[UIColor clearColor];
-        linLabel.textAlignment =NSTextAlignmentCenter;
-        
+        if (l==0) {
+            linLabel.textAlignment =NSTextAlignmentLeft;
+
+        }else if(l==1){
+            linLabel.textAlignment =NSTextAlignmentCenter;
+
+        }else{
+        linLabel.textAlignment =NSTextAlignmentRight;
+        }
         linLabel.frame =CGRectMake(20+l%3*((kWidth-30)/3),210+nameWeight, (kWidth-40)/3, 20);
         [_backScrollView addSubview:linLabel];
         
@@ -313,11 +325,11 @@
     xinagq.font =[UIFont systemFontOfSize:PxFont(24)];
     
     _gyWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 250+nameWeight, kWidth, kHeight-250-nameWeight-64)];
+
     [_gyWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:xqModel.description]]];
-    _gyWebView.backgroundColor =[UIColor redColor];
     _gyWebView.userInteractionEnabled = NO;
     _gyWebView.delegate =self;
-    
+
     [_backScrollView addSubview:_gyWebView];
 
 
@@ -357,7 +369,7 @@
     } else if([xqModel.vip_type isEqualToString:@"3"]) {
         _companyImgVip.image =[UIImage imageNamed:@"Vip2.png"];
         
-    }else if([xqModel.vip_type isEqualToString:@"1"]){
+    }else if([xqModel.vip_type isEqualToString:@"4"]){
         
         _companyImgVip.image =[UIImage imageNamed:@"Vip1.png"];
     }

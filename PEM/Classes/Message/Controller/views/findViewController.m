@@ -257,7 +257,6 @@
         
     }else{
         
-        [_CateDemandArray removeAllObjects];
         [_tableView reloadData];
         
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {

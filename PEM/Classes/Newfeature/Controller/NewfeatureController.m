@@ -111,7 +111,7 @@
 }
 -(void)login:(UIButton *)btn {
     [UIApplication sharedApplication].statusBarHidden =NO;
-    self.view.window.rootViewController =[[RegisterContrller alloc]init];
+//    self.view.window.rootViewController =[[RegisterContrller alloc]init];
    
     
 //    self.view.window.rootViewController =[[RegisterContrller alloc]init];

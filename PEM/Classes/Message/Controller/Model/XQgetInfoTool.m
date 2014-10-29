@@ -7,7 +7,6 @@
 //
 
 #import "XQgetInfoTool.h"
-
 #import "HttpTool.h"
 #import "XQgetInfoDetailModel.h"
 #import "comHomeModel.h"
@@ -40,10 +39,10 @@
     
 }
 
-+ (void)statusesWithSuccessNew:(StatusSuccessBlock)success newFailure:(StatusFailureBlock)failure NewCompanyid:(NSString *)companyid
++ (void)statusesWithSuccessNew:(StatusSuccessBlock)success newFailure:(StatusFailureBlock)failure NewCompanyid:(NSString *)companyid loginId:(NSString *)loginid
 {
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:companyid,@"company_id", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:companyid,@"company_id",loginid,@"login_id" ,nil];
     [HttpTool postWithPath:@"getCompanyDetail" params:dic success:^(id JSON) {
         
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];

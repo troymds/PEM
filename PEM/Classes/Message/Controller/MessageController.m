@@ -55,12 +55,8 @@
     currentTag =0;
     
     
-    
-    if (IsIos7) {
-        self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(zbarSdk:)];
-    }else {
-        
-    }
+   
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(zbarSdk:)];
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:@selector(logoImage)];
     self.view.userInteractionEnabled = YES;
 
@@ -127,10 +123,8 @@
     for (int but=0; but<_categoryArray.count; but++) {
         gategoryModel *cagegoryModel =[_categoryArray objectAtIndex:but];
 
-        UIButton *button =[UIButton buttonWithType:UIButtonTypeCustom];
         
-        button.frame = CGRectMake(but%3*(70+37), 0+but/3*(60+35), kWidth/3, 96);
-        [_scrollView addSubview:button];
+        
         UIButton *titleBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         [titleBtn setTitle:cagegoryModel.nameGategory forState:UIControlStateNormal];
         [_scrollView addSubview:titleBtn];
@@ -138,8 +132,10 @@
         titleBtn.frame =CGRectMake(25+but%3*(70+40), 67+but/3*(60+35), 50, 30);
         [titleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         titleBtn.titleLabel.font =[UIFont systemFontOfSize:14];
-        [titleBtn addTarget:self action:@selector(itemsClick:) forControlEvents:UIControlEventTouchUpInside];
-        [button addTarget:self action:@selector(itemsClick:) forControlEvents:UIControlEventTouchUpInside];
+               UIButton *button =[UIButton buttonWithType:UIButtonTypeCustom];
+        
+        button.frame = CGRectMake(but%3*(70+37), 0+but/3*(60+35), kWidth/3, 96);
+        [_scrollView addSubview:button];
         button.titleLabel.text = titleBtn.titleLabel.text;
 
         
@@ -148,15 +144,17 @@
         findImage.frame =CGRectMake(25+but%3*(70+40), 10+but/3*(60+35), 50, 50);
         [_scrollView addSubview:findImage];
         
-        titleBtn.tag = [cagegoryModel.idType intValue]+1000;
-        button.tag=titleBtn.tag;
-        
+        button.tag=[cagegoryModel.idType intValue]+1000;
         findImage.tag = button.tag+100000;
         titleBtn.tag =findImage.tag;
+        
         findImage.userInteractionEnabled = NO;
         
         [findImage setImageWithURL:[NSURL URLWithString:cagegoryModel.imageGategpry]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
         
+        [button addTarget:self action:@selector(itemsClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+
 
     }
     

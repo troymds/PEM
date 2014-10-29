@@ -16,10 +16,8 @@
 #import "PrivilegeController.h"
 #import "LoginController.h"
 #import "HttpTool.h"
-@interface qiugouXQ ()<UIWebViewDelegate>
-{
-    UIScrollView *_backScrollView;
-}
+@interface qiugouXQ ()
+
 @end
 
 @implementation qiugouXQ
@@ -35,6 +33,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    demandWebheight = 0;
+    
     self.view.backgroundColor =HexRGB(0xffffff);
     demandArray =[[NSMutableArray alloc]init];
   
@@ -51,7 +51,22 @@
     titleLabele.text =@"求购详情";
     titleLabele.font = [UIFont systemFontOfSize:PxFont(26)];
 
+}
 
+
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
+    
+    
+    return YES;
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView{
+    
+    demandWebheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
+    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 100, kWidth, demandWebheight)];
+
+        _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+144);
+    
+    
 }
 -(void)loadStatusView{
     
@@ -183,13 +198,14 @@
     xinagLabel.frame =CGRectMake(5,titleHeight+80, 300, contentHeight+40);
     [_backScrollView addSubview:xinagLabel];
     xinagLabel.font =[UIFont systemFontOfSize:15];
-    
-    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 120, kWidth, kHeight-164)];
-    
-    [_backScrollView addSubview:demandWebView];
-    demandWebView.userInteractionEnabled = NO;
+
+    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 100, kWidth,  kHeight-124)];
+
     [demandWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:xqModel.description]]];
+    demandWebView.userInteractionEnabled = NO;
     demandWebView.delegate = self;
+
+    [_backScrollView addSubview:demandWebView];
 
     
 
@@ -406,30 +422,12 @@
 }
 
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView{
-    
-    float demandWebheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
-    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 120, kWidth, demandWebheight)];
-    
-    
-    if (demandWebheight<500) {
-        _backScrollView.contentSize = CGSizeMake(kWidth,kHeight);
-        
-    }else {
-        _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+160);
-        
-    }
-
-    
-}
--(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-    
-    
-    return YES;
-}
 
 -(void)surePhoneBtnClick:(UIButton *)sure{
     if (sure.tag ==44) {
+        [_phoneViewName removeFromSuperview];
+        [nameView removeFromSuperview];
+
         if (![SystemConfig sharedInstance].isUserLogin) {
             
             LoginController *lvc =[[LoginController alloc] init];
@@ -484,8 +482,13 @@
 
 -(void)phoneBtnClick:(UIButton *)sentder
 {
-    
-    [self addphoneViewName];
+    if (![SystemConfig sharedInstance].isUserLogin) {
+        LoginController *lvc =[[LoginController alloc] init];
+        [self.navigationController pushViewController:lvc animated:YES];
+    }else{
+        [self addphoneViewName];
+
+    }
     
     
 

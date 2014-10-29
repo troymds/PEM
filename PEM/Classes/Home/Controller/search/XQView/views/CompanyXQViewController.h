@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "MJRefresh.h"
+#import "LoginView.h"
+#import "RegisterContrller.h"
+#import "FindSecretController.h"
 
-@interface CompanyXQViewController : UIViewController{
+@interface CompanyXQViewController : UIViewController<LoginViewDelegate>{
     
     UIScrollView* _companyHomeScrollView;
     
@@ -28,7 +31,7 @@
     
     MJRefreshHeaderView *header;
     MJRefreshFooterView *footer;
-    
+    LoginView*_loginView;
 
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;
@@ -47,6 +50,7 @@
 
 
 @property(nonatomic,weak)NSString *companyID;
+@property(nonatomic,weak)NSString *loginID;
 
 
 @end

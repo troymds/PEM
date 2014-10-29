@@ -233,6 +233,7 @@
 		55B4972C19EBB9A2005013A6 /* nav_code@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4972919EBB9A2005013A6 /* nav_code@2x.png */; };
 		55B4972D19EBB9A2005013A6 /* nav_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4972A19EBB9A2005013A6 /* nav_logo@2x.png */; };
 		55B4972E19EBB9A2005013A6 /* vav_code_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4972B19EBB9A2005013A6 /* vav_code_pre@2x.png */; };
+		55B4DEEB1A00E06A003D81CD /* home_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B4DEEA1A00E06A003D81CD /* home_phone.png */; };
 		55B5103F19F73930009F9008 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B5102D19F73930009F9008 /* AFHTTPClient.m */; };
 		55B5104019F73930009F9008 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B5102F19F73930009F9008 /* AFHTTPRequestOperation.m */; };
 		55B5104119F73930009F9008 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B5103119F73930009F9008 /* AFImageRequestOperation.m */; };
@@ -780,6 +781,7 @@
 		55B4972919EBB9A2005013A6 /* nav_code@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_code@2x.png"; sourceTree = "<group>"; };
 		55B4972A19EBB9A2005013A6 /* nav_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_logo@2x.png"; sourceTree = "<group>"; };
 		55B4972B19EBB9A2005013A6 /* vav_code_pre@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vav_code_pre@2x.png"; sourceTree = "<group>"; };
+		55B4DEEA1A00E06A003D81CD /* home_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_phone.png; sourceTree = "<group>"; };
 		55B5102C19F73930009F9008 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		55B5102D19F73930009F9008 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		55B5102E19F73930009F9008 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -2380,6 +2382,7 @@
 		55E6CD0D19BEF906007C85BB /* find */ = {
 			isa = PBXGroup;
 			children = (
+				55B4DEEA1A00E06A003D81CD /* home_phone.png */,
 				5554229019C6B68D00C9DF9E /* home_favorite@2x.png */,
 				55D350AB19C2DC0200BFD8F3 /* lansejiantou_seledted@2x.png */,
 				55D2FB4B19BFEF5200248CAF /* bg_homeCodition.png */,
@@ -2552,6 +2555,7 @@
 				55E8C0F419D3A66A003F1685 /* privilege@2x.png in Resources */,
 				55B5104E19F782A9009F9008 /* nav_return_pre@2x.png in Resources */,
 				04A93AA319B70D17007542A7 /* home_Jump_blue_btn.png in Resources */,
+				55B4DEEB1A00E06A003D81CD /* home_phone.png in Resources */,
 				04A3BC5919C05C0500B2217B /* nav_setting@2x.png in Resources */,
 				55D350AC19C2DC0200BFD8F3 /* lansejiantou_selected.png in Resources */,
 				55E6CD2A19BF23F3007C85BB /* company1@2x.png in Resources */,

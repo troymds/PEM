@@ -323,17 +323,21 @@
 - (void)demandRequest
 {
 
+    
     if (_searchTextField.text.length>0)
     {
         [SearchTool searchWithDemandSuccessBlock:^(NSArray *search) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            NSLog(@"----demand---%d",search.count);
 
             if (search.count<=0)
-            {
+            {            NSLog(@"----11111demand---%d",search.count);
+
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
-            {
+            {            NSLog(@"----2222demand---%d",search.count);
+
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
                 [_demandArray addObjectsFromArray:search];
@@ -370,10 +374,7 @@
 }
 - (void)companyRequest
 {
-//    if (_compangyArray.count!=0) {
-//        [_compangyArray removeAllObjects];
-//        [_resultTableView reloadData];
-//    }
+    
     
     if (_currentKeyString.length > 0)
     {
@@ -478,6 +479,7 @@
     
     _searchTextField.delegate = self;
     _searchTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _searchTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
     
    
@@ -587,9 +589,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // --- 》对应3个数组
-    
+
     if (self.view == _bgView)
     {
+
         if (currentSelectedBtnTag == 202)
         {
             if (_searchComanyArray.count > 0)
@@ -867,7 +870,6 @@
                         break;
                 }
 
-
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
             }else
@@ -903,6 +905,7 @@
 
             }else
             {
+
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
 
@@ -943,6 +946,7 @@
                 }
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
+
 
             }else
             {
@@ -1067,7 +1071,7 @@
     bigBtn.frame = CGRectMake(0, 0, kWidth, kHeight);
     bigBtn.backgroundColor =[UIColor whiteColor];
     bigBtn.alpha =0.1;
-    [self.view addSubview:bigBtn];
+    [_bgView addSubview:bigBtn];
     
     [bigBtn addTarget:self action:@selector(bigBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -1089,6 +1093,7 @@
     {
         [self addBigButton];
         [self xuangxiangka];
+        
     }else
     {
         [bigBtn removeFromSuperview];
@@ -1349,6 +1354,8 @@
 {
     if (currentSelectedBtnTag == 202)
     {
+        [_supllyArray removeAllObjects];
+        [_demandArray removeAllObjects];
         [_searchComanyArray removeAllObjects];
         [_recTableView reloadData];
         [SaveTempDataTool archiveClass:_searchComanyArray withArrayTag:202];
@@ -1358,6 +1365,8 @@
 
     }else if(currentSelectedBtnTag == 201)
     {
+        [_supllyArray removeAllObjects];
+        [_compangyArray removeAllObjects];
         [_searchDemandArray removeAllObjects];
         [_recTableView reloadData];
         [SaveTempDataTool archiveClass:_searchDemandArray withArrayTag:201];
