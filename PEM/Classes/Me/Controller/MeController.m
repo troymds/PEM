@@ -494,7 +494,7 @@
         case 3003:
         {
             if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
-                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"尊敬的体验会员,您没有权限上传全景图片\n1.普通会员及以上会员可单独购买上传次数\n2.金牌会员赠送1次\n3.铂金会员赠送5次" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
+                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"尊敬的体验会员,您没有权限上传全景图片\n1.普通会员及以上会员可单独购买上传次数\n2.金牌会员赠送1次\n3.铂金会员赠送5次" delegate:self cancleButton:@"取 消" otherButton:@"立即升级"];
                 _upTDView.tag =1000;
                 [_upTDView showView];
             }else{
