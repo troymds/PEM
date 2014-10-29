@@ -100,7 +100,6 @@
             [imageView addSubview:login];
             
             imageView.userInteractionEnabled = YES;
-
         }
     }
 }
@@ -119,11 +118,7 @@
     NewRegisterController *rc = [[NewRegisterController alloc] init];
     WBNavigationController *wb = [[WBNavigationController alloc] initWithRootViewController:rc];
     [self presentViewController:wb animated:YES completion:nil];
-//    UIStoryboard* board = [UIStoryboard storyboardWithName:@"regist" bundle:nil];
-//    WBNavigationController * nav = [board instantiateViewControllerWithIdentifier:@"nav"];
-//    [self presentViewController:nav animated:YES completion:nil];
-//     self.view.window.rootViewController = nav;
-       }
+}
 
 
 

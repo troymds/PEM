@@ -223,6 +223,7 @@
     }else if([controller isKindOfClass:[DescriptionController class]]){
         demandDes = value;
         _demandView.descriptionLabel.text = demandDes;
+        _demandView.descriptionLabel.textColor = [UIColor blackColor];
     }else if([controller isKindOfClass:[HotTagsController class]]){
         tagsArray = value;
         NSMutableString *tagStr = [NSMutableString stringWithString:@""];
@@ -263,6 +264,11 @@
         [RemindView showViewWithTitle:@"请输入联系人" location:MIDDLE];
         return NO;
     }
+    if (_demandView.linkManTextField.text.length < 2||_demandView.linkManTextField.text.length>4) {
+        [RemindView showViewWithTitle:@"联系人为2-4个字符" location:MIDDLE];
+        return NO;
+    }
+
     if (!(_demandView.phoneNumTextField.text.length!=0)){
         [RemindView showViewWithTitle:@"请输入手机号码" location:MIDDLE];
         return NO;

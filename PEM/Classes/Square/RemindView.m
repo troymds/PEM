@@ -12,15 +12,15 @@
 
 @implementation RemindView
 
-+ (void)showViewWithTitle:(NSString *)title location:(NSString *)location
++ (void)showViewWithTitle:(NSString *)title location:(LocationType)location
 {
     CGSize size = [AdaptationSize getSizeFromString:title Font:[UIFont systemFontOfSize:13] withHight:25 withWidth:CGFLOAT_MAX];
     UILabel *remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width+15, 30)];
     CGPoint center = CGPointMake(kWidth/2, kHeight-90);
-    if ([location isEqualToString:TOP]) {
+    if (location == TOP) {
         center = CGPointMake(kWidth/2, 80);
     }
-    if ([location isEqualToString:MIDDLE]) {
+    if (location == MIDDLE) {
         center = CGPointMake(kWidth/2, kHeight/2);
     }
     remindLabel.text = title;

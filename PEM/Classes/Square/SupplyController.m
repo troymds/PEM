@@ -499,6 +499,10 @@
         [RemindView showViewWithTitle:@"请输入联系人" location:MIDDLE];
         return NO;
     }
+    if (_supplyView.linkManTextField.text.length < 2||_supplyView.linkManTextField.text.length>4) {
+        [RemindView showViewWithTitle:@"联系人为2-4个字符" location:MIDDLE];
+        return NO;
+    }
     if (!(_supplyView.phoneNumTextField.text.length!=0)) {
         [RemindView showViewWithTitle:@"请输入手机号码" location:MIDDLE];
         return NO;
@@ -598,6 +602,7 @@
     }else if ([controller isKindOfClass:[DescriptionController class]]){
         supplyDes = value;
         _supplyView.descriptionLabel.text = supplyDes;
+        _supplyView.descriptionLabel.textColor = [UIColor blackColor];
     }
 }
 

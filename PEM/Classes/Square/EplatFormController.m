@@ -26,6 +26,11 @@
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_e_url]]];
 }
 
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

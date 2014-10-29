@@ -218,7 +218,7 @@
     }else{
         if ([self checkOut]) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.labelText = @"";
+            hud.labelText = @"注册中...";
             NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:_phoneNum,@"phonenum",yzmField.text,@"yzm",secretField.text,@"password",nil];
             [HttpTool postWithPath:@"register" params:param success:^(id JSON){
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -237,6 +237,7 @@
                     }
                 }
             } failure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 NSLog(@"%@",error);
             }];
         }else{

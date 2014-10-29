@@ -191,6 +191,7 @@
         _phoneNumView.nameLabel.text = @"电     话";
         _phoneNumTextField = [[UITextField alloc] initWithFrame:CGRectMake(75, 0, _phoneNumView.frame.size.width-75, 35)];
         _phoneNumTextField.tag = PHONENUM_TYPE;
+        _phoneNumTextField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         _phoneNumTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _phoneNumTextField.font = [UIFont systemFontOfSize:PxFont(20)];
         _phoneNumTextField.delegate = self;
@@ -239,13 +240,13 @@
         
         _remindView = [[UIView alloc] initWithFrame:CGRectMake(20, 460, kWidth-20*2, 30)];
         
-        NSString *string = @"上传全景图片需要大量素材，发布成功后请等待我们与您联系，或现在";
+        NSString *string = @"上传全景图片需要大量素材,发布成功后请等待我们与您联系,或现在";
         CGSize size = [AdaptationSize getSizeFromString:string Font:[UIFont systemFontOfSize:12] withHight:15 withWidth:CGFLOAT_MAX];
         
         CGSize btnSize = [AdaptationSize getSizeFromString:@"联系我们" Font:[UIFont systemFontOfSize:12] withHight:15 withWidth:CGFLOAT_MAX];
 
         
-        UILabel *remindLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _remindView.frame.size.width, 30)];
+        UILabel *remindLabel = [[UILabel alloc] init];
         remindLabel.backgroundColor = [UIColor clearColor];
         remindLabel.numberOfLines = 0;
         remindLabel.text = string;

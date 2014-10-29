@@ -90,35 +90,6 @@
     }];
 }
 
-//获取用户VIP信息
-- (void)getVipInfo
-{
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.dimBackground = NO;
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",nil];
-    [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSDictionary *dic = [result objectForKey:@"response"];
-        if (dic) {
-            if (!isNull(result, @"response")) {
-                if ([[dic objectForKey:@"code"] intValue] ==100) {
-                    NSDictionary *data = [dic objectForKey:@"data"];
-                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-                    [SystemConfig sharedInstance].vipInfo = vipInfo;
-                    
-                    _maxNum = [vipInfo.tag_num intValue]+[_dataArray count];
-                    NSLog(@"----%d",_maxNum);
-                    [SystemConfig sharedInstance].maxTagNum = _maxNum;
-                }
-            }
-        }
-    } failure:^(NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-    }];
-    
-}
 
 - (void)tapDown{
     [addField resignFirstResponder];
@@ -189,6 +160,7 @@
     [HttpTool postWithPath:@"getMyTagList" params:param success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         if (dic) {
             if ([[dic objectForKey:@"code"] intValue] == 100) {
@@ -237,6 +209,34 @@
     }];
 }
 
+//获取用户VIP信息
+- (void)getVipInfo
+{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.dimBackground = NO;
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",nil];
+    [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if (dic) {
+            if (!isNull(result, @"response")) {
+                if ([[dic objectForKey:@"code"] intValue] ==100) {
+                    NSDictionary *data = [dic objectForKey:@"data"];
+                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                    [SystemConfig sharedInstance].vipInfo = vipInfo;
+                    
+                    _maxNum = [vipInfo.tag_num intValue]+[_dataArray count];
+                    [SystemConfig sharedInstance].maxTagNum = _maxNum;
+                }
+            }
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
+    
+}
 
 #pragma mark proImageView_delegate
 - (void)imageClicked:(ProImageView *)image{

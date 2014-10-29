@@ -8,12 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-#define TOP @"top"
-#define MIDDLE @"middle"
-#define BELLOW @"bellow"
+typedef enum
+{
+    TOP = 0,
+    MIDDLE,
+    BELLOW
+    
+}LocationType;
+
 
 @interface RemindView : NSObject
 
-+ (void)showViewWithTitle:(NSString *)title location:(NSString *)location;
++ (void)showViewWithTitle:(NSString *)title location:(LocationType)location;
 
 @end
