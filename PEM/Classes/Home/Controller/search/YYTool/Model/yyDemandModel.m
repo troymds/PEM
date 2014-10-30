@@ -18,7 +18,6 @@
         self.demandid = dict[@"id"];
         self.demandDate = dict[@"date"];
         self.read_num=dict[@"read_num"];
-        NSLog(@"self.read_num----%@",self.read_num);
         self.buy_num=dict[@"buy_num"];
         self.Introduction=dict[@"introduction"];
         
