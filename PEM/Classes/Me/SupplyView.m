@@ -224,6 +224,7 @@
         
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(36,433, 150, 20)];
+        label.backgroundColor = [UIColor clearColor];
         label.text = @"是否上传全景图片";
         label.textColor = HexRGB(0x666666);
         label.font = [UIFont systemFontOfSize:PxFont(20)];
@@ -231,7 +232,7 @@
         [self addSubview:label];
         
         UIButton *selectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        selectBtn.frame = CGRectMake(kWidth-33-25,426, 25, 25);
+        selectBtn.frame = CGRectMake(kWidth-33-33,427, 33, 33);
         selectBtn.tag = 3003;
         [selectBtn setBackgroundImage:[UIImage imageNamed:@"off.png"] forState:UIControlStateNormal];
         [selectBtn setBackgroundImage:[UIImage imageNamed:@"on.png"] forState:UIControlStateSelected];
