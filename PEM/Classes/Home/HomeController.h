@@ -12,6 +12,7 @@
     NSTimer *_timer;
     NSArray *imageArray;
     int currentPage;
+    Boolean catClickFlage;
 }
 
 @property(nonatomic,strong)NSMutableArray *hotImageArray;

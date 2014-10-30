@@ -60,6 +60,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    catClickFlage = true;
     self.view.backgroundColor =HexRGB(0xe9f0f5);
     
     UIButton * _searchImage =[UIButton buttonWithType:UIButtonTypeCustom];
@@ -665,6 +667,10 @@
 //八宫格
 -(void)categoryBtnClick:(UIButton *)cate
 {
+    if (!catClickFlage) {
+        return ;
+    }
+    catClickFlage = false;
     currentTag =(int) cate.tag+10000;
     
     curStr = cate.titleLabel.text;
@@ -733,6 +739,7 @@
     NSString *strId =[NSString stringWithFormat:@"%d",currentTag-100-10000];
     find.cateIndex = strId;
     [self.navigationController pushViewController:find animated:YES];
+    catClickFlage = true;
 
 }
 
