@@ -37,13 +37,21 @@
     UIView *line2;
 }
 
+typedef void(^LoginSucessBlock)(void);
+typedef void(^LoginFailBlock)(void);
+
+
 @property (nonatomic,strong) UITextField *userField;
 @property (nonatomic,strong) UITextField *passwordField;
 
 @property (nonatomic,weak) id<LoginViewDelegate> delegate;
+@property (nonatomic,strong) LoginSucessBlock sucessBlock;
+@property (nonatomic,strong) LoginFailBlock failBlock;
 
 - (void)showView;
 
 - (void)dismissView;
+
+- (void)loginWithSuccess:(LoginSucessBlock)sucess fail:(LoginFailBlock)fail;
 
 @end
