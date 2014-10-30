@@ -299,7 +299,7 @@
     [textField resignFirstResponder];
     [UIView animateWithDuration:0.3 animations:^{
         bgView.frame = CGRectMake((kWidth-275)/2,95, 275, 250);
-    }];
+    }]; 
     return YES;
 }
 

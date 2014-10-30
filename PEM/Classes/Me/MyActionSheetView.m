@@ -84,11 +84,7 @@
         [_cancelButton addTarget:self action:@selector(actionButtonDown:) forControlEvents:UIControlEventTouchUpInside];
         _cancelButton.frame = CGRectMake(bgView.frame.size.width/2, bgView.frame.size.height-40,(kWidth-40)/2, 40);
         [bgView addSubview:_cancelButton];
-        
         self.delegate = delegate;
-        window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        window.windowLevel = UIWindowLevelStatusBar;
-        
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:0.1];
         [UIView setAnimationDelegate:self];
@@ -154,8 +150,7 @@
 
 - (void)showView
 {
-    [window addSubview:self];
-    [window makeKeyAndVisible];
+    [[UIApplication sharedApplication].keyWindow addSubview:self];
 }
 
 

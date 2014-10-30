@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "ReloadDataDelegate.h"
 #import "LoginView.h"
-
-@interface xiangqingViewController : UIViewController<UIWebViewDelegate,LoginViewDelegate>
+#import "MyActionSheetView.h"
+@interface xiangqingViewController : UIViewController<UIWebViewDelegate,LoginViewDelegate,MyActionSheetViewDelegate>
 {
     float webheight;
     UIWebView *_gyWebView;

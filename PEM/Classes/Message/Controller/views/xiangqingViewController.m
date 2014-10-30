@@ -20,6 +20,7 @@
 #import "RegisterContrller.h"
 #import "FindSecretController.h"
 #import "HttpTool.h"
+
 @interface phoneView ()
 
 @end
@@ -473,16 +474,24 @@
 
 
 -(void)goCompanyBtnClick:(UIButton *)go{
-    
-    CompanyXQViewController *xqVC = [[CompanyXQViewController alloc]init];
-    
-    XQgetInfoDetailModel *comID =[[XQArray objectAtIndex:0]objectAtIndex:0];
-    xqVC.companyName = comID.company_name;
-    xqVC.companyID =comID.company_id;
-    
-    [self.navigationController pushViewController:xqVC animated:YES];
-
-    
+    NSArray *array = self.navigationController.viewControllers;
+    int count = 0;
+    for (UIViewController *viewController in array) {
+        if ([viewController isKindOfClass:[CompanyXQViewController class]]) {
+            [self.navigationController popToViewController:viewController animated:YES];
+            break;
+        }
+        count++;
+    }
+    if (count == array.count) {
+        CompanyXQViewController *xqVC = [[CompanyXQViewController alloc]init];
+        
+        XQgetInfoDetailModel *comID =[[XQArray objectAtIndex:0]objectAtIndex:0];
+        xqVC.companyName = comID.company_name;
+        xqVC.companyID =comID.company_id;
+        
+        [self.navigationController pushViewController:xqVC animated:YES];
+    }
 }
 #pragma mark 收藏产品信息
 -(void)collectionBtnClick:(UIButton *)collect{
@@ -588,9 +597,31 @@
         }];
         [loginView showView];
     }else{
-        [self addphoneViewName];
-
+        XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
+        MyActionSheetView *action = [[MyActionSheetView alloc] initWithTitle:xqModel.contacts withMessage:[NSString stringWithFormat:@"拨打%@？",xqModel.phone_num] delegate:self cancleButton:@"取消" otherButton:@"确定"];
+        [action showView];
    }
+}
+
+
+- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView
+{
+    XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
+    [phoneView callPhoneNumber:xqModel.phone_num
+                          call:^(NSTimeInterval duration) {
+                              NSLog(@"User made a call of %.1f seconds", duration);
+                              
+                          } cancel:^{
+                              NSLog(@"User cancelled the call");
+                          } finish:^{
+                              NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"call_id",xqModel.company_id,@"to_id",xqModel.info_id,@"info_id", nil];
+                              [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
+                                  
+                              } failure:^(NSError *error) {
+                                  
+                              }];
+                          }];
+
 }
 
 
