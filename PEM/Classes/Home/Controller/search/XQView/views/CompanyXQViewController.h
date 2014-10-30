@@ -31,7 +31,6 @@
     
     MJRefreshHeaderView *header;
     MJRefreshFooterView *footer;
-    LoginView*_loginView;
 
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;

@@ -945,10 +945,14 @@
     }else
     {
         if (![SystemConfig sharedInstance].isUserLogin) {
-            _loginView = [[LoginView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-            _loginView.delegate = self;
-            [_loginView showView];
-           
+            LoginView *loginView = [[LoginView alloc] init];
+            loginView.delegate = self;
+            [loginView loginWithSuccess:^{
+                [self loadViewStatusesHome];
+            } fail:^{
+                NSLog(@"登陆失败");
+            }];
+            [loginView showView];
         }
       else if([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
             UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"温馨提示:" message:@"抱歉，您的级别不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
@@ -964,109 +968,6 @@
     [_supplyANDdemandTableView reloadData];
     
 }
-
-- (void)btnDown:(UIButton *)btn
-{
-    switch (btn.tag){
-            //登陆
-        case LOGIN_TYPE:
-        {
-            NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:_loginView.userField.text,@"phonenum",_loginView.passwordField.text,@"password", nil];
-            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.labelText = @"登录中...";
-            [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                NSDictionary *dic = [result objectForKey:@"response"];
-                if (dic) {
-                    NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
-                    if ([code isEqualToString:@"100"]){
-                        
-                        [[NSUserDefaults standardUserDefaults] setObject:_loginView.userField.text forKey:@"userName"];
-                        [[NSUserDefaults standardUserDefaults] setObject:_loginView.passwordField.text forKey:@"secret"];
-                        
-                        NSDictionary *data = [dic objectForKey:@"data"];
-                        [SystemConfig sharedInstance].isUserLogin = YES;
-                        if (isNull(data, @"company_id")){
-                            [SystemConfig sharedInstance].company_id = @"-1";
-                        }else{
-                            int company_id = [[data objectForKey:@"company_id"] intValue];
-                            [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
-                        }
-                        if (isNull(data, @"viptype")) {
-                            [SystemConfig sharedInstance].viptype = @"-3";
-                        }else{
-                            NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
-                            [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
-                        }
-                        CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
-                        [SystemConfig sharedInstance].companyInfo = item;
-                        
-                        [self getVipInfo:[SystemConfig sharedInstance].company_id];
-                        
-                    }else{
-                        [RemindView showViewWithTitle:@"用户名或密码错误" location:MIDDLE];
-                    }
-                }
-            }failure:^(NSError *error){
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            }];
-        }
-            break;
-            //寻找密码
-        case FIND_TYPE:
-        {
-            FindSecretController *fsc = [[FindSecretController alloc] init];
-            [self.navigationController pushViewController:fsc animated:YES];
-        }
-            break;
-            //注册
-        case REGIST_TYPE:
-        {
-            RegisterContrller *rsc = [[RegisterContrller alloc] init];
-            [self.navigationController pushViewController:rsc animated:YES];
-        }
-            break;
-        default:
-            break;
-    }
-    
-}
-
-//获取用户VIP信息
-- (void)getVipInfo:(NSString *)company_id
-{
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.dimBackground = NO;
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
-    [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSDictionary *dic = [result objectForKey:@"response"];
-        if (dic) {
-            if (!isNull(result, @"response")) {
-                if ([[dic objectForKey:@"code"] intValue] ==100) {
-                    NSDictionary *data = [dic objectForKey:@"data"];
-                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-                    [SystemConfig sharedInstance].vipInfo = vipInfo;
-                    [_loginView dismissView];
-
-                    [self demandRequest];
-                }else{
-                    [_loginView dismissView];
-                    [self demandRequest];
-
-                }
-            }
-        }
-    } failure:^(NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSLog(@"%@",error);
-    }];
-    
-}
-
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex ==0) {

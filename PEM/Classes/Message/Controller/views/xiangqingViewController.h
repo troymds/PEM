@@ -23,7 +23,6 @@
     //标题
     UILabel *nameLable;
     
-    LoginView *_loginView;
     
     UIView *_phoneViewName;//拨号蒙版
     UIView *nameView;

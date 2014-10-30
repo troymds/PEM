@@ -15,7 +15,6 @@
     UIView *nameView;
     UIScrollView *_backScrollView;
     float demandWebheight;
-    LoginView *_loginView;
 }
 @property(nonatomic ,weak)NSString *demandIndex;
 @property(nonatomic ,strong)NSMutableArray *demandArray;

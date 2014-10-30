@@ -32,7 +32,6 @@
     ProActionSheet *_actionSheet;
     SupplyView *_supplyView;
     PurchaseView *_purchaseView;
-    LoginView *_loginView;
     UIView *sliderLine;
     UIScrollView *_purchaseScrollView;
     MyActionSheetView *_upTDView;

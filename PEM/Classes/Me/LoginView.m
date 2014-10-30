@@ -7,15 +7,19 @@
 //
 
 #import "loginView.h"
+#import "RegisterContrller.h"
+#import "FindSecretController.h"
+#import "RemindView.h"
+#import "HttpTool.h"
 
 
 @implementation LoginView
 
-- (id)initWithFrame:(CGRect)frame
+- (id)init
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
+    if (self = [super init]) {
+        CGRect frame = [UIScreen mainScreen].bounds;
+        self.frame = frame;
         self.backgroundColor = [UIColor clearColor];
         UIView *view = [[UIView alloc] initWithFrame:frame];
         view.backgroundColor = [UIColor blackColor];
@@ -51,7 +55,7 @@
         UIImageView *secretImg = [[UIImageView alloc] initWithFrame:CGRectMake(20, 77.5, 25, 23)];
         secretImg.image = [UIImage imageNamed:@"regsiter_Password_btn.png"];
         [bgView addSubview:secretImg];
-
+        
         _passwordField = [[UITextField alloc] initWithFrame:CGRectMake(60,77.5, 150, 23)];
         _passwordField.placeholder = @"请输入您的密码";
         _passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -63,7 +67,7 @@
         line2 = [[UIView alloc] initWithFrame:CGRectMake(10,114.5,bgView.frame.size.width-10*2, 0.5)];
         line2.backgroundColor = HexRGB(0x666666);
         [bgView addSubview:line2];
-
+        
         
         loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         loginBtn.frame = CGRectMake(10, 145.5, 275-20, 35);
@@ -103,10 +107,14 @@
         [UIView animateWithDuration:0.3 animations:^{
             bgView.frame = CGRectMake((kWidth-275)/2,95, 275, 250);
         }];
+        NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+        if ([user valueForKey:@"userName"]) {
+            _userField.text = [user valueForKey:@"userName"];
+        }
+        
     }
     return self;
 }
-
 
 -(void)tapDown
 {
@@ -148,12 +156,143 @@
 }
 
 - (void)buttonDown:(UIButton *)btn{
-    if (btn.tag == FIND_TYPE||btn.tag == REGIST_TYPE) {
-        [self dismissView];
+    if (self.delegate) {
+        UIViewController *viewController = (UIViewController *)self.delegate;
+        if (btn.tag==FIND_TYPE) {
+            [self dismissView];
+            FindSecretController *find = [[FindSecretController alloc] init];
+            [viewController.navigationController pushViewController:find animated:YES];
+        }
+        if (btn.tag == REGIST_TYPE) {
+            [self dismissView];
+            RegisterContrller *regist = [[RegisterContrller alloc] init];
+            [viewController.navigationController pushViewController:regist animated:YES];
+        }
+        if (btn.tag == LOGIN_TYPE) {
+            [_userField resignFirstResponder];
+            [_passwordField resignFirstResponder];
+            if ([self checkData]) {
+                [self login];
+            }
+        }
     }
-    if ([self.delegate respondsToSelector:@selector(btnDown:)]) {
-        [self.delegate btnDown:btn];
+}
+
+- (void)login
+{
+    NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:self.userField.text,@"phonenum",self.passwordField.text,@"password", nil];
+    UIViewController *controller;
+    if (self.delegate) {
+        controller = (UIViewController *)self.delegate;
     }
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:controller.view animated:YES];
+    hud.labelText = @"登录中...";
+    [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
+        [MBProgressHUD hideAllHUDsForView:controller.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if (dic) {
+            NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
+            if ([code isEqualToString:@"100"]){
+                
+                [[NSUserDefaults standardUserDefaults] setObject:self.userField.text forKey:@"userName"];
+                [[NSUserDefaults standardUserDefaults] setObject:self.passwordField.text forKey:@"secret"];
+                
+                NSDictionary *data = [dic objectForKey:@"data"];
+                [SystemConfig sharedInstance].isUserLogin = YES;
+                if (isNull(data, @"company_id")){
+                    [SystemConfig sharedInstance].company_id = @"-1";
+                }else{
+                    int company_id = [[data objectForKey:@"company_id"] intValue];
+                    [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                }
+                if (isNull(data, @"viptype")) {
+                    [SystemConfig sharedInstance].viptype = @"-3";
+                }else{
+                    NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
+                    [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                }
+                CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
+                [SystemConfig sharedInstance].companyInfo = item;
+                [self getVipInfo:[SystemConfig sharedInstance].company_id];
+                
+                [[NSUserDefaults standardUserDefaults] setObject:_userField.text forKey:@"userName"];
+                [[NSUserDefaults standardUserDefaults] setObject:_passwordField.text forKey:@"secret"];
+                
+            }else{
+                [RemindView showViewWithTitle:@"用户名或密码错误" location:MIDDLE];
+                if (self.failBlock!=nil) {
+                    self.failBlock();
+                }
+            }
+        }
+    }failure:^(NSError *error){
+        [MBProgressHUD hideAllHUDsForView:controller.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        if (self.failBlock!=nil) {
+            self.failBlock();
+        }
+    }];
+    
+}
+
+//获取用户VIP信息
+- (void)getVipInfo:(NSString *)company_id
+{
+    UIViewController *controller;
+    if (self.delegate) {
+        controller = (UIViewController *)self.delegate;
+    }
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:controller.view animated:YES];
+    hud.dimBackground = NO;
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
+    [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:controller.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if (dic) {
+            if (!isNull(result, @"response")) {
+                if ([[dic objectForKey:@"code"] intValue] ==100) {
+                    NSDictionary *data = [dic objectForKey:@"data"];
+                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
+                    [SystemConfig sharedInstance].vipInfo = vipInfo;
+                    [self dismissView];
+                }else{
+                    [self dismissView];
+                }
+            }
+        }
+        if (self.sucessBlock!=nil) {
+            self.sucessBlock();
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:controller.view animated:YES];
+        NSLog(@"%@",error);
+        if (self.sucessBlock!=nil) {
+            self.sucessBlock();
+        }
+    }];
+    
+}
+
+- (void)loginWithSuccess:(LoginSucessBlock)sucess fail:(LoginFailBlock)fail
+{
+    self.sucessBlock = sucess;
+    self.failBlock = fail;
+}
+
+
+- (BOOL)checkData
+{
+    if (_userField.text.length==0) {
+        [RemindView showViewWithTitle:@"请输入用户名" location:MIDDLE];
+        return NO;
+    }
+    if (_passwordField.text.length == 0) {
+        [RemindView showViewWithTitle:@"请输入密码" location:MIDDLE];
+        return NO;
+    }
+    return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -177,7 +316,7 @@
     }else{
         line2.backgroundColor = HexRGB(0x069dd4);
     }
-
+    
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -187,7 +326,6 @@
         line2.backgroundColor = HexRGB(0x666666);
     }
 }
-
 
 /*
 // Only override drawRect: if you perform custom drawing.
