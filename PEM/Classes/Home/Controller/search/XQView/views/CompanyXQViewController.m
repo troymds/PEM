@@ -1052,12 +1052,10 @@
                     [SystemConfig sharedInstance].vipInfo = vipInfo;
                     [_loginView dismissView];
 
-                    [self loadViewStatusesHome];
-//                    [_supplyANDdemandTableView reloadData];
+                    [self demandRequest];
                 }else{
                     [_loginView dismissView];
-                    [self loadViewStatusesHome];
-//                    [_supplyANDdemandTableView reloadData];
+                    [self demandRequest];
 
                 }
             }
@@ -1208,7 +1206,13 @@
 {
     if(_selectedBtn.tag==22)
     {
-        return 90  ;
+        if (_chooseSelected.tag==31) {
+            return 70;
+            
+        }else
+        {
+            return 80;
+        }
     }else
     {
         return 70;
@@ -1251,6 +1255,12 @@
             cell.dateLabel.text =demand.date;
             cell.TitleLabel.text =demand.name;
             cell.contentLabel.text =demand.introduction;
+            UIView *cellLine = [[UIView alloc] initWithFrame:CGRectMake(10, 69, kWidth - 20, 1)];
+            cellLine.backgroundColor = HexRGB(0xd5d5d5);
+            [cell.contentView addSubview:cellLine];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            return cell;
             return cell;
         }else{
             static NSString *cellIndexfider =@"Cell2";
@@ -1263,10 +1273,12 @@
             supplyCOM *item =[_companySupplyArray objectAtIndex:indexPath.row];
             supplyCell.nameLabel.text = item.name;
             supplyCell.priceLabel.text = [NSString stringWithFormat:@"¥%@元/每件",item.price];
-            supplyCell.read_numLabel.text = [NSString stringWithFormat:@"%@件起供应",item.min_supply_num];
+            supplyCell.supply_numLabel.text = [NSString stringWithFormat:@"%@起供应",item.min_supply_num];
+            supplyCell.read_numLabel.text = [NSString stringWithFormat:@"浏览%@次",item.read_num];
+
             supplyCell.dateLabel.text = item.date;
             [supplyCell.supplyImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
-            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(10,79, kWidth-20, 1)];
             line.backgroundColor = HexRGB(0xd5d5d5);
             [supplyCell.contentView addSubview:line];
             
@@ -1299,7 +1311,9 @@
             UIView *cellLine = [[UIView alloc] initWithFrame:CGRectMake(10, 69, kWidth - 20, 1)];
             cellLine.backgroundColor = HexRGB(0xd5d5d5);
             [cell.contentView addSubview:cellLine];
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+            return cell;
         }
 
 

@@ -30,9 +30,9 @@
                     
                 }
             }
-            success(statuses);
         }
-        
+        success(statuses);
+
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

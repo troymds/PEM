@@ -62,9 +62,9 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     
     demandWebheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
-    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 100, kWidth, demandWebheight)];
+    demandWebView .frame = CGRectMake(0, 100, kWidth, demandWebheight+180);
 
-        _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+144);
+        _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+200);
     
     
 }
@@ -143,7 +143,7 @@
     CGFloat contentHeight =[xqModel.description sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(300, MAXFLOAT)].height;
     CGFloat titleHeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:CGSizeMake(300, MAXFLOAT)].height;
     
-    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, self.view.frame.size.height)];
+    _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:_backScrollView];
@@ -199,7 +199,7 @@
     [_backScrollView addSubview:xinagLabel];
     xinagLabel.font =[UIFont systemFontOfSize:15];
 
-    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 100, kWidth,  kHeight-124)];
+    demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 100, kWidth,  _backScrollView.frame.size.height-180)];
 
     [demandWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:xqModel.description]]];
     demandWebView.userInteractionEnabled = NO;

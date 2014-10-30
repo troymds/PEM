@@ -22,7 +22,7 @@
         TitleLabel.backgroundColor =[UIColor clearColor];
         dateLabel=[[UILabel alloc]init];
         [self addSubview:dateLabel];
-        dateLabel.frame =CGRectMake(250, 0, 60, 40);
+        dateLabel.frame =CGRectMake(250, -4, 60, 40);
         dateLabel.numberOfLines = 1;
         dateLabel.font =[UIFont systemFontOfSize:PxFont(14)];
         dateLabel.textColor=HexRGB(0x666666);
@@ -31,8 +31,8 @@
         
         contentLabel=[[UILabel alloc]init];
         [self addSubview:contentLabel];
-        contentLabel.numberOfLines = 1;
-        contentLabel.frame =CGRectMake(20, 25, 280, 40);
+        contentLabel.numberOfLines = 2;
+        contentLabel.frame =CGRectMake(20, 20, 280, 50);
         contentLabel.font =[UIFont systemFontOfSize:PxFont(17)];
         contentLabel.textColor=HexRGB(0x666666);
         contentLabel.backgroundColor =[UIColor clearColor];

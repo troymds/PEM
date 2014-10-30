@@ -487,6 +487,11 @@
     
 }
 -(void)moreBtnClick:(UIButton *)more{
+    
+    if (!catClickFlage) {
+        return ;
+    }
+    catClickFlage = false;
     for (UIView *view in [_backScrollView subviews])
     {
         if (view.tag == 88)
@@ -529,6 +534,8 @@
     
    
     [self.navigationController pushViewController:message animated:YES];
+    catClickFlage = true;
+    
 }
 #pragma mark 添加三条广告
 -(void)addHot:(NSMutableArray *)hotDemand hotSupply:(NSMutableArray *)supply

@@ -43,6 +43,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor =HexRGB(0xe9f0f5);
+    catClickFlage = true;
     _categoryArray = [[NSMutableArray alloc]init];
     
     UIButton * _searchImage =[UIButton buttonWithType:UIButtonTypeCustom];
@@ -186,7 +187,10 @@
 - (void)itemsClick:(UIButton *)sender
 
 {
- 
+    if (!catClickFlage) {
+        return ;
+    }
+    catClickFlage = false;
         currentTag =(int) sender.tag+100000;
        currStr=sender.titleLabel.text;
     
@@ -254,6 +258,7 @@
     NSString *strId =[NSString stringWithFormat:@"%d",currentTag-1000-100000];
     find.cateIndex = strId;
     [self.navigationController pushViewController:find animated:YES];
+    catClickFlage = true;
     
 }
 -(void)searchBarBtn{

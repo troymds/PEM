@@ -11,6 +11,7 @@
 #import "yyDemandModel.h"
 #import "yySupplyModel.h"
 #import "yyCompanyModel.h"
+
 @implementation SearchTool
 
 + (void)searchWithSuccessBlock:(SearchSuccessBlock)success  withKeywords:(NSString *)keywords lastID:(NSString *)lastid failureBlock:(SearchFailureBlock)failure
@@ -30,15 +31,15 @@
         NSDictionary *array =d[@"response"];
         if ([array isKindOfClass:[NSNull class]])
         {
-            
         }else{
         for (NSDictionary *dict in array) {
             yyCompanyModel *s =[[yyCompanyModel alloc] initWithDictionaryForCompany:dict];
             
             [statuses addObject:s];
         }
-        success(statuses);
         }
+        success(statuses);
+
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -56,6 +57,7 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
+        NSLog(@"-------%@",array);
         if ([array isKindOfClass:[NSNull class]]) {
         }else{
             for (NSDictionary *dict in array) {
@@ -83,15 +85,15 @@
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
         NSDictionary *array =d[@"response"];
-        if ([array isKindOfClass:[NSNull class]])
-        {}else{
-        for (NSDictionary *dict in array) {
-            yyDemandModel *s =[[yyDemandModel alloc] initWithDictionaryFordemand:dict];
+        if ([array isKindOfClass:[NSNull class]]){
             
-            [statuses addObject:s];
+        }else{
+            for (NSDictionary *dict in array) {
+                yyDemandModel *s =[[yyDemandModel alloc] initWithDictionaryFordemand:dict];
+                [statuses addObject:s];
+            }
         }
         success(statuses);
-        }
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

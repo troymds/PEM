@@ -247,25 +247,16 @@
     {
         if (currentSelectedBtnTag ==202) {
             [self companyRequest];
-            if (_compangyArray.count ==0) {
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-
-            }
+            
         }
         else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
-            if (_demandArray.count ==0) {
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-                
-            }
+           
         }else
         {
             [self supplyRequest];
-            if (_supllyArray.count ==0) {
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-                
-            }
+           
             
         }
     }
@@ -282,10 +273,12 @@
 
             if (search.count<=0)
             {
+                
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
             {
+
                 _resultTableView.hidden = NO;
                 noDataBgView.hidden = YES;
                 [_supllyArray addObjectsFromArray:search];
@@ -328,16 +321,13 @@
     {
         [SearchTool searchWithDemandSuccessBlock:^(NSArray *search) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            NSLog(@"----demand---%d",search.count);
 
             if (search.count<=0)
-            {            NSLog(@"----11111demand---%d",search.count);
-
+            {
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
-            {            NSLog(@"----2222demand---%d",search.count);
-
+            {
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
                 [_demandArray addObjectsFromArray:search];
@@ -383,6 +373,7 @@
         {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
+            
             if (search.count<=0)
             {
                 noDataBgView.hidden = NO;
@@ -392,6 +383,7 @@
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
                 [_compangyArray addObjectsFromArray:search];
+
             }
             [self tableReloadData];
             
@@ -417,7 +409,6 @@
             }
             
             [self tableReloadData];
-            
             
         } lasiID:0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0] failure:^(NSError *error) {
             
@@ -704,7 +695,7 @@
         }
     }
     
-    return 8;
+    return 0;
     
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -1278,12 +1269,15 @@
         if (currentSelectedBtnTag == 202)
         {
             [self companyRequest];
+          
+
             [self removerThreeArray];
-        }else if(currentSelectedBtnTag == 201)
+            }else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
+         
             [self removerThreeArray];
-
+            
         }else
         {
             [self supplyRequest];
@@ -1291,7 +1285,9 @@
 
         }
         
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+//        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+       
+      
     }
 
 }
@@ -1384,10 +1380,6 @@
         recordLabel.hidden = NO;
 
     }
-}
--(void)BackButton
-{
-    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark textField delegate

@@ -22,6 +22,7 @@
     
     [ebingooWeb loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_ebingooID]]];
     ebingooWeb.delegate =self;
+    ebingooWeb.backgroundColor =[UIColor whiteColor];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -28,7 +28,7 @@
         nameLabel.backgroundColor =[UIColor clearColor];
         
         
-        dateLabel= [[UILabel alloc] initWithFrame:CGRectMake(250, 7, 60, 40)];
+        dateLabel= [[UILabel alloc] initWithFrame:CGRectMake(250, 3, 60, 20)];
         dateLabel.text = @"";
         dateLabel.numberOfLines = 1;
         dateLabel.textColor=HexRGB(0x666666);
@@ -38,7 +38,7 @@
         [self.contentView addSubview:dateLabel];
         
         
-        priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 24, 180, 25)];
+        priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 30, 180, 25)];
         priceLabel.textColor=HexRGB(0xff7300);
         priceLabel.font =[UIFont systemFontOfSize:PxFont(22)];
         [self.contentView addSubview:priceLabel];
@@ -47,19 +47,21 @@
         
         
         
-        supply_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 43, 180, 20)];
+        supply_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 55, 100, 20)];
         supply_numLabel.font =[UIFont systemFontOfSize:PxFont(17)];
         [self.contentView addSubview:supply_numLabel];
         supply_numLabel.textColor=HexRGB(0x666666);
         supply_numLabel.backgroundColor =[UIColor clearColor];
 
         
-        read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, 60, 180, 20)];
+        read_numLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 55, 105, 20)];
         [self.contentView addSubview:read_numLabel];
         read_numLabel.font =[UIFont systemFontOfSize:PxFont(17)];
         read_numLabel.textColor=HexRGB(0x666666);
         read_numLabel.backgroundColor =[UIColor clearColor];
-
+        read_numLabel.textAlignment = NSTextAlignmentRight;
+        
+        
         
         
        

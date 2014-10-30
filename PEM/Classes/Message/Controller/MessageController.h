@@ -16,6 +16,8 @@
 
     int currentTag;
     NSString *currStr;
+    Boolean catClickFlage;
+
 }
 
 @property(nonatomic,assign)id <ChangeControllerDelegate> delegate;

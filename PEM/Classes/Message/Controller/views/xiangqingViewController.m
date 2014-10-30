@@ -77,9 +77,9 @@
     
     webheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     
-    _gyWebView.frame = CGRectMake(0, 320, kWidth, webheight+100);
+    _gyWebView.frame = CGRectMake(0, 320, kWidth, webheight+320);
 
-    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+500);
+    _backScrollView.contentSize = CGSizeMake(kWidth,webheight+450);
     
     
     

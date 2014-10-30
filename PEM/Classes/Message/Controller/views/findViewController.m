@@ -92,7 +92,6 @@
     [self.view addSubview:linBackView];
     [self addLeftSegment];
     [self addRigthSegment];
-    [self addMBprogressView];
     [self loadSupplyDataResoult];
 
 
@@ -105,6 +104,8 @@
 
 }
 -(void)loadSupplyDataResoult{
+ [self addMBprogressView];
+
     [supplyTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if (statues.count > 0) {
@@ -195,7 +196,7 @@
             [_tableView reloadData];
             [refreshView endRefreshing];
 
-        }cateId:cateIndex supplyHot:@"read_num" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+        }cateId:cateIndex supplyHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
             
         }];
         
@@ -251,7 +252,7 @@
             
             
             
-        }cateId:cateIndex demandHot:@"read_num" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
+        }cateId:cateIndex demandHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
             
         }];
         
@@ -576,7 +577,8 @@
     
 
     if (sender.tag ==11) {
-        
+        [self addMBprogressView];
+
         [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
@@ -675,7 +677,7 @@
 
             [_CateSupplyArray addObjectsFromArray:statues];
             [_tableView reloadData];
-        }cateId:cateIndex supplyHot:@"read_num" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+        }cateId:cateIndex supplyHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
             
         }];
 
@@ -739,7 +741,7 @@
 
             
             
-        }cateId:cateIndex demandHot:@"read_num" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
+        }cateId:cateIndex demandHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
             
         }];
 
