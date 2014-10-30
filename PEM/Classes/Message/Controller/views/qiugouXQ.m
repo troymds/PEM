@@ -599,7 +599,9 @@
 -(void)gotoCompanyBtnClick:(UIButton *)goCompany{
     XQgetInfoDetailModel *comID =[demandArray objectAtIndex:0];
     if (![SystemConfig sharedInstance].isUserLogin) {
-        
+        _loginView = [[LoginView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        _loginView.delegate = self;
+        [_loginView showView];
         
      
         
