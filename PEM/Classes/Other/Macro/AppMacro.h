@@ -68,7 +68,7 @@
 //判断字典dic中键key对应的值是否为空
 #define isNull(dic,key) [[dic objectForKey:key] isKindOfClass:[NSNull class]]?YES:NO
 
-#define kBaseURL @"http://218.244.149.129"
+#define kBaseURL @"http://ebingoo.bingoso.com"
 #define kURL @"http://192.168.1.155"
 
 
