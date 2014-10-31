@@ -24,11 +24,13 @@
         self.mainRun = dic[@"mainRun"];
         
         self.name = dic[@"name"];
+        self.name = [self.name stringByReplacingOccurrencesOfString:@" " withString:@""];
         self.tel = dic[@"tel"];
         self.viptype = dic[@"vip_type"];
         
         self.website = dic[@"website"];
         self.infoarray = dic[@"infoarray"];
+        NSLog(@"infoarray%@",self.infoarray);
         self.e_url = dic[@"e_url"];
 
         

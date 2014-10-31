@@ -26,11 +26,9 @@
 #import "adsModel.h"
 #import "CompanyXQViewController.h"
 #import "MessageController.h"
-//#import "QRCodeViewController.h"
 #import "bannerWebView.h"
 #import "SDWebImageManager.h"
 #import "ZBarSDK.h"
-//#import "CompanyDetailViewController.h"
 #import "DimensionalCodeViewController.h"
 
 @interface HomeController ()<UIScrollViewDelegate,SDWebImageManagerDelegate,ZBarReaderDelegate>

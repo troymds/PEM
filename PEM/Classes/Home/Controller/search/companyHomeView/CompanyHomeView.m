@@ -276,9 +276,34 @@
     [_scroll addSubview:linView4];
     
     
+
     //判断是否有具体公司信息
     UILabel *noCompanginfo = [[UILabel alloc] init];
     UILabel *companyinfo = [[UILabel alloc] init];
+    UILabel *noCompang = [[UILabel alloc] init];
+
+    if ([data.infoarray isKindOfClass:[NSNull class]]) {
+
+        noCompang.text = @"【近期供求】";
+        noCompang.backgroundColor =[UIColor clearColor];
+        noCompang.textColor = HexRGB(0x3a3a3a);
+        noCompang.font =[UIFont systemFontOfSize:PxFont(20)];
+        noCompang.frame = CGRectMake(_headFrame.imageFrame.origin.x, CGRectGetMaxY(linView4.frame) + KViewBorderWidth, 200, KMainFont);
+        [_scroll addSubview:noCompang];
+        
+        noCompanginfo.text = @"暂无近期供求！";
+        noCompanginfo.textColor =HexRGB(0x666666);
+        noCompanginfo.font = [UIFont systemFontOfSize:PxFont(17)];
+        noCompanginfo.hidden = NO;
+        
+        companyinfo.hidden = YES;
+        noCompanginfo.frame = CGRectMake(_headFrame.imageFrame.origin.x+120, 20+CGRectGetMaxY(linView4.frame) + KViewBorderWidth, 200, KMainFont);
+        _scroll.contentSize = CGSizeMake(kWidth, CGRectGetMaxY(noCompanginfo.frame) ) ;
+        [_scroll addSubview:noCompanginfo];
+
+   }else{
+       
+
     NSInteger count = data.infoarray.count;
     NSMutableArray * array = [NSMutableArray arrayWithCapacity:count];
     for (NSDictionary *dict in data.infoarray)
@@ -287,28 +312,20 @@
         [array addObject:hotModel];
     }
     _comPanyArray = array;
-    if (count == 0) {
-        
-        noCompanginfo.text = @"暂无近期供求！";
-        noCompanginfo.textColor =HexRGB(0x666666);
-        noCompanginfo.font = [UIFont systemFontOfSize:PxFont(17)];
-        noCompanginfo.hidden = NO;
-        [_scroll addSubview:companyinfo];
-        
-        companyinfo.hidden = YES;
-        noCompanginfo.frame = CGRectMake(_headFrame.imageFrame.origin.x, CGRectGetMaxY(linView4.frame) + KViewBorderWidth, 200, KMainFont);
-        _scroll.contentSize = CGSizeMake(kWidth, CGRectGetMaxY(noCompanginfo.frame) ) ;
-        
-    }else
-    {
+       
+       
+       
+       companyinfo.text = @"【近期供求】";
+       companyinfo.backgroundColor =[UIColor clearColor];
+       companyinfo.textColor = HexRGB(0x3a3a3a);
+       companyinfo.font =[UIFont systemFontOfSize:PxFont(20)];
+       companyinfo.frame = CGRectMake(_headFrame.imageFrame.origin.x, CGRectGetMaxY(linView4.frame) + KViewBorderWidth, 200, KMainFont);
+       [_scroll addSubview:companyinfo];
         noCompanginfo.hidden = YES;
         companyinfo.hidden = NO;
-        companyinfo.text = @"【近期供求】";
-        companyinfo.backgroundColor =[UIColor clearColor];
-        companyinfo.textColor = HexRGB(0x3a3a3a);
-        companyinfo.font =[UIFont systemFontOfSize:PxFont(20)];
-        companyinfo.frame = CGRectMake(_headFrame.imageFrame.origin.x, CGRectGetMaxY(linView4.frame) + KViewBorderWidth, 200, KMainFont);
-        [_scroll addSubview:companyinfo];
+       noCompang.hidden = YES;
+
+       
         
         CGFloat supplyStartY = CGRectGetMaxY(companyinfo.frame) + KViewBorderWidth;
         for (int i = 0; i < count; i++) {
@@ -322,8 +339,8 @@
         _scroll.contentSize = CGSizeMake(kWidth, supplyStartY+ (30 *count )) ;
     }
     
+   
 }
-
 #pragma mark 点击供应视图
 - (void)tapGesture :(UITapGestureRecognizer *) myView
 {
