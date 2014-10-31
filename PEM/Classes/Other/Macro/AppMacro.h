@@ -75,10 +75,10 @@
 // 2.日志输出宏定义
 #ifdef DEBUG
 // 调试状态
-#define MyLog(...) NSLog(__VA_ARGS__)
+#define NSLog(...) NSLog(__VA_ARGS__)
 #else
 // 发布状态
-#define MyLog(...)
+#define NSLog(...)
 #endif
 
 #define KCompanyMenuItemW   kWidth/3
