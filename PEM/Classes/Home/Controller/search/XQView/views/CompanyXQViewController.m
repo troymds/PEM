@@ -491,14 +491,19 @@
     
     EbingooView *ebingView =[[EbingooView alloc]init];
     ebingView.ebingooID =comHomeModel.e_url;
+    
     if (![comHomeModel.e_url isKindOfClass:[NSNull class]]) {
-        if (![comHomeModel.e_url isEqualToString:@""]) {
-            [self.navigationController pushViewController:ebingView animated:YES];
+        if ([comHomeModel.e_url isEqualToString:@""]) {
+            [RemindView showViewWithTitle:@"该企业未开通E平台" location:BELLOW];
 
         }
+        else {
+            [self.navigationController pushViewController:ebingView animated:YES];
+
+
+        }
+
         
-    }else {
-        [RemindView showViewWithTitle:@"该企业未开通E平台" location:BELLOW];
     }
 }
 
@@ -593,7 +598,8 @@
         UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/3+i%3*(75+32), 8, 1, 14)];
         [companyBackView addSubview:companyBackLine];
         
-        companyBackLine.backgroundColor =HexRGB(0xe6e3e4);
+        companyBackLine.backgroundColor =[UIColor lightGrayColor];
+        companyBackLine.alpha = 0.5;
         
     }
     for (int p=0; p<3; p++)
