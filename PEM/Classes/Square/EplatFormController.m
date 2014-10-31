@@ -9,6 +9,7 @@
 #import "EplatFormController.h"
 
 @interface EplatFormController ()
+@property (nonatomic, strong) NSString * useAgent;
 
 @end
 
@@ -23,6 +24,13 @@
     _webView.userInteractionEnabled = YES;
     _webView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_webView];
+    NSString *userAgent = [[[UIWebView alloc] init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+    self.useAgent = [userAgent stringByAppendingString:@"/ebingoo"];
+    
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"UserAgent"].length == 0) {
+        NSDictionary *dictionnary = [[NSDictionary alloc]initWithObjectsAndKeys:self.useAgent, @"UserAgent", nil];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
+    }
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_e_url]]];
 }
 
