@@ -949,7 +949,7 @@
                 
                 
                 if ([s.price isEqualToString:@"0"]) {
-                    cell.priceLabel.text=@"面议";
+                    cell.priceLabel.text=@"电议";
                 }else{
                     cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
                     

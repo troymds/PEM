@@ -67,35 +67,19 @@
 
 - (void)check
 {
-    //判断是否能发布供应信息
     int vipType = [[SystemConfig sharedInstance].viptype intValue];
     //当会员类型小于等于0时  检查是否能发布供应信息
     if (vipType <= 0 ) {
-        //判断是否可以发布供应信息
-        NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.dimBackground = NO;
-        [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-            if ([result objectForKey:@"response"]) {
-                NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
-                if ([code intValue] ==100) {
-                    int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
-                    if (data == 0) {
-                        //不能发布信息
-                        NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
-                        MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                        [actionView showView];
-                    }
-                }
+        if ([SystemConfig sharedInstance].vipInfo) {
+            int supply_num = [[SystemConfig sharedInstance].vipInfo.supply_num intValue];
+            if (supply_num>=10) {
+                NSString *message = @"您好,您的发布供应次数已用完,要想发布更多,请选择立即升级";
+                MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                actionView.tag = 1003;
+                [actionView showView];
             }
-        } failure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            NSLog(@"%@",error);
-        }];
+        }
     }
-
 }
 
 

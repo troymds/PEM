@@ -140,7 +140,7 @@
     [cell.iconImageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",item.img]] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
     cell.nameLabel.text = item.title;
     if ([item.price isEqualToString:@"0"]) {
-        cell.priceLabel.text = @"价格:面议";
+        cell.priceLabel.text = @"价格:电议";
     }else{
         cell.priceLabel.text = [NSString stringWithFormat:@"价格:%@元",item.price];
     }
