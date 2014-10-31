@@ -31,6 +31,7 @@
     
     // 4.修改所有UIBarButtonItem的外观
     UIBarButtonItem *barItem = [UIBarButtonItem appearance];
+    
     // 修改item的背景图片
     [barItem setBackgroundImage:[UIImage imageNamed:@"baisejiantou.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     [barItem setBackgroundImage:[UIImage imageNamed:@"baisejiantou.png"] forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault] ;

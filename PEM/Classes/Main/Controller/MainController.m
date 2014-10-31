@@ -95,6 +95,10 @@
         [root.view addSubview:_dock];
         
         // 4.添加左上角的返回按钮
+        UIBarButtonItem * back = [UIBarButtonItem itemWithIcon:@"nav_return.png" highlightedIcon:@"nav_return_pre.png" target:self action:@selector(backItem)];
+       NSNumber * num =  [back valueForKey:@"_width"];
+        
+//        MyLog(@"UIBarButtonItem frame %@",NSStringFromCGRect(myview.bounds));
         viewController.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithIcon:@"nav_return.png" highlightedIcon:@"nav_return_pre.png" target:self action:@selector(backItem)];
         
     }

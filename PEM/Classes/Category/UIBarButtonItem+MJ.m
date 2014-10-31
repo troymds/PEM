@@ -21,7 +21,7 @@
     [btn setBackgroundImage:[UIImage imageNamed:highlighted] forState:UIControlStateHighlighted];
     
     // 设置尺寸
-    btn.bounds = (CGRect){CGPointZero, image.size};
+    btn.bounds = (CGRect){CGPointZero, CGSizeMake(30, 30)};
     
     [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     

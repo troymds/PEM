@@ -26,10 +26,14 @@
 #import "adsModel.h"
 #import "CompanyXQViewController.h"
 #import "MessageController.h"
-#import "QRCodeViewController.h"
+//#import "QRCodeViewController.h"
 #import "bannerWebView.h"
 #import "SDWebImageManager.h"
-@interface HomeController ()<UIScrollViewDelegate,SDWebImageManagerDelegate>
+#import "ZBarSDK.h"
+//#import "CompanyDetailViewController.h"
+#import "DimensionalCodeViewController.h"
+
+@interface HomeController ()<UIScrollViewDelegate,SDWebImageManagerDelegate,ZBarReaderDelegate>
 {
     UIScrollView *_backScrollView;
     UIImageView *_smallImgView;
@@ -44,7 +48,9 @@
     int currentTag;
     
     NSString *curStr;
+    ZBarReaderViewController *_reader;
 }
+@property (nonatomic, strong)NSString * zbarUl;
 @end
 
 @implementation HomeController
@@ -105,11 +111,43 @@
     
 }
 -(void)zbarSdk:(UIButton *)sdk{
-    QRCodeViewController *qrcode =[[QRCodeViewController alloc]init];
-    [self.navigationController pushViewController:qrcode animated:YES];
+    _reader = [ZBarReaderViewController new];
+    _reader.readerDelegate = self;
+    _reader.showsHelpOnFail = NO;
     
-
+    ZBarImageScanner * scanner = _reader.scanner;
+    
+    [scanner setSymbology:ZBAR_I25
+                   config:ZBAR_CFG_ENABLE
+                       to:0];
+    [self presentViewController:_reader animated:YES completion:^{
+        
+    }];
+    
 }
+
+#pragma mark - zbar reader delegate
+- (void) imagePickerController: (UIImagePickerController*) readerv
+ didFinishPickingMediaWithInfo: (NSDictionary*) info
+{
+    //    [self performSelectorOnMainThread:@selector(dismissPicker) withObject:nil waitUntilDone:YES];
+    // ADD: get the decode results
+    id<NSFastEnumeration> results =
+    [info objectForKey: ZBarReaderControllerResults];
+    ZBarSymbol *symbol = nil;
+    for(symbol in results)
+        // EXAMPLE: just grab the first barcode
+        break;
+    self.zbarUl = symbol.data;
+    
+    [readerv dismissViewControllerAnimated:YES completion:^{
+        DimensionalCodeViewController *DimensionalCodeViewCon = [[DimensionalCodeViewController alloc]init];
+        DimensionalCodeViewCon.url =[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.zbarUl]];
+        self.navigationController.navigationBar.hidden = NO;
+        [self.navigationController pushViewController:DimensionalCodeViewCon animated:YES];
+    }];
+}
+
 #pragma mark 加载微博数据
 - (void)loadNewData
 {
