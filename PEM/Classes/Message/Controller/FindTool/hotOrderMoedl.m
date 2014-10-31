@@ -15,7 +15,7 @@
     NSDictionary *dicid = [NSDictionary dictionaryWithObjectsAndKeys:supply,@"sort",cateid,@"category_id",nil];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicid options:NSJSONWritingPrettyPrinted error:nil];
     NSString *condition = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"15",@"pagesize",lastid,@"lastid",condition,@"condition", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",lastid,@"lastid",condition,@"condition", nil];
     [HttpTool postWithPath:@"getSupplyInfoList" params:dic success:^(id JSON) {
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];
@@ -43,7 +43,7 @@
     NSDictionary *dicid = [NSDictionary dictionaryWithObjectsAndKeys:demand,@"sort",cateid,@"category_id",nil];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicid options:NSJSONWritingPrettyPrinted error:nil];
     NSString *condition = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"15",@"pagesize",lastid,@"lastid",condition,@"condition", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",lastid,@"lastid",condition,@"condition", nil];
     [HttpTool postWithPath:@"getDemandInfoList" params:dic success:^(id JSON) {
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];

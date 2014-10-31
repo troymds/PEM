@@ -14,7 +14,7 @@
 {
     
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"15",@"pagesize",lastid,@"lastid", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",lastid,@"lastid", nil];
     [HttpTool postWithPath:@"getCompanyList" params:dic success:^(id JSON) {
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
 
