@@ -56,6 +56,8 @@
     [self.view addSubview:_searchImage];
     self.navigationItem.titleView =_searchImage;
     [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateNormal];
+    [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateHighlighted];
+
     [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
     
     currentTag =0;

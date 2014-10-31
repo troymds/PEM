@@ -129,11 +129,16 @@
 
 -(void)loadViewStatusesHome
 {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+
     if ([companyID isKindOfClass:[NSNull class]] ) {
     }else
     {
         //    公司首页
         [XQgetInfoTool statusesWithSuccessNew:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             [_companyHomeArray addObject:statues];
             comHomeModel *statuModel =[statues objectAtIndex:0];
             self.title = statuModel.name;
@@ -293,7 +298,6 @@
         
         [self tableReloadData];
     } DemandCompanyFailure:^(NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         
@@ -303,9 +307,9 @@
 }
 - (void)companyRequest
 {
-   
-    //    公司企业
+       //    公司企业
     [comPanyNEWTool statusesWithSuccessNew:^(NSArray *statues) {
+
         if (statues.count > 0) {
             
             _conditionTableView.hidden = NO;
@@ -325,7 +329,6 @@
         [self tableReloadData1];
         //[_conditionTableView reloadData];
     } NewFailure:^(NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     } CompanyID:companyID ];
