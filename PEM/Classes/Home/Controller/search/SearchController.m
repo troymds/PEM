@@ -286,6 +286,9 @@
             [self tableReloadData];
             
         } SupplywithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0]  SupplyfailureBlock:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         }];
         
     }else
@@ -305,6 +308,9 @@
             [self tableReloadData];
             
         } lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0] failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
             
         }];
         
@@ -335,6 +341,9 @@
             [self tableReloadData];
             
         } DemandwithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%d",[_demandArray count]-0] DemandfailureBlock:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
             
         }];
         
@@ -356,7 +365,10 @@
             
             [self tableReloadData];
         } lastID:0? 0:[NSString stringWithFormat:@"%u",[_demandArray count]-0] failure:^(NSError *error) {
-            
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
         
     }
@@ -389,6 +401,10 @@
             
         } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0]
                               failureBlock:^(NSError *error) {
+                                  [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                                  
+                                  [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
                                   
                               }];
     }
@@ -411,7 +427,10 @@
             [self tableReloadData];
             
         } lasiID:0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0] failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
     }
  
@@ -1260,10 +1279,7 @@
     
     // 显示指示器
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
-    
-    
+    hud.labelText = @"加载中...";
     if (self.view == _resultBgView)
     {
         if (currentSelectedBtnTag == 202)

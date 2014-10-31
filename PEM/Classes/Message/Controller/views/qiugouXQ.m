@@ -78,6 +78,9 @@
         [self addAabstract];
         [self showNewStatusCount];
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         
     } infoID:demandIndex];
 }
@@ -472,6 +475,9 @@
                                       [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
                                           
                                       } failure:^(NSError *error) {
+                                          [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                                          
+                                          [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                                           
                                       }];
                                       
@@ -517,7 +523,9 @@
                               [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
                                   
                               } failure:^(NSError *error) {
+                                  [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                                   
+                                  [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                               }];
                           }];
     

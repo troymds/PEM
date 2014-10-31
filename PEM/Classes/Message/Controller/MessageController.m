@@ -15,7 +15,7 @@
 #import "gategoryModel.h"
 #import "MainController.h"
 #import "UIImageView+WebCache.h"
-//#import "QRCodeViewController.h"
+#import "RemindView.h"
 #import "ZBarSDK.h"
 //#import "CompanyDetailViewController.h"
 #import "DimensionalCodeViewController.h"
@@ -134,7 +134,10 @@
 
 
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
     }];
 
 }
@@ -155,8 +158,7 @@
 {
     // 显示指示器
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
+    hud.labelText = @"加载中...";
     
     for (int but=0; but<_categoryArray.count; but++) {
         gategoryModel *cagegoryModel =[_categoryArray objectAtIndex:but];

@@ -162,6 +162,9 @@
             [self buildCompanyHomeUI];
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         } newFailure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
             
         } NewCompanyid:companyID loginId:[SystemConfig sharedInstance].company_id];
         
@@ -259,6 +262,10 @@
         [self tableReloadData];
         
     } CompanyId:companyID CompanyFailure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         
         
     }];
@@ -286,6 +293,9 @@
         
         [self tableReloadData];
     } DemandCompanyFailure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         
     } DemandCompanyId:companyID];
     
@@ -315,7 +325,9 @@
         [self tableReloadData1];
         //[_conditionTableView reloadData];
     } NewFailure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     } CompanyID:companyID ];
     
     
