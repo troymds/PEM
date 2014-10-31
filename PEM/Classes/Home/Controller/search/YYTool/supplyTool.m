@@ -31,9 +31,9 @@
                     yySupplyModel *s =[[yySupplyModel alloc] initWithDictionaryForSupply:dict];
                     [statuses addObject:s];
                 }
-            }      success(statuses);
+            }
         }
-        
+        success(statuses);
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -63,8 +63,9 @@
                 }
                 
             }
-            success(statuses);
         }
+        success(statuses);
+
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -96,8 +97,9 @@
                 }
                 
             }
-            success(statuses);
         }
+        success(statuses);
+
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

@@ -29,7 +29,6 @@
                 [statuses addObject:s];
                 
             }
-                success(statuses);
                 
             }
             else{
@@ -37,6 +36,8 @@
                 
             }
         }
+        success(statuses);
+
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -63,10 +64,11 @@
                     
                     [statuses addObject:s];
                 }
-                success(statuses);
             }else{
             }
         }
+        success(statuses);
+
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);
@@ -96,8 +98,9 @@
                 }
                 
             }
-            success(statuses);
         }
+        success(statuses);
+
     } failure:^(NSError *error) {
         if (failure==nil)return ; {
             failure(error);

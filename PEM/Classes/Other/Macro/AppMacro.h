@@ -71,3 +71,40 @@
 #define kBaseURL @"http://218.244.149.129"
 #define kURL @"http://192.168.1.155"
 
+
+// 2.日志输出宏定义
+#ifdef DEBUG
+// 调试状态
+#define MyLog(...) NSLog(__VA_ARGS__)
+#else
+// 发布状态
+#define MyLog(...)
+#endif
+
+#define KCompanyMenuItemW   kWidth/3
+#define KCompanyMenuItemH   30
+
+// ---------------------公司首页页面
+// 图标
+#define kIconSmallW 34
+#define kIconSmallH 34
+
+#define kIconDefaultW 105
+#define kIconDefaultH 74
+
+#define kIconBigW 85
+#define kIconBigH 85
+
+#define KViewBorderWidth 10 //距离边界的大小
+#define KLineH      16  // 线条图片的高度
+#define KBoardWitch  10   // 图片和公司名称的间距
+#define KVIPW     18        //vip图片的宽度
+#define KVIPH      25       //vip图片的高度
+
+#define KNumberOfText    11  //   一行显示的字数
+#define KWordSpace     12     //vip图标和 第二行文字的间隔
+
+#define KEPlatFormW  100  //E平台按钮宽度
+#define KEplatFormH  30  //E平台按钮高度
+#define KMainFont 40
+#define KIconWH 12   //小图标的宽高

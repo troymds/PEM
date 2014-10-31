@@ -9,7 +9,10 @@
 #import "DimensionalCodeViewController.h"
 
 @interface DimensionalCodeViewController ()
-
+{
+    UIWebView *_web;
+}
+@property (nonatomic, strong) NSString * useAgent;
 @end
 
 @implementation DimensionalCodeViewController
@@ -36,41 +39,47 @@
    
     [self setBackNaviItem];
 }
+
 -(void)viewWillAppear:(BOOL)animated{
-    UIWebView *web =[[UIWebView alloc] initWithFrame:CGRectMake(0,0, kWidth, kHeight-64)];
-    web.delegate=self;
-    web.scrollView.bounces = NO;
-    [self.view addSubview:web];
+    _web =[[UIWebView alloc] initWithFrame:CGRectMake(0,0, kWidth, kHeight-64)];
+    _web.delegate=self;
+    _web.scrollView.bounces = NO;
+    [self.view addSubview:_web];
     
+    NSString *userAgent = [[[UIWebView alloc] init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+    self.useAgent = [userAgent stringByAppendingString:@"/ebingoo"];
+
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"UserAgent"].length == 0) {
+        NSDictionary *dictionnary = [[NSDictionary alloc]initWithObjectsAndKeys:self.useAgent, @"UserAgent", nil];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
+    }
     NSURLRequest *request =[[NSURLRequest alloc] initWithURL:self.url];
-    [web loadRequest:request];
+    [_web loadRequest:request];
     
 }
 
 -(void)webViewDidStartLoad:(UIWebView *)webView{
-    
+
 }
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
-    
+
 }
+
 -(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     
 }
 
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    if (webView == _web) {
+        return YES;
+    }
+    return YES;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
