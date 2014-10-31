@@ -13,7 +13,7 @@
 + (void)statusesWithSuccess:(StatusSuccessBlock)success failure:(StatusFailureBlock)failure
 {
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"15",@"pagesize",@"0",@"lastid", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",@"0",@"lastid", nil];
     [HttpTool postWithPath:@"getCategoryList" params:dic success:^(id JSON) {
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         
