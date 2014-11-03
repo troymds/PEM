@@ -3205,8 +3205,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: wu guixiang (DBA88DPK47)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: wu guixiang (DBA88DPK47)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PEM/Classes/Other/ShareSDK/Connection",
@@ -3240,7 +3240,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "962a2c18-82f6-4bb8-bae3-1e22fe2895c5";
+				PROVISIONING_PROFILE = "bf32ab81-2772-4def-b21b-eb8c7fa652fa";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
@@ -3253,8 +3253,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: wu guixiang (DBA88DPK47)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: wu guixiang (DBA88DPK47)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PEM/Classes/Other/ShareSDK/Connection",
@@ -3288,7 +3288,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "962a2c18-82f6-4bb8-bae3-1e22fe2895c5";
+				PROVISIONING_PROFILE = "bf32ab81-2772-4def-b21b-eb8c7fa652fa";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = armv7;
