@@ -33,6 +33,7 @@
 #import "LoginView.h"
 #import "HttpTool.h"
 #import "CompanyHomeView.h"
+#import "EplatFormController.h"
 
 #define KHEIGHT_COMPANY  12
 
@@ -488,22 +489,18 @@
 - (void) CompanyHomeView:(CompanyHomeView *)view
 {
     comHomeModel *comHomeModel =[[_companyHomeArray objectAtIndex:0]objectAtIndex:0];
-    
-    EbingooView *ebingView =[[EbingooView alloc]init];
-    ebingView.ebingooID =comHomeModel.e_url;
-    NSLog(@"%@",comHomeModel.e_url);
     if ([comHomeModel.e_url isKindOfClass:[NSNull class]]) {
        
             [RemindView showViewWithTitle:@"该企业未开通E平台" location:BELLOW];
-
     }
-    else {
-        [self.navigationController pushViewController:ebingView animated:YES];
-        
-        
+    else
+    {
+        EplatFormController *plat = [[EplatFormController alloc] init];
+        plat.e_url = comHomeModel.e_url;
+        [self.navigationController pushViewController:plat animated:YES];
     }
-  
 }
+
 
 -(void)addChooseBtn
 {

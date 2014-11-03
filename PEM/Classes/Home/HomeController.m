@@ -23,7 +23,6 @@
 #import "UIImageView+WebCache.h"
 #import "labelColor.h"
 #import "supplyTool.h"
-#import "adsModel.h"
 #import "CompanyXQViewController.h"
 #import "MessageController.h"
 #import "bannerWebView.h"
@@ -185,6 +184,8 @@
                 [adsImage addObject:ads];
             }
             [self addADSimageBtn:adsImage];
+            [self initBannerView];
+            
             [self addCategorybutton:_hotImageArray];
             [self addtitleTodyBtn:_tadyNumArray];
             [self addHot:_hotDemandArray hotSupply:_hotSupplyArray ];
@@ -198,24 +199,7 @@
 
     
 }
-- (void)updateAvailabilityFieldWithReach:(AHReach *)reach
-{
-    if([reach isReachableViaWWAN])
-    {
-        [self loadNewData];
-        [RemindView showViewWithTitle:@"已连接上网络！" location:BELLOW];
-    }else if([reach isReachableViaWiFi])
-    {
-        [self loadNewData];
-        [RemindView showViewWithTitle:@"已经连接WiFi" location:BELLOW];
-    }else
-    {
-        //        [RemindView showViewWithTitle:@"网络断开，请检测网络！" location:BELLOW];
-    }
-}
-
-
-#pragma mark----addsImages
+#pragma mark - 轮播
 
 -(void)addADSimageBtn:(NSMutableArray *)tody
 {
@@ -226,65 +210,36 @@
     {
         adsModel *ads =[tody objectAtIndex:i];
         [slideImages addObject:ads.srcImage];
-    }
-    
-    
-    NSMutableArray *tempArray=[NSMutableArray arrayWithArray:slideImages];
-    [tempArray insertObject:[slideImages objectAtIndex:([slideImages count]-1)] atIndex:0];
-    [tempArray addObject:[slideImages objectAtIndex:0]];
-    imageArray=[NSArray arrayWithArray:tempArray];
-    
-    NSUInteger pageCount=[imageArray count];
-    for (int i=0; i<pageCount; i++)
-    {
-        NSString *imgURL=[imageArray objectAtIndex:i];
-        UIImageView *imageView = [[UIImageView alloc] init];
-        imageView.userInteractionEnabled = YES;
-        [imageView setImageWithURL:[NSURL URLWithString:imgURL]  placeholderImage:[UIImage imageNamed:@"load_big.png"]];
-        imageView.tag = 230+i;
-        
-        imageView.frame = CGRectMake((kWidth * i), 0, kWidth, 118);
-        [scrollView addSubview:imageView]; // 首页是第0页,默认从第1页开始的。所以+kWidth。。。
-        
-        UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
-        [imageView addGestureRecognizer:tap];
         
     }
-
+}
+-(void)initBannerView{
+    _bannerView =[[KDCycleBannerView alloc] initWithFrame:CGRectMake(0, 0,kWidth,118)];
     
-    // 取数组最后一张图片 放在第0页
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[imageArray objectAtIndex:([imageArray count]-1)]]];
-    
-    imageView.frame = CGRectMake(0, 0, kWidth, 118); // 添加最后1页在首页 循环
-    [scrollView addSubview:imageView];
-    // 取数组第一张图片 放在最后1页
-    imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[imageArray objectAtIndex:0]]];
-    imageView.frame = CGRectMake((kWidth * ([imageArray count] + 1)) , 0, kWidth, 118); // 添加第1页在最后 循环
-    [scrollView addSubview:imageView];
-    
-    [scrollView setContentSize:CGSizeMake(kWidth * ([imageArray count] + 2), 118)]; //  +上第1页和第4页  原理：4-[1-2-3-4]-1
-    [scrollView setContentOffset:CGPointMake(0, 0)];
-    [self.scrollView scrollRectToVisible:CGRectMake(kWidth,0,kWidth,kWidth*2) animated:NO]; // 默认从序号1位置放第1页 ，序号0位置位置放第4页
+    _bannerView.datasource = self;
+    _bannerView.delegate = self;
+    _bannerView.continuous = YES;
+    _bannerView.autoPlayTimeInterval = 3;
+    [_backScrollView addSubview:_bannerView];
+}
+- (NSArray *)numberOfKDCycleBannerView:(KDCycleBannerView *)bannerView{
     
     
-    self.pageControl = [[UIPageControl alloc]init];
-    pageControl.frame = CGRectMake((kWidth-100)*0.5, 99, 100, 10);
-    
-    pageControl.currentPageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_page_on.png"]];
-    pageControl.pageIndicatorTintColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"home_page_off.png"]];
-    pageControl.numberOfPages = pageCount - 2;
-    pageControl.currentPage = 0;
-    [pageControl addTarget:self action:@selector(turnPage) forControlEvents:UIControlEventValueChanged];
-    [_backScrollView addSubview:pageControl];
-    [_backScrollView bringSubviewToFront:pageControl];
-    
-    [self startNstimer];
+    return slideImages;
+}
+- (UIViewContentMode)contentModeForImageIndex:(NSUInteger)index{
+    return UIViewContentModeScaleAspectFill;
+}
+- (UIImage *)placeHolderImageOfBannerView:(KDCycleBannerView *)bannerView atIndex:(NSUInteger)index{
+    return placeHoderImage;
+}
+// 滚动到第几个图片
+- (void)cycleBannerView:(KDCycleBannerView *)bannerView didScrollToIndex:(NSUInteger)index{
     
 }
-
--(void)tapGesture:(UITapGestureRecognizer *)img
-{
-    adsModel *model = [adsImage objectAtIndex:img.view.tag-230-1];
+// 选中第几个图片
+- (void)cycleBannerView:(KDCycleBannerView *)bannerView didSelectedAtIndex:(NSUInteger)index{
+    adsModel *model = adsImage[index];
     if ([model.idType isEqualToString:@"1"]) {
         xiangqingViewController *xiq =[[xiangqingViewController alloc]init];
         xiq.supplyIndex = model.content;
@@ -307,76 +262,10 @@
         //bannerView.currentTag = img.view.tag-230-1;
         bannerView.bannerWebid =model.content;
         [self.navigationController pushViewController:bannerView animated:YES];
-       
-    }
- 
-}
-#pragma mark - 开启定时器
-- (void)startNstimer
-{
-    _timer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(runTimePage) userInfo:nil repeats:YES];
-}
-
-
-#pragma mark -  scrollviewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)sender
-{
-//    CGFloat pagewidth = self.scrollView.frame.size.width;
-//    int page = floor((self.scrollView.contentOffset.x - pagewidth/([slideImages count]+2))/pagewidth)+1;
-//    page --;  // 默认从第二页开始
-//    pageControl.currentPage = page;
-    
-    CGFloat pageWidth = self.scrollView.frame.size.width;
-    int page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    currentPage = page;
-    
-    pageControl.currentPage=(page-1);
-    
-    
-}
-// scrollview 委托函数
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    if (currentPage==0)
-    {
-        self.scrollView.contentOffset = CGPointMake(kWidth * ([imageArray count] - 2), 0);
-    }
-    if (currentPage==([imageArray count] - 1))
-    {
-        self.scrollView.contentOffset = CGPointMake(kWidth, 0);
+        
     }
     
 }
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    [_timer invalidate];
-    
-}
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    [self startNstimer];
-}
-
-
-// pagecontrol 选择器的方法
-- (void)turnPage
-{
-    NSInteger page = pageControl.currentPage; // 获取当前的page
-    
-    [self.scrollView scrollRectToVisible:CGRectMake(kWidth*(page+1),0,kWidth,118) animated:YES]; // 触摸pagecontroller那个点点 往后翻一页 +1
-    
-}
-// 定时器 绑定的方法
-- (void)runTimePage
-{
-    NSInteger page = pageControl.currentPage; // 获取当前的page
-    page++;
-    page = page > 2 ? 0 : page ;
-    pageControl.currentPage = page;
-    [self turnPage];
-}
-
 
 #pragma mark - create bigBackScrollView
 

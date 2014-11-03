@@ -7,13 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-@interface HomeController : UIViewController
+#import "KDCycleBannerView.h"
+@interface HomeController : UIViewController<KDCycleBannerViewDataource,KDCycleBannerViewDelegate>
 {
     NSTimer *_timer;
     NSArray *imageArray;
     int currentPage;
     Boolean catClickFlage;
+    
+    KDCycleBannerView * _bannerView; // 轮播
+
 }
+
 
 @property(nonatomic,strong)NSMutableArray *hotImageArray;
 @property(nonatomic,strong)NSMutableArray *tadyNumArray;//今日新增

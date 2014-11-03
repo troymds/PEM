@@ -88,7 +88,7 @@
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:0.1];
         [UIView setAnimationDelegate:self];
-        bgView.transform = CGAffineTransformScale([self transformForOrientation],0.7,0.7);;
+        bgView.transform = CGAffineTransformScale([self transformForOrientation],1.05,1.05);;
         [UIView commitAnimations];
         [self performSelector:@selector(changeUI) withObject:nil afterDelay:0.1];
 
@@ -102,19 +102,8 @@
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.1];
     [UIView setAnimationDelegate:self];
-    bgView.transform = CGAffineTransformScale([self transformForOrientation], 1.05, 1.05);;
-    [UIView commitAnimations];
-    [self performSelector:@selector(changeUI2) withObject:nil afterDelay:0.1];
-    
-}
-
-- (void)changeUI2
-{
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.1];
-    [UIView setAnimationDelegate:self];
     bgView.transform = CGAffineTransformScale([self transformForOrientation], 1.0, 1.0);;
-    [UIView commitAnimations];
+    [UIView commitAnimations];    
 }
 
 

@@ -50,7 +50,7 @@
     scroll.frame = self.view.bounds;
     scroll.showsHorizontalScrollIndicator = NO; // 隐藏水平滚动条
     CGSize size = scroll.frame.size;
-    scroll.contentSize = CGSizeMake(size.width * kCount, kHeight); // 内容尺寸
+    scroll.contentSize = CGSizeMake(size.width * kCount, kHeight-20); // 内容尺寸
     scroll.pagingEnabled = YES; // 分页
     scroll.delegate = self;
     scroll.bounces = NO;
