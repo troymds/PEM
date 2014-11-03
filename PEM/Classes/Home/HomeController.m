@@ -23,7 +23,6 @@
 #import "UIImageView+WebCache.h"
 #import "labelColor.h"
 #import "supplyTool.h"
-#import "adsModel.h"
 #import "CompanyXQViewController.h"
 #import "MessageController.h"
 #import "bannerWebView.h"
