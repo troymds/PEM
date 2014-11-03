@@ -40,12 +40,7 @@
     
     NSString *title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
     self.title =title;
-    
-    
-
-}
-
-
+ }
 
 
 -(void)addTapOnWebView

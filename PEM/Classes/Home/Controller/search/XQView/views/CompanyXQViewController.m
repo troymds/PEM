@@ -491,20 +491,20 @@
     EbingooView *ebingView =[[EbingooView alloc]init];
     ebingView.ebingooID =comHomeModel.e_url;
     
-    if (![comHomeModel.e_url isKindOfClass:[NSNull class]]) {
-        if ([comHomeModel.e_url isEqualToString:@""]) {
+    if ([comHomeModel.e_url isKindOfClass:[NSNull class]]) {
+       
             [RemindView showViewWithTitle:@"该企业未开通E平台" location:BELLOW];
 
-        }
-        else {
-            [self.navigationController pushViewController:ebingView animated:YES];
-
-
-        }
-
+    }
+    else {
+        [self.navigationController pushViewController:ebingView animated:YES];
+        
         
     }
-}
+    
+
+    
+        }
 
 -(void)addChooseBtn
 {
