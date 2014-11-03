@@ -36,7 +36,7 @@
 
 #define KHEIGHT_COMPANY  12
 
-@interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
+@interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,CompanyHomeViewDeletgare>
 {
     UIButton *_selectedBtn;
     UIView *_orangLin;
@@ -62,7 +62,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ebingoClicked) name:@"eBingooClicked" object:nil] ;
+
     self.view.backgroundColor = HexRGB(0xffffff);
     ChosseSelectedBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     _companySupplyArray =[[NSMutableArray alloc]init];
@@ -99,7 +99,6 @@
     [self addRefreshViews];
     
 }
-
 
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
@@ -197,6 +196,7 @@
     comHomeModel* data = [[_companyHomeArray objectAtIndex:0] objectAtIndex:0];
     companyHome.frame  = CGRectMake(0, 0, kWidth, self.view.frame.size.height-KCompanyMenuItemH);
     companyHome.data = data;
+    companyHome.delegate = self;
     [_BigCompanyScrollView addSubview:companyHome];
 }
 
@@ -484,8 +484,9 @@
 }
 
 
-#pragma mark -----ebingoo-E
--(void)ebingoClicked{
+#pragma mark -----CompanyHomeViewDeletgare
+- (void) CompanyHomeView:(CompanyHomeView *)view
+{
     comHomeModel *comHomeModel =[[_companyHomeArray objectAtIndex:0]objectAtIndex:0];
     
     EbingooView *ebingView =[[EbingooView alloc]init];
@@ -501,10 +502,8 @@
         
         
     }
-    
-
-    
-        }
+  
+}
 
 -(void)addChooseBtn
 {

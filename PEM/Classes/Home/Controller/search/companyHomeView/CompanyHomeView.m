@@ -28,6 +28,7 @@
     UILabel* _companyIntrudctionLabel;
     
     supplyViewClickedBlocl _clickBlock;
+    NSInteger cont;
     
 }
 @property (nonatomic, strong) NSArray *comPanyArray;
@@ -359,6 +360,11 @@
 
 - (void)ebingooE
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"eBingooClicked" object:nil];
+    if ([_delegate respondsToSelector:@selector(CompanyHomeView:)]) {
+        [_delegate CompanyHomeView:self];
+    }
 }
+
+
+
 @end
