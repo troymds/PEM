@@ -602,6 +602,13 @@
 
     if (self.view == _bgView)
     {
+        [_demandArray removeAllObjects];
+        [_supllyArray removeAllObjects];
+        [_compangyArray removeAllObjects];
+        
+        [_resultTableView reloadData];
+        [_recTableView reloadData];
+
 
         if (currentSelectedBtnTag == 202)
         {
@@ -610,7 +617,17 @@
                 SearchCompanyModel *searchResult = [_searchComanyArray objectAtIndex:indexPath.row-1];
                 _searchTextField.text = searchResult.searchKeyword;
                 _currentKeyString = searchResult.searchKeyword;
-                
+                for (int i = 0;i<_searchComanyArray.count;i++)
+                {
+                    SearchCompanyModel *resultMod = [_searchComanyArray objectAtIndex:i];
+                    if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                    {
+                        [_searchComanyArray removeObjectAtIndex:i];
+                    }
+                }
+                [_searchComanyArray insertObject:searchResult atIndex:0];
+
+
             }
         }
         else if (currentSelectedBtnTag == 201)
@@ -620,6 +637,17 @@
                 SearchDenamdModel *searchResult = [_searchDemandArray objectAtIndex:indexPath.row-1];
                 _searchTextField.text = searchResult.searchKeyword;
                 _currentKeyString = searchResult.searchKeyword;
+                
+                for (int i = 0;i<_searchDemandArray.count;i++)
+                {
+                    SearchDenamdModel *resultMod = [_searchDemandArray objectAtIndex:i];
+                    if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                    {
+                        [_searchDemandArray removeObjectAtIndex:i];
+                    }
+                }
+                [_searchDemandArray insertObject:searchResult atIndex:0];
+                
             }
         }
         else
@@ -629,6 +657,15 @@
                 SearchResultModel *searchResult = [_searchSupplyArray objectAtIndex:indexPath.row-1];
                 _searchTextField.text = searchResult.searchKeyword;
                 _currentKeyString = searchResult.searchKeyword;
+                for (int i = 0;i<_searchSupplyArray.count;i++)
+                {
+                    SearchResultModel *resultMod = [_searchSupplyArray objectAtIndex:i];
+                    if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                    {
+                        [_searchSupplyArray removeObjectAtIndex:i];
+                    }
+                }
+                [_searchSupplyArray insertObject:searchResult atIndex:0];
             }
         }
         
@@ -733,7 +770,11 @@
     {
         return 44;
     }else if(_searBtn.selected){
-        return 90;
+        if(currentSelectedBtnTag == 202){
+            return 80;
+        }else{
+            return 86;
+        }
     }
     return 100;
     
@@ -888,7 +929,7 @@
                 _resultTableView.hidden = YES;
 
             }
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,79, kWidth-20, 1)];
             lineView.backgroundColor = HexRGB(0xd5d5d5);
             [cell.contentView addSubview:lineView];
             
@@ -920,7 +961,7 @@
                 _resultTableView.hidden = YES;
 
             }
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,85, kWidth-20, 1)];
             lineView.backgroundColor = HexRGB(0xd5d5d5);
             [cell.contentView addSubview:lineView];
             
@@ -964,7 +1005,7 @@
                 _resultTableView.hidden = YES;
 
             }
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,85, kWidth-20, 1)];
             lineView.backgroundColor = HexRGB(0xd5d5d5);
             [cell.contentView addSubview:lineView];
             
@@ -1301,7 +1342,6 @@
 
         }
         
-//        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
        
       
     }

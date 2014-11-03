@@ -38,15 +38,9 @@
 //color
 #define HexRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]//十六进制转换
 
-#define linColor   [UIColor colorWithRed:(45.0/ 255.0) green:(129.0 / 255.0) blue:(229.0 / 255.0) alpha:1.0]//线条颜色
-#define titleColor
+
 #define backGroundColor    [UIColor colorWithRed:(226.0/ 255.0) green:(226.0 / 255.0) blue:(226.0 / 255.0) alpha:1.0]//背景颜色
-#define TextRGBColor     [UIColor colorWithRed:(48.0 / 255.0) green:(136.0 / 255.0) blue:(213.0 / 255.0) alpha:1.0]//蓝色字体颜色
 #define RGBNAVbackGroundColor             [UIColor colorWithRed:(47.0 / 255.0) green:(138.0 / 255.0) blue:(201.0/ 255.0) alpha:1.0]//导航条的颜色
-#define RGBAlpha(r, g, b, a)     [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:(a)]
-
-#define HexRGBAlpha(rgbValue,a) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:(a)]
-
 #define PxFont(px) (((float) px/96)*72)//字体大小转换
 
 //设备屏幕尺寸

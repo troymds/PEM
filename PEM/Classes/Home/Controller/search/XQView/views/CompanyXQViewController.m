@@ -495,17 +495,18 @@
     if ([comHomeModel.e_url isKindOfClass:[NSNull class]]) {
        
             [RemindView showViewWithTitle:@"该企业未开通E平台" location:BELLOW];
-
     }
-    else {
+    else
+    {
+        
         [self.navigationController pushViewController:ebingView animated:YES];
         
         
     }
-    
 
     
         }
+
 
 -(void)addChooseBtn
 {

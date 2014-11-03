@@ -53,7 +53,7 @@
        [newWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_urlNstr]]];
        newWebView.delegate = self;
        newWebView.backgroundColor =[UIColor clearColor];
-       
+       newWebView.scrollView.bounces = NO;
 
        
    } failure:^(NSError *error) {
