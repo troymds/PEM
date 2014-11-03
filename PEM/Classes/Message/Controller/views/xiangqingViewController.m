@@ -271,7 +271,7 @@
     
     
     if ([xqModel.price isEqualToString:@"0"]) {
-        picLabel.text=@"价格:面议";
+        picLabel.text=@"价格:电议";
     }else{
         picLabel.text =[NSString stringWithFormat:@"￥%@",xqModel.price];
         

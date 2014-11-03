@@ -885,7 +885,7 @@
         [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
         cell.supply_numLabel.text =[NSString stringWithFormat:@"%@起批",s.min_supply_num];
             if ([s.price isEqualToString:@"0"]) {
-                cell.priceLabel.text=@"面议";
+                cell.priceLabel.text=@"电议";
             }else{
                 cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
 

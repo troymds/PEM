@@ -190,7 +190,7 @@
     MySupplyItem *item = [_dataArray objectAtIndex:indexPath.row];
     cell.nameLabel.text = item.name;
     if ([item.price isEqualToString:@"0"]) {
-        cell.priceLabel.text = @"价格面议";
+        cell.priceLabel.text = @"价格电议";
     }else{
         cell.priceLabel.text = [NSString stringWithFormat:@"%@元/每%@",item.price,item.unit];
     }

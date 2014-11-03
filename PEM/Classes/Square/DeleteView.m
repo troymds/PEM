@@ -45,11 +45,10 @@
         [self addSubview:bgView];
         titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,10, 180, size.height)];
         titleLabel.numberOfLines = 0;
+        titleLabel.textAlignment = NSTextAlignmentLeft;
         titleLabel.font = [UIFont systemFontOfSize:16];
-        titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.text = title;
-        titleLabel.textColor = HexRGB(0x3a3a3a);
         [bgView addSubview:titleLabel];
         
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,20+size.height,200, 0.5)];
@@ -59,7 +58,11 @@
         delBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         delBtn.frame = CGRectMake(0,20+size.height,200,35);
         delBtn.tag = DELETE_TYPE;
-        [delBtn setTitle:@"删除" forState:UIControlStateNormal];
+        UILabel *title1 = [[UILabel alloc] initWithFrame:CGRectMake(10, 0,60, 35)];
+        title1.text=@"删除";
+        title1.textColor = HexRGB(0x3a3a3a);
+        title1.backgroundColor = [UIColor clearColor];
+        [delBtn addSubview:title1];
         [delBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
         [delBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:delBtn];
@@ -71,13 +74,68 @@
         cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         cancelBtn.frame = CGRectMake(0,20+size.height+35,200, 35);
         cancelBtn.tag = CANCEL_TYPE;
+        cancelBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
         [cancelBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
-        [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [cancelBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
         [bgView addSubview:cancelBtn];
+        
+        UILabel *title2 = [[UILabel alloc] initWithFrame:CGRectMake(10, 0,60, 35)];
+        title2.text=@"取消";
+        title2.textColor = HexRGB(0x3a3a3a);
+        title2.backgroundColor = [UIColor clearColor];
+        [cancelBtn addSubview:title2];
+        
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.1];
+        [UIView setAnimationDelegate:self];
+        bgView.transform = CGAffineTransformScale([self transformForOrientation],0.7,0.7);;
+        [UIView commitAnimations];
+        [self performSelector:@selector(changeUI) withObject:nil afterDelay:0.1];
+
+
     }
     return self;
 }
+
+- (void)changeUI
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.1];
+    [UIView setAnimationDelegate:self];
+    bgView.transform = CGAffineTransformScale([self transformForOrientation], 1.05, 1.05);;
+    [UIView commitAnimations];
+    [self performSelector:@selector(changeUI2) withObject:nil afterDelay:0.1];
+    
+}
+
+- (void)changeUI2
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.1];
+    [UIView setAnimationDelegate:self];
+    bgView.transform = CGAffineTransformScale([self transformForOrientation], 1.0, 1.0);;
+    [UIView commitAnimations];
+}
+
+
+- (CGAffineTransform)transformForOrientation
+{
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (UIInterfaceOrientationLandscapeLeft == orientation)
+    {
+        return CGAffineTransformMakeRotation(M_PI*1.5);
+    } else if (UIInterfaceOrientationLandscapeRight == orientation)
+    {
+        return CGAffineTransformMakeRotation(M_PI/2);
+    } else if (UIInterfaceOrientationPortraitUpsideDown == orientation)
+    {
+        return CGAffineTransformMakeRotation(-M_PI);
+    } else
+    {
+        return CGAffineTransformIdentity;
+    }
+}
+
 
 - (void)buttonDown:(UIButton *)btn{
     if (btn.tag == DELETE_TYPE) {
