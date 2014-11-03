@@ -124,7 +124,7 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
     NSString *condition = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     condition = [condition stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"lastid",@"15",@"pagesize",condition,@"condition", nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"lastid",@"10",@"pagesize",condition,@"condition", nil];
     if (isLoad) {
         if (_dataArray.count!=0){
             NSString *lastid = [NSString stringWithFormat:@"%lu",(unsigned long)[_dataArray count]];
@@ -190,7 +190,7 @@
     MySupplyItem *item = [_dataArray objectAtIndex:indexPath.row];
     cell.nameLabel.text = item.name;
     if ([item.price isEqualToString:@"0"]) {
-        cell.priceLabel.text = @"价格面议";
+        cell.priceLabel.text = @"价格电议";
     }else{
         cell.priceLabel.text = [NSString stringWithFormat:@"%@元/每%@",item.price,item.unit];
     }

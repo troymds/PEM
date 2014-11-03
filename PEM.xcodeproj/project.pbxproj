@@ -221,7 +221,6 @@
 		5588E27C19EE66FF0095D362 /* SearchDenamdModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E27B19EE66FF0095D362 /* SearchDenamdModel.m */; };
 		5588E27F19EE67140095D362 /* SearchCompanyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588E27E19EE67140095D362 /* SearchCompanyModel.m */; };
 		5591C5DF19FDEA0A00F82380 /* HttpTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 5591C5DE19FDEA0A00F82380 /* HttpTool.m */; };
-		5591C5E219FDEA3400F82380 /* AHReach.m in Sources */ = {isa = PBXBuildFile; fileRef = 5591C5E119FDEA3400F82380 /* AHReach.m */; };
 		5591C5E719FDEAA700F82380 /* bannerWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5591C5E419FDEAA700F82380 /* bannerWebView.m */; };
 		5591C5E819FDEAA700F82380 /* CompanyXQViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5591C5E619FDEAA700F82380 /* CompanyXQViewController.m */; };
 		5591C5EB19FDEAC700F82380 /* comditionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5591C5EA19FDEAC700F82380 /* comditionController.m */; };
@@ -290,6 +289,7 @@
 		55B682BD19D029BC0068308D /* company2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B682BC19D029BC0068308D /* company2@2x.png */; };
 		55B707B919D3F03D006F61E7 /* dial_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B707B819D3F03D006F61E7 /* dial_btn@2x.png */; };
 		55B7254219DA9CA8008F5578 /* supplyWishlistidModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7254119DA9CA8008F5578 /* supplyWishlistidModel.m */; };
+		55B77CCE1A03852D00712DB9 /* AHReach.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B77CCD1A03852D00712DB9 /* AHReach.m */; };
 		55B7820A19F499A000EC9508 /* SaveTempDataTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7820919F499A000EC9508 /* SaveTempDataTool.m */; };
 		55B7820D19F49A2A00EC9508 /* findViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B7820C19F49A2A00EC9508 /* findViewController.m */; };
 		55B7821819F509D900EC9508 /* back_companypre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55B7821719F509D900EC9508 /* back_companypre@2x.png */; };
@@ -776,8 +776,6 @@
 		5588E27E19EE67140095D362 /* SearchCompanyModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchCompanyModel.m; sourceTree = "<group>"; };
 		5591C5DD19FDEA0A00F82380 /* HttpTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpTool.h; sourceTree = "<group>"; };
 		5591C5DE19FDEA0A00F82380 /* HttpTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpTool.m; sourceTree = "<group>"; };
-		5591C5E019FDEA3400F82380 /* AHReach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHReach.h; sourceTree = "<group>"; };
-		5591C5E119FDEA3400F82380 /* AHReach.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHReach.m; sourceTree = "<group>"; };
 		5591C5E319FDEAA700F82380 /* bannerWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bannerWebView.h; sourceTree = "<group>"; };
 		5591C5E419FDEAA700F82380 /* bannerWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = bannerWebView.m; sourceTree = "<group>"; };
 		5591C5E519FDEAA700F82380 /* CompanyXQViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyXQViewController.h; sourceTree = "<group>"; };
@@ -872,6 +870,8 @@
 		55B707B819D3F03D006F61E7 /* dial_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dial_btn@2x.png"; sourceTree = "<group>"; };
 		55B7254019DA9CA8008F5578 /* supplyWishlistidModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = supplyWishlistidModel.h; sourceTree = "<group>"; };
 		55B7254119DA9CA8008F5578 /* supplyWishlistidModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = supplyWishlistidModel.m; sourceTree = "<group>"; };
+		55B77CCC1A03852D00712DB9 /* AHReach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHReach.h; sourceTree = "<group>"; };
+		55B77CCD1A03852D00712DB9 /* AHReach.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHReach.m; sourceTree = "<group>"; };
 		55B7820819F499A000EC9508 /* SaveTempDataTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveTempDataTool.h; sourceTree = "<group>"; };
 		55B7820919F499A000EC9508 /* SaveTempDataTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveTempDataTool.m; sourceTree = "<group>"; };
 		55B7820B19F49A2A00EC9508 /* findViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = findViewController.h; sourceTree = "<group>"; };
@@ -1744,8 +1744,8 @@
 		55B5102B19F73930009F9008 /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
-				5591C5E019FDEA3400F82380 /* AHReach.h */,
-				5591C5E119FDEA3400F82380 /* AHReach.m */,
+				55B77CCC1A03852D00712DB9 /* AHReach.h */,
+				55B77CCD1A03852D00712DB9 /* AHReach.m */,
 				55B5102C19F73930009F9008 /* AFHTTPClient.h */,
 				55B5102D19F73930009F9008 /* AFHTTPClient.m */,
 				55B5102E19F73930009F9008 /* AFHTTPRequestOperation.h */,
@@ -2897,6 +2897,7 @@
 				04AF26CB19E8B15E001B29CB /* TKRoundedView.m in Sources */,
 				04AF262819E8B108001B29CB /* DialRecordCell.m in Sources */,
 				04AF266019E8B129001B29CB /* SettingController.m in Sources */,
+				55B77CCE1A03852D00712DB9 /* AHReach.m in Sources */,
 				55B86B2E19C68826008B34AA /* XQgetInfoTool.m in Sources */,
 				04AF26D119E8B16D001B29CB /* MeController.m in Sources */,
 				55B5104619F73930009F9008 /* AFXMLRequestOperation.m in Sources */,
@@ -2961,7 +2962,6 @@
 				04AF26E619E8B17C001B29CB /* CityController.m in Sources */,
 				04AF26E219E8B17C001B29CB /* DescriptionController.m in Sources */,
 				0471EA1819ED3AA800060640 /* BuyTagController.m in Sources */,
-				5591C5E219FDEA3400F82380 /* AHReach.m in Sources */,
 				55D035AA19B8679E000F090F /* demandTableViewCell.m in Sources */,
 				55B5104219F73930009F9008 /* AFJSONRequestOperation.m in Sources */,
 				04AF266219E8B129001B29CB /* AdviceController.m in Sources */,

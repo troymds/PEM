@@ -91,9 +91,7 @@
     // 显示指示器
 
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
-    
+    hud.labelText = @"加载中...";
     [XQgetInfoTool statusesWithSuccess:^(NSArray *statues) {
         
         [XQArray addObject:statues];
@@ -114,6 +112,9 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
     } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         
     } infoID:supplyIndex];
     
@@ -270,7 +271,7 @@
     
     
     if ([xqModel.price isEqualToString:@"0"]) {
-        picLabel.text=@"价格:面议";
+        picLabel.text=@"价格:电议";
     }else{
         picLabel.text =[NSString stringWithFormat:@"￥%@",xqModel.price];
         
@@ -518,6 +519,9 @@
             }
             
         }companyID:[SystemConfig sharedInstance].company_id wishlistidID:_wishlist_id wishlistFailure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
             
         }];
 
@@ -550,7 +554,9 @@
                 
                 
             } companyID:[SystemConfig sharedInstance].company_id infoID:supplyIndex CategoryFailure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
             }];
             
         }
@@ -573,6 +579,9 @@
                                   [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
                                       
                                   } failure:^(NSError *error) {
+                                      [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                                      
+                                      [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                                       
                                   }];
                               }];
@@ -618,6 +627,9 @@
                               [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
                                   
                               } failure:^(NSError *error) {
+                                  [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                                  
+                                  [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                                   
                               }];
                           }];

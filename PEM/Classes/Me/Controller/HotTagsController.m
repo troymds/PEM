@@ -101,7 +101,7 @@
 
 
 - (void)addView{
-    UIImageView *hotTagImg = [[UIImageView alloc] initWithFrame:CGRectMake(19, 20, 20, 16)];
+    UIImageView *hotTagImg = [[UIImageView alloc] initWithFrame:CGRectMake(19, 14, 14, 22)];
     hotTagImg.image = [UIImage imageNamed:@"hotTags.png"];
     [scrollView addSubview:hotTagImg];
 
@@ -123,11 +123,12 @@
     
     addTagLabel = [[UILabel alloc] initWithFrame:CGRectMake(45, 0, kWidth-45-20, 16)];
     addTagLabel.text = @"新增标签";
+    addTagLabel.backgroundColor = [UIColor clearColor];
     addTagLabel.textColor = HexRGB(0x3a3a3a);
     addTagLabel.font = [UIFont systemFontOfSize:PxFont(24)];
     [bottomView addSubview:addTagLabel];
     
-    addField = [[UITextField alloc] initWithFrame:CGRectMake(20,addTagLabel.frame.origin.y+addTagLabel.frame.size.height+5, 200, 35)];
+    addField = [[UITextField alloc] initWithFrame:CGRectMake(20,addTagLabel.frame.origin.y+addTagLabel.frame.size.height+10, 200, 35)];
     addField.layer.borderColor = HexRGB(0xd5d5d5).CGColor;
     addField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     addField.layer.borderWidth = 1.0;

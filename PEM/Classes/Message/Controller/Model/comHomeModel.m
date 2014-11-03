@@ -30,7 +30,6 @@
         
         self.website = dic[@"website"];
         self.infoarray = dic[@"infoarray"];
-        NSLog(@"infoarray%@",self.infoarray);
         self.e_url = dic[@"e_url"];
 
         

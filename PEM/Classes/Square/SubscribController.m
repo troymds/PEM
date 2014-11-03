@@ -283,7 +283,7 @@
     [_scrollView addSubview:hotLabel];
     
     UIButton *managerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    managerBtn.frame =CGRectMake(kWidth-20-80,16, 80, 30);
+    managerBtn.frame =CGRectMake(kWidth-10-80,16, 80, 30);
     [managerBtn setTitle:@"【管理】" forState:UIControlStateNormal];
     [managerBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
     managerBtn.backgroundColor = [UIColor clearColor];

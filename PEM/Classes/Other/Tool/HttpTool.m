@@ -60,13 +60,14 @@
 {
     if([reach isReachableViaWWAN])
     {
-        //[RemindView showViewWithTitle:@"已连接上网络！" location:BELLOW];
+        
+//        [RemindView showViewWithTitle:@"已连接上网络！" location:BELLOW];
     }else if([reach isReachableViaWiFi])
     {
-        //[RemindView showViewWithTitle:@"已经连接WiFi" location:BELLOW];
+//        [RemindView showViewWithTitle:@"已经连接WiFi" location:BELLOW];
     }else
     {
-        [RemindView showViewWithTitle:@"网络断开，请检测网络！" location:BELLOW];
+//        [RemindView showViewWithTitle:@"网络断开，请检测网络！" location:BELLOW];
     }
 }
 

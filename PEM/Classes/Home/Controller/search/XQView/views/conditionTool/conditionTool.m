@@ -14,7 +14,7 @@
 {
     
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"15",@"pagesize",0,@"company_id", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",0,@"company_id", nil];
     [HttpTool postWithPath:@"getCompanyDetail" params:dic success:^(id JSON) {
         
     } failure:^(NSError *error) {

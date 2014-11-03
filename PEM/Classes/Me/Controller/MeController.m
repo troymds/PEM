@@ -190,45 +190,16 @@
         int vipType = [[SystemConfig sharedInstance].viptype intValue];
         //当会员类型小于等于0时  检查是否能发布供应信息
         if (vipType <= 0 ) {
-            if (needCheck) {
-                if (canPublish) {
-                    //判断是否可以发布供应信息
-                    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id", nil];
-                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                    hud.dimBackground = NO;
-                    [HttpTool postWithPath:@"canPublishSupplyInfo" params:param success:^(id JSON) {
-                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                        if ([result objectForKey:@"response"]) {
-                            NSString *code = [[result objectForKey:@"response"] objectForKey:@"code"];
-                            if ([code intValue] ==100) {
-                                int data = [[[result objectForKey:@"response"] objectForKey:@"data"] intValue];
-                                if (data == 0) {
-                                    //不能发布信息
-                                    NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
-                                    MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                                    actionView.tag = 1002;
-                                    [actionView showView];
-                                }else{
-                                    canPublish = NO;
-                                }
-                            }
-                        }
-                    } failure:^(NSError *error) {
-                        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                        NSLog(@"%@",error);
-                    }];
-                }else{
+            if ([SystemConfig sharedInstance].vipInfo) {
+                int supply_num = [[SystemConfig sharedInstance].vipInfo.supply_num intValue];
+                NSLog(@"%d",supply_num);
+                if (supply_num>=10) {
                     NSString *message = @"您好,您的发布供应次数已用完,要想发布更多,请选择立即升级";
                     MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
                     actionView.tag = 1003;
                     [actionView showView];
                 }
             }
-        }
-
-        if (needCheck) {
-            //判断是否能发布供应信息
         }
     }
 }
@@ -740,7 +711,6 @@
 - (void)keyboardWillShow
 {
     isEditing = YES;
-    
 }
 
 
@@ -762,6 +732,8 @@
 //发布求购成功后，清空页面数据
 - (void)clearPurchaseData
 {
+    demandCateItem = nil;
+    _purchaseView.categoryLabel.text = @"";
     _purchaseView.titleTextField.text = @"";
     _purchaseView.descriptionLabel.text = @"10字以上";
     _purchaseView.descriptionLabel.textColor = HexRGB(0xd5d5d5);
@@ -769,6 +741,8 @@
     _purchaseView.purchaseNumField.text = @"";
     _purchaseView.unitField.text = @"";
     _purchaseView.markLabel.text = @"";
+    _purchaseView.linkManTextField.text = @"";
+    _purchaseView.phoneNumTextField.text = @"";
     if (tagsArray.count!=0) {
         [tagsArray removeAllObjects];
     }
@@ -776,6 +750,10 @@
 //发布供应成功后，清空页面数据
 - (void)clearSupplyData
 {
+    supplyCateItem = nil;
+    _supplyView.areaLabel.text = @"";
+    region = nil;
+    _supplyView.categoryLabel.text = @"";
     _supplyView.titleTextField.text = @"";
     _supplyView.descriptionLabel.text = @"";
     _supplyView.priceTextField.text = @"";
@@ -783,9 +761,19 @@
     _supplyView.standardTextField.text = @"";
     _supplyView.descriptionLabel.text = @"10字以上";
     _supplyView.descriptionLabel.textColor = HexRGB(0xd5d5d5);
+    _supplyView.linkManTextField.text=@"";
+    _supplyView.phoneNumTextField.text = @"";
     supplyDes = @"";
     _supplyView.headImage.image = nil;
     headImage = nil;
+    for (UIView *subView in _supplyView.subviews) {
+        if ([subView isKindOfClass:[UIButton class]]) {
+            UIButton *button = (UIButton *)subView;
+            if (button.tag == 3003) {
+                button.selected = NO;
+            }
+        }
+    }
     //下面两句代码不能颠倒
     _supplyView.isExistImg = NO;
     _supplyView.isHide = YES;
@@ -895,34 +883,6 @@
 }
 
 
-
-//键盘监听
-//- (void)keyboardWillShow:(NSNotification *)notify
-//{
-//    NSDictionary *userInfo = [notify userInfo];
-//    NSValue *value = [userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
-//    CGRect keyboardRect = [value CGRectValue];
-//    height = keyboardRect.size.height;
-//    if (_isPurchase) {
-//        [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416+height)];
-//    }else{
-//        [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+height)];
-//    }
-//}
-
-//- (void)keyboardWillHide
-//{
-//    if (_isPurchase) {
-//        [UIView animateWithDuration:0.2 animations:^{
-//            [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416)];
-//        }];
-//    }else{
-//        [UIView animateWithDuration:0.2 animations:^{
-//            [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height)];
-//        }];
-//    }
-//}
-
 #pragma mark UIImagePickerControllerDelegate
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
@@ -942,19 +902,7 @@
 
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    if (!_isPurchase) {
-        for (UIView *subView in _supplyView.subviews) {
-            if ([subView isKindOfClass:[UITextField class]]) {
-                [subView resignFirstResponder];
-            }
-        }
-    }else{
-        for (UIView *subView in _purchaseView.subviews) {
-            if ([subView isKindOfClass:[UITextField class]]) {
-                [subView resignFirstResponder];
-            }
-        }
-    }
+    [activeField resignFirstResponder];
 }
 
 #pragma mark imageSelectView_delegate
@@ -974,7 +922,6 @@
         picker.delegate = self;
         [self presentViewController:picker animated:YES completion:nil];
     }
-
 }
 
 

@@ -30,7 +30,7 @@
 #import "SDWebImageManager.h"
 #import "ZBarSDK.h"
 #import "DimensionalCodeViewController.h"
-
+#import "RemindView.h"
 @interface HomeController ()<UIScrollViewDelegate,SDWebImageManagerDelegate,ZBarReaderDelegate>
 {
     UIScrollView *_backScrollView;
@@ -151,13 +151,11 @@
 {
     // 显示指示器
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
-    
-    hud.graceTime = 1;
-    
+    hud.labelText = @"加载中...";
     // 获取数据
     [StatusTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         Status *statusModel = [statues objectAtIndex:0];
         
         for (NSDictionary *dict in statusModel.hotCategoryArray)
@@ -190,11 +188,32 @@
             [self addCategorybutton:_hotImageArray];
             [self addtitleTodyBtn:_tadyNumArray];
             [self addHot:_hotDemandArray hotSupply:_hotSupplyArray ];
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         }
-    } failure:nil];
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
+
+    }];
+
     
 }
+- (void)updateAvailabilityFieldWithReach:(AHReach *)reach
+{
+    if([reach isReachableViaWWAN])
+    {
+        [self loadNewData];
+        [RemindView showViewWithTitle:@"已连接上网络！" location:BELLOW];
+    }else if([reach isReachableViaWiFi])
+    {
+        [self loadNewData];
+        [RemindView showViewWithTitle:@"已经连接WiFi" location:BELLOW];
+    }else
+    {
+        //        [RemindView showViewWithTitle:@"网络断开，请检测网络！" location:BELLOW];
+    }
+}
+
 
 #pragma mark----addsImages
 

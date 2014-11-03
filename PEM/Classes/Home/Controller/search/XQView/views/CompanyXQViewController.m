@@ -128,11 +128,16 @@
 
 -(void)loadViewStatusesHome
 {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+
     if ([companyID isKindOfClass:[NSNull class]] ) {
     }else
     {
         //    公司首页
         [XQgetInfoTool statusesWithSuccessNew:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
             [_companyHomeArray addObject:statues];
             comHomeModel *statuModel =[statues objectAtIndex:0];
             self.title = statuModel.name;
@@ -161,6 +166,9 @@
             [self buildCompanyHomeUI];
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         } newFailure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
             
         } NewCompanyid:companyID loginId:[SystemConfig sharedInstance].company_id];
         
@@ -259,6 +267,10 @@
         [self tableReloadData];
         
     } CompanyId:companyID CompanyFailure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         
         
     }];
@@ -287,15 +299,17 @@
         [self tableReloadData];
     } DemandCompanyFailure:^(NSError *error) {
         
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        
     } DemandCompanyId:companyID];
     
     
 }
 - (void)companyRequest
 {
-   
-    //    公司企业
+       //    公司企业
     [comPanyNEWTool statusesWithSuccessNew:^(NSArray *statues) {
+
         if (statues.count > 0) {
             
             _conditionTableView.hidden = NO;
@@ -316,6 +330,7 @@
         //[_conditionTableView reloadData];
     } NewFailure:^(NSError *error) {
         
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     } CompanyID:companyID ];
     
     
@@ -386,7 +401,6 @@
 #pragma mark  ------scrollview_delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-
     if (scrollView.tag == 9999)
     {
         dataLabel.hidden = YES;
@@ -483,10 +497,11 @@
             
         }
         
-    }else {
-        [RemindView showViewWithTitle:@"该企业未开通E平台" location:BELLOW];
     }
-}
+    
+
+    
+        }
 
 -(void)addChooseBtn
 {
@@ -579,7 +594,8 @@
         UIView *companyBackLine =[[UIView alloc]initWithFrame:CGRectMake(kWidth/3+i%3*(75+32), 8, 1, 14)];
         [companyBackView addSubview:companyBackLine];
         
-        companyBackLine.backgroundColor =HexRGB(0xe6e3e4);
+        companyBackLine.backgroundColor =[UIColor lightGrayColor];
+        companyBackLine.alpha = 0.5;
         
     }
     for (int p=0; p<3; p++)
@@ -620,20 +636,20 @@
     if (company.tag == 20)
     {
         dataLabel.hidden = YES;
-        _BigCompanyScrollView.contentOffset = CGPointMake(0, 0);
+        [_BigCompanyScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     }
     else if(company.tag ==21)
     {
         header.scrollView = _conditionTableView;
         header.scrollView = _conditionTableView;
-        _BigCompanyScrollView.contentOffset = CGPointMake(kWidth, 0);
+        [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth, 0) animated:YES];
         [self companyRequest];
     }
     else if(company.tag ==22)
     {
         header.scrollView = _supplyANDdemandTableView;
         footer.scrollView = _supplyANDdemandTableView;
-        _BigCompanyScrollView.contentOffset = CGPointMake(kWidth*2, 0);
+        [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
         if (_chooseSelected.tag == 31)
         {
             [self demandRequest];
@@ -641,14 +657,6 @@
             [self supplyRequest];
         }
     }
-    
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        CGPoint center =_orangLin.center;
-        center.x = company.center.x;
-        _orangLin.center = center;
-    }];
-    
 }
 
 

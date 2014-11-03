@@ -13,7 +13,7 @@
 @implementation comPanyNEWTool
 + (void)statusesWithSuccessNew:(StatusSuccessBlock)success NewFailure:(StatusFailureBlock)failure CompanyID:(NSString *)comid{
     
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:comid,@"company_id" ,@"15",@"pagesize",@"0",@"last_id",nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:comid,@"company_id" ,@"10",@"pagesize",@"0",@"last_id",nil];
     [HttpTool postWithPath:@"getCompanyNewsList" params:dic success:^(id JSON) {
         NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSMutableArray *statuses =[NSMutableArray array];

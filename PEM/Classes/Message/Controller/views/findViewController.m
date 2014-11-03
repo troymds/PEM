@@ -99,8 +99,7 @@
 #pragma  mark ------显示指示器
 -(void)addMBprogressView{
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"正在加载中...";
-    hud.dimBackground = YES;
+    hud.labelText = @"加载中...";
 
 }
 -(void)loadSupplyDataResoult{
@@ -123,7 +122,10 @@
         
         [_tableView reloadData];
     } CategoryId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
     }];
     
     
@@ -197,6 +199,10 @@
             [refreshView endRefreshing];
 
         }cateId:cateIndex supplyHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
             
         }];
         
@@ -225,6 +231,10 @@
             
             
         }cateId:cateIndex supplyHot:@"price" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
             
         }];
 
@@ -253,6 +263,10 @@
             
             
         }cateId:cateIndex demandHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
             
         }];
         
@@ -280,7 +294,10 @@
             
         }cateId:cateIndex demandHot:@"time" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
             
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
             
         }];
         
@@ -598,7 +615,10 @@
             
             
         } DemandId:cateIndex lastID:0? 0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] DemandFailure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+ 
         }];
         [_rigthBtn removeFromSuperview];
         [_rightBtnDemand removeFromSuperview];
@@ -678,7 +698,10 @@
             [_CateSupplyArray addObjectsFromArray:statues];
             [_tableView reloadData];
         }cateId:cateIndex supplyHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
 
         
@@ -697,7 +720,10 @@
             
             
         }cateId:cateIndex supplyHot:@"price" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
         
 
@@ -742,7 +768,10 @@
             
             
         }cateId:cateIndex demandHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
         }];
 
     }else{
@@ -760,7 +789,10 @@
             
         }cateId:cateIndex demandHot:@"time" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
             
-        
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+
             
         }];
         
@@ -853,7 +885,7 @@
         [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
         cell.supply_numLabel.text =[NSString stringWithFormat:@"%@起批",s.min_supply_num];
             if ([s.price isEqualToString:@"0"]) {
-                cell.priceLabel.text=@"面议";
+                cell.priceLabel.text=@"电议";
             }else{
                 cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
 
