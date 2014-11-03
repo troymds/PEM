@@ -401,7 +401,6 @@
 #pragma mark  ------scrollview_delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-
     if (scrollView.tag == 9999)
     {
         dataLabel.hidden = YES;
@@ -640,20 +639,20 @@
     if (company.tag == 20)
     {
         dataLabel.hidden = YES;
-        _BigCompanyScrollView.contentOffset = CGPointMake(0, 0);
+        [_BigCompanyScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     }
     else if(company.tag ==21)
     {
         header.scrollView = _conditionTableView;
         header.scrollView = _conditionTableView;
-        _BigCompanyScrollView.contentOffset = CGPointMake(kWidth, 0);
+        [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth, 0) animated:YES];
         [self companyRequest];
     }
     else if(company.tag ==22)
     {
         header.scrollView = _supplyANDdemandTableView;
         footer.scrollView = _supplyANDdemandTableView;
-        _BigCompanyScrollView.contentOffset = CGPointMake(kWidth*2, 0);
+        [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
         if (_chooseSelected.tag == 31)
         {
             [self demandRequest];
@@ -661,14 +660,6 @@
             [self supplyRequest];
         }
     }
-    
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        CGPoint center =_orangLin.center;
-        center.x = company.center.x;
-        _orangLin.center = center;
-    }];
-    
 }
 
 
