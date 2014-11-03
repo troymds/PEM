@@ -499,7 +499,6 @@
         if (distanse < 250) {
             [UIView animateWithDuration:0.2 animations:^{
                 [_scrollView setContentSize:CGSizeMake(kWidth,_scrollView.contentSize.height+50)];
-                //            _scrollView.contentOffset = contentOffset;
             }];
         }
         if (_iPhone4) {
@@ -510,7 +509,7 @@
             [_scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-130) animated:YES];
         }
     }else{
-        if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
+        if (bottomView.frame.origin.y+bottomView.frame.size.height +20 <= kHeight-64) {
             [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
         }
         if (bottomView.frame.origin.y > 105) {
