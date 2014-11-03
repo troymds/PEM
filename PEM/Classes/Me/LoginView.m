@@ -110,6 +110,9 @@
         NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
         if ([user valueForKey:@"userName"]) {
             _userField.text = [user valueForKey:@"userName"];
+            if ([user valueForKey:@"secret"]) {
+                _passwordField.text = [user valueForKey:@"secret"];
+            }
         }
         
     }
@@ -181,22 +184,15 @@
 - (void)login
 {
     NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:self.userField.text,@"phonenum",self.passwordField.text,@"password", nil];
-    UIViewController *controller;
-    if (self.delegate) {
-        controller = (UIViewController *)self.delegate;
-    }
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:controller.view animated:YES];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     hud.labelText = @"登录中...";
     [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
-        [MBProgressHUD hideAllHUDsForView:controller.view animated:YES];
+        [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
         if (dic) {
             NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
             if ([code isEqualToString:@"100"]){
-                
-                [[NSUserDefaults standardUserDefaults] setObject:self.userField.text forKey:@"userName"];
-                [[NSUserDefaults standardUserDefaults] setObject:self.passwordField.text forKey:@"secret"];
                 
                 NSDictionary *data = [dic objectForKey:@"data"];
                 [SystemConfig sharedInstance].isUserLogin = YES;
@@ -227,7 +223,7 @@
             }
         }
     }failure:^(NSError *error){
-        [MBProgressHUD hideAllHUDsForView:controller.view animated:YES];
+        [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         if (self.failBlock!=nil) {
             self.failBlock();
@@ -239,15 +235,11 @@
 //获取用户VIP信息
 - (void)getVipInfo:(NSString *)company_id
 {
-    UIViewController *controller;
-    if (self.delegate) {
-        controller = (UIViewController *)self.delegate;
-    }
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:controller.view animated:YES];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     hud.dimBackground = NO;
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
-        [MBProgressHUD hideAllHUDsForView:controller.view animated:YES];
+        [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
         if (dic) {
@@ -266,7 +258,7 @@
             self.sucessBlock();
         }
     } failure:^(NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:controller.view animated:YES];
+        [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
         NSLog(@"%@",error);
         if (self.sucessBlock!=nil) {
             self.sucessBlock();
