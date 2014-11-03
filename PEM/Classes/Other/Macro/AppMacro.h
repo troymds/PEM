@@ -20,6 +20,8 @@
 #elif TARGET_OS_IPHONE
 #define SIMULATOR 0
 #endif
+//占位图片
+#define placeHoderImage [UIImage imageNamed:@"load_big.png"]
 
 //加载图片
 //#define LOADIMAGE(file,type) [UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:file ofType:type]]
