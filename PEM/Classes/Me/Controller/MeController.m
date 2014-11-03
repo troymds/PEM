@@ -732,6 +732,8 @@
 //发布求购成功后，清空页面数据
 - (void)clearPurchaseData
 {
+    demandCateItem = nil;
+    _purchaseView.categoryLabel.text = @"";
     _purchaseView.titleTextField.text = @"";
     _purchaseView.descriptionLabel.text = @"10字以上";
     _purchaseView.descriptionLabel.textColor = HexRGB(0xd5d5d5);
@@ -739,6 +741,8 @@
     _purchaseView.purchaseNumField.text = @"";
     _purchaseView.unitField.text = @"";
     _purchaseView.markLabel.text = @"";
+    _purchaseView.linkManTextField.text = @"";
+    _purchaseView.phoneNumTextField.text = @"";
     if (tagsArray.count!=0) {
         [tagsArray removeAllObjects];
     }
@@ -746,6 +750,10 @@
 //发布供应成功后，清空页面数据
 - (void)clearSupplyData
 {
+    supplyCateItem = nil;
+    _supplyView.areaLabel.text = @"";
+    region = nil;
+    _supplyView.categoryLabel.text = @"";
     _supplyView.titleTextField.text = @"";
     _supplyView.descriptionLabel.text = @"";
     _supplyView.priceTextField.text = @"";
@@ -753,9 +761,19 @@
     _supplyView.standardTextField.text = @"";
     _supplyView.descriptionLabel.text = @"10字以上";
     _supplyView.descriptionLabel.textColor = HexRGB(0xd5d5d5);
+    _supplyView.linkManTextField.text=@"";
+    _supplyView.phoneNumTextField.text = @"";
     supplyDes = @"";
     _supplyView.headImage.image = nil;
     headImage = nil;
+    for (UIView *subView in _supplyView.subviews) {
+        if ([subView isKindOfClass:[UIButton class]]) {
+            UIButton *button = (UIButton *)subView;
+            if (button.tag == 3003) {
+                button.selected = NO;
+            }
+        }
+    }
     //下面两句代码不能颠倒
     _supplyView.isExistImg = NO;
     _supplyView.isHide = YES;
@@ -884,19 +902,7 @@
 
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    if (!_isPurchase) {
-        for (UIView *subView in _supplyView.subviews) {
-            if ([subView isKindOfClass:[UITextField class]]) {
-                [subView resignFirstResponder];
-            }
-        }
-    }else{
-        for (UIView *subView in _purchaseView.subviews) {
-            if ([subView isKindOfClass:[UITextField class]]) {
-                [subView resignFirstResponder];
-            }
-        }
-    }
+    [activeField resignFirstResponder];
 }
 
 #pragma mark imageSelectView_delegate
@@ -916,7 +922,6 @@
         picker.delegate = self;
         [self presentViewController:picker animated:YES completion:nil];
     }
-
 }
 
 

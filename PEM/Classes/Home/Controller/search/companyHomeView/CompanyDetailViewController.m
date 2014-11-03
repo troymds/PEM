@@ -88,13 +88,13 @@
 }
 
 #pragma mark  点击ebingo按钮
-- (void)ebingoClicked{
-//    comHomeModel *comHomeModel =[[_companyHomeArray objectAtIndex:0]objectAtIndex:0];
-    
-//    EbingooView *ebingView =[[EbingooView alloc]init];
-//    ebingView.ebingooID =comHomeModel.e_url;
-//    [self.navigationController pushViewController:ebingView animated:YES];
-}
+//- (void)ebingoClicked{
+////    comHomeModel *comHomeModel =[[_companyHomeArray objectAtIndex:0]objectAtIndex:0];
+//    
+////    EbingooView *ebingView =[[EbingooView alloc]init];
+////    ebingView.ebingooID =comHomeModel.e_url;
+////    [self.navigationController pushViewController:ebingView animated:YES];
+//}
 #pragma mark 加底层scrollview
 - (void) addBackScrool
 {

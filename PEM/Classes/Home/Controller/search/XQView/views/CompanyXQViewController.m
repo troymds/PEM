@@ -36,7 +36,7 @@
 
 #define KHEIGHT_COMPANY  12
 
-@interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
+@interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,CompanyHomeViewDeletgare>
 {
     UIButton *_selectedBtn;
     UIView *_orangLin;
@@ -62,7 +62,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ebingoClicked) name:@"eBingooClicked" object:nil] ;
+
     self.view.backgroundColor = HexRGB(0xffffff);
     ChosseSelectedBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     _companySupplyArray =[[NSMutableArray alloc]init];
@@ -99,7 +99,6 @@
     [self addRefreshViews];
     
 }
-
 
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
@@ -197,6 +196,7 @@
     comHomeModel* data = [[_companyHomeArray objectAtIndex:0] objectAtIndex:0];
     companyHome.frame  = CGRectMake(0, 0, kWidth, self.view.frame.size.height-KCompanyMenuItemH);
     companyHome.data = data;
+    companyHome.delegate = self;
     [_BigCompanyScrollView addSubview:companyHome];
 }
 
@@ -401,7 +401,6 @@
 #pragma mark  ------scrollview_delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-
     if (scrollView.tag == 9999)
     {
         dataLabel.hidden = YES;
@@ -485,13 +484,14 @@
 }
 
 
-#pragma mark -----ebingoo-E
--(void)ebingoClicked{
+#pragma mark -----CompanyHomeViewDeletgare
+- (void) CompanyHomeView:(CompanyHomeView *)view
+{
     comHomeModel *comHomeModel =[[_companyHomeArray objectAtIndex:0]objectAtIndex:0];
     
     EbingooView *ebingView =[[EbingooView alloc]init];
     ebingView.ebingooID =comHomeModel.e_url;
-    
+    NSLog(@"%@",comHomeModel.e_url);
     if ([comHomeModel.e_url isKindOfClass:[NSNull class]]) {
        
             [RemindView showViewWithTitle:@"该企业未开通E平台" location:BELLOW];
@@ -641,20 +641,20 @@
     if (company.tag == 20)
     {
         dataLabel.hidden = YES;
-        _BigCompanyScrollView.contentOffset = CGPointMake(0, 0);
+        [_BigCompanyScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     }
     else if(company.tag ==21)
     {
         header.scrollView = _conditionTableView;
         header.scrollView = _conditionTableView;
-        _BigCompanyScrollView.contentOffset = CGPointMake(kWidth, 0);
+        [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth, 0) animated:YES];
         [self companyRequest];
     }
     else if(company.tag ==22)
     {
         header.scrollView = _supplyANDdemandTableView;
         footer.scrollView = _supplyANDdemandTableView;
-        _BigCompanyScrollView.contentOffset = CGPointMake(kWidth*2, 0);
+        [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
         if (_chooseSelected.tag == 31)
         {
             [self demandRequest];
@@ -662,14 +662,6 @@
             [self supplyRequest];
         }
     }
-    
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        CGPoint center =_orangLin.center;
-        center.x = company.center.x;
-        _orangLin.center = center;
-    }];
-    
 }
 
 

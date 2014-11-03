@@ -40,7 +40,12 @@
     if (companySize.width + KVIPW > viewWidth-companyX) {
         //vip在公司名字下一行
         //1 计算第二行显示的字数
-        NSUInteger len = data.name.length - KNumberOfText;
+        NSUInteger len;
+        if ([data.name rangeOfCharacterFromSet:[NSCharacterSet decimalDigitCharacterSet]].location != NSNotFound  ) {// 公司名称包含数字
+            len = data.name.length - (KNumberOfText + 1 );
+        }else{
+            len = data.name.length - KNumberOfText;
+        }
         if (len == 0) {
             vipY = CGRectGetMaxY(_companyNameFrame);
             vipX = companyX;
