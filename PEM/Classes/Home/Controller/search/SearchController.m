@@ -480,7 +480,7 @@
     _selectBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-65);
     
     _searchTextField =[[UITextField alloc]init];
-    _searchTextField.frame =CGRectMake(63, 0, 165, 30);
+    _searchTextField.frame =CGRectMake(63, 0, 145, 30);
     [_searchImage addSubview:_searchTextField];
     [_selectBtn addTarget:self action:@selector(xuankaBtn:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -862,6 +862,7 @@
         
     }else
     {
+        
         if (currentSelectedBtnTag ==202 )
         {
             static NSString *cellIndexfider =@"Cell3";
@@ -932,6 +933,8 @@
             [cell.contentView addSubview:lineView];
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [_compangyArray removeAllObjects];
+
             return cell;
             
         }
@@ -964,6 +967,8 @@
             [cell.contentView addSubview:lineView];
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [_demandArray removeAllObjects];
+
             return cell;
             
         }else
@@ -1008,6 +1013,8 @@
             [cell.contentView addSubview:lineView];
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [_supllyArray removeAllObjects];
+
             return cell;
         }
         
@@ -1205,6 +1212,7 @@
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (_currentKeyString.length>0)
     {
+        
         // 如果有重复关键字，保留最新的。
         if (currentSelectedBtnTag == 202)
         {

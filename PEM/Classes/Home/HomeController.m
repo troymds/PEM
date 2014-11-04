@@ -354,6 +354,7 @@
     labelColor* showLable = [[labelColor alloc] initWithFrame:CGRectMake(init_x,init_y,viewWidth_f,30)];
     showLable.alignmentType = Muti_Alignment_Left_Type;
     [showLable setShowText:[NSString stringWithFormat:@"求购|%@|条   供应商|%@|家   询价|%@|次",todayNum.demandNum,todayNum.supplyNum,todayNum.callNum] Setting:setArray_f];
+    
     [_backScrollView addSubview:showLable];
     
     
