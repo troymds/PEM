@@ -145,6 +145,7 @@
     _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.backgroundColor=[UIColor whiteColor];
+    _backScrollView.bounces = NO;
     [self.view addSubview:_backScrollView];
     
     _backScrollView.showsVerticalScrollIndicator = NO;

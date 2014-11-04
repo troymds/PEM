@@ -517,9 +517,9 @@
         UILabel *TitleLabel=[[UILabel alloc]init ];
         TitleLabel.backgroundColor =[UIColor clearColor];
         TitleLabel.text =supplyArr.title;
-        TitleLabel.frame =CGRectMake(20, 458+s%3*(10+61), 250, 40);
+        TitleLabel.frame =CGRectMake(20, 388+s%3*(10+61), 250, 40);
         [_backScrollView addSubview:TitleLabel];
-        if (s==2)
+        if (s==0)
         {
             TitleLabel.frame =CGRectMake(0, 0, 0, 0);
         }
@@ -527,9 +527,9 @@
         TitleLabel.font =[UIFont systemFontOfSize:PxFont(22)];
         TitleLabel.textColor=HexRGB(0x3a3a3a);
         //小标题
-        UILabel *SubTitle =[[UILabel alloc]initWithFrame:CGRectMake(20, 492+s%3*(10+61), 250, 30)];
+        UILabel *SubTitle =[[UILabel alloc]initWithFrame:CGRectMake(20, 422+s%3*(10+61), 250, 30)];
         SubTitle.backgroundColor =[UIColor clearColor];
-        if (s==2) {
+        if (s==0) {
             SubTitle.frame =CGRectMake(0, 0, 0, 0);
         }
         [_backScrollView addSubview:SubTitle];
@@ -568,19 +568,19 @@
         UILabel *dTitleLabel=[[UILabel alloc]init ];
         dTitleLabel.backgroundColor =[UIColor clearColor];
         dTitleLabel.text =demandArr.title;
-        dTitleLabel.frame =CGRectMake(20, 760+d%3*(10+61), 250, 40);
+        dTitleLabel.frame =CGRectMake(20, 680+d%3*(10+61), 250, 40);
         dTitleLabel.font =[UIFont systemFontOfSize:PxFont(22)];
         dTitleLabel.textColor=HexRGB(0x3a3a3a);
         
         [_backScrollView addSubview:dTitleLabel];
-        if (d==2) {
+        if (d==0) {
             dTitleLabel.frame =CGRectMake(0, 0, 0, 0);
         }
         dTitleLabel.backgroundColor =[UIColor clearColor];
         //小标题
-        UILabel *SubTitle =[[UILabel alloc]initWithFrame:CGRectMake(20, 790+d%3*(10+61), 250, 30)];
+        UILabel *SubTitle =[[UILabel alloc]initWithFrame:CGRectMake(20, 710+d%3*(10+61), 250, 30)];
         SubTitle.backgroundColor =[UIColor clearColor];
-        if (d==2) {
+        if (d==0) {
             SubTitle.frame =CGRectMake(0, 0, 0, 0);
         }
         [_backScrollView addSubview:SubTitle];
