@@ -199,7 +199,7 @@
 
     
 }
-#pragma mark - 轮播
+#pragma mark ----- 轮播
 
 -(void)addADSimageBtn:(NSMutableArray *)tody
 {
@@ -259,7 +259,6 @@
     else{
         
         bannerWebView *bannerView =[[bannerWebView alloc]init];
-        //bannerView.currentTag = img.view.tag-230-1;
         bannerView.bannerWebid =model.content;
         [self.navigationController pushViewController:bannerView animated:YES];
         

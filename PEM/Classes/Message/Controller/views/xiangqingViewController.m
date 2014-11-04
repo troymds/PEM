@@ -180,14 +180,9 @@
 #pragma mark计算宽高
     XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
     CGFloat nameWeight;
-//    if ([[SystemConfig sharedInstance].company_id isEqualToString:xqModel.company_id]) {
-//        
-//        nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:PxFont(22)] constrainedToSize:CGSizeMake(300, 60)].height;
-//        
-//    }else{
         nameWeight =[xqModel.titleGetInfo sizeWithFont:[UIFont systemFontOfSize:PxFont(22)] constrainedToSize:CGSizeMake(125, 60)].height;
         
-//    }
+
     if (nameWeight <20) {
         nameWeight = nameWeight+20;
     }
@@ -207,11 +202,14 @@
     hearImage.userInteractionEnabled = YES;
     [_backScrollView addSubview:hearImage];
     
-    
-    if (xqModel.url_3d ==nil) {
+  
+    if ([xqModel.url_3d isKindOfClass:[NSNull class]]) {
         [hearImage setImageWithURL:[NSURL URLWithString:xqModel.imageGetInfo] placeholderImage:[UIImage imageNamed:@"load_big.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
 
-    }else{
+    }else if([xqModel.imageGetInfo isKindOfClass:[NSNull class]]){
+        hearImage.image = [UIImage imageNamed:@"load_big.png"];
+    }
+    else{
         
         UIWebView *webview_3d = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 160)];
         webview_3d.userInteractionEnabled = NO;
@@ -351,6 +349,9 @@
        [goCompany addTarget:self action:@selector(goCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     
     //vip
+    if ([xqModel.vip_type isKindOfClass:[NSNull class]]) {
+        
+    }else{
     UIImageView * _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(nameCompanyw+20,10, 18, 25)];
     
     if ([xqModel.vip_type isEqualToString:@"1"]) {
@@ -373,10 +374,8 @@
         
         _companyImgVip.image =[UIImage imageNamed:@"Vip6.png"];
     }
-    
-  
-    
     [forImage addSubview:_companyImgVip];
+    }
 
     if ([[SystemConfig sharedInstance].company_id isEqualToString:xqModel.company_id]) {
         
