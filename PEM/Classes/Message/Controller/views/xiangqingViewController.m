@@ -202,20 +202,29 @@
     hearImage.userInteractionEnabled = YES;
     [_backScrollView addSubview:hearImage];
     
-  
-    if ([xqModel.url_3d isKindOfClass:[NSNull class]]) {
-        [hearImage setImageWithURL:[NSURL URLWithString:xqModel.imageGetInfo] placeholderImage:[UIImage imageNamed:@"load_big.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
+   
+   
+    
+    if ([xqModel.imageGetInfo isKindOfClass:[NSNull class]]) {
+        hearImage.image =[UIImage imageNamed:@"load_big.png"];
+    }else{
+        if (xqModel.url_3d ==nil) {
+            [hearImage setImageWithURL:[NSURL URLWithString:xqModel.imageGetInfo] placeholderImage:[UIImage imageNamed:@"load_big.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
+        }else{
+            UIWebView *webview_3d = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 160)];
+            webview_3d.userInteractionEnabled = NO;
+            [_backScrollView addSubview:webview_3d];
+            [webview_3d loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:xqModel.url_3d]]];
 
-    }else if([xqModel.imageGetInfo isKindOfClass:[NSNull class]]){
-        hearImage.image = [UIImage imageNamed:@"load_big.png"];
-    }
-    else{
+        }
         
-        UIWebView *webview_3d = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 160)];
-        webview_3d.userInteractionEnabled = NO;
-        [_backScrollView addSubview:webview_3d];
-        [webview_3d loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:xqModel.url_3d]]];
-   }
+    }
+    
+    
+    
+    
+    
+
     
 #pragma mark-----收藏
     

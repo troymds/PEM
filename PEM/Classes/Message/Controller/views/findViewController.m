@@ -179,9 +179,9 @@
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
+
             }else
             {if (statues.count==0){
-                
                 
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
             }
@@ -196,11 +196,8 @@
             
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
-            
         }];
-        
-        
-    }else{
+       }else{
         
         [_tableView reloadData];
         
@@ -240,9 +237,9 @@
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
+
             }else
             {if (statues.count==0){
-                
                 
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
             }
@@ -271,12 +268,14 @@
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
-            }else
-            {if (statues.count==0){
-                
-                
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-            }
+//                NSLog(@"---22222--1111%d",statues.count);
+//
+//            }else
+//            {if (statues.count==0){
+//                
+//                NSLog(@"-----1111%d",statues.count);
+//                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+//            }
             }
             
             [_CateDemandArray addObjectsFromArray:statues];
@@ -293,13 +292,7 @@
 
             
         }];
-        
-        
-        
-    }
-
-  
-
+     }
 }
 
 -(void)addLeftSegment
