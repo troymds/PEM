@@ -933,7 +933,6 @@
             [cell.contentView addSubview:lineView];
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [_compangyArray removeAllObjects];
 
             return cell;
             
@@ -967,7 +966,6 @@
             [cell.contentView addSubview:lineView];
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [_demandArray removeAllObjects];
 
             return cell;
             
@@ -1013,7 +1011,6 @@
             [cell.contentView addSubview:lineView];
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [_supllyArray removeAllObjects];
 
             return cell;
         }
