@@ -339,8 +339,6 @@
         }
         _scroll.contentSize = CGSizeMake(kWidth, supplyStartY+ (30 *count )) ;
     }
-    
-   
 }
 #pragma mark 点击供应视图
 - (void)tapGesture :(UITapGestureRecognizer *) myView

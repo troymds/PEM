@@ -22,11 +22,12 @@
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(62, 11, 100, 17)];
         _nameLabel.backgroundColor = [UIColor clearColor];
         _nameLabel.textColor = HexRGB(0x666666);
-        _nameLabel.font = [UIFont systemFontOfSize:PxFont(24)];
+        _nameLabel.font = [UIFont systemFontOfSize:16];
         [self addSubview:_nameLabel];
         UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(frame.size.width-36-7, 13, 7, 13)];
         img.image = [UIImage imageNamed:@"next.png"];
         [self addSubview:img];
+        [self setBackgroundImage:[UIImage imageNamed:@"bg.png"] forState:UIControlStateHighlighted];
      }
     return self;
 }

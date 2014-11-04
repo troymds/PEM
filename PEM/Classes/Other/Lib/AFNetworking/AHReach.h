@@ -26,7 +26,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#define kAHReachDefaultHost "218.244.149.129"
+#define kAHReachDefaultHost "ebingoo.bingoso.com"
 
 @class AHReach;
 
