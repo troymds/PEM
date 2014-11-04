@@ -268,6 +268,7 @@
     
     if (_currentKeyString.length>0)
     {
+
         [SearchTool searchWithSupplySuccessBlock:^(NSArray *search) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
@@ -1297,26 +1298,18 @@
 }
 
 -(void)removerThreeArray{
-    if (_compangyArray.count!=0) {
-        [_compangyArray removeAllObjects];
-        [_resultTableView reloadData];
-    }
-    if (_supllyArray.count!=0) {
-        [_supllyArray removeAllObjects];
-        [_resultTableView reloadData];
-    }
-    if (_demandArray.count!=0) {
-        [_demandArray removeAllObjects];
-        [_resultTableView reloadData];
-    }
     
-    
+    [_compangyArray removeAllObjects];
+    [_demandArray removeAllObjects];
+    [_supllyArray removeAllObjects];
+    [_resultTableView reloadData];
+
 }
 
 
 - (void)searchToGo
 {
-    
+
     self.view = _resultBgView;
     
     [_searchTextField resignFirstResponder];
@@ -1325,23 +1318,24 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
     if (self.view == _resultBgView)
-    {
+    {    [self removerThreeArray];
+
+        [_resultTableView reloadData];
         if (currentSelectedBtnTag == 202)
-        {
-            [self companyRequest];
+        {[self companyRequest];
+           
           
 
-            [self removerThreeArray];
+            
             }else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
          
-            [self removerThreeArray];
+           
             
         }else
         {
             [self supplyRequest];
-            [self removerThreeArray];
 
         }
         
