@@ -268,6 +268,7 @@
     
     if (_currentKeyString.length>0)
     {
+
         [SearchTool searchWithSupplySuccessBlock:^(NSArray *search) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
@@ -459,12 +460,9 @@
 
 -(void)addbutton
 {
-    UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 44)];
     _searchImage =[[UIImageView alloc]init];
     _searchImage.frame =CGRectMake(0, 7, 230, 30);
-    //[self.view addSubview:_searchImage];
-    [navBgView addSubview:_searchImage];
-    self.navigationItem.titleView =navBgView;
+    self.navigationItem.titleView =_searchImage;
     _searchImage.userInteractionEnabled = YES;
     _searchImage.image =[UIImage imageNamed:@"nav_searchBtn.png"];
     
@@ -483,7 +481,7 @@
     _selectBtn.imageEdgeInsets = UIEdgeInsetsMake(0,13,0,-65);
     
     _searchTextField =[[UITextField alloc]init];
-    _searchTextField.frame =CGRectMake(63, 0, 165, 30);
+    _searchTextField.frame =CGRectMake(63, 0, 145, 30);
     [_searchImage addSubview:_searchTextField];
     [_selectBtn addTarget:self action:@selector(xuankaBtn:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -514,8 +512,9 @@
     self.view = _bgView;
     
     
-    _backViw =[[UIView alloc]initWithFrame:CGRectMake(20, 3, 100, 70)];
+    _backViw =[[UIView alloc]initWithFrame:CGRectMake(50, 3, 100, 70)];
     [_bgView addSubview:_backViw];
+    _backViw.backgroundColor =[UIColor clearColor];
     
     [_recTableView reloadData];
     
@@ -864,6 +863,7 @@
         
     }else
     {
+        
         if (currentSelectedBtnTag ==202 )
         {
             static NSString *cellIndexfider =@"Cell3";
@@ -934,6 +934,7 @@
             [cell.contentView addSubview:lineView];
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
             return cell;
             
         }
@@ -966,6 +967,7 @@
             [cell.contentView addSubview:lineView];
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
             return cell;
             
         }else
@@ -1010,6 +1012,7 @@
             [cell.contentView addSubview:lineView];
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
             return cell;
         }
         
@@ -1207,6 +1210,7 @@
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (_currentKeyString.length>0)
     {
+        
         // 如果有重复关键字，保留最新的。
         if (currentSelectedBtnTag == 202)
         {
@@ -1290,30 +1294,22 @@
 
     
     [self searchToGo];
-    
+
 }
 
 -(void)removerThreeArray{
-    if (_compangyArray.count!=0) {
-        [_compangyArray removeAllObjects];
-        [_resultTableView reloadData];
-    }
-    if (_supllyArray.count!=0) {
-        [_supllyArray removeAllObjects];
-        [_resultTableView reloadData];
-    }
-    if (_demandArray.count!=0) {
-        [_demandArray removeAllObjects];
-        [_resultTableView reloadData];
-    }
     
-    
+    [_compangyArray removeAllObjects];
+    [_demandArray removeAllObjects];
+    [_supllyArray removeAllObjects];
+    [_resultTableView reloadData];
+
 }
 
 
 - (void)searchToGo
 {
-    
+
     self.view = _resultBgView;
     
     [_searchTextField resignFirstResponder];
@@ -1322,23 +1318,24 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
     if (self.view == _resultBgView)
-    {
+    {    [self removerThreeArray];
+
+        [_resultTableView reloadData];
         if (currentSelectedBtnTag == 202)
-        {
-            [self companyRequest];
+        {[self companyRequest];
+           
           
 
-            [self removerThreeArray];
+            
             }else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
          
-            [self removerThreeArray];
+           
             
         }else
         {
             [self supplyRequest];
-            [self removerThreeArray];
 
         }
         

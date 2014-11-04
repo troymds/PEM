@@ -60,16 +60,9 @@
         }
     }
     
-    UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-90, 44)];
-    self.navigationItem.titleView =navBgView;
-    navBgView.backgroundColor =[UIColor clearColor];
-    UILabel *titleLabele =[[UILabel alloc]init];
-    [navBgView addSubview:titleLabele];
-    titleLabele.frame = CGRectMake((kWidth-90-80)*0.5, 0, 80, 44);
-    titleLabele.backgroundColor =[UIColor clearColor];
+   
     
-    titleLabele.text =[NSString stringWithFormat:@"%@分类",_titleLabel];
-    titleLabele.font = [UIFont systemFontOfSize:PxFont(26)];
+    self.title =[NSString stringWithFormat:@"%@分类",_titleLabel];
 
     self.view.backgroundColor =[UIColor whiteColor];
     _selectedFind =[[UIButton alloc]init];
@@ -186,9 +179,9 @@
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
+
             }else
             {if (statues.count==0){
-                
                 
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
             }
@@ -203,11 +196,8 @@
             
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
-            
         }];
-        
-        
-    }else{
+       }else{
         
         [_tableView reloadData];
         
@@ -247,9 +237,9 @@
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
+
             }else
             {if (statues.count==0){
-                
                 
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
             }
@@ -278,12 +268,14 @@
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
-            }else
-            {if (statues.count==0){
-                
-                
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-            }
+//                NSLog(@"---22222--1111%d",statues.count);
+//
+//            }else
+//            {if (statues.count==0){
+//                
+//                NSLog(@"-----1111%d",statues.count);
+//                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+//            }
             }
             
             [_CateDemandArray addObjectsFromArray:statues];
@@ -300,13 +292,7 @@
 
             
         }];
-        
-        
-        
-    }
-
-  
-
+     }
 }
 
 -(void)addLeftSegment
