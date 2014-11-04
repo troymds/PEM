@@ -43,16 +43,9 @@
   
     [self loadStatusView];
     
-    UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-90, 44)];
-    self.navigationItem.titleView =navBgView;
-    navBgView.backgroundColor =[UIColor clearColor];
-    UILabel *titleLabele =[[UILabel alloc]init];
-    [navBgView addSubview:titleLabele];
-    titleLabele.frame = CGRectMake((kWidth-90-80)*0.5, 0, 80, 44);
-    titleLabele.backgroundColor =[UIColor clearColor];
     
-    titleLabele.text =@"求购详情";
-    titleLabele.font = [UIFont systemFontOfSize:PxFont(26)];
+    
+    self.title =@"求购详情";
 
 }
 
@@ -67,7 +60,7 @@
     demandWebheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     demandWebView .frame = CGRectMake(0, 120, kWidth, demandWebheight+180);
 
-        _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+200);
+        _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+220);
     
     
 }

@@ -60,16 +60,9 @@
         }
     }
     
-    UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth-90, 44)];
-    self.navigationItem.titleView =navBgView;
-    navBgView.backgroundColor =[UIColor clearColor];
-    UILabel *titleLabele =[[UILabel alloc]init];
-    [navBgView addSubview:titleLabele];
-    titleLabele.frame = CGRectMake((kWidth-90-80)*0.5, 0, 80, 44);
-    titleLabele.backgroundColor =[UIColor clearColor];
+   
     
-    titleLabele.text =[NSString stringWithFormat:@"%@分类",_titleLabel];
-    titleLabele.font = [UIFont systemFontOfSize:PxFont(26)];
+    self.title =[NSString stringWithFormat:@"%@分类",_titleLabel];
 
     self.view.backgroundColor =[UIColor whiteColor];
     _selectedFind =[[UIButton alloc]init];

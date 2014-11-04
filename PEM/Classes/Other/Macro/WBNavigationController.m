@@ -32,8 +32,8 @@
     // 4.修改所有UIBarButtonItem的外观
     UIBarButtonItem *barItem = [UIBarButtonItem appearance];
     // 修改item的背景图片
-    [barItem setBackgroundImage:[UIImage imageNamed:@"baisejiantou.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [barItem setBackgroundImage:[UIImage imageNamed:@"baisejiantou.png"] forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault] ;
+    [barItem setBackgroundImage:[UIImage imageNamed:@"home_display_btn.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [barItem setBackgroundImage:[UIImage imageNamed:@"home_display_btn.png"] forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault] ;
     // 修改item上面的文字样式
     NSDictionary *dict = @{
                            UITextAttributeTextColor : [UIColor blackColor],

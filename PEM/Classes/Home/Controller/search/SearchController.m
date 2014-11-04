@@ -459,12 +459,9 @@
 
 -(void)addbutton
 {
-    UIView *navBgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 230, 44)];
     _searchImage =[[UIImageView alloc]init];
     _searchImage.frame =CGRectMake(0, 7, 230, 30);
-    //[self.view addSubview:_searchImage];
-    [navBgView addSubview:_searchImage];
-    self.navigationItem.titleView =navBgView;
+    self.navigationItem.titleView =_searchImage;
     _searchImage.userInteractionEnabled = YES;
     _searchImage.image =[UIImage imageNamed:@"nav_searchBtn.png"];
     
@@ -514,8 +511,9 @@
     self.view = _bgView;
     
     
-    _backViw =[[UIView alloc]initWithFrame:CGRectMake(20, 3, 100, 70)];
+    _backViw =[[UIView alloc]initWithFrame:CGRectMake(50, 3, 100, 70)];
     [_bgView addSubview:_backViw];
+    _backViw.backgroundColor =[UIColor clearColor];
     
     [_recTableView reloadData];
     
@@ -1290,7 +1288,7 @@
 
     
     [self searchToGo];
-    
+
 }
 
 -(void)removerThreeArray{
