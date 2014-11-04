@@ -74,18 +74,16 @@
     [self loadData];
     [self addView];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiden) name:UIKeyboardWillHideNotification object:nil];
-//    tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDown)];
 }
 
 - (void)keyboardWillHiden
 {
     isKeyboardShow = NO;
     [UIView animateWithDuration:0.2 animations:^{
-        if (bottomView.frame.origin.y+bottomSpace <= kHeight-64) {
+        if (bottomView.frame.origin.y+bottomView.frame.size.height+40<= kHeight-64) {
             [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
-        }
-        if (bottomView.frame.origin.y > 105) {
-            [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
+        }else{
+            [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomView.frame.size.height+40)];
         }
     }];
 }
@@ -342,7 +340,7 @@
     CGFloat distanse = _scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
     if (distanse < 250) {
         [UIView animateWithDuration:0.2 animations:^{
-            [_scrollView setContentSize:CGSizeMake(kWidth,_scrollView.contentSize.height+150)];
+            [_scrollView setContentSize:CGSizeMake(kWidth,_scrollView.contentSize.height+(250-distanse))];
         }];
     }
     if (_iPhone4) {
@@ -498,7 +496,7 @@
         CGFloat distanse = _scrollView.contentSize.height-(bottomView.frame.origin.y+bottomView.frame.size.height);
         if (distanse < 250) {
             [UIView animateWithDuration:0.2 animations:^{
-                [_scrollView setContentSize:CGSizeMake(kWidth,_scrollView.contentSize.height+50)];
+                [_scrollView setContentSize:CGSizeMake(kWidth,_scrollView.contentSize.height+(250-distanse))];
             }];
         }
         if (_iPhone4) {
@@ -509,11 +507,10 @@
             [_scrollView setContentOffset:CGPointMake(0, bottomView.frame.origin.y-130) animated:YES];
         }
     }else{
-        if (bottomView.frame.origin.y+bottomView.frame.size.height +20 <= kHeight-64) {
+        if (bottomView.frame.origin.y+bottomView.frame.size.height+40<= kHeight-64) {
             [_scrollView setContentSize:CGSizeMake(kWidth,kHeight-64)];
-        }
-        if (bottomView.frame.origin.y > 105) {
-            [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomSpace)];
+        }else{
+            [_scrollView setContentSize:CGSizeMake(kWidth,bottomView.frame.origin.y+bottomView.frame.size.height+40)];
         }
     }
 }

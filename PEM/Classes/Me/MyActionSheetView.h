@@ -18,14 +18,6 @@
 @end
 
 @interface MyActionSheetView : UIView
-{
-    UILabel *_titleLabel;
-    UILabel *_messageLabel;
-    UIButton *_cancelButton;
-    UIButton *_otherButton;
-    UIView *bgView;
-    UIView *view;
-}
 
 @property (nonatomic,weak) id <MyActionSheetViewDelegate> delegate;
 

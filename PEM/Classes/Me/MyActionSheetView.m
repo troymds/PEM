@@ -9,6 +9,19 @@
 #import "MyActionSheetView.h"
 #import "AdaptationSize.h"
 
+@interface MyActionSheetView ()
+{
+    UILabel *_titleLabel;
+    UILabel *_messageLabel;
+    UIButton *_cancelButton;
+    UIButton *_otherButton;
+    UIView *bgView;
+    UIView *view;
+    UIWindow *secondWindow;
+}
+
+@end
+
 @implementation MyActionSheetView
 
 - (id)initWithFrame:(CGRect)frame
@@ -133,12 +146,16 @@
             [self.delegate actionSheetButtonClicked:self];
         }
     }
-    [self removeFromSuperview];
+    secondWindow.hidden = YES;
+    secondWindow = nil;
 }
 
 - (void)showView
 {
-    [[UIApplication sharedApplication].keyWindow addSubview:self];
+    secondWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    secondWindow.windowLevel = UIWindowLevelStatusBar;
+    [secondWindow makeKeyAndVisible];
+    [secondWindow addSubview:self];
 }
 
 
