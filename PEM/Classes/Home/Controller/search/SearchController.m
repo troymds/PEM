@@ -231,7 +231,7 @@
 
     if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
         // 上拉加载更多
-        [self loadViewStatuses:refreshView];
+        [self loadUpViewStatuses:refreshView];
     } else {
         // 下拉刷新
         [self loadViewStatuses:refreshView];
@@ -263,12 +263,217 @@
     
     _refreshView = refreshView;
 }
-- (void)supplyRequest
+-(void)loadUpViewStatuses:(MJRefreshBaseView *)refreshView{
+    
+    _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    
+    // 获取数据
+    if (self.view == _resultBgView)
+    {
+        if (currentSelectedBtnTag ==202) {
+            [self loadcompanyRequest];
+            
+        }
+        else if(currentSelectedBtnTag == 201)
+        {
+            [self loaddemandRequest];
+            
+        }else
+        {
+            [self loadsupplyRequest];
+            
+            
+        }
+    }
+    
+    _refreshView = refreshView;
+}
+
+#pragma mark----request上拉加载更多
+- (void)loadsupplyRequest
+{
+    if (_currentKeyString.length>0)
+    {
+        
+        
+        [SearchTool searchWithSupplySuccessBlock:^(NSArray *search) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            if (search.count<=0)
+            {
+                
+                noDataBgView.hidden = NO;
+                _resultTableView.hidden = YES;
+            }else
+            {
+                
+                _resultTableView.hidden = NO;
+                noDataBgView.hidden = YES;
+                [_supllyArray addObjectsFromArray:search];
+            }
+            [self tableReloadData];
+            
+        } SupplywithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0]  SupplyfailureBlock:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        }];
+        
+    }else
+    {
+        [supplyTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            if (statues.count<=0)
+            {
+                noDataBgView.hidden = NO;
+                _resultTableView.hidden = YES;
+            }else
+            {
+                _resultTableView.hidden = NO;
+                noDataBgView.hidden = YES;
+                [_supllyArray addObjectsFromArray:statues];
+            }
+            [self tableReloadData];
+            
+        } lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0] failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            
+            
+        }];
+        
+    }
+    
+    
+    
+}
+- (void)loaddemandRequest
 {
     
+    
+    if (_searchTextField.text.length>0)
+    {
+        [SearchTool searchWithDemandSuccessBlock:^(NSArray *search) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            if (search.count<=0)
+            {
+                noDataBgView.hidden = NO;
+                _resultTableView.hidden = YES;
+            }else
+            {
+                noDataBgView.hidden = YES;
+                _resultTableView.hidden = NO;
+                [_demandArray addObjectsFromArray:search];
+            }
+            [self tableReloadData];
+            
+        } DemandwithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%d",[_demandArray count]-0] DemandfailureBlock:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            
+            
+        }];
+        
+    }else
+    {
+        [demandTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            if (statues.count<=0)
+            {
+                noDataBgView.hidden = NO;
+                _resultTableView.hidden = YES;
+            }else
+            {
+                noDataBgView.hidden = YES;
+                _resultTableView.hidden = NO;
+                [_demandArray addObjectsFromArray:statues];
+            }
+            
+            [self tableReloadData];
+        } lastID:0? 0:[NSString stringWithFormat:@"%u",[_demandArray count]-0] failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            
+        }];
+        
+    }
+    
+}
+- (void)loadcompanyRequest
+{
+    
+    
+    if (_currentKeyString.length > 0)
+    {
+        
+        [SearchTool searchWithSuccessBlock:^(NSArray *search)
+         {
+             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+             
+             
+             if (search.count<=0)
+             {
+                 noDataBgView.hidden = NO;
+                 _resultTableView.hidden = YES;
+             }else
+             {
+                 noDataBgView.hidden = YES;
+                 _resultTableView.hidden = NO;
+                 
+             }
+             [_compangyArray addObjectsFromArray:search];
+
+             [self tableReloadData];
+             
+         } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0]
+                              failureBlock:^(NSError *error) {
+                                  [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                                  
+                                  [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                                  
+                                  
+                              }];
+    }
+    else
+    {
+        [companyTool statusesWithSuccess:^(NSArray *statues) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            if (statues.count<=0)
+            {
+                noDataBgView.hidden = NO;
+                _resultTableView.hidden = YES;
+            }else
+            {
+                noDataBgView.hidden = YES;
+                _resultTableView.hidden = NO;
+                [_compangyArray addObjectsFromArray:statues];
+            }
+            
+            [self tableReloadData];
+            
+        } lasiID:0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0] failure:^(NSError *error) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            
+        }];
+    }
+    
+}
+
+
+#pragma mark----request下拉刷新
+- (void)supplyRequest
+{
     if (_currentKeyString.length>0)
     {
 
+        
         [SearchTool searchWithSupplySuccessBlock:^(NSArray *search) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
@@ -282,8 +487,11 @@
 
                 _resultTableView.hidden = NO;
                 noDataBgView.hidden = YES;
+                [_supllyArray removeAllObjects];
                 [_supllyArray addObjectsFromArray:search];
             }
+           
+
             [self tableReloadData];
             
         } SupplywithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0]  SupplyfailureBlock:^(NSError *error) {
@@ -304,8 +512,11 @@
             {
                 _resultTableView.hidden = NO;
                 noDataBgView.hidden = YES;
+                [_supllyArray removeAllObjects];
                 [_supllyArray addObjectsFromArray:statues];
             }
+          
+
             [self tableReloadData];
             
         } lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0] failure:^(NSError *error) {
@@ -337,8 +548,11 @@
             {
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
+                [_demandArray removeAllObjects];
                 [_demandArray addObjectsFromArray:search];
+
             }
+            
             [self tableReloadData];
             
         } DemandwithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%d",[_demandArray count]-0] DemandfailureBlock:^(NSError *error) {
@@ -361,9 +575,11 @@
             {
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
+                [_demandArray removeAllObjects];
                 [_demandArray addObjectsFromArray:statues];
+
             }
-            
+           
             [self tableReloadData];
         } lastID:0? 0:[NSString stringWithFormat:@"%u",[_demandArray count]-0] failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -395,9 +611,11 @@
             {
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
+                [_compangyArray removeAllObjects];
                 [_compangyArray addObjectsFromArray:search];
-
             }
+           
+
             [self tableReloadData];
             
         } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0]
@@ -422,9 +640,11 @@
             {
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
+                [_compangyArray removeAllObjects];
                 [_compangyArray addObjectsFromArray:statues];
             }
             
+
             [self tableReloadData];
             
         } lasiID:0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0] failure:^(NSError *error) {
@@ -442,6 +662,7 @@
 {
     [_refreshView endRefreshing];
     [_resultTableView reloadData];
+    
 }
 
 
@@ -740,6 +961,7 @@
         if (currentSelectedBtnTag==200)
         {
             return [_supllyArray count];
+            
         }
         if (currentSelectedBtnTag ==201)
         {
@@ -775,7 +997,7 @@
             return 86;
         }
     }
-    return 100;
+    return 90;
     
 }
 
@@ -1007,7 +1229,7 @@
                 _resultTableView.hidden = YES;
 
             }
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,85, kWidth-20, 1)];
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
             lineView.backgroundColor = HexRGB(0xd5d5d5);
             [cell.contentView addSubview:lineView];
             
@@ -1322,25 +1544,18 @@
 
         [_resultTableView reloadData];
         if (currentSelectedBtnTag == 202)
-        {[self companyRequest];
-           
-          
-
+        {
+            [self companyRequest];
             
             }else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
-         
-           
             
         }else
         {
             [self supplyRequest];
 
         }
-        
-       
-      
     }
 
 }
