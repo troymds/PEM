@@ -18,12 +18,12 @@
 #import "HotTagsController.h"
 #import "SendValueDelegate.h"
 #import "CategoryItem.h"
-#import "MyActionSheetView.h"
+#import "ProAlertView.h"
 
 
 
 
-@interface MeController : UIViewController<UITextFieldDelegate,ProActionSheetDelegate,PublishViewDelegate,LoginViewDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,ProImageViewDelegate,UIAlertViewDelegate,SendValueDelegate,MyActionSheetViewDelegate,UIScrollViewDelegate>
+@interface MeController : UIViewController<UITextFieldDelegate,ProActionSheetDelegate,PublishViewDelegate,LoginViewDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,ProImageViewDelegate,UIAlertViewDelegate,SendValueDelegate,ProAlertViewDelegate,UIScrollViewDelegate>
 {
     
     UIScrollView *bgScrollView;
@@ -34,7 +34,7 @@
     PurchaseView *_purchaseView;
     UIView *sliderLine;
     UIScrollView *_purchaseScrollView;
-    MyActionSheetView *_upTDView;
+    ProAlertView *_upTDView;
     
     CategoryItem *demandCateItem;        //发布求购分类
     NSString *demandDes;                   //发布求购描述

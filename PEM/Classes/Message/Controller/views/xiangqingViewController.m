@@ -606,34 +606,33 @@
         [loginView showView];
     }else{
         XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
-        MyActionSheetView *action = [[MyActionSheetView alloc] initWithTitle:xqModel.contacts withMessage:[NSString stringWithFormat:@"拨打%@？",xqModel.phone_num] delegate:self cancleButton:@"取消" otherButton:@"确定"];
-        [action showView];
+        ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:xqModel.contacts withMessage:[NSString stringWithFormat:@"拨打%@？",xqModel.phone_num] delegate:self cancleButton:@"取消" otherButton:@"确定"];
+        [alertView showView];
    }
 }
 
 
-- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView
+#pragma mark ----proAlertView_delegate
+- (void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index
 {
-    XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
-    [phoneView callPhoneNumber:xqModel.phone_num
-                          call:^(NSTimeInterval duration) {
-                              NSLog(@"User made a call of %.1f seconds", duration);
-                              
-                          } cancel:^{
-                              NSLog(@"User cancelled the call");
-                          } finish:^{
-                              NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"call_id",xqModel.company_id,@"to_id",xqModel.info_id,@"info_id", nil];
-                              [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
-                                  
-                              } failure:^(NSError *error) {
-                                  [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                                  
-                                  [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-                                  
-                              }];
-                          }];
+    if (index == 0) {
+        XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
+        [phoneView callPhoneNumber:xqModel.phone_num call:^(NSTimeInterval duration) {
+            NSLog(@"User made a call of %.1f seconds", duration);
+            
+            } cancel:^{
+            NSLog(@"User cancelled the call");
+            } finish:^{
+            NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"call_id",xqModel.company_id,@"to_id",xqModel.info_id,@"info_id", nil];
+            [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
+                                      
+                } failure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }];
 
+    }
 }
-
 
 @end

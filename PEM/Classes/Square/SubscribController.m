@@ -170,8 +170,6 @@
                             if ([SystemConfig sharedInstance].vipInfo) {
                                 _maxNum = [[SystemConfig sharedInstance].vipInfo.tag_num intValue];
                                 [SystemConfig sharedInstance].maxTagNum = _maxNum;
-                            }else{
-                                [self getVipInfo];
                             }
                         }
                     }
@@ -194,8 +192,6 @@
                             if ([SystemConfig sharedInstance].vipInfo) {
                                 _maxNum = [[SystemConfig sharedInstance].vipInfo.tag_num intValue]+[_dataArray count];
                                 [SystemConfig sharedInstance].maxTagNum = _maxNum;
-                            }else{
-                                [self getVipInfo];
                             }
                         }
                     }
@@ -205,35 +201,6 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-}
-
-//获取用户VIP信息
-- (void)getVipInfo
-{
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.dimBackground = NO;
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",nil];
-    [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-        NSDictionary *dic = [result objectForKey:@"response"];
-        if (dic) {
-            if (!isNull(result, @"response")) {
-                if ([[dic objectForKey:@"code"] intValue] ==100) {
-                    NSDictionary *data = [dic objectForKey:@"data"];
-                    VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
-                    [SystemConfig sharedInstance].vipInfo = vipInfo;
-                    
-                    _maxNum = [vipInfo.tag_num intValue]+[_dataArray count];
-                    [SystemConfig sharedInstance].maxTagNum = _maxNum;
-                }
-            }
-        }
-    } failure:^(NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-    }];
-    
 }
 
 #pragma mark proImageView_delegate
@@ -407,8 +374,8 @@
                     addField.text = @"";
                 }
             }else{
-                MyActionSheetView *sheetView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签,升级后可订阅更多标签",_maxNum] delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                [sheetView showView];
+                ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签,升级后可订阅更多标签",_maxNum] delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                [alertView showView];
             }
         }
     }
@@ -463,12 +430,16 @@
     }
 }
 
-- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView
-{
-    PrivilegeController *pri = [[PrivilegeController alloc] init];
-    [self.navigationController pushViewController:pri animated:YES];
-}
 
+#pragma mark -- proAlertView_delegate
+
+- (void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index
+{
+    if (index == 0) {
+        PrivilegeController *pri = [[PrivilegeController alloc] init];
+        [self.navigationController pushViewController:pri animated:YES];
+    }
+}
 
 - (void)moveBottomView{
     CGRect bottomFrame = bottomView.frame;

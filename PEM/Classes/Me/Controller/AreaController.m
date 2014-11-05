@@ -7,6 +7,7 @@
 //
 
 #import "AreaController.h"
+#import "HttpTool.h"
 
 @interface AreaController ()
 
@@ -31,142 +32,169 @@
     self.view.backgroundColor = HexRGB(0xffffff);
     _dataArray = [[NSMutableArray alloc] init];
     _provinceArray = [[NSMutableArray alloc] init];
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"provinces" ofType:@"plist"];
-    NSArray *data = [[NSMutableArray alloc] initWithContentsOfFile:filePath];
-    for (NSDictionary *dic in data){
-        NSString *strProvince = [dic objectForKey:@"name"];
-        [_dataArray addObject:strProvince];
-    }
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0,kWidth,kHeight-64) style:UITableViewStylePlain];
-    _tableView.delegate = self;
-    _tableView.dataSource =self;
-    _tableView.showsHorizontalScrollIndicator = NO;
-    _tableView.showsVerticalScrollIndicator = NO;
-    _tableView.backgroundColor = [UIColor clearColor];
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _tableView.separatorColor = [UIColor clearColor];
-    [self.view addSubview:_tableView];
-//    if ([CLLocationManager locationServicesEnabled]) {
-//        _currentLocation = [[CLLocationManager alloc] init];
-//        _currentLocation.delegate = self;
-//        [_currentLocation startUpdatingLocation];
-//    }else{
-//        //不允许定位操作  显示出所有省份
-//        [_dataArray addObjectsFromArray:_provinceArray];
-//        [_tableView reloadData];
-//    }
+    _cityArray = [[NSMutableArray alloc] initWithCapacity:0];
+    //左边省份
+    _provinceTabelView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 150,kHeight-64) style:UITableViewStylePlain];
+    _provinceTabelView.delegate = self;
+    _provinceTabelView.tag = 2000;
+    _provinceTabelView.dataSource = self;
+    _provinceTabelView.showsVerticalScrollIndicator = NO;
+    _provinceTabelView.showsHorizontalScrollIndicator = NO;
+    _provinceTabelView.backgroundColor = [UIColor clearColor];
+    _provinceTabelView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _provinceTabelView.separatorColor = [UIColor clearColor];
+    
+    [self.view addSubview:_provinceTabelView];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(150,0, 1, kHeight-64)];
+    line.backgroundColor = HexRGB(0xd5d5d5);
+    [self.view addSubview:line];
+    //右边城市
+    _cityTableView = [[UITableView alloc] initWithFrame:CGRectMake(151,0,kWidth-151,kHeight-64) style:UITableViewStylePlain];
+    _cityTableView.delegate = self;
+    _cityTableView.tag = 2001;
+    _cityTableView.backgroundColor = HexRGB(0xf2f2f2);
+    _cityTableView.dataSource = self;
+    _cityTableView.showsVerticalScrollIndicator = NO;
+    _cityTableView.showsHorizontalScrollIndicator = NO;
+    _cityTableView.backgroundColor = [UIColor clearColor];
+    _cityTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _cityTableView.separatorColor = [UIColor clearColor];
+    [self.view addSubview:_cityTableView];
+    [self getProvinceData];
 }
 
+- (void)getProvinceData{
+    [HttpTool postWithPath:@"getProvinceList" params:nil success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if (dic) {
+            if ([[dic objectForKey:@"code"] intValue] == 100) {
+                _provinceArray = [dic objectForKey:@"data"];
+                [_provinceTabelView reloadData];
+                provinceName = [[_provinceArray objectAtIndex:0] objectForKey:@"name"];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                [_provinceTabelView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
+                NSString *uid = [[_provinceArray objectAtIndex:0] objectForKey:@"id"];
+                [self getCityData:uid];
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
 
-//#pragma mark LocationManager delegate
-//- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
-//    NSLog(@"locError:%@",error);
-//    //定位失败   显示所有省份
-//    [_dataArray addObjectsFromArray:_provinceArray];
-//    [_tableView reloadData];
-//}
-//
-//- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-//    CLLocation *currentLocation = [locations lastObject];
-//    CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
-//    [geoCoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-//        CLPlacemark *placeMark = [placemarks objectAtIndex:0];
-//        NSMutableArray *array = [[NSMutableArray alloc] init];
-//        NSMutableArray *arr = [[NSMutableArray alloc] init];
-//        [array addObject:placeMark.administrativeArea];
-//        for (NSString *province in _provinceArray) {
-//            if (![[array objectAtIndex:0] isEqualToString:province]) {
-//                [arr addObject:province];
-//            }
-//        }
-//        [_dataArray addObject:array];
-//        [_dataArray addObject:arr];
-//        titleArray = [NSArray arrayWithObjects:@"当前地区",@"其他地区", nil];
-//        [_tableView reloadData];
-//    }];
-//    [_currentLocation stopUpdatingLocation];
-//}
-//
-//- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
-//{
-//    CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
-//    [geoCoder reverseGeocodeLocation:oldLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-//        CLPlacemark *placeMark = [placemarks objectAtIndex:0];
-//        NSMutableArray *array = [[NSMutableArray alloc] init];
-//        NSMutableArray *arr = [[NSMutableArray alloc] init];
-//        [array addObject:placeMark.administrativeArea];
-//        for (NSString *province in _provinceArray) {
-//            if (![[array objectAtIndex:0] isEqualToString:province]) {
-//                [arr addObject:province];
-//            }
-//        }
-//        [_dataArray addObject:array];
-//        [_dataArray addObject:arr];
-//        titleArray = [NSArray arrayWithObjects:@"当前地区",@"其他地区", nil];
-//        [_tableView reloadData];
-//    }];
-//    [_currentLocation stopUpdatingLocation];
-//}
+- (void)getCityData:(NSString *)uid
+{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:uid,@"province", nil];
+    [HttpTool postWithPath:@"getCityList" params:param success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if (dic) {
+            if ([[dic objectForKey:@"code"] intValue] == 100) {
+                if (_cityArray.count!=0) {
+                    [_cityArray removeAllObjects];
+                }
+                _cityArray = [dic objectForKey:@"data"];
+                [_cityTableView reloadData];
+            }
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSLog(@"%@",error);
+    }];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentSize.height-scrollView.frame.size.height>0) {
+        scrollView.scrollEnabled = YES;
+    }else{
+        scrollView.scrollEnabled = NO;
+    }
+    if (scrollView.contentOffset.y<0) {
+        scrollView.contentOffset = CGPointMake(0, 0);
+    }
+    if (scrollView.contentSize.height-scrollView.frame.size.height>0) {
+        if (scrollView.contentOffset.y>scrollView.contentSize.height-scrollView.frame.size.height) {
+            scrollView.contentOffset = CGPointMake(0, scrollView.contentSize.height-scrollView.frame.size.height);
+        }
+    }
+}
+
 
 #pragma mark tableView delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-//    if (titleArray.count==0) {
-//        return [_dataArray count];
-//    }
-//    return [[_dataArray objectAtIndex:section] count];
-    return [_dataArray count];
+    if (tableView.tag == 2000) {
+        return [_provinceArray count];
+    }
+    return [_cityArray count];
 }
 
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-//    if (titleArray.count==0) {
-//        return 1;
-//    }
-//    return [titleArray count];
-//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *cellName = @"CellName";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+    UITableViewCell *cell;
+    if (tableView.tag == 2000) {
+        static NSString *cellName = @"CellName";
+        cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+        }
+        for (UIView *subView in cell.contentView.subviews) {
+            [subView removeFromSuperview];
+        }
+        NSString *areaStr = [[_provinceArray objectAtIndex:indexPath.row] objectForKey:@"name"];
+        cell.textLabel.text = areaStr;
+        cell.textLabel.font = [UIFont systemFontOfSize:15];
+        cell.textLabel.textColor = HexRGB(0x3a3a3a);
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,44,150,1)];
+        line.backgroundColor = HexRGB(0xd5d5d5);
+        [cell.contentView addSubview:line];
+        
+    }else{
+        static NSString *cellName = @"identify";
+        cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+        }
+        for (UIView *subView in cell.contentView.subviews) {
+            [subView removeFromSuperview];
+        }
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,39,kWidth-151,1)];
+        line.backgroundColor = HexRGB(0xd5d5d5);
+        [cell.contentView addSubview:line];
+        NSString *areaStr = [[_cityArray objectAtIndex:indexPath.row] objectForKey:@"name"];
+        cell.textLabel.text = areaStr;
+        cell.textLabel.textColor = HexRGB(0x808080);
+        cell.textLabel.font = [UIFont systemFontOfSize:13];
+        cell.backgroundColor = HexRGB(0xf2f2f2);
     }
-//    if (titleArray.count == 0) {
-//        cell.detailTextLabel.text= [_dataArray objectAtIndex:indexPath.row];
-//    }else{
-//        cell.detailTextLabel.text = [[_dataArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-//    }
-    NSString *areaStr = [_dataArray objectAtIndex:indexPath.row];
-    cell.textLabel.text = areaStr;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0,cell.frame.size.height-1, kWidth, 1)];
-    lineView.backgroundColor = HexRGB(0xd5d5d5);
-    [cell.contentView addSubview:lineView];
-
     return cell;
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-//    return [titleArray objectAtIndex:section];
-//}
-//
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView.tag == 2000) {
+        return 45;
+    }
+    return 40;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    NSString *str;
-//    if (titleArray.count == 0) {
-//        str = [_dataArray objectAtIndex:indexPath.row];
-//
-//    }else{
-//        str = [[_dataArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-//    }
-//    if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
-//        [self.delegate sendValueFromViewController:self value:str isDemand:NO];
-//    }
-    NSString *areaStr = [_dataArray objectAtIndex:indexPath.row];
-    if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
-        [self.delegate sendValueFromViewController:self value:areaStr isDemand:NO];
+    if (tableView.tag == 2000) {
+        provinceName = [[_provinceArray objectAtIndex:indexPath.row] objectForKey:@"name"];
+        NSString *uid = [[_provinceArray objectAtIndex:indexPath.row] objectForKey:@"id"];
+        [self getCityData:uid];
+    }else{
+        NSString *cityName = [[_cityArray objectAtIndex:indexPath.row] objectForKey:@"name"];
+        NSString *area = [NSString stringWithFormat:@"%@ %@",provinceName,cityName];
+        if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
+            [self.delegate sendValueFromViewController:self value:area isDemand:NO];
+        }
+        [self.navigationController popViewControllerAnimated:YES];
     }
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

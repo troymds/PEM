@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "SubTagButton.h"
-#import "MyActionSheetView.h"
+#import "ProAlertView.h"
 
 
-@interface SubscribController : UIViewController<UITextFieldDelegate,ProImageViewDelegate,UIAlertViewDelegate,MyActionSheetViewDelegate>
+@interface SubscribController : UIViewController<UITextFieldDelegate,ProImageViewDelegate,UIAlertViewDelegate,ProAlertViewDelegate>
 {
     NSMutableArray *_dataArray;
     UITextField *addField;

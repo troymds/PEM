@@ -170,32 +170,12 @@
                 if (dic) {
                     NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
                     if ([code isEqualToString:@"100"]){
+                        //用户信息
+                        NSDictionary *userData = [dic objectForKey:@"data"];
                         
-                        [[NSUserDefaults standardUserDefaults] setObject:_userNameField.text forKey:@"userName"];
-                        [[NSUserDefaults standardUserDefaults] setObject:_secretField.text forKey:@"secret"];
+                        NSString *companyId = [NSString stringWithFormat:@"%d",[[userData objectForKey:@"company_id"] intValue]];
                         
-                        NSDictionary *data = [dic objectForKey:@"data"];
-                        
-                        [SystemConfig sharedInstance].isUserLogin = YES;
-                        if (isNull(data, @"company_id")){
-                            [SystemConfig sharedInstance].company_id = @"-1";
-                        }else{
-                            int company_id = [[data objectForKey:@"company_id"] intValue];
-                            [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
-                        }
-                        if (isNull(data, @"viptype")) {
-                            [SystemConfig sharedInstance].viptype = @"-3";
-                        }else{
-                            NSInteger vipType = [[data objectForKey:@"viptype"] intValue];
-                            [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
-                        }
-                        
-                        CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
-                        [SystemConfig sharedInstance].companyInfo = item;
-                        
-                        NSString *companyId = [NSString stringWithFormat:@"%d",[[data objectForKey:@"company_id"] intValue]];
-                        
-                        [self getVipInfo:companyId];
+                        [self getVipInfo:companyId withData:userData];
                         
                     }else{
                         [RemindView showViewWithTitle:@"用户名或密码错误" location:BELLOW];
@@ -219,7 +199,7 @@
 }
 
 
-- (void)getVipInfo:(NSString *)company_id
+- (void)getVipInfo:(NSString *)company_id withData:(NSDictionary *)userData
 {
     //获取用户VIP信息
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -232,12 +212,37 @@
         if (dic) {
             if (!isNull(result, @"response")) {
                 if ([[dic objectForKey:@"code"] intValue] ==100) {
+                    //登陆只有在获取到vip信息后才算登陆成功
+                    
+                    //存储用户名和密码到本地
+                    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+                    [user setObject:_userNameField.text forKey:@"userName"];
+                    [user setObject:_secretField.text forKey:@"secret"];
+                    [user synchronize];
+                    //获取登陆信息
+                    [SystemConfig sharedInstance].isUserLogin = YES;
+                    if (isNull(userData, @"company_id")){
+                        [SystemConfig sharedInstance].company_id = @"-1";
+                    }else{
+                        int company_id = [[userData objectForKey:@"company_id"] intValue];
+                        [SystemConfig sharedInstance].company_id = [NSString stringWithFormat:@"%d",company_id];
+                    }
+                    if (isNull(userData, @"viptype")) {
+                        [SystemConfig sharedInstance].viptype = @"-3";
+                    }else{
+                        NSInteger vipType = [[userData objectForKey:@"viptype"] intValue];
+                        [SystemConfig sharedInstance].viptype = [NSString stringWithFormat:@"%ld",(long)vipType];
+                    }
+                    CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:userData];
+                    [SystemConfig sharedInstance].companyInfo = item;
+                    //存储vip信息
                     NSDictionary *data = [dic objectForKey:@"data"];
                     VipInfoItem *vipInfo = [[VipInfoItem alloc] initWithDictionary:data];
                     [SystemConfig sharedInstance].vipInfo = vipInfo;
+                    
                     [self.navigationController popViewControllerAnimated:YES];
                 }else{
-                    [self.navigationController popViewControllerAnimated:YES];
+                    [RemindView showViewWithTitle:@"登陆失败" location:MIDDLE];
                 }
             }
         }

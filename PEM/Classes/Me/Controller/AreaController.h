@@ -6,16 +6,17 @@
 //  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
 //
 #import <UIKit/UIKit.h>
-#import <CoreLocation/CoreLocation.h>
 #import "SendValueDelegate.h"
 
-@interface AreaController : UIViewController<UITableViewDelegate,UITableViewDataSource,CLLocationManagerDelegate>
+@interface AreaController : UIViewController<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
 {
-    UITableView *_tableView;
+    UITableView *_provinceTabelView;
+    UITableView *_cityTableView;
     NSMutableArray *_dataArray;
-    CLLocationManager *_currentLocation;
     NSMutableArray *_provinceArray;    //包含所有省份的数组
     NSArray *titleArray;
+    NSMutableArray *_cityArray;
+    NSString *provinceName;           //选中的城市名
 }
 
 @property (nonatomic,weak) id <SendValueDelegate> delegate;
