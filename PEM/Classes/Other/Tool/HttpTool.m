@@ -4,6 +4,7 @@
 #import <objc/message.h>
 #import "AHReach.h"
 #import "RemindView.h"
+#import "AFHTTPRequestOperation.h"
 @implementation HttpTool
 + (void)requestWithPath:(NSString *)path params:(NSDictionary *)params success:(HttpSuccessBlock)success failure:(HttpFailureBlock)failure method:(NSString *)method
 {
@@ -25,12 +26,17 @@
     [allParams setObject:md5 forKey:@"secret"];
     NSString *pathStr = [NSString stringWithFormat:@"/index.php?s=/Home/Api/%@",path];
    
-     [client postPath:pathStr parameters:allParams success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSURLRequest *request = [client requestWithMethod:method path:pathStr parameters:allParams];
+    
+    AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         success(responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         failure(error);
-       
     }];
+    [op start];
+    
+    
     
     
 //    

@@ -483,7 +483,7 @@
         }
     }else{
         CGRect bottomFrame = bottomView.frame;
-        bottomFrame.origin.y = 105;   //40为热门标签的底坐标，20为button的高度，10为上下button的间距
+        bottomFrame.origin.y = 105;
         if (!_isDelete) {
             [UIView animateWithDuration:0.2 animations:^{
                 bottomView.frame = bottomFrame;

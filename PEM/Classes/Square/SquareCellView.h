@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SquareCellView : UIView
+@interface SquareCellView : UIButton
 
 @property (nonatomic,strong) UIImageView *imgView;
 @property (nonatomic,strong) UILabel *nameLabel;
