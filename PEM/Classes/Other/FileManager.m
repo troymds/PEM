@@ -17,6 +17,11 @@
     return [path objectAtIndex:0];
 }
 
++(NSString *)getPathForChche{
+    NSArray *path =NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    return [path objectAtIndex:0];
+}
+
 
 + (void)writeDictionary:(NSDictionary *)data toFile:(NSString *)fileName{
     NSFileManager *fm = [NSFileManager defaultManager];

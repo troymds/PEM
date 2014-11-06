@@ -16,8 +16,21 @@
 #import "HttpTool.h"
 #import "CategoryItem.h"
 #import "RemindView.h"
+#import "CategoryCell.h"
+#import "UIImageView+WebCache.h"
+#import "CategoryView.h"
 
-@interface CategoryController ()
+@interface CategoryController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,CategoryViewDelegate>
+{
+    NSMutableArray *_dataArray;
+    UIScrollView *_scrollView;
+    NSMutableArray *_categoryArr;
+    NSMutableArray *_firstArray;
+    NSMutableArray *_secondArray;
+    UITableView *_firstTableView;
+    UITableView *_secondTableView;
+}
+
 
 @end
 
@@ -43,32 +56,26 @@
     _firstArray = [[NSMutableArray alloc] init];
     _secondArray = [[NSMutableArray alloc] init];
     
-    _firstTableView = [[UITableView alloc] initWithFrame:CGRectMake(0,0,195,kHeight-64) style:UITableViewStylePlain];
-    _firstTableView.delegate = self;
-    _firstTableView.dataSource =self;
-    _firstTableView.tag = 1000;
-    _firstTableView.showsHorizontalScrollIndicator = NO;
-    _firstTableView.showsVerticalScrollIndicator = NO;
-    _firstTableView.backgroundColor = [UIColor clearColor];
-    _firstTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _firstTableView.separatorColor = [UIColor clearColor];
-
-    [self.view addSubview:_firstTableView];
     
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(195, 0, 1, kHeight-64)];
-    line.backgroundColor = HexRGB(0xd5d5d5);
-    [self.view addSubview:line];
-    
-    _secondTableView = [[UITableView alloc] initWithFrame:CGRectMake(196, 0, kWidth-196, kHeight-64) style:UITableViewStylePlain];
+    _secondTableView = [[UITableView alloc] initWithFrame:CGRectMake(195, 0, kWidth-195, kHeight-64) style:UITableViewStylePlain];
     _secondTableView.delegate = self;
     _secondTableView.dataSource =self;
     _secondTableView.tag = 1001;
     _secondTableView.showsHorizontalScrollIndicator = NO;
     _secondTableView.showsVerticalScrollIndicator = NO;
-    _secondTableView.backgroundColor = [UIColor clearColor];
     _secondTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _secondTableView.separatorColor = [UIColor clearColor];
+    _secondTableView.backgroundColor = HexRGB(0xf2f2f2);
     [self.view addSubview:_secondTableView];
+    
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0,0,195,kHeight-64)];
+    _scrollView.backgroundColor = HexRGB(0xffffff);
+    _scrollView.delegate = self;
+    _scrollView.showsHorizontalScrollIndicator=NO;
+    _scrollView.showsVerticalScrollIndicator = NO;
+    
+    [self.view addSubview:_scrollView];
+        
     [self getData];
 }
 
@@ -83,14 +90,52 @@
             NSArray *array = [NSArray arrayWithArray:[dic objectForKey:@"response"]];
             for (NSDictionary *subDic in array) {
                 CategoryItem *item = [[CategoryItem alloc] initWithDic:subDic];
-                [_dataArray addObject:item];
+                [_firstArray addObject:item];
+                [_secondArray addObject:item];
             }
-            [_tableView reloadData];
+            [self addLeftView];
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
+}
+
+
+- (void)addLeftView
+{
+    [_scrollView setContentSize:CGSizeMake(195,75*[_firstArray count])];
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(194.5, 0,0.5,_scrollView.contentSize.height)];
+    line.backgroundColor = HexRGB(0xd5d5d5);
+    [_scrollView addSubview:line];
+    for (int i = 0 ; i < [_firstArray count]; i++) {
+        CategoryItem *item = [_firstArray objectAtIndex:i];
+        CategoryView *view = [[CategoryView alloc] initWithFrame:CGRectMake(0, 75*i, 195, 75)];
+        view.titleLabel.text = item.name;
+        view.tag = 4000+i;
+        if (i==0) {
+            view.isSelected = YES;
+        }
+        view.delegate = self;
+        [view.iconImg setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
+        [_scrollView addSubview:view];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,75*i,195,0.5)];
+        line.backgroundColor = HexRGB(0xd5d5d5);
+        [_scrollView addSubview:line];
+    }
+    [_secondTableView reloadData];
+}
+
+- (void)categoryViewClicked:(CategoryView *)view
+{
+    for (UIView *subView in _scrollView.subviews) {
+        if ([subView isKindOfClass:[CategoryView class]]) {
+            CategoryView *categoryView = (CategoryView *)subView;
+            if (categoryView.tag!=view.tag) {
+                categoryView.isSelected = NO;
+            }
+        }
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -111,68 +156,48 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (tableView.tag == 1000) {
-        return [_firstArray count];
-    }
     return [_secondArray count];
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell;
-    if (tableView.tag == 2000) {
-        static NSString *cellName = @"CellName";
-        cell = [tableView dequeueReusableCellWithIdentifier:cellName];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
-        }
-        for (UIView *subView in cell.contentView.subviews) {
-            [subView removeFromSuperview];
-        }
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,74,195,1)];
-        line.backgroundColor = HexRGB(0xd5d5d5);
-        [cell.contentView addSubview:line];
-        
-    }else{
-        static NSString *cellName = @"identify";
-        cell = [tableView dequeueReusableCellWithIdentifier:cellName];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
-        }
-        for (UIView *subView in cell.contentView.subviews) {
-            [subView removeFromSuperview];
-        }
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,44,kWidth-196,1)];
-        line.backgroundColor = HexRGB(0xd5d5d5);
-        [cell.contentView addSubview:line];
+    static NSString *cellName = @"identify";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
     }
+    for (UIView *subView in cell.contentView.subviews) {
+        [subView removeFromSuperview];
+    }
+    CategoryItem *item = [_secondArray objectAtIndex:indexPath.row];
+    cell.textLabel.text = item.name;
+    cell.textLabel.textColor = HexRGB(0x808080);
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,44,kWidth-196,1)];
+    line.backgroundColor = HexRGB(0xfffffff);
+    [cell.contentView addSubview:line];
+    cell.backgroundColor = HexRGB(0xf2f2f2);
     return cell;
 }
 
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (tableView.tag == 1000) {
-        return 75;
-    }
     return 45;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (tableView.tag == 1000) {
-        
-    }else{
-        CategoryItem *item = [_dataArray objectAtIndex:indexPath.row];
-        if (_isSupply){
-            if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
-                [self.delegate sendValueFromViewController:self value:item isDemand:NO];
-            }
-        }else{
-            if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
-                [self.delegate sendValueFromViewController:self value:item isDemand:YES];
-            }
+    CategoryItem *item = [_secondArray objectAtIndex:indexPath.row];
+    if (_isSupply){
+        if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
+            [self.delegate sendValueFromViewController:self value:item isDemand:NO];
         }
-        [self.navigationController popViewControllerAnimated:YES];
+    }else{
+        if ([self.delegate respondsToSelector:@selector(sendValueFromViewController:value:isDemand:)]) {
+            [self.delegate sendValueFromViewController:self value:item isDemand:YES];
+        }
     }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

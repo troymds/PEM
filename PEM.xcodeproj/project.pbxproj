@@ -125,6 +125,9 @@
 		04AF26E519E8B17C001B29CB /* ProvinceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26DD19E8B17C001B29CB /* ProvinceController.m */; };
 		04AF26E619E8B17C001B29CB /* CityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26DF19E8B17C001B29CB /* CityController.m */; };
 		04B1778B1A08CC9E000D1B18 /* bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B1778A1A08CC9E000D1B18 /* bg@2x.png */; };
+		04B1D2011A0B0A6000929A59 /* CategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1D2001A0B0A6000929A59 /* CategoryCell.m */; };
+		04B1D2411A0B4FD500929A59 /* CategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1D2401A0B4FD500929A59 /* CategoryView.m */; };
+		04B1D2431A0B5EF600929A59 /* Cell_Selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B1D2421A0B5EF600929A59 /* Cell_Selected@2x.png */; };
 		04B89CB419F50AE600A417AA /* btn_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B89CB319F50AE600A417AA /* btn_down@2x.png */; };
 		04C5043619F0A3C8008F36AD /* provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043519F0A3C8008F36AD /* provinces.plist */; };
 		04C5043B19F124FD008F36AD /* Vip1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043719F124FD008F36AD /* Vip1@2x.png */; };
@@ -663,6 +666,11 @@
 		04AF26DE19E8B17C001B29CB /* CityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityController.h; sourceTree = "<group>"; };
 		04AF26DF19E8B17C001B29CB /* CityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CityController.m; sourceTree = "<group>"; };
 		04B1778A1A08CC9E000D1B18 /* bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg@2x.png"; sourceTree = "<group>"; };
+		04B1D1FF1A0B0A6000929A59 /* CategoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryCell.h; sourceTree = "<group>"; };
+		04B1D2001A0B0A6000929A59 /* CategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoryCell.m; sourceTree = "<group>"; };
+		04B1D23F1A0B4FD500929A59 /* CategoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CategoryView.h; sourceTree = "<group>"; };
+		04B1D2401A0B4FD500929A59 /* CategoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CategoryView.m; sourceTree = "<group>"; };
+		04B1D2421A0B5EF600929A59 /* Cell_Selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cell_Selected@2x.png"; sourceTree = "<group>"; };
 		04B5F01D19ECAA4300CE68A4 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		04B5F01F19ECAA5500CE68A4 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		04B5F02119ECAAF000CE68A4 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -1363,6 +1371,8 @@
 				04AF26C119E8B15E001B29CB /* TagButton.m */,
 				04AF26C219E8B15E001B29CB /* ProAlertView.h */,
 				04AF26C319E8B15E001B29CB /* ProAlertView.m */,
+				04B1D23F1A0B4FD500929A59 /* CategoryView.h */,
+				04B1D2401A0B4FD500929A59 /* CategoryView.m */,
 				04AF26C419E8B15E001B29CB /* PublishViewDelegate.h */,
 			);
 			name = View;
@@ -1442,6 +1452,15 @@
 				04AA702419C8506E002A5009 /* GTMDefines.h */,
 			);
 			name = GTMBase64;
+			sourceTree = "<group>";
+		};
+		04B1D1FE1A0B0A2B00929A59 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				04B1D1FF1A0B0A6000929A59 /* CategoryCell.h */,
+				04B1D2001A0B0A6000929A59 /* CategoryCell.m */,
+			);
+			name = Cell;
 			sourceTree = "<group>";
 		};
 		04D2CEA019EE46BD0016862F /* ShareSDK */ = {
@@ -1533,6 +1552,7 @@
 		04EE097419D055F00064B27C /* MeImages */ = {
 			isa = PBXGroup;
 			children = (
+				04B1D2421A0B5EF600929A59 /* Cell_Selected@2x.png */,
 				04AA5D1C1A024C4E00D75A1C /* off@2x.png */,
 				04AA5D1D1A024C4E00D75A1C /* on@2x.png */,
 				04AA21CD19FF9AFE00A18DC6 /* action_btn@2x.png */,
@@ -1922,6 +1942,7 @@
 		55B5D283199AECAC002A9750 /* Me */ = {
 			isa = PBXGroup;
 			children = (
+				04B1D1FE1A0B0A2B00929A59 /* Cell */,
 				04A9051D19AB56660024E625 /* Model */,
 				04A9051819AB55630024E625 /* View */,
 				55E1AF9B19A6E1590095F9C2 /* Controller */,
@@ -2747,6 +2768,7 @@
 				55B5104D19F782A9009F9008 /* nav_return@2x.png in Resources */,
 				55DA328919ADB8C400A5A3CE /* xialakuang.png in Resources */,
 				55E8C0F119D3A66A003F1685 /* companyInfo@2x.png in Resources */,
+				04B1D2431A0B5EF600929A59 /* Cell_Selected@2x.png in Resources */,
 				55D16CD019B701D1003B805A /* nav_return.png in Resources */,
 				04A3BC5D19C05C1C00B2217B /* home_login_pre@2x.png in Resources */,
 				554E1FC219D18FDA0024879C /* nav_searchBtn.png in Resources */,
@@ -2975,6 +2997,7 @@
 				0471EA1819ED3AA800060640 /* BuyTagController.m in Sources */,
 				55D035AA19B8679E000F090F /* demandTableViewCell.m in Sources */,
 				55B5104219F73930009F9008 /* AFJSONRequestOperation.m in Sources */,
+				04B1D2011A0B0A6000929A59 /* CategoryCell.m in Sources */,
 				04AF266219E8B129001B29CB /* AdviceController.m in Sources */,
 				04AF265A19E8B129001B29CB /* MyFavoriteController.m in Sources */,
 				F30ADA8F1A033D5800403963 /* CompangHomeHeadFrame.m in Sources */,
@@ -3020,6 +3043,7 @@
 				55D035B419B87BEB000F090F /* yySupplyModel.m in Sources */,
 				04AF265319E8B129001B29CB /* FindSecretController.m in Sources */,
 				55D8977219AC7A41001EAF9F /* WBNavigationController.m in Sources */,
+				04B1D2411A0B4FD500929A59 /* CategoryView.m in Sources */,
 				55D8975619AC62DA001EAF9F /* UIImage+GIF.m in Sources */,
 				554E1F8F19D0FD6F0024879C /* hotOrderMoedl.m in Sources */,
 				55D8975819AC62DA001EAF9F /* UIImage+WebP.m in Sources */,

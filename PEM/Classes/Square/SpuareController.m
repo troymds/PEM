@@ -128,7 +128,7 @@
     [rightBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
     [rightBtn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
     // 设置尺寸
-    rightBtn.frame = CGRectMake(10, 10,52, 24);
+    rightBtn.frame = CGRectMake(10, 10,60, 24);
     [rightBtn addTarget:self action:@selector(leftItemClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     self.navigationItem.rightBarButtonItem = item;

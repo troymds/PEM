@@ -56,7 +56,6 @@
     _cityTableView.dataSource = self;
     _cityTableView.showsVerticalScrollIndicator = NO;
     _cityTableView.showsHorizontalScrollIndicator = NO;
-    _cityTableView.backgroundColor = [UIColor clearColor];
     _cityTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _cityTableView.separatorColor = [UIColor clearColor];
     [self.view addSubview:_cityTableView];
@@ -109,17 +108,16 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollView.contentSize.height-scrollView.frame.size.height>0) {
-        scrollView.scrollEnabled = YES;
-    }else{
-        scrollView.scrollEnabled = NO;
-    }
     if (scrollView.contentOffset.y<0) {
         scrollView.contentOffset = CGPointMake(0, 0);
     }
     if (scrollView.contentSize.height-scrollView.frame.size.height>0) {
         if (scrollView.contentOffset.y>scrollView.contentSize.height-scrollView.frame.size.height) {
             scrollView.contentOffset = CGPointMake(0, scrollView.contentSize.height-scrollView.frame.size.height);
+        }
+    }else{
+        if (scrollView.contentOffset.y>0) {
+            scrollView.contentOffset = CGPointMake(0, 0);
         }
     }
 }
@@ -145,6 +143,7 @@
         for (UIView *subView in cell.contentView.subviews) {
             [subView removeFromSuperview];
         }
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
         NSString *areaStr = [[_provinceArray objectAtIndex:indexPath.row] objectForKey:@"name"];
         cell.textLabel.text = areaStr;
         cell.textLabel.font = [UIFont systemFontOfSize:15];
@@ -165,6 +164,7 @@
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,39,kWidth-151,1)];
         line.backgroundColor = HexRGB(0xd5d5d5);
         [cell.contentView addSubview:line];
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
         NSString *areaStr = [[_cityArray objectAtIndex:indexPath.row] objectForKey:@"name"];
         cell.textLabel.text = areaStr;
         cell.textLabel.textColor = HexRGB(0x808080);
