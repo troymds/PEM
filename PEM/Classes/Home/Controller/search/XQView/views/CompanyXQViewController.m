@@ -163,7 +163,6 @@
                 }
             }
             dataLabel.hidden = YES;
-//            [self addCompanyHome];
             [self buildCompanyHomeUI];
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         } newFailure:^(NSError *error) {
@@ -272,8 +271,6 @@
         
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
-        
-        
     }];
     
     

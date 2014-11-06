@@ -358,6 +358,7 @@
 
 - (void)ebingooE
 {
+    
     if ([_delegate respondsToSelector:@selector(CompanyHomeView:)]) {
         [_delegate CompanyHomeView:self];
     }

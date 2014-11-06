@@ -345,9 +345,9 @@
     UILabel *nameCopany =[[UILabel alloc]init];
     nameCopany.text = xqModel.company_name;
     nameCopany.backgroundColor =[UIColor clearColor];
-    CGFloat nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(210, 30)].width;
+    CGFloat nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(260, 30)].width;
     [forImage addSubview:nameCopany];
-    nameCopany.frame =CGRectMake(18, 0, 210, 44);
+    nameCopany.frame =CGRectMake(18, 0, 260, 44);
     nameCopany.font =[UIFont systemFontOfSize:PxFont(18)];
     
     UIButton *goCompany =[UIButton buttonWithType:UIButtonTypeCustom];
