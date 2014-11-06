@@ -68,7 +68,6 @@
     _selectedFind =[[UIButton alloc]init];
     _supplyBtnPice =[[UIButton alloc]init];
     _demandBtnTimer =[[UIButton alloc]init];
-    NSLog(@"_s%d",_supplyBtnPice.tag);
 
 
     _CateSupplyArray =[[NSMutableArray alloc]init];
