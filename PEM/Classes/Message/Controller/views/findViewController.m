@@ -234,14 +234,18 @@
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
-                [_CateDemandArray addObjectsFromArray:statues];
+                if (statues.count>4) {
+                    [_CateDemandArray removeAllObjects];
+                    
+                }
             }else
             {if (statues.count==0){
                 
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
             }
             }
-            
+            [_CateDemandArray addObjectsFromArray:statues];
+
             [_tableView reloadData];
             [refreshView endRefreshing];
         }cateId:cateIndex demandHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
