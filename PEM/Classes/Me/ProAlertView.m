@@ -6,10 +6,10 @@
 //  Copyright (c) 2014年 ___普尔摩___. All rights reserved.
 //
 
-#import "MyActionSheetView.h"
+#import "ProAlertView.h"
 #import "AdaptationSize.h"
 
-@interface MyActionSheetView ()
+@interface ProAlertView ()
 {
     UILabel *_titleLabel;
     UILabel *_messageLabel;
@@ -22,7 +22,7 @@
 
 @end
 
-@implementation MyActionSheetView
+@implementation ProAlertView
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -105,7 +105,6 @@
         bgView.transform = CGAffineTransformScale([self transformForOrientation],1.05,1.05);;
         [UIView commitAnimations];
         [self performSelector:@selector(changeUI) withObject:nil afterDelay:0.1];
-        
     }
     return self;
 }
@@ -141,10 +140,8 @@
 
 - (void)actionButtonDown:(UIButton *)button
 {
-    if (button.tag == 0) {
-        if ([self.delegate respondsToSelector:@selector(actionSheetButtonClicked:)]) {
-            [self.delegate actionSheetButtonClicked:self];
-        }
+    if ([self.delegate respondsToSelector:@selector(proAclertView:clickButtonAtIndex:)]) {
+        [self.delegate proAclertView:self clickButtonAtIndex:button.tag];
     }
     secondWindow.hidden = YES;
     secondWindow = nil;

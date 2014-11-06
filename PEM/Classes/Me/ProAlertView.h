@@ -8,21 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@class MyActionSheetView;
-@protocol MyActionSheetViewDelegate <NSObject>
+@class ProAlertView;
+@protocol ProAlertViewDelegate <NSObject>
 
 @optional
 
-- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView;
+- (void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index;
 
 @end
 
-@interface MyActionSheetView : UIView
+@interface ProAlertView : UIView
 
-@property (nonatomic,weak) id <MyActionSheetViewDelegate> delegate;
+@property (nonatomic,weak) id <ProAlertViewDelegate> delegate;
 
 - (id)initWithTitle:(NSString *)title withMessage:(NSString *)message delegate:(id)delegate cancleButton:(NSString *)cancelButton otherButton:(NSString *)otherButton;
-
 
 - (void)showView;
 

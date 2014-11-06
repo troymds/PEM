@@ -114,9 +114,8 @@
 		04AF26C819E8B15E001B29CB /* CellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26B919E8B15E001B29CB /* CellView.m */; };
 		04AF26C919E8B15E001B29CB /* ProImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26BB19E8B15E001B29CB /* ProImageView.m */; };
 		04AF26CA19E8B15E001B29CB /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26BD19E8B15E001B29CB /* LoginView.m */; };
-		04AF26CB19E8B15E001B29CB /* TKRoundedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26BF19E8B15E001B29CB /* TKRoundedView.m */; };
 		04AF26CC19E8B15E001B29CB /* TagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26C119E8B15E001B29CB /* TagButton.m */; };
-		04AF26CD19E8B15E001B29CB /* MyActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26C319E8B15E001B29CB /* MyActionSheetView.m */; };
+		04AF26CD19E8B15E001B29CB /* ProAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26C319E8B15E001B29CB /* ProAlertView.m */; };
 		04AF26D119E8B16D001B29CB /* MeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26CF19E8B16D001B29CB /* MeController.m */; };
 		04AF26E019E8B17C001B29CB /* CategoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26D319E8B17C001B29CB /* CategoryController.m */; };
 		04AF26E119E8B17C001B29CB /* AreaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AF26D519E8B17C001B29CB /* AreaController.m */; };
@@ -633,12 +632,10 @@
 		04AF26BB19E8B15E001B29CB /* ProImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProImageView.m; sourceTree = "<group>"; };
 		04AF26BC19E8B15E001B29CB /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
 		04AF26BD19E8B15E001B29CB /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
-		04AF26BE19E8B15E001B29CB /* TKRoundedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TKRoundedView.h; sourceTree = "<group>"; };
-		04AF26BF19E8B15E001B29CB /* TKRoundedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TKRoundedView.m; sourceTree = "<group>"; };
 		04AF26C019E8B15E001B29CB /* TagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagButton.h; sourceTree = "<group>"; };
 		04AF26C119E8B15E001B29CB /* TagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagButton.m; sourceTree = "<group>"; };
-		04AF26C219E8B15E001B29CB /* MyActionSheetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyActionSheetView.h; sourceTree = "<group>"; };
-		04AF26C319E8B15E001B29CB /* MyActionSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyActionSheetView.m; sourceTree = "<group>"; };
+		04AF26C219E8B15E001B29CB /* ProAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProAlertView.h; sourceTree = "<group>"; };
+		04AF26C319E8B15E001B29CB /* ProAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProAlertView.m; sourceTree = "<group>"; };
 		04AF26C419E8B15E001B29CB /* PublishViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublishViewDelegate.h; sourceTree = "<group>"; };
 		04AF26CE19E8B16D001B29CB /* MeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeController.h; sourceTree = "<group>"; };
 		04AF26CF19E8B16D001B29CB /* MeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeController.m; sourceTree = "<group>"; };
@@ -1346,12 +1343,10 @@
 				04AF26BB19E8B15E001B29CB /* ProImageView.m */,
 				04AF26BC19E8B15E001B29CB /* LoginView.h */,
 				04AF26BD19E8B15E001B29CB /* LoginView.m */,
-				04AF26BE19E8B15E001B29CB /* TKRoundedView.h */,
-				04AF26BF19E8B15E001B29CB /* TKRoundedView.m */,
 				04AF26C019E8B15E001B29CB /* TagButton.h */,
 				04AF26C119E8B15E001B29CB /* TagButton.m */,
-				04AF26C219E8B15E001B29CB /* MyActionSheetView.h */,
-				04AF26C319E8B15E001B29CB /* MyActionSheetView.m */,
+				04AF26C219E8B15E001B29CB /* ProAlertView.h */,
+				04AF26C319E8B15E001B29CB /* ProAlertView.m */,
 				04AF26C419E8B15E001B29CB /* PublishViewDelegate.h */,
 			);
 			name = View;
@@ -2879,7 +2874,6 @@
 				04AF269019E8B13D001B29CB /* PriHeadView.m in Sources */,
 				55C10D5A19CC09A7002498DD /* comPanyModel.m in Sources */,
 				55D8974F19AC62DA001EAF9F /* SDWebImageCompat.m in Sources */,
-				04AF26CB19E8B15E001B29CB /* TKRoundedView.m in Sources */,
 				04AF262819E8B108001B29CB /* DialRecordCell.m in Sources */,
 				04AF266019E8B129001B29CB /* SettingController.m in Sources */,
 				55B77CCE1A03852D00712DB9 /* AHReach.m in Sources */,
@@ -3001,7 +2995,7 @@
 				04AF26E319E8B17C001B29CB /* TDImageController.m in Sources */,
 				04AF261719E8B0F9001B29CB /* MyFavoriteItem.m in Sources */,
 				04AA21C319FF41EF00A18DC6 /* NewCompanySeController.m in Sources */,
-				04AF26CD19E8B15E001B29CB /* MyActionSheetView.m in Sources */,
+				04AF26CD19E8B15E001B29CB /* ProAlertView.m in Sources */,
 				55D8974519AC62DA001EAF9F /* MJRefreshBaseView.m in Sources */,
 				04AF269619E8B13D001B29CB /* InfoCellView.m in Sources */,
 				554E1F8919D0FA7A0024879C /* SearchModel.m in Sources */,
@@ -3177,8 +3171,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: wu guixiang (JB4UYV4U6H)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PEM/Classes/Other/ShareSDK/Connection",
@@ -3212,7 +3206,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bf32ab81-2772-4def-b21b-eb8c7fa652fa";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
@@ -3225,8 +3219,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: wu guixiang (DBA88DPK47)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: wu guixiang (DBA88DPK47)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PEM/Classes/Other/ShareSDK/Connection",
@@ -3260,7 +3254,7 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "bf32ab81-2772-4def-b21b-eb8c7fa652fa";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = armv7;

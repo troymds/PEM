@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "LoginView.h"
-#import "MyActionSheetView.h"
+#import "ProAlertView.h"
 
-@interface qiugouXQ : UIViewController<UIWebViewDelegate,LoginViewDelegate,MyActionSheetViewDelegate>{
+@interface qiugouXQ : UIViewController<UIWebViewDelegate,LoginViewDelegate,ProAlertViewDelegate>{
     UIWebView* demandWebView ;
     UIView *_phoneViewName;
     UIView *nameView;

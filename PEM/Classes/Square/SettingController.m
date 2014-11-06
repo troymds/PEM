@@ -227,11 +227,8 @@
             break;
         case LOGINBACK_TYPE:
         {
-            MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"确定退出登录?" delegate:self cancleButton:@"取消" otherButton:@"确定"];
-            [actionSheet showView];
-//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"确认退出当前账号?" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认退出", nil];
-//            alertView.tag = 1002;
-//            [alertView show];
+            ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:@"确定退出登录?" delegate:self cancleButton:@"取消" otherButton:@"确定"];
+            [alertView showView];
             
         }
             break;
@@ -240,25 +237,24 @@
     }
 }
 
-#pragma mark -MyActionSheet_delegate
-- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView
+#pragma mark -proAlertView_delegate
+-(void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index
 {
-    [SystemConfig sharedInstance].isUserLogin = NO;
-    [SystemConfig sharedInstance].company_id = nil;
-    [SystemConfig sharedInstance].viptype = nil;
-    [SystemConfig sharedInstance].companyInfo = nil;
-    [SystemConfig sharedInstance].vipInfo = nil;
-    
-    LoginController *login = [[LoginController alloc] init];
-    NSArray *arr = self.navigationController.viewControllers;
-    NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
-    [array insertObject:login atIndex:1];
-    self.navigationController.viewControllers = array;
-    [self.navigationController popViewControllerAnimated:YES];
-
+    if (index==0) {
+        [SystemConfig sharedInstance].isUserLogin = NO;
+        [SystemConfig sharedInstance].company_id = nil;
+        [SystemConfig sharedInstance].viptype = nil;
+        [SystemConfig sharedInstance].companyInfo = nil;
+        [SystemConfig sharedInstance].vipInfo = nil;
+        
+        LoginController *login = [[LoginController alloc] init];
+        NSArray *arr = self.navigationController.viewControllers;
+        NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
+        [array insertObject:login atIndex:1];
+        self.navigationController.viewControllers = array;
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
-
-
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {

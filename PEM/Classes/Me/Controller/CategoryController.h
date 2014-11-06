@@ -9,10 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "SendValueDelegate.h"
 
-@interface CategoryController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface CategoryController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>
 {
     UITableView *_tableView;
     NSMutableArray *_dataArray;
+    UIScrollView *_scrollView;
+    NSMutableArray *_categoryArr;
+    NSMutableArray *_firstArray;
+    NSMutableArray *_secondArray;
+    UITableView *_firstTableView;
+    UITableView *_secondTableView;
 }
 
 @property (nonatomic,assign) BOOL isSupply;

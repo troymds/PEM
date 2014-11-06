@@ -195,9 +195,9 @@
                 NSLog(@"%d",supply_num);
                 if (supply_num>=10) {
                     NSString *message = @"您好,您的发布供应次数已用完,要想发布更多,请选择立即升级";
-                    MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                    actionView.tag = 1003;
-                    [actionView showView];
+                    ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                    alertView.tag = 1003;
+                    [alertView showView];
                 }
             }
         }
@@ -396,7 +396,7 @@
         case 3003:
         {
             if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
-                _upTDView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"尊敬的体验会员,您没有权限上传全景图片\n1.普通会员及以上会员可单独购买上传次数\n2.金牌会员赠送1次\n3.铂金会员赠送5次" delegate:self cancleButton:@"取 消" otherButton:@"立即升级"];
+                _upTDView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:@"尊敬的体验会员,您没有权限上传全景图片\n1.普通会员及以上会员可单独购买上传次数\n2.金牌会员赠送1次\n3.铂金会员赠送5次" delegate:self cancleButton:@"取 消" otherButton:@"立即升级"];
                 _upTDView.tag =1000;
                 [_upTDView showView];
             }else{
@@ -486,7 +486,7 @@
                     if (data == 0) {
                         //不能发布信息
                         NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
-                        MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                        ProAlertView *actionView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
                         actionView.tag = 1001;
                         [actionView showView];
                     }else{
@@ -924,17 +924,16 @@
     }
 }
 
-
-- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView
+#pragma mark ---proAlertView_delegate
+- (void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index
 {
-    if (actionSheetView.tag ==1001) {
-        
-    }else{
-        PrivilegeController *priVC = [[PrivilegeController alloc] init];
-        [self.navigationController pushViewController:priVC animated:YES];
+    if (alertView.tag!=1001) {
+        if (index == 0) {
+            PrivilegeController *priVC = [[PrivilegeController alloc] init];
+            [self.navigationController pushViewController:priVC animated:YES];
+        }
     }
 }
-
 
 
 //图片点击事件

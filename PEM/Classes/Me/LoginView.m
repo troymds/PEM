@@ -211,10 +211,10 @@
                 CompanyInfoItem *item = [[CompanyInfoItem alloc] initWithDictionary:data];
                 [SystemConfig sharedInstance].companyInfo = item;
                 [self getVipInfo:[SystemConfig sharedInstance].company_id];
-                
-                [[NSUserDefaults standardUserDefaults] setObject:_userField.text forKey:@"userName"];
-                [[NSUserDefaults standardUserDefaults] setObject:_passwordField.text forKey:@"secret"];
-                
+                NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+                [user setObject:_userField.text forKey:@"userName"];
+                [user setObject:_passwordField.text forKey:@"secret"];
+                [user synchronize];
             }else{
                 [RemindView showViewWithTitle:@"用户名或密码错误" location:MIDDLE];
                 if (self.failBlock!=nil) {
@@ -259,9 +259,8 @@
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
-        NSLog(@"%@",error);
-        if (self.sucessBlock!=nil) {
-            self.sucessBlock();
+        if (self.failBlock!=nil) {
+            self.failBlock();
         }
     }];
     

@@ -74,7 +74,7 @@
             int supply_num = [[SystemConfig sharedInstance].vipInfo.supply_num intValue];
             if (supply_num>=10) {
                 NSString *message = @"您好,您的发布供应次数已用完,要想发布更多,请选择立即升级";
-                MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                ProAlertView *actionView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
                 actionView.tag = 1003;
                 [actionView showView];
             }
@@ -263,7 +263,7 @@
                                 if (data == 0) {
                                     //不能发布信息
                                     NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
-                                    MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                                    ProAlertView *actionView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
                                     [actionView showView];
                                 }else{
                                     [self publishSupplyInfo];
@@ -285,13 +285,13 @@
         case 3003:
         {
             if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
-                MyActionSheetView *actionView = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好！您目前所处等级没有权限上传全景图片,请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
+                ProAlertView *actionView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:@"您好！您目前所处等级没有权限上传全景图片,请先升级。" delegate:self cancleButton:@"取 消" otherButton:@"升 级"];
                 actionView.tag =1000;
                 [actionView showView];
             }else{
                 int display_3d_num = [[SystemConfig sharedInstance].vipInfo.display_3d_num intValue];
                 if (display_3d_num <= 0) {
-                    MyActionSheetView *actionSheet = [[MyActionSheetView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您还不能上传全景图片或上传全景图片数量已用完,要上传全景图片,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
+                    ProAlertView *actionSheet = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:@"您好!您还不能上传全景图片或上传全景图片数量已用完,要上传全景图片,可单独购买" delegate:self cancleButton:@"取消" otherButton:@"单独购买"];
                     actionSheet.tag = 1001;
                     [actionSheet showView];
                 }else{
@@ -539,12 +539,15 @@
     }
 }
 
-
-- (void)actionSheetButtonClicked:(MyActionSheetView *)actionSheetView
+#pragma mark--proAlertView_delegate
+- (void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index
 {
-    PrivilegeController *pri = [[PrivilegeController alloc] init];
-    [self.navigationController pushViewController:pri animated:YES];
+    if (index == 0) {
+        PrivilegeController *pri = [[PrivilegeController alloc] init];
+        [self.navigationController pushViewController:pri animated:YES];
+    }
 }
+
 
 #pragma mark UIImagePickerControllerDelegate
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
