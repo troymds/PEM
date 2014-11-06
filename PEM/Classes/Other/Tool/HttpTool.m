@@ -9,7 +9,7 @@
 + (void)requestWithPath:(NSString *)path params:(NSDictionary *)params success:(HttpSuccessBlock)success failure:(HttpFailureBlock)failure method:(NSString *)method
 {
     // 1.创建post请求
-    AFHTTPClient *client = [AFHTTPClient clientWithBaseURL:[NSURL URLWithString:kURL]];
+    AFHTTPClient *client = [AFHTTPClient clientWithBaseURL:[NSURL URLWithString:kBaseURL]];
 
     NSMutableDictionary *allParams = [NSMutableDictionary dictionary];
 //    // 拼接传进来的参数
@@ -24,7 +24,7 @@
     [allParams setObject:time forKey:@"time"];
     [allParams setObject:uuid forKey:@"uuid"];
     [allParams setObject:md5 forKey:@"secret"];
-    NSString *pathStr = [NSString stringWithFormat:@"ebingoo/index.php?s=/Home/Api/%@",path];
+    NSString *pathStr = [NSString stringWithFormat:@"/index.php?s=/Home/Api/%@",path];
    
     NSURLRequest *request = [client requestWithMethod:method path:pathStr parameters:allParams];
     
