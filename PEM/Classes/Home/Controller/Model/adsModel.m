@@ -21,4 +21,23 @@
     return self;
 }
 
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:self.idType forKey:@"type"];
+    [coder encodeObject:self.srcImage forKey:@"src"];
+    [coder encodeObject:self.content forKey:@"content"];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
+    if (self) {
+        self.idType =  [coder decodeObjectForKey:@"type"];
+        self.srcImage =  [coder decodeObjectForKey:@"src"];
+        self.content =  [coder decodeObjectForKey:@"content"];
+    }
+    return self;
+}
+
+
 @end

@@ -31,4 +31,12 @@
 @property (strong,nonatomic)UIPageControl *pageControl;
 @property (strong, nonatomic)UITextField *text;
 @property(nonatomic,strong)NSMutableArray *adsImage;
+
+//离线数据
+@property(nonatomic,strong)NSMutableArray *hotImageArrayOff;
+@property(nonatomic,strong)NSMutableArray *tadyNumArrayOff;//今日新增
+@property(nonatomic,strong)NSMutableArray *hotDemandArrayOff;//热门求购
+@property(nonatomic,strong)NSMutableArray *hotSupplyArrayOff;//热门供应
+@property(nonatomic,strong)NSMutableArray *adsImageOff;
+
 @end

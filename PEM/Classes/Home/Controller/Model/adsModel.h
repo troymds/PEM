@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface adsModel : NSObject
+@interface adsModel : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *idType;
 @property (nonatomic, copy) NSString *srcImage;
 @property (nonatomic, copy) NSString *content;
