@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface HotCategoryModel : NSObject
+@interface HotCategoryModel : NSObject<NSCoding>
 
 @property (nonatomic, copy) NSString *cateid;
 @property (nonatomic, copy) NSString *image;

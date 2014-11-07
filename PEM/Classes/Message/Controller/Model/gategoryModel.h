@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface gategoryModel : NSObject
+@interface gategoryModel : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *idType;
 @property (nonatomic, copy) NSString *imageGategpry;
 @property (nonatomic, copy) NSString *nameGategory;
