@@ -40,13 +40,13 @@
     
     self.view.backgroundColor =HexRGB(0xffffff);
     demandArray =[[NSMutableArray alloc]init];
-  
+    
     [self loadStatusView];
     
     
     
     self.title =@"求购详情";
-
+    
 }
 
 
@@ -59,14 +59,17 @@
     
     demandWebheight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.offsetHeight;"] floatValue];
     demandWebView .frame = CGRectMake(0, 120, kWidth, demandWebheight+180);
-
-        _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+220);
+    
+    _backScrollView.contentSize = CGSizeMake(kWidth,demandWebheight+220);
     
     
 }
 -(void)loadStatusView{
-    
-        [XQgetInfoTool statusesWithSuccess:^(NSArray *statues) {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    [XQgetInfoTool statusesWithSuccess:^(NSArray *statues) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
         [demandArray addObjectsFromArray:statues];
         [self addAabstract];
         [self showNewStatusCount];
@@ -133,7 +136,7 @@
 }
 -(void)goBackFalseClick{
     DemandController *demand =[[DemandController alloc]init];
-  demand.title = @"编辑求购信息";
+    demand.title = @"编辑求购信息";
     demand.info_id = demandIndex;
     [self.navigationController pushViewController:demand animated:YES];
 }
@@ -150,7 +153,7 @@
     
     _backScrollView.showsVerticalScrollIndicator = NO;
     _backScrollView.showsHorizontalScrollIndicator = NO;
-
+    
     UILabel *nameLable =[[UILabel alloc]init];
     nameLable.text =xqModel.titleGetInfo;
     nameLable.frame =CGRectMake(5,5, 300, titleHeight);
@@ -191,37 +194,37 @@
     [_backScrollView addSubview:xinagq];
     xinagq.font =[UIFont systemFontOfSize:15];
     xinagq.textColor =HexRGB(0x69dd4);;
-
+    
     UILabel *xinagLabel =[[UILabel alloc]init];
     xinagLabel.text =xqModel.description;
     xinagLabel.numberOfLines =0;
     xinagLabel.frame =CGRectMake(5,titleHeight+80, 300, contentHeight+40);
     [_backScrollView addSubview:xinagLabel];
     xinagLabel.font =[UIFont systemFontOfSize:15];
-
+    
     demandWebView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 100, kWidth,  _backScrollView.frame.size.height-180)];
-
+    
     [demandWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:xqModel.description]]];
     demandWebView.userInteractionEnabled = NO;
     demandWebView.delegate = self;
-
-    [_backScrollView addSubview:demandWebView];
-
     
-
+    [_backScrollView addSubview:demandWebView];
+    
+    
+    
     //底部
     
     UIView *backView =[[UIView alloc]init];
     backView.backgroundColor =[UIColor whiteColor];
-     backView .frame=CGRectMake(0, self.view.frame.size.height-80, kWidth, 80);
-
+    backView .frame=CGRectMake(0, self.view.frame.size.height-80, kWidth, 80);
+    
     backView.backgroundColor =HexRGB(0xefeded);
-
+    
     [self.view addSubview:backView];
     
     
     
-  
+    
     
     UIView *lbackView =[[UIView alloc]init];
     lbackView.frame =CGRectMake(0, 0, kWidth, 44);
@@ -236,7 +239,7 @@
     [phoneBtn setImage:[UIImage imageNamed:@"home_phone.png"] forState:UIControlStateNormal];
     [phoneBtn addTarget:self action:@selector(phoneBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [lbackView addSubview:phoneBtn];
-
+    
     UIView *l =[[UIView alloc]init];
     [backView addSubview:l];
     l.frame =CGRectMake(0, 44, kWidth, 1);
@@ -252,12 +255,12 @@
     [goCompany addTarget:self action:@selector(gotoCompanyBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     
     
-
+    
     //vip
     
     UIImageView * _companyImgVip;
     CGFloat nameCompanyw=0 ;
-     _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(70,50, 18, 25)];
+    _companyImgVip = [[UIImageView alloc] initWithFrame:CGRectMake(70,50, 18, 25)];
     
     if ([xqModel.vip_type isEqualToString:@"1"]) {
         _companyImgVip.image =[UIImage imageNamed:@"Vip4.png"];
@@ -284,7 +287,7 @@
     //name
     if (![xqModel.company_name isKindOfClass:[NSNull class]]){
         nameCompanyw =[xqModel.company_name sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(250, 50)].width;
-
+        
     }else{
         
     }
@@ -297,7 +300,7 @@
     nameCopany.font =[UIFont systemFontOfSize:PxFont(18)];
     if (![xqModel.company_name isKindOfClass:[NSNull class]]){
         nameCopany.text = xqModel.company_name;
-
+        
     }else{
         nameCopany.text = @"";
     }
@@ -343,11 +346,11 @@
     }else {
         nameCopany.text = @"xxx公司";
         nameCopany.frame =CGRectMake(20, 40, 250, 44);
-
+        
         
     }
     
-
+    
     
 }
 
@@ -427,7 +430,7 @@
     if (sure.tag ==44) {
         [_phoneViewName removeFromSuperview];
         [nameView removeFromSuperview];
-
+        
         if (![SystemConfig sharedInstance].isUserLogin) {
             LoginView *loginView = [[LoginView alloc] init];
             loginView.delegate = self;
@@ -479,7 +482,7 @@
             
         }
         
-
+        
     }else {
         [_phoneViewName removeFromSuperview];
         [nameView removeFromSuperview];
@@ -510,17 +513,17 @@
         XQgetInfoDetailModel *xqModel =[demandArray objectAtIndex:0];
         [phoneView callPhoneNumber:xqModel.phone_num call:^(NSTimeInterval duration) {
             NSLog(@"User made a call of %.1f seconds", duration);
-                                  
+            
         } cancel:^{
             NSLog(@"User cancelled the call");
         } finish:^{
             NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"call_id",xqModel.company_id,@"to_id",xqModel.info_id,@"info_id", nil];
             [HttpTool postWithPath:@"addCallRecord" params:param success:^(id JSON) {
-                                      
-                } failure:^(NSError *error) {
-                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                                      
-                    [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                
+            } failure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
             }];
         }];
     }
@@ -537,17 +540,17 @@
             NSLog(@"登陆失败");
         }];
         [loginView showView];
-     
+        
         
     }else  if([[SystemConfig sharedInstance].viptype isEqualToString:@"-1"]) {
-       
+        
         UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员" message:@"抱歉，体验会员不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
         [alert show];
-                
+        
         
         
     }else  if([[SystemConfig sharedInstance].viptype isEqualToString:@"3"]) {
-       
+        
         UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"尊敬的体验会员" message:@"抱歉，体验会员不能查看求购的公司信息，请立即升级!" delegate:self cancelButtonTitle:@"立即升级" otherButtonTitles:@"取消", nil];
         [alert show];
         
@@ -575,8 +578,8 @@
     if (buttonIndex ==0) {
         PrivilegeController *lvc =[[PrivilegeController alloc] init];
         [self.navigationController pushViewController:lvc animated:YES];
-      
+        
     }else{
-            }
+    }
 }
 @end
