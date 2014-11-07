@@ -42,6 +42,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     if ([SystemConfig sharedInstance].isUserLogin){
         //判断是否是登录状态 若是 显示企业头像等信息
         CompanyInfoItem *item = [SystemConfig sharedInstance].companyInfo;
@@ -120,18 +121,18 @@
     [_scrollView setContentSize:CGSizeMake(kWidth, _headView.frame.size.height+_squareView.frame.size.height)];
     
     
-    // 创建按钮
-    rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    // 设置普通背景图片
-    [rightBtn setTitle:@"E平台" forState:UIControlStateNormal];
-    [rightBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
-    [rightBtn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
-    // 设置尺寸
-    rightBtn.frame = CGRectMake(10, 10,60, 24);
-    [rightBtn addTarget:self action:@selector(leftItemClick) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
-    self.navigationItem.rightBarButtonItem = item;
+//    // 创建按钮
+//    rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    
+//    // 设置普通背景图片
+//    [rightBtn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
+//    [rightBtn setBackgroundImage:[UIImage imageNamed:@"E_plat.png"] forState:UIControlStateNormal];
+//    [rightBtn setBackgroundImage:[UIImage imageNamed:@"E_plat_pre.png"] forState:UIControlStateHighlighted];
+//    // 设置尺寸
+//    rightBtn.frame = CGRectMake(10, 10,52, 23);
+//    [rightBtn addTarget:self action:@selector(leftItemClick) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+//    self.navigationItem.rightBarButtonItem = item;
 }
 
 - (void)leftItemClick

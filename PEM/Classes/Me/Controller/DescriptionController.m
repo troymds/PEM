@@ -37,11 +37,10 @@
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     
     // 设置普通背景图片
-    [btn setTitle:@"完 成" forState:UIControlStateNormal];
-    [btn setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
-    [btn setBackgroundImage:[UIImage imageNamed:@"left_item.png"] forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"right_finish.png"] forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"rigth_finish_pre.png"] forState:UIControlStateHighlighted];
     // 设置尺寸
-    btn.frame = CGRectMake(10, 10,52, 24);
+    btn.frame = CGRectMake(10, 10,52, 23);
     [btn addTarget:self action:@selector(finish) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
     self.navigationItem.rightBarButtonItem = item;

@@ -87,13 +87,33 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         if ([dic objectForKey:@"response"]) {
-            NSArray *array = [NSArray arrayWithArray:[dic objectForKey:@"response"]];
-            for (NSDictionary *subDic in array) {
-                CategoryItem *item = [[CategoryItem alloc] initWithDic:subDic];
-                [_firstArray addObject:item];
-                [_secondArray addObject:item];
+            if (!isNull(dic, @"response")) {
+                NSArray *array = [NSArray arrayWithArray:[dic objectForKey:@"response"]];
+                for (NSDictionary *subDic in array) {
+                    NSString *parent_id = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"parent_id"] intValue]];
+                    CategoryItem *item = [[CategoryItem alloc] initWithDic:subDic];
+                    NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:0];
+                    if ([parent_id isEqualToString:@"0"]) {
+                        [_firstArray addObject:item];
+                    }else{
+                        [arr addObject:item];
+                    }
+                    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:0];
+                    for (int i = 0; i < [_firstArray count]; i++) {
+                        if (array.count!=0) {
+                            [array removeAllObjects];
+                        }
+                        CategoryItem *firstItem = [_firstArray objectAtIndex:i];
+                        for (CategoryItem *secondItem in arr) {
+                            if ([secondItem.uid isEqualToString:firstItem.uid]) {
+                                [array addObject:secondItem];
+                            }
+                        }
+                        [_dataArray addObject:array];
+                    }
+                }
+                [self addLeftView];
             }
-            [self addLeftView];
         }
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -122,6 +142,22 @@
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,75*i,195,0.5)];
         line.backgroundColor = HexRGB(0xd5d5d5);
         [_scrollView addSubview:line];
+        NSArray *array = [_dataArray objectAtIndex:i];
+        int count = array.count;
+        if (count>0) {
+            if (count==1) {
+                CategoryItem *item = [array objectAtIndex:0];
+                view.desLabel.text = item.name;
+            }else{
+                CategoryItem *item1 = [array objectAtIndex:0];
+                CategoryItem *item2 = [array objectAtIndex:1];
+                NSString *str =[NSString stringWithFormat:@"%@  %@",item1.name,item2.name];
+                view.desLabel.text = str;
+            }
+        }
+    }
+    if ([_dataArray count]!=0) {
+        _secondArray = [_dataArray objectAtIndex:0];
     }
     [_secondTableView reloadData];
 }
