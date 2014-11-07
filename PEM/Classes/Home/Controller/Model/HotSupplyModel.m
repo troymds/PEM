@@ -26,4 +26,27 @@
     
     return self;
 }
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:self.supplyhotID forKey:@"id"];
+    [coder encodeObject:self.image forKey:@"image"];
+    [coder encodeObject:self.title forKey:@"title"];
+    [coder encodeObject:self.sub_title forKey:@"sub_title"];
+    [coder encodeObject:self.supplytype forKey:@"supplytype"];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
+    if (self) {
+        self.supplyhotID =  [coder decodeObjectForKey:@"id"];
+        self.image =  [coder decodeObjectForKey:@"image"];
+        self.title =  [coder decodeObjectForKey:@"title"];
+        self.sub_title =  [coder decodeObjectForKey:@"sub_title"];
+        self.supplytype =  [coder decodeObjectForKey:@"supplytype"];
+    }
+    return self;
+}
+
 @end

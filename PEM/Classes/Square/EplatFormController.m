@@ -17,7 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"E平台";
+    self.title = @"企业E平台";
     // Do any additional setup after loading the view.
     _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     _webView.delegate = self;

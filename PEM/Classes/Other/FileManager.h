@@ -8,16 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
+
+typedef  enum
+{
+    DocumentType,
+    CacheType
+}directoryType;
+
 @interface FileManager : NSObject
 
-+ (void)writeDictionary:(NSDictionary *)data toFile:(NSString *)fileName;
++ (void)writeDictionary:(NSDictionary *)data toFile:(NSString *)fileName withType:(directoryType)type;
 
-+(void)writeArray:(NSMutableArray *)data toFile:(NSString *)fileName;
++(void)writeArray:(NSArray *)data toFile:(NSString *)fileName withType:(directoryType)type;
 
-+ (NSArray *)readArrayFromFileName:(NSString *)fileName;
++ (NSArray *)readArrayFromFileName:(NSString *)fileName withType:(directoryType)type;
 
-+ (NSDictionary *)readDictionaryFromFileName:(NSString *)fileName;
++ (NSDictionary *)readDictionaryFromFileName:(NSString *)fileName withType:(directoryType)type;
 
-+ (BOOL)fileExistName:(NSString *)fileName;
++ (BOOL)fileExistName:(NSString *)fileName withType:(directoryType)type;
+
 
 @end

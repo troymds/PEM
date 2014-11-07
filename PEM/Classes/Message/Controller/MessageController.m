@@ -19,6 +19,7 @@
 #import "ZBarSDK.h"
 //#import "CompanyDetailViewController.h"
 #import "DimensionalCodeViewController.h"
+#define kFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"message.data"]
 
 @interface MessageController ()<ZBarReaderDelegate>
 {
@@ -30,6 +31,7 @@
 @property (nonatomic, retain) NSMutableArray *menuArray;
 @property (nonatomic,copy)NSString *menuUrlString;
 @property (nonatomic, strong)NSString * zbarUl;
+@property (nonatomic, strong)NSMutableArray *offLineDataArray;
 @end
 
 @implementation MessageController
@@ -50,6 +52,7 @@
     self.view.backgroundColor =HexRGB(0xe9f0f5);
     catClickFlage = true;
     _categoryArray = [[NSMutableArray alloc]init];
+    _offLineDataArray = [NSMutableArray array];
     
     UIButton * _searchImage =[UIButton buttonWithType:UIButtonTypeCustom];
     _searchImage.frame =CGRectMake(0, 0, 180, 30);
@@ -71,10 +74,7 @@
 
     self.view.backgroundColor =[UIColor whiteColor];
     [self loadNewData];
-    
-    [self addScrollView];
-    [self addCateGoryButton];
-    [self addlineView];
+
 }
 
 
@@ -129,6 +129,8 @@
     [gategoryListTool statusesWithSuccess:^(NSArray *statues) {
         [_categoryArray addObjectsFromArray:statues];
         
+        [NSKeyedArchiver archiveRootObject:_categoryArray toFile:kFilePath];
+        
         [self addScrollView ];
         [self addCateGoryButton];
         [self addlineView];
@@ -139,9 +141,24 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
+         _offLineDataArray= [NSKeyedUnarchiver unarchiveObjectWithFile:kFilePath];
+        [self addScrollViewOffLine];
+        [self addCateGoryButtonOffLine];
+        [self addlineViewOffLine];
+        
     }];
 
+}
+
+-(void)addScrollViewOffLine
+{
+    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, self.view.frame.size.height)];
+    _scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width, _offLineDataArray.count/3*(66+30)+10);
+    _scrollView.showsHorizontalScrollIndicator=NO;
+    _scrollView.showsVerticalScrollIndicator=NO;
+    _scrollView.backgroundColor =[UIColor whiteColor];
+    
+    [self.view addSubview:_scrollView];
 }
 
 -(void)addScrollView
@@ -205,6 +222,66 @@
 }
 
 
+- (void)addCateGoryButtonOffLine
+{
+    for (int but=0; but<_offLineDataArray.count; but++) {
+        gategoryModel *cagegoryModel =[_offLineDataArray objectAtIndex:but];
+        
+        
+        
+        UIButton *titleBtn =[UIButton buttonWithType:UIButtonTypeCustom];
+        [titleBtn setTitle:cagegoryModel.nameGategory forState:UIControlStateNormal];
+        [_scrollView addSubview:titleBtn];
+        titleBtn .titleLabel.font = [UIFont systemFontOfSize:PxFont(24)];
+        titleBtn.frame =CGRectMake(25+but%3*(70+40), 67+but/3*(60+35), 50, 30);
+        [titleBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        titleBtn.titleLabel.font =[UIFont systemFontOfSize:14];
+        UIButton *button =[UIButton buttonWithType:UIButtonTypeCustom];
+        
+        button.frame = CGRectMake(but%3*(70+37), 0+but/3*(60+35), kWidth/3, 96);
+        [_scrollView addSubview:button];
+        button.titleLabel.text = titleBtn.titleLabel.text;
+        
+        
+        
+        UIImageView *findImage =[[UIImageView alloc]init];
+        findImage.frame =CGRectMake(25+but%3*(70+40), 10+but/3*(60+35), 50, 50);
+        [_scrollView addSubview:findImage];
+        
+        button.tag=[cagegoryModel.idType intValue]+1000;
+        findImage.tag = button.tag+100000;
+        titleBtn.tag =findImage.tag;
+        
+        findImage.userInteractionEnabled = NO;
+        
+        UIImage *cacheImg = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:cagegoryModel.imageGategpry];
+        if (cacheImg) {
+            findImage.image = cacheImg;
+        }else
+        {
+            [findImage setImageWithURL:[NSURL URLWithString:cagegoryModel.imageGategpry]  placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
+        }
+        [button addTarget:self action:@selector(itemsClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+    }
+}
+
+-(void)addlineViewOffLine
+{
+    for (int l=0; l<_offLineDataArray.count/4+1; l++) {
+        UIView *linex =[[UIView alloc]init];
+        linex.backgroundColor =HexRGB(0xe6e3e4);
+        linex.frame =CGRectMake(0,95+l%9*(50+45) , kWidth, 1);
+        [_scrollView addSubview:linex];
+    }
+    for (int i = 0; i<2; i++) {
+        UIView *liney =[[UIView alloc]init];
+        liney.backgroundColor =HexRGB(0xe6e3e4);
+        
+        liney.frame =CGRectMake(kWidth/3+i%3*(75+32),8 , 1, _offLineDataArray.count/3*(63+30));
+        [_scrollView addSubview:liney];
+    }
+}
 
 
 -(void)addlineView

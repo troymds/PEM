@@ -38,8 +38,8 @@
 
 - (void)loadData
 {
-    if ([FileManager fileExistName:@"provinces"]){
-        NSArray *array = [FileManager readArrayFromFileName:@"provinces"];
+    if ([FileManager fileExistName:@"provinces" withType:CacheType]){
+        NSArray *array = [FileManager readArrayFromFileName:@"provinces" withType:CacheType];
         for (NSDictionary *dic in array) {
             AreaItem *item = [[AreaItem alloc] initWithDictionary:dic];
             [_dataArray addObject:item];
@@ -59,7 +59,7 @@
                         [mutableArray addObject:subDic];
                     }
                     NSArray *arr = [NSArray arrayWithArray:[mutableArray copy]];
-                    [FileManager writeArray:arr toFile:@"provinces"];
+                    [FileManager writeArray:arr toFile:@"provinces" withType:CacheType];
                     [_tableView reloadData];
                 }
             }

@@ -30,6 +30,13 @@
 #import "ZBarSDK.h"
 #import "DimensionalCodeViewController.h"
 #import "RemindView.h"
+
+#define khotImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"hotImage.data"]
+#define ktadyNumFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"tadyNum.data"]
+#define khotSupplyFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"hotSupply.data"]
+#define khotDemandFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"hotDemand.data"]
+#define kadsImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"adsImage.data"]
+
 @interface HomeController ()<UIScrollViewDelegate,SDWebImageManagerDelegate,ZBarReaderDelegate>
 {
     UIScrollView *_backScrollView;
@@ -94,6 +101,15 @@
     self.hotDemandArray =[[NSMutableArray alloc]initWithCapacity:0];
     
     self.hotSupplyArray =[[NSMutableArray alloc]initWithCapacity:0];
+    
+    
+    // 离线数据
+    self.adsImageOff = [NSMutableArray array];
+    self.hotImageArrayOff = [NSMutableArray array];
+    self.tadyNumArrayOff = [NSMutableArray array];
+    self.hotDemandArrayOff = [NSMutableArray array];
+    self.hotSupplyArrayOff = [NSMutableArray array];
+    
     [self addBackScrollView];//    背景
     [self loadNewData];
     
@@ -164,8 +180,17 @@
             [_hotImageArray addObject:hotModel];
 
         }
+        //归档离线数据
+        [NSKeyedArchiver archiveRootObject:_hotImageArray toFile:khotImageFilePath];
+        
         TodayNumModel *todayModel = [[TodayNumModel alloc] initWithTodayNumDictionary:statusModel.todayNumDictionary];
         [_tadyNumArray addObject:todayModel];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:todayModel.callNum forKey:@"callnum"];
+        [[NSUserDefaults standardUserDefaults] setObject:todayModel.demandNum forKey:@"demandNum"];
+        [[NSUserDefaults standardUserDefaults] setObject:todayModel.supplyNum forKey:@"supplyNum"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
         if ([statusModel.hotSupplyArray isKindOfClass:[NSNull class]]){
             
         }else{
@@ -174,15 +199,27 @@
                 HotSupplyModel *supplyArr =[[HotSupplyModel alloc]initWithDictionaryForHotSupply:supplyDic];
                 [_hotSupplyArray addObject:supplyArr];
             }
+            
+            //归档离线数据
+            [NSKeyedArchiver archiveRootObject:_hotSupplyArray toFile:khotSupplyFilePath];
+            
             for (NSDictionary *demandDic in statusModel.hotDemandArray) {
                 HotDemandModel *demand =[[HotDemandModel alloc]initWithDictionaryForHotDeman:demandDic];
                 [_hotDemandArray addObject:demand];
             }
+            
+            //归档离线数据
+            [NSKeyedArchiver archiveRootObject:_hotDemandArray toFile:khotDemandFilePath];
+            
             for (NSDictionary *dict in statusModel.adsArray)
             {
                 adsModel *ads =[[adsModel alloc]initWithDictionaryForAds:dict];
                 [adsImage addObject:ads];
             }
+            
+            //归档离线数据
+            [NSKeyedArchiver archiveRootObject:adsImage toFile:kadsImageFilePath];
+            
             [self addADSimageBtn:adsImage];
             [self initBannerView];
             
@@ -194,7 +231,20 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
-
+        //反归档数据
+        self.adsImageOff = [NSKeyedUnarchiver unarchiveObjectWithFile:kadsImageFilePath];
+        self.hotImageArrayOff = [NSKeyedUnarchiver unarchiveObjectWithFile:khotImageFilePath];
+        self.hotDemandArrayOff = [NSKeyedUnarchiver unarchiveObjectWithFile:khotDemandFilePath];
+        self.hotSupplyArrayOff = [NSKeyedUnarchiver unarchiveObjectWithFile:khotSupplyFilePath];
+        
+        [self addADSimageBtn:_adsImageOff];
+        [self initBannerView];
+        
+        [self addCategorybutton:_hotImageArrayOff];
+        
+        [self addtitletodayOff];
+        [self addHot:_hotDemandArrayOff hotSupply:_hotSupplyArrayOff ];
+        
     }];
 
     
@@ -239,7 +289,15 @@
 }
 // 选中第几个图片
 - (void)cycleBannerView:(KDCycleBannerView *)bannerView didSelectedAtIndex:(NSUInteger)index{
-    adsModel *model = adsImage[index];
+    adsModel *model;
+    if (_adsImageOff.count > 0) { //判断是否离线,还有待改进
+        //        model = _adsImageOff[index];
+        [RemindView showViewWithTitle:@"没有网络" location:MIDDLE];
+        return;
+    }else
+    {
+        model = adsImage[index];
+    }
     if ([model.idType isEqualToString:@"1"]) {
         xiangqingViewController *xiq =[[xiangqingViewController alloc]init];
         xiq.supplyIndex = model.content;
@@ -319,6 +377,42 @@
         }
     }
 }
+
+- (void)addtitletodayOff
+{
+    for (int t=0; t<3; t++) {
+        UIImageView *hotTitle =[[UIImageView alloc]initWithFrame:CGRectMake(18, 122+t%3*(15+180), 70, 17)];
+        hotTitle.image =[UIImage imageNamed:[NSString stringWithFormat:@"title%d",t+1]];
+        [_backScrollView addSubview:hotTitle];
+        if (t==2) {
+            hotTitle.frame = CGRectMake(10, 260+t%3*(20+154), 80, 17);
+        }
+        
+    }
+    int init_x = 100;
+    int init_y = 116;
+    int viewWidth_f = 210;
+    
+    NSMutableArray* setArray_f = [[NSMutableArray alloc] initWithCapacity:5];
+    [setArray_f addObject:[NSDictionary dictionaryWithObjectsAndKeys:HexRGB(0x666666),@"Color",[UIFont systemFontOfSize:PxFont(14)],@"Font",nil]];
+    [setArray_f addObject:[NSDictionary dictionaryWithObjectsAndKeys:HexRGB(0x069ddd),@"Color",[UIFont systemFontOfSize:PxFont(18)],@"Font",nil]];
+    [setArray_f addObject:[NSDictionary dictionaryWithObjectsAndKeys:HexRGB(0x666666),@"Color",[UIFont systemFontOfSize:PxFont(14)],@"Font",nil]];
+    [setArray_f addObject:[NSDictionary dictionaryWithObjectsAndKeys:HexRGB(0x069ddd),@"Color",[UIFont systemFontOfSize:PxFont(18)],@"Font",nil]];
+    [setArray_f addObject:[NSDictionary dictionaryWithObjectsAndKeys:HexRGB(0x666666),@"Color",[UIFont systemFontOfSize:PxFont(14)],@"Font",nil]];
+    [setArray_f addObject:[NSDictionary dictionaryWithObjectsAndKeys:HexRGB(0x069ddd),@"Color",[UIFont systemFontOfSize:PxFont(18)],@"Font",nil]];
+    [setArray_f addObject:[NSDictionary dictionaryWithObjectsAndKeys:HexRGB(0x666666),@"Color",[UIFont systemFontOfSize:PxFont(14)],@"Font",nil]];
+    
+    NSString *call = [[NSUserDefaults standardUserDefaults] objectForKey:@"callnum"];
+    NSString *demand = [[NSUserDefaults standardUserDefaults] objectForKey:@"demandNum"];
+    NSString *supply = [[NSUserDefaults standardUserDefaults] objectForKey:@"supplyNum"];
+    
+    labelColor* showLable = [[labelColor alloc] initWithFrame:CGRectMake(init_x,init_y,viewWidth_f,30)];
+    showLable.alignmentType = Muti_Alignment_Left_Type;
+    [showLable setShowText:[NSString stringWithFormat:@"求购|%@|条   供应商|%@|家   询价|%@|次",demand,supply,call] Setting:setArray_f];
+    
+    [_backScrollView addSubview:showLable];
+}
+
 
 
 
@@ -599,7 +693,11 @@
 //供应
 -(void)supplyBtn:(UIButton *)supply
 {
-    
+    //判断是否离线,还有待改进
+    if (_hotSupplyArrayOff.count > 0) {
+        [RemindView showViewWithTitle:@"没有网络" location:MIDDLE];
+        return;
+    }
     xiangqingViewController *xiangq =[[xiangqingViewController alloc]init];
     HotSupplyModel *model =[_hotSupplyArray objectAtIndex:supply.tag-300];
     xiangq.supplyIndex= model.supplyhotID ;
@@ -607,7 +705,11 @@
 }
 //求购
 -(void)demandBtn:(UIButton *)deman{
-    
+    //判断是否离线,还有待改进
+    if (_hotDemandArrayOff.count > 0) {
+        [RemindView showViewWithTitle:@"没有网络" location:MIDDLE];
+        return;
+    }
     qiugouXQ *qiug =[[qiugouXQ alloc]init];
     HotDemandModel *model =[_hotDemandArray objectAtIndex:deman.tag-200];
     qiug.demandIndex =model.demandHotid;

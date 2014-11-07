@@ -36,7 +36,6 @@
 {
     [super viewDidLoad];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ebingoClicked) name:@"eBingooClicked" object:nil] ;
     _companyHomeArray = [NSMutableArray array];
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.frame = CGRectMake(0, 0, 200, 30);

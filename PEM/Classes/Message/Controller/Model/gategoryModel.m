@@ -22,4 +22,23 @@
     return self;
 }
 
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:self.idType forKey:@"_idType"];
+    [coder encodeObject:self.imageGategpry forKey:@"_imageGategpry"];
+    [coder encodeObject:self.nameGategory forKey:@"_nameGategory"];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
+    if (self) {
+        self.idType =  [coder decodeObjectForKey:@"_idType"];
+        self.imageGategpry =  [coder decodeObjectForKey:@"_imageGategpry"];
+        self.nameGategory =  [coder decodeObjectForKey:@"_nameGategory"];
+    }
+    return self;
+}
+
+
 @end

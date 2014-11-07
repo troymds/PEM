@@ -11,6 +11,7 @@
 @interface CategoryItem : NSObject
 
 @property (nonatomic,copy) NSString *uid;
+@property (nonatomic,copy) NSString *parent_id;
 @property (nonatomic,copy) NSString *image;
 @property (nonatomic,copy) NSString *name;
 

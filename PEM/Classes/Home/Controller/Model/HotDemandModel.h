@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface HotDemandModel : NSObject
+@interface HotDemandModel : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *demandHotid;
 @property (nonatomic, copy) NSString *image;
 @property (nonatomic, copy) NSString *sub_title;
