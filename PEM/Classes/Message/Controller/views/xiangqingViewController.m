@@ -84,7 +84,8 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = @"加载中...";
     [XQgetInfoTool statusesWithSuccess:^(NSArray *statues) {
-        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
         [XQArray addObject:statues];
         [self addAabstract];
         [self showNewStatusCount];
@@ -100,7 +101,6 @@
         
         
 
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
     } failure:^(NSError *error) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

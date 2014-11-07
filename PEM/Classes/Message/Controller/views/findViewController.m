@@ -45,7 +45,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        
     }
     return self;
 }
@@ -59,9 +59,7 @@
             self.edgesForExtendedLayout = UIRectEdgeNone;
         }
     }
-    
-   
-    
+        
     self.title =[NSString stringWithFormat:@"%@分类",_titleLabel];
 
     self.view.backgroundColor =[UIColor whiteColor];
@@ -172,6 +170,7 @@
 -(void)loadViewDownStatuses:(MJRefreshBaseView *)refreshView{
     
     
+
     if (_supplyBtnPice.tag==50) {
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
             if (statues.count > 0) {
@@ -233,7 +232,7 @@
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
-                if (statues.count>4) {
+                if (statues.count>9) {
                     [_CateDemandArray removeAllObjects];
                     
                 }
@@ -263,7 +262,7 @@
                 _tableView.hidden = NO;
 
                         }
-            if (statues.count>4) {
+            if (statues.count>9) {
             [_CateDemandArray removeAllObjects];
 
             }
@@ -289,7 +288,6 @@
 }
 
 -(void)loadViewStatuses:(MJRefreshBaseView *)refreshView{
-    
     
 
     if (_supplyBtnPice.tag==50) {

@@ -317,6 +317,8 @@
             _conditionTableView.hidden = YES;
             
         }
+        
+        
         if (_companyNEWArray.count > 0)
         {
             [_companyNEWArray removeAllObjects];
