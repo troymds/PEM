@@ -223,7 +223,7 @@
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,39,kWidth-151,1)];
         line.backgroundColor = HexRGB(0xd5d5d5);
         [cell.contentView addSubview:line];
-        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         AreaItem *item = [_cityArray objectAtIndex:indexPath.row];
         cell.textLabel.text = item.name;
         cell.textLabel.textColor = HexRGB(0x808080);

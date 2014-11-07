@@ -89,28 +89,25 @@
         if ([dic objectForKey:@"response"]) {
             if (!isNull(dic, @"response")) {
                 NSArray *array = [NSArray arrayWithArray:[dic objectForKey:@"response"]];
+                NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:0];
                 for (NSDictionary *subDic in array) {
-                    NSString *parent_id = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"parent_id"] intValue]];
+                    NSString *parent_id = [NSString stringWithFormat:@"%d",[[subDic objectForKey:@"parent_id"] intValue]];
                     CategoryItem *item = [[CategoryItem alloc] initWithDic:subDic];
-                    NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:0];
                     if ([parent_id isEqualToString:@"0"]) {
                         [_firstArray addObject:item];
                     }else{
                         [arr addObject:item];
                     }
-                    NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:0];
-                    for (int i = 0; i < [_firstArray count]; i++) {
-                        if (array.count!=0) {
-                            [array removeAllObjects];
+                }
+                for (int i = 0; i < [_firstArray count]; i++) {
+                    NSMutableArray *muatbleArray = [[NSMutableArray alloc] initWithCapacity:0];
+                    CategoryItem *firstItem = [_firstArray objectAtIndex:i];
+                    for (CategoryItem *secondItem in arr) {
+                        if ([secondItem.parent_id isEqualToString:firstItem.uid]) {
+                            [muatbleArray addObject:secondItem];
                         }
-                        CategoryItem *firstItem = [_firstArray objectAtIndex:i];
-                        for (CategoryItem *secondItem in arr) {
-                            if ([secondItem.uid isEqualToString:firstItem.uid]) {
-                                [array addObject:secondItem];
-                            }
-                        }
-                        [_dataArray addObject:array];
                     }
+                    [_dataArray addObject:muatbleArray];
                 }
                 [self addLeftView];
             }
@@ -142,7 +139,7 @@
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,75*i,195,0.5)];
         line.backgroundColor = HexRGB(0xd5d5d5);
         [_scrollView addSubview:line];
-        NSArray *array = [_dataArray objectAtIndex:i];
+        NSMutableArray *array = [_dataArray objectAtIndex:i];
         int count = array.count;
         if (count>0) {
             if (count==1) {
@@ -172,6 +169,8 @@
             }
         }
     }
+    _secondArray = [_dataArray objectAtIndex:view.tag-4000];
+    [_secondTableView reloadData];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
