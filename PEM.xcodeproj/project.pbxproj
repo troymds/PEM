@@ -137,6 +137,7 @@
 		04B1D2411A0B4FD500929A59 /* CategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1D2401A0B4FD500929A59 /* CategoryView.m */; };
 		04B1D2431A0B5EF600929A59 /* Cell_Selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B1D2421A0B5EF600929A59 /* Cell_Selected@2x.png */; };
 		04BCD71C1A0F7A5100B3612D /* RegionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BCD71B1A0F7A5100B3612D /* RegionCell.m */; };
+		04BCD71F1A0FA9D200B3612D /* UserModelSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BCD71E1A0FA9D200B3612D /* UserModelSingleton.m */; };
 		04C5043619F0A3C8008F36AD /* provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043519F0A3C8008F36AD /* provinces.plist */; };
 		04C5043B19F124FD008F36AD /* Vip1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043719F124FD008F36AD /* Vip1@2x.png */; };
 		04C5043C19F124FD008F36AD /* Vip2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043819F124FD008F36AD /* Vip2@2x.png */; };
@@ -681,6 +682,8 @@
 		04B5F02119ECAAF000CE68A4 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		04BCD71A1A0F7A5100B3612D /* RegionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegionCell.h; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/RegionCell.h; sourceTree = "<group>"; };
 		04BCD71B1A0F7A5100B3612D /* RegionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegionCell.m; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/RegionCell.m; sourceTree = "<group>"; };
+		04BCD71D1A0FA9D200B3612D /* UserModelSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserModelSingleton.h; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/UserModelSingleton.h; sourceTree = "<group>"; };
+		04BCD71E1A0FA9D200B3612D /* UserModelSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserModelSingleton.m; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/UserModelSingleton.m; sourceTree = "<group>"; };
 		04C5043519F0A3C8008F36AD /* provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = provinces.plist; sourceTree = "<group>"; };
 		04C5043719F124FD008F36AD /* Vip1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip1@2x.png"; sourceTree = "<group>"; };
 		04C5043819F124FD008F36AD /* Vip2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip2@2x.png"; sourceTree = "<group>"; };
@@ -1392,6 +1395,8 @@
 				04AF26A719E8B150001B29CB /* DemandDetailItem.m */,
 				04AF26A819E8B150001B29CB /* SupplyDetailItem.h */,
 				04AF26A919E8B150001B29CB /* SupplyDetailItem.m */,
+				04BCD71D1A0FA9D200B3612D /* UserModelSingleton.h */,
+				04BCD71E1A0FA9D200B3612D /* UserModelSingleton.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -2912,6 +2917,7 @@
 				552811F919FF898400EB6DA0 /* HomeController.m in Sources */,
 				5591C5EE19FDEAF500F82380 /* qiugouXQ.m in Sources */,
 				5530176E19A3520600E52F07 /* Dock.m in Sources */,
+				04BCD71F1A0FA9D200B3612D /* UserModelSingleton.m in Sources */,
 				55D8975219AC62DA001EAF9F /* SDWebImageDownloaderOperation.m in Sources */,
 				55D035A319B80D33000F090F /* adsModel.m in Sources */,
 				55D8975519AC62DA001EAF9F /* UIButton+WebCache.m in Sources */,
