@@ -136,6 +136,7 @@
 		04B1D2011A0B0A6000929A59 /* CategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1D2001A0B0A6000929A59 /* CategoryCell.m */; };
 		04B1D2411A0B4FD500929A59 /* CategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1D2401A0B4FD500929A59 /* CategoryView.m */; };
 		04B1D2431A0B5EF600929A59 /* Cell_Selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B1D2421A0B5EF600929A59 /* Cell_Selected@2x.png */; };
+		04BCD71C1A0F7A5100B3612D /* RegionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BCD71B1A0F7A5100B3612D /* RegionCell.m */; };
 		04C5043619F0A3C8008F36AD /* provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043519F0A3C8008F36AD /* provinces.plist */; };
 		04C5043B19F124FD008F36AD /* Vip1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043719F124FD008F36AD /* Vip1@2x.png */; };
 		04C5043C19F124FD008F36AD /* Vip2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043819F124FD008F36AD /* Vip2@2x.png */; };
@@ -678,6 +679,8 @@
 		04B5F01D19ECAA4300CE68A4 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		04B5F01F19ECAA5500CE68A4 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		04B5F02119ECAAF000CE68A4 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		04BCD71A1A0F7A5100B3612D /* RegionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegionCell.h; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/RegionCell.h; sourceTree = "<group>"; };
+		04BCD71B1A0F7A5100B3612D /* RegionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegionCell.m; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/RegionCell.m; sourceTree = "<group>"; };
 		04C5043519F0A3C8008F36AD /* provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = provinces.plist; sourceTree = "<group>"; };
 		04C5043719F124FD008F36AD /* Vip1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip1@2x.png"; sourceTree = "<group>"; };
 		04C5043819F124FD008F36AD /* Vip2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip2@2x.png"; sourceTree = "<group>"; };
@@ -1458,6 +1461,8 @@
 			children = (
 				04B1D1FF1A0B0A6000929A59 /* CategoryCell.h */,
 				04B1D2001A0B0A6000929A59 /* CategoryCell.m */,
+				04BCD71A1A0F7A5100B3612D /* RegionCell.h */,
+				04BCD71B1A0F7A5100B3612D /* RegionCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -2896,6 +2901,7 @@
 				04AF26C719E8B15E001B29CB /* PurchaseView.m in Sources */,
 				04AA21C819FF8F3200A18DC6 /* EplatFormController.m in Sources */,
 				55D035BD19B89BDA000F090F /* yyDemandModel.m in Sources */,
+				04BCD71C1A0F7A5100B3612D /* RegionCell.m in Sources */,
 				04AF26CA19E8B15E001B29CB /* LoginView.m in Sources */,
 				04AADCEA19EB723900801D2B /* VipInfoItem.m in Sources */,
 				55B60C6B19CAB5FF006E438E /* phoneView.m in Sources */,

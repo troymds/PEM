@@ -10,6 +10,7 @@
 #import "HttpTool.h"
 #import "FileManager.h"
 #import "AreaItem.h"
+#import "RegionCell.h"
 
 @interface AreaController ()
 
@@ -42,10 +43,12 @@
     _provinceTabelView.dataSource = self;
     _provinceTabelView.showsVerticalScrollIndicator = NO;
     _provinceTabelView.showsHorizontalScrollIndicator = NO;
-    _provinceTabelView.backgroundColor = [UIColor clearColor];
-    _provinceTabelView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _provinceTabelView.separatorColor = [UIColor clearColor];
-    
+//    _provinceTabelView.backgroundColor = [UIColor clearColor];
+//    _provinceTabelView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    _provinceTabelView.separatorColor = [UIColor clearColor];
+    if (IsIos7) {
+        _provinceTabelView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    }
     [self.view addSubview:_provinceTabelView];
     UIView *line = [[UIView alloc] initWithFrame:CGRectMake(150,0, 1, kHeight-64)];
     line.backgroundColor = HexRGB(0xd5d5d5);
@@ -65,8 +68,13 @@
 }
 
 - (void)getProvinceData{
-    if ([FileManager fileExistName:@"provinces" withType:CacheType]){
-        NSArray *array = [FileManager readArrayFromFileName:@"provinces" withType:CacheType];
+    NSString *path = [FileManager getPathForChche];
+    path = [path stringByAppendingPathComponent:@"area"];
+    [FileManager creteDirectory:path];
+    path = [path stringByAppendingPathComponent:@"provinces.plist"];
+
+    if ([FileManager fileExistAtPath:path]){
+        NSArray *array = [FileManager readArrayFromPath:path];
         for (NSDictionary *dic in array) {
             AreaItem *item = [[AreaItem alloc] initWithDictionary:dic];
             [_provinceArray addObject:item];
@@ -94,7 +102,7 @@
                     }
                     //加入缓存
                     NSArray *arr = [NSArray arrayWithArray:[mutableArray copy]];
-                    [FileManager writeArray:arr toFile:@"provinces" withType:CacheType];
+                    [FileManager writeArray:arr toPath:path];
                     [_provinceTabelView reloadData];
                     
                     AreaItem *item = [_provinceArray objectAtIndex:0];
@@ -113,12 +121,15 @@
 
 - (void)getCityData:(NSString *)uid
 {
+    NSString *path = [FileManager getPathForChche];
+    path = [path stringByAppendingPathComponent:@"area"];
+    [FileManager creteDirectory:path];
     if ([_cityArray count]!=0) {
         [_cityArray removeAllObjects];
     }
-    NSString *path = [NSString stringWithFormat:@"citys_%@",uid];
-    if ([FileManager fileExistName:path withType:CacheType]){
-        NSArray *array = [FileManager readArrayFromFileName:path withType:CacheType];
+    path = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"cities_%@.plist",uid]];
+    if ([FileManager fileExistAtPath:path]){
+        NSArray *array = [FileManager readArrayFromPath:path];
         for (NSDictionary *dic in array) {
             AreaItem *item = [[AreaItem alloc] initWithDictionary:dic];
             [_cityArray addObject:item];
@@ -147,7 +158,7 @@
                     }
                     //加入缓存
                     NSArray *arr = [NSArray arrayWithArray:[mutableArray copy]];
-                    [FileManager writeArray:arr toFile:path withType:CacheType];
+                    [FileManager writeArray:arr toPath:path];
                     [_cityTableView reloadData];
                 }
             }
@@ -185,15 +196,12 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell;
+    RegionCell *cell;
     if (tableView.tag == 2000) {
         static NSString *cellName = @"CellName";
         cell = [tableView dequeueReusableCellWithIdentifier:cellName];
         if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
-        }
-        for (UIView *subView in cell.contentView.subviews) {
-            [subView removeFromSuperview];
+            cell = [[RegionCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
         }
         AreaItem *item = [_provinceArray objectAtIndex:indexPath.row];
         cell.textLabel.text = item.name;
@@ -201,28 +209,17 @@
         cell.textLabel.textColor = HexRGB(0x3a3a3a);
         
         UIView *bgView = [[UIView alloc] initWithFrame:cell.frame];
-        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,2, cell.frame.size.height)];
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,2,40)];
         leftView.backgroundColor = HexRGB(0x069dd4);
         bgView.backgroundColor = HexRGB(0xe5e5e5);
         [bgView addSubview:leftView];
         cell.selectedBackgroundView = bgView;
-        
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,44,150,1)];
-        line.backgroundColor = HexRGB(0xd5d5d5);
-        [cell.contentView addSubview:line];
-        
     }else{
         static NSString *cellName = @"identify";
         cell = [tableView dequeueReusableCellWithIdentifier:cellName];
         if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+            cell = [[RegionCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
         }
-        for (UIView *subView in cell.contentView.subviews) {
-            [subView removeFromSuperview];
-        }
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0,39,kWidth-151,1)];
-        line.backgroundColor = HexRGB(0xd5d5d5);
-        [cell.contentView addSubview:line];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         AreaItem *item = [_cityArray objectAtIndex:indexPath.row];
         cell.textLabel.text = item.name;

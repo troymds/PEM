@@ -17,15 +17,23 @@ typedef  enum
 
 @interface FileManager : NSObject
 
-+ (void)writeDictionary:(NSDictionary *)data toFile:(NSString *)fileName withType:(directoryType)type;
++ (NSString *)getPathForDocuments;
 
-+(void)writeArray:(NSArray *)data toFile:(NSString *)fileName withType:(directoryType)type;
 
-+ (NSArray *)readArrayFromFileName:(NSString *)fileName withType:(directoryType)type;
++(NSString *)getPathForChche;
 
-+ (NSDictionary *)readDictionaryFromFileName:(NSString *)fileName withType:(directoryType)type;
++ (void)creteDirectory:(NSString *)path;
 
-+ (BOOL)fileExistName:(NSString *)fileName withType:(directoryType)type;
+
++ (void)writeDictionary:(NSDictionary *)data toPath:(NSString *)path;
+
++(void)writeArray:(NSArray *)data toPath:(NSString *)path;
+
++ (NSArray *)readArrayFromPath:(NSString *)path;
+
++ (NSDictionary *)readDictionaryFromPath:(NSString *)path;
+
++ (BOOL)fileExistAtPath:(NSString *)path;
 
 
 @end

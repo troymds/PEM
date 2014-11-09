@@ -38,8 +38,12 @@
 
 - (void)loadData
 {
-    if ([FileManager fileExistName:@"provinces" withType:CacheType]){
-        NSArray *array = [FileManager readArrayFromFileName:@"provinces" withType:CacheType];
+    NSString *path = [FileManager getPathForChche];
+    path = [path stringByAppendingPathComponent:@"area"];
+    [FileManager creteDirectory:path];
+    path = [path stringByAppendingPathComponent:@"provinces.plist"];
+    if ([FileManager fileExistAtPath:path]){
+        NSArray *array = [FileManager readArrayFromPath:path];
         for (NSDictionary *dic in array) {
             AreaItem *item = [[AreaItem alloc] initWithDictionary:dic];
             [_dataArray addObject:item];
@@ -59,7 +63,7 @@
                         [mutableArray addObject:subDic];
                     }
                     NSArray *arr = [NSArray arrayWithArray:[mutableArray copy]];
-                    [FileManager writeArray:arr toFile:@"provinces" withType:CacheType];
+                    [FileManager writeArray:arr toPath:path];
                     [_tableView reloadData];
                 }
             }
