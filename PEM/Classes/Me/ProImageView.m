@@ -26,7 +26,6 @@
     if ([self.delegate respondsToSelector:@selector(imageClicked:)]) {
         [self.delegate imageClicked:self];
     }
-    NSLog(@"=====");
 }
 
 /*

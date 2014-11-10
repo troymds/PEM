@@ -25,22 +25,34 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
-    
-    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
         // iOS 7
         [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
     }
+    
+    //获取用户uuid
+    NSString *retrieveuuid = [SSKeychain passwordForService:@"cn.chinapromo.userinfo" account:@"uuid"];
+    if (retrieveuuid == nil || [retrieveuuid isEqualToString:@""]) {
+        CFUUIDRef uuid = CFUUIDCreate(NULL);
+        assert(uuid!=NULL);
+        CFStringRef uuidStr = CFUUIDCreateString(NULL, uuid);
+        retrieveuuid = [NSString stringWithFormat:@"%@",uuidStr];
+        [SSKeychain setPassword:retrieveuuid forService:@"cn.chinapromo.userinfo" account:@"uuid"];
+    }
+    [SystemConfig sharedInstance].uuidStr = retrieveuuid;
+
+    
     NSString *key = (NSString *)kCFBundleVersionKey;
     
     // 1.从Info.plist中取出版本号
     NSString *version = [NSBundle mainBundle].infoDictionary[key];
-    
     // 2.从沙盒中取出上次存储的版本号
     NSString *saveVersion = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    if (saveVersion) {
+        [self checkVersion];
+    }
     
     if ([version isEqualToString:saveVersion]) { // 不是第一次使用这个版本
         // 显示状态栏
@@ -55,18 +67,6 @@
         // 显示版本新特性界面
         self.window.rootViewController = [[NewfeatureController alloc] init];
     }
-    
-    NSString *retrieveuuid = [SSKeychain passwordForService:@"cn.chinapromo.userinfo" account:@"uuid"];
-    if (retrieveuuid == nil || [retrieveuuid isEqualToString:@""]) {
-        CFUUIDRef uuid = CFUUIDCreate(NULL);
-        assert(uuid!=NULL);
-        CFStringRef uuidStr = CFUUIDCreateString(NULL, uuid);
-        retrieveuuid = [NSString stringWithFormat:@"%@",uuidStr];
-        [SSKeychain setPassword:retrieveuuid forService:@"cn.chinapromo.userinfo" account:@"uuid"];
-        
-    }
-    
-    [SystemConfig sharedInstance].uuidStr = retrieveuuid;
     
     //自动登录
     [self autoLogin];
@@ -107,6 +107,28 @@
     [self.window makeKeyAndVisible];
     
     return YES;
+}
+
+- (void)checkVersion
+{
+    __weak proAppDelegate *weakSelf = self;
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:@"ios",@"os", nil];
+    [HttpTool postWithPath:@"getNewestVersion" params:param success:^(id JSON) {
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *dic = [result objectForKey:@"response"];
+        if (dic) {
+            NSString *key = (NSString *)kCFBundleVersionKey;
+            NSString *version = [NSBundle mainBundle].infoDictionary[key];
+            NSString *current = [dic objectForKey:@"version"];
+            if (![current isEqualToString:version]) {
+                weakSelf.updateUrl = [dic objectForKey:@"url"];
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"检测到新版本" message:nil delegate:weakSelf cancelButtonTitle:@"取消" otherButtonTitles:@"立即升级", nil];
+                [alertView show];
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 
@@ -176,7 +198,15 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-    
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        if (self.updateUrl&&self.updateUrl.length!=0) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.updateUrl]];
+        }
+    }
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url

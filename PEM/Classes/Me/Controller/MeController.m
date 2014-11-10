@@ -20,6 +20,7 @@
 #import "FindSecretController.h"
 #import "MySupplyController.h"
 #import "MyPurchaseController.h"
+#import "SelectImageController.h"
 
 
 @interface MeController ()
@@ -345,6 +346,8 @@
         {
             [activeField resignFirstResponder];
             CGRect frame = [UIScreen mainScreen].bounds;
+//            SelectImageController *vc = [[SelectImageController alloc] init];
+//            [self.navigationController pushViewController:vc animated:YES];
             _actionSheet = [[ProActionSheet alloc] initWithFrame:frame];
             _actionSheet.delegate = self;
             [_actionSheet showView];
@@ -505,6 +508,7 @@
     }
 }
 
+
 //发布供应信息
 - (void)updateSupplyData
 {
@@ -564,9 +568,7 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
-
 }
-
 
 - (void)textFieldBeganEditting:(UITextField *)textField{
     activeField = textField;
@@ -690,23 +692,17 @@
         default:
             break;
     }
-
     if (_isPurchase) {
 
         [_purchaseScrollView setContentOffset:CGPointMake(0, y) animated:YES];
         [_purchaseScrollView setContentSize:CGSizeMake(kWidth,416+240)];
+        
     }else{
         [_supplyScrollView setContentOffset:CGPointMake(0, y) animated:YES];
         [_supplyScrollView setContentSize:CGSizeMake(kWidth, _supplyView.frame.size.height+240)];
     }
-
 }
 
-//- (void)textFieldEndEditting:(UITextField *)textField
-//{
-//    isEditing = NO;
-//
-//}
 #pragma mark keyboard_NSNotification
 - (void)keyboardWillShow
 {
@@ -882,13 +878,11 @@
     return YES;
 }
 
-
 #pragma mark UIImagePickerControllerDelegate
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
     UIImage *portraitImg = [info objectForKey:@"UIImagePickerControllerEditedImage"];
@@ -899,7 +893,6 @@
     _supplyScrollView.contentSize = CGSizeMake(kWidth,_supplyView.frame.size.height);
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     [activeField resignFirstResponder];
@@ -982,7 +975,6 @@
         _supplyView.areaLabel.text = region;
     }
 }
-
 
 - (void)didReceiveMemoryWarning
 {

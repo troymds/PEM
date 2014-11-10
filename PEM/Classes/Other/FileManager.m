@@ -21,6 +21,7 @@
 +(NSString *)getPathForChche
 {
     NSArray *path =NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSLog(@"%@",path);
     return [path objectAtIndex:0];
 }
 

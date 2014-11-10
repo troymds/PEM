@@ -16,28 +16,29 @@
 
 @implementation CategoryView
 
-- (id)init
-{
-    if (self = [super init]) {
-        img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 195, 75)];
-        img.image = [UIImage imageNamed:@"Cell_Selected.png"];
-        img.userInteractionEnabled = YES;
-        img.hidden = YES;
-        [self addSubview:img];
-        _iconImg = [[UIImageView alloc] initWithFrame:CGRectMake(18,9, 57, 57)];
-        [self addSubview:_iconImg];
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30+57, 18, 100,20)];
-        _titleLabel.textColor = HexRGB(0x3a3a3a);
-        _titleLabel.backgroundColor = [UIColor clearColor];
-        [self addSubview:_titleLabel];
-        
-        _desLabel = [[UILabel alloc] initWithFrame:CGRectMake(30+57, 51,100,15)];
-        _desLabel.backgroundColor = [UIColor clearColor];
-        _desLabel.textColor = HexRGB(0x808080);
-        [self addSubview:_desLabel];
-    }
-    return self;
-}
+//- (id)init
+//{
+//    if (self = [super init]) {
+//        img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0,frame.size.width,frame.size.height)];
+//        img.image = [UIImage imageNamed:@"Cell_Selected.png"];
+//        img.userInteractionEnabled = YES;
+//        img.hidden = YES;
+//        [self addSubview:img];
+//        _iconImg = [[UIImageView alloc] initWithFrame:CGRectMake(18,15, 44, 44)];
+//        _iconImg.userInteractionEnabled = YES;
+//        [self addSubview:_iconImg];
+//        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30+44, 18, 100,20)];
+//        _titleLabel.textColor = HexRGB(0x3a3a3a);
+//        _titleLabel.backgroundColor = [UIColor clearColor];
+//        [self addSubview:_titleLabel];
+//        
+//        _desLabel = [[UILabel alloc] initWithFrame:CGRectMake(30+44, 51,100,15)];
+//        _desLabel.backgroundColor = [UIColor clearColor];
+//        _desLabel.textColor = HexRGB(0x808080);
+//        [self addSubview:_desLabel];
+//    }
+//    return self;
+//}
 
 
 - (id)initWithFrame:(CGRect)frame
@@ -48,16 +49,17 @@
         img.userInteractionEnabled = YES;
         img.hidden = YES;
         [self addSubview:img];
-        _iconImg = [[UIImageView alloc] initWithFrame:CGRectMake(18,9, 57, 57)];
+        _iconImg = [[UIImageView alloc] initWithFrame:CGRectMake(18,15, 44, 44)];
         _iconImg.userInteractionEnabled = YES;
         [self addSubview:_iconImg];
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30+57, 18, 100,20)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(30+44, 18, 100,20)];
         _titleLabel.textColor = HexRGB(0x3a3a3a);
         _titleLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:_titleLabel];
         
-        _desLabel = [[UILabel alloc] initWithFrame:CGRectMake(30+57, 51,100,15)];
+        _desLabel = [[UILabel alloc] initWithFrame:CGRectMake(30+44, 51,100,15)];
         _desLabel.backgroundColor = [UIColor clearColor];
+        _desLabel.font  = [UIFont systemFontOfSize:13];
         _desLabel.textColor = HexRGB(0x808080);
         [self addSubview:_desLabel];
     }

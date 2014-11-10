@@ -23,8 +23,9 @@
 
 
 @class ViewController;
-@interface proAppDelegate : UIResponder <UIApplicationDelegate>
+@interface proAppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property(strong,nonatomic)ViewController *viewController;
+@property (nonatomic,strong) NSString *updateUrl;
 @end

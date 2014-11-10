@@ -43,9 +43,9 @@
     _provinceTabelView.dataSource = self;
     _provinceTabelView.showsVerticalScrollIndicator = NO;
     _provinceTabelView.showsHorizontalScrollIndicator = NO;
-//    _provinceTabelView.backgroundColor = [UIColor clearColor];
-//    _provinceTabelView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    _provinceTabelView.separatorColor = [UIColor clearColor];
+    _provinceTabelView.backgroundColor = [UIColor clearColor];
+    _provinceTabelView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _provinceTabelView.separatorColor = [UIColor clearColor];
     if (IsIos7) {
         _provinceTabelView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
     }
