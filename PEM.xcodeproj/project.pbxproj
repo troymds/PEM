@@ -142,8 +142,6 @@
 		04B1D2411A0B4FD500929A59 /* CategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1D2401A0B4FD500929A59 /* CategoryView.m */; };
 		04B1D2431A0B5EF600929A59 /* Cell_Selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B1D2421A0B5EF600929A59 /* Cell_Selected@2x.png */; };
 		04BC99041A121119003DD369 /* SecondCateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BC99031A121119003DD369 /* SecondCateView.m */; };
-		04BCD71C1A0F7A5100B3612D /* RegionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BCD71B1A0F7A5100B3612D /* RegionCell.m */; };
-		04BCD71F1A0FA9D200B3612D /* UserModelSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BCD71E1A0FA9D200B3612D /* UserModelSingleton.m */; };
 		04C5043619F0A3C8008F36AD /* provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043519F0A3C8008F36AD /* provinces.plist */; };
 		04C5043B19F124FD008F36AD /* Vip1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043719F124FD008F36AD /* Vip1@2x.png */; };
 		04C5043C19F124FD008F36AD /* Vip2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043819F124FD008F36AD /* Vip2@2x.png */; };
@@ -151,6 +149,7 @@
 		04C5043E19F124FD008F36AD /* Vip4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043A19F124FD008F36AD /* Vip4@2x.png */; };
 		04C5044119F12505008F36AD /* Vip5.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043F19F12505008F36AD /* Vip5.png */; };
 		04C5044219F12505008F36AD /* Vip6.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5044019F12505008F36AD /* Vip6.png */; };
+		04C50E271A1251FE0076D62C /* ExtendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C50E261A1251FE0076D62C /* ExtendCell.m */; };
 		04D2CEC819EE46BD0016862F /* MailConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D2CEA219EE46BD0016862F /* MailConnection.framework */; };
 		04D2CEC919EE46BD0016862F /* QQConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D2CEA319EE46BD0016862F /* QQConnection.framework */; };
 		04D2CECA19EE46BD0016862F /* QZoneConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D2CEA419EE46BD0016862F /* QZoneConnection.framework */; };
@@ -533,8 +532,8 @@
 		04AC10D51A0C70C300B5C4D7 /* modify@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "modify@2x.png"; sourceTree = "<group>"; };
 		04AC4A691A104AFE00F625CD /* SelectImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectImageController.h; sourceTree = "<group>"; };
 		04AC4A6A1A104AFE00F625CD /* SelectImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectImageController.m; sourceTree = "<group>"; };
-		04AC4A6D1A105AC800F625CD /* SelectImgCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectImgCell.h; sourceTree = "<group>"; };
-		04AC4A6E1A105AC800F625CD /* SelectImgCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectImgCell.m; sourceTree = "<group>"; };
+		04AC4A6D1A105AC800F625CD /* SelectImgCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectImgCell.h; path = ../../../Me/SelectImgCell.h; sourceTree = "<group>"; };
+		04AC4A6E1A105AC800F625CD /* SelectImgCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectImgCell.m; path = ../../../Me/SelectImgCell.m; sourceTree = "<group>"; };
 		04AC4A701A108D3F00F625CD /* takePhoto@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "takePhoto@2x.png"; sourceTree = "<group>"; };
 		04AC4A721A10A53200F625CD /* white_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white_bg@2x.png"; sourceTree = "<group>"; };
 		04AC4A741A10A8CA00F625CD /* white_bg_pre.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white_bg_pre.png; sourceTree = "<group>"; };
@@ -697,10 +696,6 @@
 		04B5F02119ECAAF000CE68A4 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		04BC99021A121119003DD369 /* SecondCateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondCateView.h; sourceTree = "<group>"; };
 		04BC99031A121119003DD369 /* SecondCateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondCateView.m; sourceTree = "<group>"; };
-		04BCD71A1A0F7A5100B3612D /* RegionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegionCell.h; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/RegionCell.h; sourceTree = "<group>"; };
-		04BCD71B1A0F7A5100B3612D /* RegionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegionCell.m; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/RegionCell.m; sourceTree = "<group>"; };
-		04BCD71D1A0FA9D200B3612D /* UserModelSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserModelSingleton.h; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/UserModelSingleton.h; sourceTree = "<group>"; };
-		04BCD71E1A0FA9D200B3612D /* UserModelSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserModelSingleton.m; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/UserModelSingleton.m; sourceTree = "<group>"; };
 		04C5043519F0A3C8008F36AD /* provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = provinces.plist; sourceTree = "<group>"; };
 		04C5043719F124FD008F36AD /* Vip1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip1@2x.png"; sourceTree = "<group>"; };
 		04C5043819F124FD008F36AD /* Vip2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip2@2x.png"; sourceTree = "<group>"; };
@@ -708,6 +703,8 @@
 		04C5043A19F124FD008F36AD /* Vip4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip4@2x.png"; sourceTree = "<group>"; };
 		04C5043F19F12505008F36AD /* Vip5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vip5.png; sourceTree = "<group>"; };
 		04C5044019F12505008F36AD /* Vip6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vip6.png; sourceTree = "<group>"; };
+		04C50E251A1251FE0076D62C /* ExtendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExtendCell.h; path = ../../../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Message/Controller/views/ExtendCell.h; sourceTree = "<group>"; };
+		04C50E261A1251FE0076D62C /* ExtendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExtendCell.m; path = ../../../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Message/Controller/views/ExtendCell.m; sourceTree = "<group>"; };
 		04D2CEA219EE46BD0016862F /* MailConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MailConnection.framework; sourceTree = "<group>"; };
 		04D2CEA319EE46BD0016862F /* QQConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QQConnection.framework; sourceTree = "<group>"; };
 		04D2CEA419EE46BD0016862F /* QZoneConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QZoneConnection.framework; sourceTree = "<group>"; };
@@ -1491,8 +1488,6 @@
 				557E286D1A11927A009A4886 /* RegionCell.m */,
 				04B1D1FF1A0B0A6000929A59 /* CategoryCell.h */,
 				04B1D2001A0B0A6000929A59 /* CategoryCell.m */,
-				04AC4A6D1A105AC800F625CD /* SelectImgCell.h */,
-				04AC4A6E1A105AC800F625CD /* SelectImgCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -2228,6 +2223,10 @@
 				55CFB98219C16FB200FF14F8 /* findSupplyCel.h */,
 				55CFB98319C16FB200FF14F8 /* findSupplyCel.m */,
 				55CFB98619C16FCF00FF14F8 /* findDemandCell.m */,
+				04AC4A6D1A105AC800F625CD /* SelectImgCell.h */,
+				04AC4A6E1A105AC800F625CD /* SelectImgCell.m */,
+				04C50E251A1251FE0076D62C /* ExtendCell.h */,
+				04C50E261A1251FE0076D62C /* ExtendCell.m */,
 				55B60C6919CAB5FF006E438E /* phoneView.h */,
 				55B60C6A19CAB5FF006E438E /* phoneView.m */,
 				5588E22019EE06BC0095D362 /* xiangqingViewController.h */,
@@ -2965,6 +2964,7 @@
 				04AF26E519E8B17C001B29CB /* ProvinceController.m in Sources */,
 				55B5103F19F73930009F9008 /* AFHTTPClient.m in Sources */,
 				04AF269819E8B13D001B29CB /* SubTagButton.m in Sources */,
+				04C50E271A1251FE0076D62C /* ExtendCell.m in Sources */,
 				F30ADA7B1A033B8D00403963 /* DimensionalCodeViewController.m in Sources */,
 				55B8B4F719CD257700FF86AD /* supplyCOM.m in Sources */,
 				04AF265D19E8B129001B29CB /* SubscribController.m in Sources */,

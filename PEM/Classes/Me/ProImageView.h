@@ -19,5 +19,6 @@
 @interface ProImageView : UIImageView
 
 @property (nonatomic,weak) id<ProImageViewDelegate> delegate;
+@property (nonatomic,assign) BOOL hasSelected;
 
 @end

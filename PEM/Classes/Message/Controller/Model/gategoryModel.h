@@ -12,6 +12,7 @@
 @property (nonatomic, copy) NSString *idType;
 @property (nonatomic, copy) NSString *imageGategpry;
 @property (nonatomic, copy) NSString *nameGategory;
+@property (nonatomic,copy) NSString *parent_id;
 
 - (instancetype)initWithDictionaryForGategory:(NSDictionary *)dict;
 
