@@ -48,7 +48,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.view.backgroundColor =HexRGB(0xe9f0f5);
     catClickFlage = true;
     _categoryArray = [[NSMutableArray alloc]init];
@@ -74,7 +74,7 @@
 
     self.view.backgroundColor =[UIColor whiteColor];
     [self loadNewData];
-
+   
 }
 
 
@@ -142,9 +142,14 @@
         
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
          _offLineDataArray= [NSKeyedUnarchiver unarchiveObjectWithFile:kFilePath];
+       
+
         [self addScrollViewOffLine];
+        [self failView];
+
         [self addCateGoryButtonOffLine];
         [self addlineViewOffLine];
+
         
     }];
 
@@ -170,6 +175,7 @@
     _scrollView.backgroundColor =[UIColor whiteColor];
 
     [self.view addSubview:_scrollView];
+    
 }
 
 
@@ -283,7 +289,37 @@
     }
 }
 
+-(void)failView{
+    for (int but=0; but<23; but++) {
+        UIImageView *findImage =[[UIImageView alloc]init];
+        findImage.frame =CGRectMake(25+but%3*(70+40), 10+but/3*(60+35), 50, 50);
+        [_scrollView addSubview:findImage];
+        
+       
+        
+           findImage.image=  [UIImage imageNamed:@"find_fail.png"];
+        
+        
+        
+        
+    }
+    
+    for (int l=0; l<23/4+1; l++) {
+        UIView *linex =[[UIView alloc]init];
+        linex.backgroundColor =HexRGB(0xe6e3e4);
+        linex.frame =CGRectMake(0,95+l%9*(50+45) , kWidth, 1);
+        [_scrollView addSubview:linex];
+    }
+    for (int i = 0; i<2; i++) {
+        UIView *liney =[[UIView alloc]init];
+        liney.backgroundColor =HexRGB(0xe6e3e4);
+        
+        liney.frame =CGRectMake(kWidth/3+i%3*(75+32),8 , 1, 23/3*(63+30));
+        [_scrollView addSubview:liney];
+    }
 
+
+}
 -(void)addlineView
 {
     
