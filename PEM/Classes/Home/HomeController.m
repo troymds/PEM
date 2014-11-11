@@ -264,6 +264,9 @@
     }
 }
 -(void)initBannerView{
+    UIImageView *bannView =[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kWidth,118)];
+    [_backScrollView addSubview:bannView];
+    bannView.image =[UIImage imageNamed:@"load_big.png"];
     _bannerView =[[KDCycleBannerView alloc] initWithFrame:CGRectMake(0, 0,kWidth,118)];
     
     _bannerView.datasource = self;
