@@ -138,6 +138,7 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         if ([result objectForKey:@"response"]) {
+            //返回的数据是否为空
             if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]){
                 if (isRefresh) {
                     if (_dataArray.count!=0) {
@@ -151,6 +152,7 @@
                 }
                 [_tableView reloadData];
             }else{
+                //返回数据为空且数组中没有数据 该界面无数据
                 if (_dataArray.count == 0) {
                     remindView.hidden = NO;
                 }else{

@@ -143,7 +143,6 @@
             NSDictionary *parms = [NSDictionary dictionaryWithObjectsAndKeys:userName,@"phonenum",passWord,@"password", nil];
             [HttpTool postWithPath:@"login" params:parms success:^(id JSON){
                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
-                NSLog(@"%@",result);
                 NSDictionary *dic = [result objectForKey:@"response"];
                 if (dic) {
                     NSString *code = [NSString stringWithFormat:@"%d",[[dic objectForKey:@"code"] intValue]];
@@ -168,7 +167,6 @@
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dic = [result objectForKey:@"response"];
-        NSLog(@"%@",dic);
         if (dic) {
             if (!isNull(result, @"response")) {
                 if ([[dic objectForKey:@"code"] intValue] ==100) {

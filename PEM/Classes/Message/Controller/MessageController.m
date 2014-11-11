@@ -150,6 +150,13 @@
 
 }
 
+
+
+- (void)addFirstCateView
+{
+    
+}
+
 -(void)addScrollViewOffLine
 {
     _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, self.view.frame.size.height)];

@@ -10,7 +10,7 @@
 
 @interface ProActionSheet ()
 {
-    UIButton *cancelBtn;
+    
 }
 @end
 
@@ -28,23 +28,28 @@
         [self addSubview:view];
         CGRect mframe = [[UIScreen mainScreen] bounds];
         self.frame = mframe;
-        cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        
+        _bgView = [[UIView alloc] initWithFrame:CGRectMake(0,kHeight,kWidth-28,45*3+28)];
+        _bgView.backgroundColor = [UIColor clearColor];
+        [self addSubview:_bgView];
+        
+        UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         cancelBtn.layer.masksToBounds = YES;
         cancelBtn.layer.cornerRadius = 5;
         cancelBtn.tag = 4002;
-        cancelBtn.frame = CGRectMake(14,kHeight,kWidth-28, 45);
+        cancelBtn.frame = CGRectMake(14,45*2+14,kWidth-28, 45);
         [cancelBtn setBackgroundImage:[UIImage imageNamed:@"white_bg.png"] forState:UIControlStateNormal];
         [cancelBtn setBackgroundImage:[UIImage imageNamed:@"white_bg_pre.png"] forState:UIControlStateNormal];
         [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [cancelBtn setTitleColor:HexRGB(0x1081fe) forState:UIControlStateNormal];
         [cancelBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:cancelBtn];
+        [_bgView addSubview:cancelBtn];
+
+        UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(14, 0, kWidth-28, 90)];
+        bgView.layer.masksToBounds = YES;
+        bgView.layer.cornerRadius = 5;
+        [_bgView addSubview:bgView];
         
-        _bgView = [[UIView alloc] initWithFrame:CGRectMake(14,kHeight,kWidth-28,90)];
-        _bgView.backgroundColor = HexRGB(0xffffff);
-        _bgView.layer.masksToBounds = YES;
-        _bgView.layer.cornerRadius = 5;
-        [self addSubview:_bgView];
         UIButton *photoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         photoBtn.frame = CGRectMake(0, 0, kWidth-28, 45);
         photoBtn.tag = 4000;
@@ -53,7 +58,7 @@
         [photoBtn setTitle:@"从相册中选取" forState:UIControlStateNormal];
         [photoBtn setTitleColor:HexRGB(0x1081fe) forState:UIControlStateNormal];
         [photoBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
-        [_bgView addSubview:photoBtn];
+        [bgView addSubview:photoBtn];
         
         UIButton *takePhotoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         takePhotoBtn.frame = CGRectMake(0,45, kWidth-28, 45);
@@ -63,10 +68,10 @@
         [takePhotoBtn addTarget:self action:@selector(buttonDown:) forControlEvents:UIControlEventTouchUpInside];
         [takePhotoBtn setTitle:@"拍照" forState:UIControlStateNormal];
         [takePhotoBtn setTitleColor:HexRGB(0x1081fe) forState:UIControlStateNormal];
-        [_bgView addSubview:takePhotoBtn];
+        [bgView addSubview:takePhotoBtn];
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 45, kWidth-28, 1)];
         line.backgroundColor = HexRGB(0xc3c3c7);
-        [_bgView addSubview:line];
+        [bgView addSubview:line];
     }
     return self;
 }
@@ -80,8 +85,7 @@
 
 - (void)dismissView{
     [UIView animateWithDuration:0.3 animations:^{
-        cancelBtn.frame = CGRectMake(14, kHeight,kWidth-28, 45);
-        _bgView.frame = CGRectMake(14, kHeight,kWidth-28, 90);
+        _bgView.frame = CGRectMake(0, kHeight,kWidth-28,45*3+28);
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];
@@ -89,8 +93,7 @@
 
 - (void)showView{
     [UIView animateWithDuration:0.3 animations:^{
-        cancelBtn.frame = CGRectMake(14, kHeight-14-45,kWidth-28, 45);
-        _bgView.frame = CGRectMake(14,kHeight-28-45-90,kWidth-28, 90);
+        _bgView.frame = CGRectMake(0, kHeight-_bgView.frame.size.height,kWidth-28,45*3+28);
     }];
     [[[UIApplication sharedApplication] keyWindow] addSubview:self];
 }

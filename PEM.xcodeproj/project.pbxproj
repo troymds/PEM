@@ -141,6 +141,7 @@
 		04B1D2011A0B0A6000929A59 /* CategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1D2001A0B0A6000929A59 /* CategoryCell.m */; };
 		04B1D2411A0B4FD500929A59 /* CategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1D2401A0B4FD500929A59 /* CategoryView.m */; };
 		04B1D2431A0B5EF600929A59 /* Cell_Selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B1D2421A0B5EF600929A59 /* Cell_Selected@2x.png */; };
+		04BC99041A121119003DD369 /* SecondCateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BC99031A121119003DD369 /* SecondCateView.m */; };
 		04BCD71C1A0F7A5100B3612D /* RegionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BCD71B1A0F7A5100B3612D /* RegionCell.m */; };
 		04BCD71F1A0FA9D200B3612D /* UserModelSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BCD71E1A0FA9D200B3612D /* UserModelSingleton.m */; };
 		04C5043619F0A3C8008F36AD /* provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043519F0A3C8008F36AD /* provinces.plist */; };
@@ -692,6 +693,8 @@
 		04B5F01D19ECAA4300CE68A4 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		04B5F01F19ECAA5500CE68A4 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		04B5F02119ECAAF000CE68A4 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		04BC99021A121119003DD369 /* SecondCateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondCateView.h; sourceTree = "<group>"; };
+		04BC99031A121119003DD369 /* SecondCateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondCateView.m; sourceTree = "<group>"; };
 		04BCD71A1A0F7A5100B3612D /* RegionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegionCell.h; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/RegionCell.h; sourceTree = "<group>"; };
 		04BCD71B1A0F7A5100B3612D /* RegionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegionCell.m; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/RegionCell.m; sourceTree = "<group>"; };
 		04BCD71D1A0FA9D200B3612D /* UserModelSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserModelSingleton.h; path = ../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Me/UserModelSingleton.h; sourceTree = "<group>"; };
@@ -2225,6 +2228,8 @@
 				5588E22119EE06BC0095D362 /* xiangqingViewController.m */,
 				5591C5EC19FDEAF500F82380 /* qiugouXQ.h */,
 				5591C5ED19FDEAF500F82380 /* qiugouXQ.m */,
+				04BC99021A121119003DD369 /* SecondCateView.h */,
+				04BC99031A121119003DD369 /* SecondCateView.m */,
 			);
 			name = views;
 			path = Controller/views;
@@ -2949,6 +2954,7 @@
 				04AF262819E8B108001B29CB /* DialRecordCell.m in Sources */,
 				04AF266019E8B129001B29CB /* SettingController.m in Sources */,
 				55B77CCE1A03852D00712DB9 /* AHReach.m in Sources */,
+				04BC99041A121119003DD369 /* SecondCateView.m in Sources */,
 				55B86B2E19C68826008B34AA /* XQgetInfoTool.m in Sources */,
 				04AF26D119E8B16D001B29CB /* MeController.m in Sources */,
 				55B5104619F73930009F9008 /* AFXMLRequestOperation.m in Sources */,

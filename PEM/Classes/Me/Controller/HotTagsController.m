@@ -293,7 +293,6 @@
             [scrollView setContentSize:CGSizeMake(kWidth, bottomView.frame.origin.y+bottomView.frame.size.height+240)];
         }
         [scrollView setContentOffset:CGPointMake(0, scrollView.contentSize.height-scrollView.frame.size.height) animated:YES];
-
     }
 }
 
@@ -344,6 +343,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 /*
