@@ -34,10 +34,11 @@
 #import "HttpTool.h"
 #import "CompanyHomeView.h"
 #import "EplatFormController.h"
+#import "LoadMoreCell.h"
 
 #define KHEIGHT_COMPANY  12
 
-@interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,CompanyHomeViewDeletgare>
+@interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,CompanyHomeViewDeletgare,UIScrollViewDelegate>
 {
     UIButton *_selectedBtn;
     UIView *_orangLin;
@@ -50,6 +51,8 @@
     NSMutableArray *_conditionArray;
     MJRefreshBaseView *_refreshView;
     UILabel *dataLabel;
+    BOOL needLoad;//是否需要加载
+    BOOL isLoading;//是否正在加载
 }
 
 @end
@@ -109,22 +112,24 @@
     header.delegate = self;
     
     // 2.上拉加载更多
-    footer = [MJRefreshFooterView footer];
-    footer.delegate = self;
+//    footer = [MJRefreshFooterView footer];
+//    footer.delegate = self;
 }
 
 
 #pragma mark 刷新代理方法
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    if ([refreshView isKindOfClass:[MJRefreshFooterView class]])
-    {
-        // 上拉加载更多
-        [self loadViewStatuce:refreshView];
-    } else {
-        // 下拉刷新
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
         [self loadViewStatuce:refreshView];
     }
+//    if ([refreshView isKindOfClass:[MJRefreshFooterView class]])
+//    {
+//        // 上拉加载更多
+//        [self loadViewStatuce:refreshView];
+//    } else {
+//        // 下拉刷新
+//        [self loadViewStatuce:refreshView];
 }
 
 -(void)loadViewStatusesHome
@@ -249,10 +254,13 @@
     [supplyTool CompanyStatusesWithSuccesscategory:^(NSArray *statues) {
         
         if (statues.count > 0) {
-            
+            if (statues.count == 10) {
+                needLoad = YES;
+            }
             _supplyANDdemandTableView.hidden = NO;
             dataLabel.hidden = YES;
         }else if(statues.count==0){
+            needLoad = NO;
             dataLabel.hidden = NO;
             _supplyANDdemandTableView.hidden = YES;
             
@@ -263,6 +271,9 @@
             [_companySupplyArray removeAllObjects];
         }
         [_companySupplyArray addObjectsFromArray:statues];
+        if (isLoading) {
+            isLoading = NO;
+        }
         
         [self tableReloadData];
         
@@ -280,10 +291,13 @@
     
     [demandTool DemandCompanyStatusesWithSuccess:^(NSArray *statues) {
         if (statues.count > 0) {
-            
+            if (statues.count == 10) {
+                needLoad = YES;
+            }
             _supplyANDdemandTableView.hidden = NO;
             dataLabel.hidden = YES;
         }else if(statues.count==0){
+            needLoad = NO;
             dataLabel.hidden = NO;
             _supplyANDdemandTableView.hidden = YES;
             
@@ -293,7 +307,10 @@
             [_companyDemandArray removeAllObjects];
         }
         [_companyDemandArray addObjectsFromArray:statues];
-        
+        if (isLoading) {
+            isLoading = NO;
+        }
+
         [self tableReloadData];
     } DemandCompanyFailure:^(NSError *error) {
         
@@ -309,10 +326,13 @@
     [comPanyNEWTool statusesWithSuccessNew:^(NSArray *statues) {
 
         if (statues.count > 0) {
-            
+            if (statues.count == 10) {
+                needLoad = YES;
+            }
             _conditionTableView.hidden = NO;
             dataLabel.hidden = YES;
         }else if(statues.count==0){
+            needLoad = NO;
             dataLabel.hidden = NO;
             _conditionTableView.hidden = YES;
             
@@ -325,7 +345,9 @@
         }
         [_companyNEWArray addObjectsFromArray:statues];
         
-
+        if (isLoading) {
+            isLoading = NO;
+        }
         [self tableReloadData1];
         //[_conditionTableView reloadData];
     } NewFailure:^(NSError *error) {
@@ -401,6 +423,33 @@
 #pragma mark  ------scrollview_delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    if ([scrollView isKindOfClass:[UITableView class]]) {
+        if (_selectedBtn.tag == 22) {
+            NSIndexPath * indexpath=[NSIndexPath indexPathForRow:[_supplyANDdemandTableView numberOfRowsInSection:0]-1 inSection:0];
+            if ([[_supplyANDdemandTableView cellForRowAtIndexPath:indexpath] isKindOfClass:[LoadMoreCell class]]&&scrollView.contentSize.height-scrollView.contentOffset.y<=scrollView.frame.size.height+40) {
+                if (!isLoading) {
+                    isLoading = YES;
+                    if (_chooseSelected.tag == 30)
+                    {
+                        [self supplyRequest];
+                        
+                    }else
+                    {
+                        [self demandRequest];
+                    }
+                }
+            }
+        }else{
+            NSIndexPath * indexpath=[NSIndexPath indexPathForRow:[_supplyANDdemandTableView numberOfRowsInSection:0]-1 inSection:0];
+            if ([[_supplyANDdemandTableView cellForRowAtIndexPath:indexpath] isKindOfClass:[LoadMoreCell class]]&&scrollView.contentSize.height-scrollView.contentOffset.y<=scrollView.frame.size.height+40) {
+                if (!isLoading) {
+                    isLoading = YES;
+                    [self companyRequest];
+                }
+            }
+
+        }
+    }
     if (scrollView.tag == 9999)
     {
         dataLabel.hidden = YES;
@@ -633,11 +682,15 @@
     
     if (company.tag == 20)
     {
+        needLoad = NO;
+        isLoading = NO;
         dataLabel.hidden = YES;
         [_BigCompanyScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     }
     else if(company.tag ==21)
     {
+        needLoad = NO;
+        isLoading = NO;
         header.scrollView = _conditionTableView;
         header.scrollView = _conditionTableView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth, 0) animated:YES];
@@ -645,6 +698,8 @@
     }
     else if(company.tag ==22)
     {
+        needLoad = NO;
+        isLoading = NO;
         header.scrollView = _supplyANDdemandTableView;
         footer.scrollView = _supplyANDdemandTableView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
@@ -706,31 +761,35 @@
     if(_selectedBtn.tag==22)
     {
         if (_chooseSelected.tag==31) {
-            return 70;
-            
-        }else
-        {
-            return 80;
+            if (indexPath.row < _companyDemandArray.count) {
+                return 70;
+            }
+        }else{
+            if (indexPath.row < _companySupplyArray.count) {
+                return 80;
+            }
         }
     }else
     {
-        return 70;
+        if (indexPath.row < _companyNEWArray.count) {
+            return 70;
+        }
     }
-    
+    return 40;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (_selectedBtn.tag ==21) {
         
-        return _companyNEWArray.count;
+        return needLoad? _companyNEWArray.count+1:_companyNEWArray.count;
 
     }else if (_selectedBtn.tag ==22)
     {
         if (_chooseSelected.tag==31) {
-            return _companyDemandArray.count;
+            return needLoad? _companyDemandArray.count+1:_companyDemandArray.count;
             
         }else
         {
-            return _companySupplyArray.count;
+            return needLoad? _companySupplyArray.count+1:_companySupplyArray.count;
         }
     }
     return 0;
@@ -738,88 +797,105 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    if(_selectedBtn.tag==22)
-    {
-        static NSString *cellIndexfider =@"Cell3";
-        demandCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
-        if(_chooseSelected.tag==31)
-        {
-
-            if (!cell)
-            {
-                cell =[[demandCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+    if(_selectedBtn.tag==22){
+        if(_chooseSelected.tag==31){
+            if (indexPath.row<_companyDemandArray.count){
+                static NSString *cellIndexfider =@"Cell3";
+                demandCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
+                if (!cell)
+                {
+                    cell =[[demandCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+                }
+                demandCOM *demand =[_companyDemandArray objectAtIndex:indexPath.row];
+                
+                cell.dateLabel.text =demand.date;
+                cell.TitleLabel.text =demand.name;
+                cell.contentLabel.text =demand.introduction;
+                UIView *cellLine = [[UIView alloc] initWithFrame:CGRectMake(10, 69, kWidth - 20, 1)];
+                cellLine.backgroundColor = HexRGB(0xd5d5d5);
+                [cell.contentView addSubview:cellLine];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                return cell;
+            }else{
+                static NSString *cellName = @"cellName";
+                LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+                if (cell == nil) {
+                    cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+                }
+                [cell.activityView startAnimating];
+                return cell;
             }
-            demandCOM *demand =[_companyDemandArray objectAtIndex:indexPath.row];
-            
-            cell.dateLabel.text =demand.date;
-            cell.TitleLabel.text =demand.name;
-            cell.contentLabel.text =demand.introduction;
-            UIView *cellLine = [[UIView alloc] initWithFrame:CGRectMake(10, 69, kWidth - 20, 1)];
-            cellLine.backgroundColor = HexRGB(0xd5d5d5);
-            [cell.contentView addSubview:cellLine];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
-            return cell;
-            return cell;
         }else{
-            static NSString *cellIndexfider =@"Cell2";
-            
-            supplyViewCell *supplyCell = [tableView dequeueReusableCellWithIdentifier:cellIndexfider];
-            
-            if (supplyCell == nil) {
-                supplyCell = [[supplyViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+            if (indexPath.row < _companySupplyArray.count) {
+                static NSString *cellIndexfider =@"Cell2";
+                supplyViewCell *supplyCell = [tableView dequeueReusableCellWithIdentifier:cellIndexfider];
+                
+                if (supplyCell == nil) {
+                    supplyCell = [[supplyViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+                }
+                supplyCOM *item =[_companySupplyArray objectAtIndex:indexPath.row];
+                supplyCell.nameLabel.text = item.name;
+                supplyCell.priceLabel.text = [NSString stringWithFormat:@"¥%@元/每件",item.price];
+                supplyCell.supply_numLabel.text = [NSString stringWithFormat:@"%@起供应",item.min_supply_num];
+                supplyCell.read_numLabel.text = [NSString stringWithFormat:@"浏览%@次",item.read_num];
+                
+                supplyCell.dateLabel.text = item.date;
+                [supplyCell.supplyImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
+                UIView *line = [[UIView alloc] initWithFrame:CGRectMake(10,79, kWidth-20, 1)];
+                line.backgroundColor = HexRGB(0xd5d5d5);
+                [supplyCell.contentView addSubview:line];
+                supplyCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                return supplyCell;
+            }else{
+                static NSString *cellName = @"cellName";
+                LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+                if (cell == nil) {
+                    cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+                }
+                [cell.activityView startAnimating];
+                return cell;
             }
-            supplyCOM *item =[_companySupplyArray objectAtIndex:indexPath.row];
-            supplyCell.nameLabel.text = item.name;
-            supplyCell.priceLabel.text = [NSString stringWithFormat:@"¥%@元/每件",item.price];
-            supplyCell.supply_numLabel.text = [NSString stringWithFormat:@"%@起供应",item.min_supply_num];
-            supplyCell.read_numLabel.text = [NSString stringWithFormat:@"浏览%@次",item.read_num];
-
-            supplyCell.dateLabel.text = item.date;
-            [supplyCell.supplyImage setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
-            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(10,79, kWidth-20, 1)];
-            line.backgroundColor = HexRGB(0xd5d5d5);
-            [supplyCell.contentView addSubview:line];
-            
-            
-            supplyCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            return supplyCell;
             
         }
-        
-        return cell;
-    }else
-    {
-
-        static NSString *cellID = @"Cell";
-        conditionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-        if (cell == nil)
-        {
-            cell = [[conditionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
-        }
-        if (_companyNEWArray.count > 0)
-        {
-            comContent *conNew =[_companyNEWArray objectAtIndex:indexPath.row];
-            
-            cell.TitleLabel.text =conNew.title;
-            cell.dateLabel.text =conNew.create_time;
-            cell.contentLabel.text =conNew.description;
-            
-            UIView *cellLine = [[UIView alloc] initWithFrame:CGRectMake(10, 69, kWidth - 20, 1)];
-            cellLine.backgroundColor = HexRGB(0xd5d5d5);
-            [cell.contentView addSubview:cellLine];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
+    }else{
+        if (indexPath.row < _companyNEWArray.count) {
+            static NSString *cellID = @"Cell";
+            conditionTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+            if (cell == nil)
+            {
+                cell = [[conditionTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                
+            }
+            if (_companyNEWArray.count > 0)
+            {
+                comContent *conNew =[_companyNEWArray objectAtIndex:indexPath.row];
+                
+                cell.TitleLabel.text =conNew.title;
+                cell.dateLabel.text =conNew.create_time;
+                cell.contentLabel.text =conNew.description;
+                
+                UIView *cellLine = [[UIView alloc] initWithFrame:CGRectMake(10, 69, kWidth - 20, 1)];
+                cellLine.backgroundColor = HexRGB(0xd5d5d5);
+                [cell.contentView addSubview:cellLine];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                
+                return cell;
+            }
+        }else{
+            static NSString *cellName = @"cellName";
+            LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+            if (cell == nil) {
+                cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+            }
+            [cell.activityView startAnimating];
             return cell;
         }
-
-
-        return cell;
     }
-    
+    return nil;
 }
+
+
 
 
 
