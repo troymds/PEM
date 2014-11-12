@@ -17,24 +17,25 @@
 #import "UIImageView+WebCache.h"
 #import "RemindView.h"
 #import "ZBarSDK.h"
-#import "SelectImgCell.h"
-#import "ProImageView.h"
-#import "ExtendCell.h"
+//#import "SelectImgCell.h"
+//#import "ProImageView.h"
+//#import "ExtendCell.h"
 //#import "CompanyDetailViewController.h"
 #import "DimensionalCodeViewController.h"
 #define kFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"message.data"]
 
-@interface MessageController ()<ZBarReaderDelegate,UITableViewDataSource,UITableViewDelegate,ProImageViewDelegate>
+@interface MessageController ()<ZBarReaderDelegate>
 {
     UIScrollView *_scrollView;
     NSMutableArray *_categoryArray;
     ZBarReaderViewController *_reader;
-    UITableView *_tableView;
-    NSMutableArray *_firstArray;
-    NSMutableArray *_secondArray;
-    NSMutableArray *_dataArray;
-    CGFloat height;
-    NSIndexPath *selectIndexPath;
+//    UITableView *_tableView;
+//    NSMutableArray *_firstArray;
+//    NSMutableArray *_secondArray;
+//    NSMutableArray *_dataArray;
+//    CGFloat height;
+//    NSIndexPath *selectIndexPath;
+//    ProImageView *selectImg;
 }
 
 @property (nonatomic, retain) NSMutableArray *menuArray;
@@ -63,14 +64,14 @@
     _categoryArray = [[NSMutableArray alloc]init];
     _offLineDataArray = [NSMutableArray array];
     
-    _tableView  = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64-44) style:UITableViewStylePlain];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    [self.view addSubview:_tableView];
-    
-    _firstArray = [[NSMutableArray alloc] initWithCapacity:0];
-    _secondArray = [[NSMutableArray alloc] initWithCapacity:0];
-    _dataArray = [[NSMutableArray alloc] initWithCapacity:0];
+//    _tableView  = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64-44) style:UITableViewStylePlain];
+//    _tableView.delegate = self;
+//    _tableView.dataSource = self;
+//    [self.view addSubview:_tableView];
+//    
+//    _firstArray = [[NSMutableArray alloc] initWithCapacity:0];
+//    _secondArray = [[NSMutableArray alloc] initWithCapacity:0];
+//    _dataArray = [[NSMutableArray alloc] initWithCapacity:0];
     
     UIButton * _searchImage =[UIButton buttonWithType:UIButtonTypeCustom];
     _searchImage.frame =CGRectMake(0, 0, 180, 30);
@@ -149,29 +150,29 @@
         
         [NSKeyedArchiver archiveRootObject:_categoryArray toFile:kFilePath];
         //将一二级分类数据分开
-        NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:0];
-        for (gategoryModel *item in statues) {
-            if ([item.parent_id isEqualToString:@"0"]) {
-                [_firstArray addObject:item];
-            }else{
-                [arr addObject:item];
-            }
-        }
-        for (int i = 0; i < [_firstArray count]; i++) {
-            NSMutableArray *muatbleArray = [[NSMutableArray alloc] initWithCapacity:0];
-            gategoryModel *firstItem = [_firstArray objectAtIndex:i];
-            for (gategoryModel *secondItem in arr) {
-                if ([secondItem.parent_id isEqualToString:firstItem.idType]) {
-                    [muatbleArray addObject:secondItem];
-                }
-            }
-            [_dataArray addObject:muatbleArray];
-        }
-        [_tableView reloadData];
+//        NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:0];
+//        for (gategoryModel *item in statues) {
+//            if ([item.parent_id isEqualToString:@"0"]) {
+//                [_firstArray addObject:item];
+//            }else{
+//                [arr addObject:item];
+//            }
+//        }
+//        for (int i = 0; i < [_firstArray count]; i++) {
+//            NSMutableArray *muatbleArray = [[NSMutableArray alloc] initWithCapacity:0];
+//            gategoryModel *firstItem = [_firstArray objectAtIndex:i];
+//            for (gategoryModel *secondItem in arr) {
+//                if ([secondItem.parent_id isEqualToString:firstItem.idType]) {
+//                    [muatbleArray addObject:secondItem];
+//                }
+//            }
+//            [_dataArray addObject:muatbleArray];
+//        }
+//        [_tableView reloadData];
         
-//        [self addScrollView ];
-//        [self addCateGoryButton];
-//        [self addlineView];
+        [self addScrollView ];
+        [self addCateGoryButton];
+        [self addlineView];
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
 
@@ -471,111 +472,142 @@
 }
 
 
-#pragma mark ---tableView_delegate
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _firstArray.count%3==0? _firstArray.count/3:_firstArray.count/3+1;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == selectIndexPath.row&&selectIndexPath!=nil) {
-        static NSString *cellName = @"cellName";
-        ExtendCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
-        if (cell == nil) {
-            cell = [[ExtendCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
-        }
-        gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3];
-        [cell.img1 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
-        cell.img1.tag = 1000+indexPath.row*3;
-        cell.img1.delegate = self;
-        if (indexPath.row*+1<_firstArray.count) {
-            gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3+1];
-            [cell.img2 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
-            cell.img2.tag = 1000+indexPath.row*3+1;
-            cell.img2.delegate = self;
-        }
-        if (indexPath.row*3+2<_firstArray.count) {
-            gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3+2];
-            [cell.img3 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
-            cell.img3.tag = 1000+indexPath.row*3+2;
-            cell.img3.delegate = self;
-            
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;;
-        return cell;
-    }else{
-         static NSString *identify = @"identiry";
-         SelectImgCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
-         if (cell == nil) {
-             cell = [[SelectImgCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identify];
-         }
-        gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3];
-        [cell.img1 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
-        cell.img1.tag = 1000+indexPath.row*3;
-        cell.img1.delegate = self;
-        if (indexPath.row*+1<_firstArray.count) {
-            gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3+1];
-            [cell.img2 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
-            cell.img2.tag = 1000+indexPath.row*3+1;
-            cell.img2.delegate = self;
-        }
-        if (indexPath.row*3+2<_firstArray.count) {
-            gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3+2];
-            [cell.img3 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
-            cell.img3.tag = 1000+indexPath.row*3+2;
-            cell.img3.delegate = self;
-            
-        }
-             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return cell;
-    }
-    return nil;
-}
-
-- (void)imageClicked:(ProImageView *)image
-{
-    NSLog(@"%d",image.tag);
-    image.hasSelected = !image.hasSelected;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(image.tag-1000)/3 inSection:0];
-    if (!selectIndexPath) {
-        selectIndexPath = indexPath;
-        height = 100;
-        [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:selectIndexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
-    }else{
-        BOOL selectTheSameRow = indexPath.row == selectIndexPath.row?YES:NO;
-        if (!selectTheSameRow) {
-            //收起上次点击展开的cell
-            NSIndexPath *tempIndexPath = [selectIndexPath copy];
-            selectIndexPath = nil;
-            height = 0;
-            [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:tempIndexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
-            //展开新选择的cell
-            selectIndexPath = indexPath;
-            height = 100;
-            [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:selectIndexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
-        }else{
-            //若点击相同的cell，收起cell
-            selectIndexPath = nil;
-            height = 0;
-            [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
-        }
-    }
-}
-
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == selectIndexPath.row&&selectIndexPath!=nil) {
-        return kWidth/3+height;
-    }
-    return kWidth/3;
-}
-
-- (CGFloat)getHeightWithTag:(NSInteger)tag
-{
-    return tag*40;
-}
+//#pragma mark ---tableView_delegate
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+//{
+//    return _firstArray.count%3==0? _firstArray.count/3:_firstArray.count/3+1;
+//}
+//
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (indexPath.row == selectIndexPath.row&&selectIndexPath!=nil) {
+//        static NSString *cellName = @"cellName";
+//        SelectImgCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+//        if (cell == nil) {
+//            cell = [[SelectImgCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+//        }
+//        gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3];
+//        [cell.img1 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
+//        cell.img1.tag = 1000+indexPath.row*3;
+//        cell.img1.delegate = self;
+//        if (indexPath.row*3+1<_firstArray.count) {
+//            gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3+1];
+//            cell.img2.hidden = NO;
+//            [cell.img2 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
+//            cell.img2.tag = 1000+indexPath.row*3+1;
+//            cell.img2.delegate = self;
+//        }else{
+//            cell.img2.hidden = YES;
+//        }
+//        if (indexPath.row*3+2<_firstArray.count) {
+//            gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3+2];
+//            cell.img3.hidden = NO;
+//            [cell.img3 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
+//            cell.img3.tag = 1000+indexPath.row*3+2;
+//            cell.img3.delegate = self;
+//            
+//        }else{
+//            cell.img3.hidden = YES;
+//        }
+//        cell.selectionStyle = UITableViewCellSelectionStyleNone;;
+//        return cell;
+//    }else{
+//         static NSString *identify = @"identiry";
+//         SelectImgCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
+//         if (cell == nil) {
+//             cell = [[SelectImgCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identify];
+//         }
+//        gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3];
+//        [cell.img1 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
+//        cell.img1.tag = 1000+indexPath.row*3;
+//        cell.img1.delegate = self;
+//        if (indexPath.row*3+1<_firstArray.count) {
+//            gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3+1];
+//            cell.img2.hidden = NO;
+//            [cell.img2 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
+//            cell.img2.tag = 1000+indexPath.row*3+1;
+//            cell.img2.delegate = self;
+//        }else{
+//            cell.img2.hidden = YES;
+//        }
+//        if (indexPath.row*3+2<_firstArray.count) {
+//            gategoryModel *item = [_firstArray objectAtIndex:indexPath.row*3+2];
+//            cell.img3.hidden = NO;
+//            [cell.img3 setImageWithURL:[NSURL URLWithString:item.imageGategpry] placeholderImage:[UIImage imageNamed:@"find_fail.png"]];
+//            cell.img3.tag = 1000+indexPath.row*3+2;
+//            cell.img3.delegate = self;
+//            
+//        }else{
+//            cell.img3.hidden = YES;
+//        }
+//             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//        return cell;
+//    }
+//    return nil;
+//}
+//
+//- (void)imageClicked:(ProImageView *)image
+//{
+//    NSLog(@"%d",image.tag);
+//    image.hasSelected = !image.hasSelected;
+//    if (selectImg == nil) {
+//        selectImg = image;
+//    }
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(image.tag-1000)/3 inSection:0];
+//    if (!selectIndexPath) {
+//        selectIndexPath = indexPath;
+//        height = [self getHeight];
+//        [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:selectIndexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
+//    }else{
+//        BOOL selectTheSameRow = indexPath.row == selectIndexPath.row?YES:NO;
+//        if (!selectTheSameRow) {
+//            //收起上次点击展开的cell
+//            NSIndexPath *tempIndexPath = [selectIndexPath copy];
+//            selectIndexPath = nil;
+//            height = 0;
+//            [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:tempIndexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
+//            //展开新选择的cell
+//            selectIndexPath = indexPath;
+//            height = [self getHeight];
+//            [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:selectIndexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
+//        }else{
+//            //若点击相同的cell
+//            //若点击相同的图片 收起cell
+//            if (selectImg.tag == image.tag) {
+//                selectIndexPath = nil;
+//                height = 0;
+//                selectImg = nil;
+//                [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
+//            }else{
+//                selectImg = image;
+//                height = [self getHeight];
+//                [_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:selectIndexPath, nil] withRowAnimation:UITableViewRowAnimationFade];
+//            }
+//        }
+//    }
+//}
+//
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (indexPath.row == selectIndexPath.row&&selectIndexPath!=nil) {
+//        return kWidth/3+height;
+//    }
+//    return kWidth/3;
+//}
+//
+//- (CGFloat)getHeight
+//{
+//    int tag = selectImg.tag;
+//    NSLog(@"---%d",tag);
+//    int count = [[_dataArray objectAtIndex:tag-1000] count];
+//    NSLog(@"%d",count);
+//    if (count == 0) {
+//        return 0;
+//    }
+//    count = count%3==0?count/3:count/3+1;
+//    return 50+count*20+(count-1)*28;
+//}
 
 
 
