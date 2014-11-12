@@ -23,6 +23,9 @@
     UIScrollView *_backScroll;           // 最底层的scroll，用来左右滑动
     CompanyMenuItem *_selectedBtn;      //选中的menu button
     CompanyTopMenuView * _topMenu;        //顶部菜单栏
+    BOOL needLoad;//是否需要加载
+    BOOL isLoading;//是否正在加载
+    BOOL isRefresh;//是否正在刷新
 }
 @property (nonatomic, strong)  NSMutableArray  *companyHomeArray;//   公司首页数组
 @property (nonatomic, strong)   NSMutableArray *comArr;//    公司详情数组
@@ -193,11 +196,11 @@
     header.delegate = self;
     [header beginRefreshing];
     
-    // 2.上拉加载更多
-    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
-//    header.scrollView = _conditionTableView;
-    
-    footer.delegate = self;
+//    // 2.上拉加载更多
+//    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+////    header.scrollView = _conditionTableView;
+//    
+//    footer.delegate = self;
 }
 
 #pragma mark 刷新代理方法

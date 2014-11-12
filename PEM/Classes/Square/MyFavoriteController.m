@@ -14,9 +14,15 @@
 #import "UIImageView+WebCache.h"
 #import "xiangqingViewController.h"
 #import "RemindView.h"
+#import "LoadMoreCell.h"
 
-@interface MyFavoriteController ()
+@interface MyFavoriteController ()<UIScrollViewDelegate>
+{
+    BOOL needLoad;//是否需要加载
+    BOOL isLoading;//是否正在加载
+    BOOL isRefresh;//是否正在刷新
 
+}
 @end
 
 @implementation MyFavoriteController
@@ -37,7 +43,7 @@
     self.view.backgroundColor = HexRGB(0xffffff);
 
     // Do any additional setup after loading the view.
-    isLoad = NO;
+//    isLoad = NO;
     isRefresh = NO;
     [self loadData];
     [self addRefreshViews];
@@ -49,9 +55,9 @@
     //    _statusFrames = [NSMutableArray array];
     
     // 2.上拉加载更多
-    MJFootView = [MJRefreshFooterView footer];
-    MJFootView.scrollView = _tableView;
-    MJFootView.delegate = self;
+//    MJFootView = [MJRefreshFooterView footer];
+//    MJFootView.scrollView = _tableView;
+//    MJFootView.delegate = self;
     
     MJHeadView = [MJRefreshHeaderView header];
     MJHeadView.scrollView = _tableView;
@@ -61,25 +67,36 @@
 #pragma mark 刷新代理方法
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
-        isLoad = YES;
-    }else{
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
         isRefresh = YES;
     }
     [self loadData];
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSIndexPath * indexpath=[NSIndexPath indexPathForRow:[_tableView numberOfRowsInSection:0]-1 inSection:0];
+    if ([[_tableView cellForRowAtIndexPath:indexpath] isKindOfClass:[LoadMoreCell class]]&&scrollView.contentSize.height-scrollView.contentOffset.y<=scrollView.frame.size.height+40) {
+        if (!isLoading) {
+            isLoading = YES;
+//            isLoad = YES;
+            [self loadData];
+        }
+    }
+}
+
 - (void)loadData{
     NSString *company_id = [SystemConfig sharedInstance].company_id;
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"lastid",@"10",@"pagesize",company_id,@"company_id",nil];
-    if (isLoad) {
+    if (isLoading) {
         if (_dataArray.count!=0) {
             NSString *lastid = [NSString stringWithFormat:@"%lu",(unsigned long)[_dataArray count]];
             [params setObject:lastid forKey:@"lastid"];
         }
     }
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"加载中...";
+    if (!(isLoading||isRefresh)) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view  animated:YES];
+        hud.labelText = @"加载中...";
+    }
     [HttpTool postWithPath:@"getWishlist" params:params success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
@@ -92,12 +109,20 @@
             if (![[result objectForKey:@"response"] isKindOfClass:[NSNull class]]){
                 
                 NSArray *arr = [result objectForKey:@"response"];
+                int count = 0 ;
                 for (NSDictionary *dic in arr) {
                     MyFavoriteItem *item = [[MyFavoriteItem alloc] initWithDictionary:dic];
                     [_dataArray addObject:item];
+                    count++;
+                }
+                if (count < 10) {
+                    needLoad = NO;
+                }else{
+                    needLoad = YES;
                 }
                 [_tableView reloadData];
             }else{
+                needLoad = NO;
                 if (_dataArray.count ==0){
                     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
                     view.backgroundColor = HexRGB(0xffffff);
@@ -113,9 +138,11 @@
                     
                 }
             }
-            if (isLoad) {
-                isLoad = NO;
-                [MJFootView endRefreshing];
+//            if (isLoad) {
+//                isLoad = NO;
+//            }
+            if (isLoading) {
+                isLoading = NO;
             }
             if (isRefresh) {
                 isRefresh = NO;
@@ -124,39 +151,60 @@
             [_tableView reloadData];
         }
     } failure:^(NSError *error){
+        if (isRefresh) {
+            isRefresh = NO;
+            [MJHeadView endRefreshing];
+        }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return needLoad?[_dataArray count]+1:[_dataArray count];
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *identifier = @"Identifier";
-    FavoriteCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-    if (!cell) {
-        cell = [[FavoriteCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-    }
-    MyFavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
-    [cell.iconImageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",item.img]] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
-    cell.nameLabel.text = item.title;
-    if ([item.price isEqualToString:@"0"]) {
-        cell.priceLabel.text = @"价格:电议";
+    if (indexPath.row<_dataArray.count) {
+        static NSString *identifier = @"Identifier";
+        FavoriteCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+        if (!cell) {
+            cell = [[FavoriteCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
+        }
+        MyFavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
+        [cell.iconImageView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",item.img]] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
+        cell.nameLabel.text = item.title;
+        if ([item.price isEqualToString:@"0"]) {
+            cell.priceLabel.text = @"价格:电议";
+        }else{
+            cell.priceLabel.text = [NSString stringWithFormat:@"价格:%@元",item.price];
+        }
+        cell.dateLabel.text = item.collectTimes;
+        cell.timesLabel.text = [NSString stringWithFormat:@"收藏%@次",item.collect_num];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,94, kWidth-20, 1)];
+        lineView.backgroundColor = HexRGB(0xd5d5d5);
+        [cell.contentView addSubview:lineView];
+        return cell;
     }else{
-        cell.priceLabel.text = [NSString stringWithFormat:@"价格:%@元",item.price];
+        static NSString *cellName = @"cellName";
+        LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+        if (cell == nil) {
+            cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+        }
+        return cell;
     }
-    cell.dateLabel.text = item.collectTimes;
-    cell.timesLabel.text = [NSString stringWithFormat:@"收藏%@次",item.collect_num];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,94, kWidth-20, 1)];
-    lineView.backgroundColor = HexRGB(0xd5d5d5);
-    [cell.contentView addSubview:lineView];
-    
-    return cell;
+    return nil;
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 95;
+    if (indexPath.row<_dataArray.count) {
+        return 95;
+    }
+    return 40;
 }
 
 

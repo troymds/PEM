@@ -15,10 +15,15 @@
 #import "SystemConfig.h"
 #import "RemindView.h"
 #import "SupplyController.h"
+#import "LoadMoreCell.h"
 
 
-@interface MySupplyController ()
-
+@interface MySupplyController ()<UIScrollViewDelegate>
+{
+    BOOL needLoad;//是否需要加载
+    BOOL isLoading;//是否正在加载
+    BOOL isRefresh; //是否正在刷新
+}
 @end
 
 @implementation MySupplyController
@@ -46,9 +51,6 @@
     // Do any additional setup after loading the view.
     longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewLongGesture:)];
     [_tableView addGestureRecognizer:longGesture];
-    isLoad = NO;
-    isRefresh = NO;
-    
     [self addRemindView];
     
     [self loadData];
@@ -81,11 +83,6 @@
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
 {
-    // 2.上拉加载更多
-    MJFootView = [MJRefreshFooterView footer];
-    MJFootView.scrollView = _tableView;
-    MJFootView.delegate = self;
-    
     MJHeadView = [MJRefreshHeaderView header];
     MJHeadView.scrollView = _tableView;
     MJHeadView.delegate = self;
@@ -94,16 +91,21 @@
 #pragma mark 刷新代理方法
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
-        isLoad = YES;
-    }else{
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
         isRefresh = YES;
     }
     [self loadData];
 }
 
-
-
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSIndexPath * indexpath=[NSIndexPath indexPathForRow:[_tableView numberOfRowsInSection:0]-1 inSection:0];
+    if ([[_tableView cellForRowAtIndexPath:indexpath] isKindOfClass:[LoadMoreCell class]]&&scrollView.contentSize.height-scrollView.contentOffset.y<=scrollView.frame.size.height+40) {
+        if (!isLoading) {
+            isLoading = YES;
+            [self loadData];
+        }
+    }
+}
 
 //长按手势响应
 - (void)tableViewLongGesture:(UILongPressGestureRecognizer *)gesture{
@@ -125,15 +127,16 @@
     NSString *condition = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     condition = [condition stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"lastid",@"10",@"pagesize",condition,@"condition", nil];
-    if (isLoad) {
+    if (isLoading) {
         if (_dataArray.count!=0){
             NSString *lastid = [NSString stringWithFormat:@"%lu",(unsigned long)[_dataArray count]];
             [params setObject:lastid forKey:@"lastid"];
         }
     }
-    
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view  animated:YES];
-    hud.labelText = @"加载中...";
+    if (!(isLoading||isRefresh)) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view  animated:YES];
+        hud.labelText = @"加载中...";
+    }
     [HttpTool postWithPath:@"getSupplyInfoList" params:params success:^(id JSON){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
@@ -146,12 +149,21 @@
                     }
                 }
                 NSArray *arr = [result objectForKey:@"response"];
+                int count = 0;
                 for (NSDictionary *dict in arr) {
                     MySupplyItem *item = [[MySupplyItem alloc] initWithDictonary:dict];
                     [_dataArray addObject:item];
+                    count++;
+                }
+                //如果数据少于10条 不需要加载数据了
+                if (count < 10) {
+                    needLoad = NO;
+                }else{
+                    needLoad = YES;
                 }
                 [_tableView reloadData];
             }else{
+                needLoad = NO;
                 //返回数据为空且数组中没有数据 该界面无数据
                 if (_dataArray.count == 0) {
                     remindView.hidden = NO;
@@ -159,9 +171,8 @@
                     [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
                 }
             }
-            if (isLoad) {
-                isLoad = NO;
-                [MJFootView endRefreshing];
+            if (isLoading) {
+                isLoading = NO;
             }
             if (isRefresh) {
                 isRefresh = NO;
@@ -169,6 +180,10 @@
             }
         }
     } failure:^(NSError *error){
+        if (isRefresh) {
+            isRefresh = NO;
+            [MJHeadView endRefreshing];
+        }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
@@ -184,44 +199,56 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *idetifier = @"Identifier";
-    SupplyCell *cell = [tableView dequeueReusableCellWithIdentifier:idetifier];
-    if (!cell) {
-        cell = [[SupplyCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:idetifier];
-    }
-    MySupplyItem *item = [_dataArray objectAtIndex:indexPath.row];
-    cell.nameLabel.text = item.name;
-    if ([item.price isEqualToString:@"0"]) {
-        cell.priceLabel.text = @"价格电议";
+    if (indexPath.row<_dataArray.count) {
+        static NSString *idetifier = @"Identifier";
+        SupplyCell *cell = [tableView dequeueReusableCellWithIdentifier:idetifier];
+        if (!cell) {
+            cell = [[SupplyCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:idetifier];
+        }
+        MySupplyItem *item = [_dataArray objectAtIndex:indexPath.row];
+        cell.nameLabel.text = item.name;
+        if ([item.price isEqualToString:@"0"]) {
+            cell.priceLabel.text = @"价格电议";
+        }else{
+            cell.priceLabel.text = [NSString stringWithFormat:@"%@元/每%@",item.price,item.unit];
+        }
+        cell.standardLabel.text = [NSString stringWithFormat:@"%@%@起供应",item.min_supply_num,item.unit];
+        NSString *date = [item.date substringWithRange:NSMakeRange(0,10)];
+        cell.timeLabel.text = date;
+        
+        if ([item.verify_result isEqualToString:@"0"]) {
+            cell.resultLabel.text = @"待审核";
+            cell.resultLabel.textColor = HexRGB(0xff7300);
+        }else if([item.verify_result isEqualToString:@"2"]){
+            cell.resultLabel.text = @"审核未通过";
+            cell.resultLabel.textColor = HexRGB(0x808080);
+            
+        }
+        [cell.iconImageView setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
+        
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,87, kWidth-20, 1)];
+        lineView.backgroundColor = HexRGB(0xd5d5d5);
+        [cell.contentView addSubview:lineView];
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        return cell;
     }else{
-        cell.priceLabel.text = [NSString stringWithFormat:@"%@元/每%@",item.price,item.unit];
+        static NSString *cellName = @"cellName";
+        LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+        if (cell == nil) {
+            cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+        }
+        return cell;
     }
-    cell.standardLabel.text = [NSString stringWithFormat:@"%@%@起供应",item.min_supply_num,item.unit];
-    NSString *date = [item.date substringWithRange:NSMakeRange(0,10)];
-    cell.timeLabel.text = date;
-    
-    if ([item.verify_result isEqualToString:@"0"]) {
-        cell.resultLabel.text = @"待审核";
-        cell.resultLabel.textColor = HexRGB(0xff7300);
-    }else if([item.verify_result isEqualToString:@"2"]){
-        cell.resultLabel.text = @"审核未通过";
-        cell.resultLabel.textColor = HexRGB(0x808080);
- 
-    }
-    
-    [cell.iconImageView setImageWithURL:[NSURL URLWithString:item.image] placeholderImage:[UIImage imageNamed:@"loading1.png"]];
-    
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,87, kWidth-20, 1)];
-    lineView.backgroundColor = HexRGB(0xd5d5d5);
-    [cell.contentView addSubview:lineView];
-
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    return cell;
+    return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 88;
+    if (indexPath.row<_dataArray.count) {
+        return 88;
+    }
+    return 40;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

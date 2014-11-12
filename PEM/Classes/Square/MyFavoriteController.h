@@ -14,7 +14,5 @@
 {
     MJRefreshHeaderView *MJHeadView;
     MJRefreshFooterView *MJFootView;
-    BOOL isRefresh;
-    BOOL isLoad;
 }
 @end

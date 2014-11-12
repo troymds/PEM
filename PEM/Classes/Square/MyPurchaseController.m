@@ -15,10 +15,15 @@
 #import "qiugouXQ.h"
 #import "RemindView.h"
 #import "DemandController.h"
+#import "LoadMoreCell.h"
 
 
-@interface MyPurchaseController ()
-
+@interface MyPurchaseController ()<UIScrollViewDelegate>
+{
+    BOOL needLoad;//是否需要加载
+    BOOL isLoading;//是否正在加载
+    BOOL isRefresh;//是否正在刷新
+}
 @end
 
 @implementation MyPurchaseController
@@ -39,9 +44,6 @@
     self.view.backgroundColor = HexRGB(0xffffff);
 
     // Do any additional setup after loading the view.
-    
-    isLoad = NO;
-    isRefresh = NO;
     
     longGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewLongGesture:)];
     [_tableView addGestureRecognizer:longGesture];
@@ -79,12 +81,7 @@
 - (void)addRefreshViews
 {
     //    _statusFrames = [NSMutableArray array];
-    
-    // 2.上拉加载更多
-    MJFootView = [MJRefreshFooterView footer];
-    MJFootView.scrollView = _tableView;
-    MJFootView.delegate = self;
-    
+        
     MJHeadView = [MJRefreshHeaderView header];
     MJHeadView.scrollView = _tableView;
     MJHeadView.delegate = self;
@@ -93,14 +90,21 @@
 #pragma mark 刷新代理方法
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
-        isLoad = YES;
-    }else{
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
         isRefresh = YES;
     }
     [self loadData];
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSIndexPath * indexpath=[NSIndexPath indexPathForRow:[_tableView numberOfRowsInSection:0]-1 inSection:0];
+    if ([[_tableView cellForRowAtIndexPath:indexpath] isKindOfClass:[LoadMoreCell class]]&&scrollView.contentSize.height-scrollView.contentOffset.y<=scrollView.frame.size.height+40) {
+        if (!isLoading) {
+            isLoading = YES;
+            [self loadData];
+        }
+    }
+}
 
 - (void)loadData{
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",@"time",@"sort",@"3",@"verify", nil];
@@ -108,14 +112,16 @@
     NSString *condition = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     condition = [condition stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"lastid",@"10",@"pagesize",condition,@"condition",@"time",@"sort", nil];
-    if (isLoad) {
+    if (isLoading) {
         if (_dataArray.count!=0) {
             NSString *lastid = [NSString stringWithFormat:@"%lu",(unsigned long)[_dataArray count]];
             [params setObject:lastid forKey:@"lastid"];
         }
     }
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"加载中...";
+    if (!(isLoading||isRefresh)) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view  animated:YES];
+        hud.labelText = @"加载中...";
+    }
     [HttpTool postWithPath:@"getDemandInfoList" params:params success:^(id JSON) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
@@ -127,9 +133,16 @@
                         [_dataArray removeAllObjects];
                     }
                 }
+                int count = 0;
                 for (NSDictionary *dic in [result objectForKey:@"response"]) {
                     MyPurchaseItem *item = [[MyPurchaseItem alloc] initWithDictionary:dic];
                     [_dataArray addObject:item];
+                    count++;
+                }
+                if (count < 10) {
+                    needLoad = NO;
+                }else{
+                    needLoad = YES;
                 }
                 [_tableView reloadData];
             }else{
@@ -143,12 +156,15 @@
                 isRefresh = NO;
                 [MJHeadView endRefreshing];
             }
-            if (isLoad) {
-                isLoad = NO;
-                [MJFootView endRefreshing];
+            if (isLoading) {
+                isLoading = NO;
             }
         }
     } failure:^(NSError *error) {
+        if (isRefresh) {
+            isRefresh = NO;
+            [MJHeadView endRefreshing];
+        }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSLog(@"%@",error);
     }];
@@ -165,31 +181,40 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *cellName = @"CellName";
-    PurchaseCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
-    if (!cell) {
-        cell = [[PurchaseCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
-    }
-    MyPurchaseItem *item = [_dataArray objectAtIndex:indexPath.row];
-    cell.nameLabel.text = item.name;
-    cell.visitLabel.text = [NSString stringWithFormat:@"查看%@次",item.read_num];
-    cell.timeLabel.text = item.date;
-    
-    if ([item.verify_result isEqualToString:@"0"]) {
-        cell.resultLabel.text = @"待审核";
-        cell.resultLabel.textColor = HexRGB(0xff7300);
-    }else if([item.verify_result isEqualToString:@"2"]){
-        cell.resultLabel.text = @"审核未通过";
-        cell.resultLabel.textColor = HexRGB(0x808080);
+    if (indexPath.row < _dataArray.count) {
+        static NSString *cellName = @"CellName";
+        PurchaseCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+        if (!cell) {
+            cell = [[PurchaseCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+        }
+        MyPurchaseItem *item = [_dataArray objectAtIndex:indexPath.row];
+        cell.nameLabel.text = item.name;
+        cell.visitLabel.text = [NSString stringWithFormat:@"查看%@次",item.read_num];
+        cell.timeLabel.text = item.date;
         
+        if ([item.verify_result isEqualToString:@"0"]) {
+            cell.resultLabel.text = @"待审核";
+            cell.resultLabel.textColor = HexRGB(0xff7300);
+        }else if([item.verify_result isEqualToString:@"2"]){
+            cell.resultLabel.text = @"审核未通过";
+            cell.resultLabel.textColor = HexRGB(0x808080);
+            
+        }
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,59, kWidth-20, 1)];
+        lineView.backgroundColor = HexRGB(0xd5d5d5);
+        [cell.contentView addSubview:lineView];
+        return cell;
+    }else{
+        static NSString *cellName = @"cellName";
+        LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+        if (cell == nil) {
+            cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+        }
+        return cell;
     }
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,59, kWidth-20, 1)];
-    lineView.backgroundColor = HexRGB(0xd5d5d5);
-    [cell.contentView addSubview:lineView];
-
-    return cell;
+    return nil;
 }
 
 
@@ -215,7 +240,10 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 60;
+    if (indexPath.row < _dataArray.count) {
+        return 60;
+    }
+    return 40;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath

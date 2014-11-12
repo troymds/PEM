@@ -17,9 +17,6 @@
     NSIndexPath *delIndex;
     MJRefreshHeaderView *MJHeadView;
     MJRefreshFooterView *MJFootView;
-    BOOL isRefresh;
-    BOOL isLoad;
-    
     UIView *remindView;
 
 }

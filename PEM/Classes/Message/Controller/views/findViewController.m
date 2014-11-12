@@ -20,6 +20,7 @@
 #import "hotOrderMoedl.h"
 #import "RemindView.h"
 #import "UIImageView+WebCache.h"
+#import "LoadMoreCell.h"
 
 @interface findViewController ()<MJRefreshBaseViewDelegate>
 {
@@ -32,6 +33,12 @@
     
     UIView *linBackView;
     UILabel *dataLabel;
+    BOOL needLoad;//是否需要加载
+    BOOL isLoading;//是否正在加载
+    BOOL isRefresh;//是否正在刷新
+    BOOL isSupply;//当前显示的是否是供应信息
+    BOOL isHot;//是否是按浏览量排序
+    NSMutableArray *_dataArray;
 
     
 }
@@ -59,7 +66,10 @@
             self.edgesForExtendedLayout = UIRectEdgeNone;
         }
     }
-        
+    //进来页面的默认显示内容和排序方式
+    isSupply = YES;
+    isHot = YES;
+    
     self.title =[NSString stringWithFormat:@"%@分类",_titleLabel];
 
     self.view.backgroundColor =[UIColor whiteColor];
@@ -70,6 +80,7 @@
 
     _CateSupplyArray =[[NSMutableArray alloc]init];
     _CateDemandArray =[[NSMutableArray alloc]init];
+    _dataArray = [[NSMutableArray alloc] init];
     [self addTableView];
     [self addShowNoDataView];
 
@@ -99,13 +110,15 @@
     [supplyTool CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         if (statues.count > 0) {
-            
+            if (statues.count==10) {
+                needLoad = YES;
+            }
             _tableView.hidden = NO;
             dataLabel.hidden = YES;
         }else if(statues.count==0){
             dataLabel.hidden = NO;
             _tableView.hidden = YES;
-            
+            needLoad = NO;
         }
         
         
@@ -132,25 +145,28 @@
     header.scrollView = _tableView;
     header.delegate = self;
 
-    // 2.上拉加载更多
-    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
-    footer.scrollView = _tableView;
-    footer.delegate = self;
+//    // 2.上拉加载更多
+//    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
+//    footer.scrollView = _tableView;
+//    footer.delegate = self;
 }
 
 #pragma mark 刷新代理方法
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-        // 下拉刷新
-    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
-        // 上拉加载更多
-        [self loadViewStatuses:refreshView];
-    } else {
-        // 下拉刷新
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
         [self loadViewDownStatuses:refreshView];
     }
-    
-    
+//        // 下拉刷新
+//    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
+//        // 上拉加载更多
+//        [self loadViewStatuses:refreshView];
+//    } else {
+//        // 下拉刷新
+//        [self loadViewDownStatuses:refreshView];
+//    }
+//    
+//    
 }
 
 
@@ -272,7 +288,7 @@
             [_tableView reloadData];
 
             [refreshView endRefreshing];
-
+            
             
             
         }cateId:cateIndex demandHot:@"time" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
@@ -287,26 +303,151 @@
     }
 }
 
--(void)loadViewStatuses:(MJRefreshBaseView *)refreshView{
-    
+-(void)loadViewStatuses{
+    //供应数据
+    if (isSupply) {
+        if (isHot) {
+            [_tableView reloadData];
+            [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+                if (statues.count > 0) {
+                    if (statues.count==10) {
+                        needLoad = YES;
+                    }
+                    dataLabel.hidden = YES;
+                    _tableView.hidden = NO;
+                    
+                }else
+                {if (statues.count==0){
+                    needLoad = NO;
+                    [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                }
+                }
+                if (isLoading) {
+                    isLoading = NO;
+                }
+                
+                [_CateSupplyArray addObjectsFromArray:statues];
+                [_tableView reloadData];
+                
+            }cateId:cateIndex supplyHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                
+            }];
+        }else{
+            [_tableView reloadData];
+            
+            [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+                if (statues.count > 0) {
+                    if (statues.count == 10) {
+                        needLoad = YES;
+                    }
+                    dataLabel.hidden = YES;
+                    _tableView.hidden = NO;
+                }else
+                {if (statues.count==0){
+                    needLoad = NO;
+                    
+                    [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                }
+                }
+                if (isLoading) {
+                    isLoading = NO;
+                }
+                
+                [_CateSupplyArray addObjectsFromArray:statues];
+                [_tableView reloadData];
+                
+            }cateId:cateIndex supplyHot:@"price" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }
+    //求购数据
+    }else{
+        if (isHot) {
+            [_tableView reloadData];
+            
+            [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+                if (statues.count > 0) {
+                    if (statues.count == 10) {
+                        needLoad = YES;
+                    }
+                    dataLabel.hidden = YES;
+                    _tableView.hidden = NO;
+                    
+                }else{
+                    if (statues.count==0){
+                        needLoad = NO;
+                        [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                    }
+                }
+                if (isLoading) {
+                    isLoading = NO;
+                }
+                [_CateDemandArray addObjectsFromArray:statues];
+                [_tableView reloadData];
+            }cateId:cateIndex demandHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }else{
+            [_tableView reloadData];
+            [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+                if (statues.count > 0) {
+                    if (statues.count == 10) {
+                        needLoad = YES;
+                    }
+                    dataLabel.hidden = YES;
+                    _tableView.hidden = NO;
+                    
+                }else{
+                    needLoad = NO;
+                }
+                if (isLoading) {
+                    isLoading = NO;
+                }
+                
+                [_CateDemandArray addObjectsFromArray:statues];
+                [_tableView reloadData];
+                
+                
+                
+            }cateId:cateIndex demandHot:@"time" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
+                
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                
+                
+            }];
+        }
+    }
 
+    
+    
+ /*
     if (_supplyBtnPice.tag==50) {
         [_tableView reloadData];
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
             if (statues.count > 0) {
                 dataLabel.hidden = YES;
                 _tableView.hidden = NO;
-
+                
             }else
             {if (statues.count==0){
                 
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
             }
             }
+            if (isLoading) {
+                isLoading = NO;
+            }
 
             [_CateSupplyArray addObjectsFromArray:statues];
             [_tableView reloadData];
-            [refreshView endRefreshing];
 
         }cateId:cateIndex supplyHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -314,7 +455,7 @@
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
         }];
-       }else{
+    }else{
         
         [_tableView reloadData];
         
@@ -329,13 +470,12 @@
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
             }
             }
-            
+            if (isLoading) {
+                isLoading = NO;
+            }
+
             [_CateSupplyArray addObjectsFromArray:statues];
             [_tableView reloadData];
-            [refreshView endRefreshing];
-
-            
-            
             
         }cateId:cateIndex supplyHot:@"price" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -361,11 +501,13 @@
                 [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
             }
             }
-            
+            if (isLoading) {
+                isLoading = NO;
+            }
+
             [_CateDemandArray addObjectsFromArray:statues];
             
             [_tableView reloadData];
-            [refreshView endRefreshing];
             
             
             
@@ -387,10 +529,12 @@
                 _tableView.hidden = NO;
 
             }
-            
+            if (isLoading) {
+                isLoading = NO;
+            }
+
             [_CateDemandArray addObjectsFromArray:statues];
             [_tableView reloadData];
-            [refreshView endRefreshing];
 
             
             
@@ -402,7 +546,7 @@
 
             
         }];
-     }
+     }*/
 }
 
 -(void)addLeftSegment
@@ -643,13 +787,9 @@
         [leftBackView removeFromSuperview];
         [rightBackViw removeFromSuperview];
         [rightBackViewDemand removeFromSuperview];
-
-
     }
-    
-    
-
 }
+
 -(void)rightXuanka:(UIButton *)rightBtn{
     rightBtn.selected = !rightBtn.selected;
     if (rightBtn.selected ==NO) {
@@ -677,8 +817,6 @@
         [self addBigButton];
         [self rightSegmentDemand];
 
-       
-
     }else{
         [rightBackViewDemand removeFromSuperview];
         [bigbutton removeFromSuperview];
@@ -687,12 +825,19 @@
 
 }
 -(void)leftSegmentBtnClick:(UIButton *)sender{
-    
-
+    needLoad = NO;
+    isLoading = NO;
+    isHot = YES;
     if (sender.tag ==11) {
+        isSupply = NO;
         [self addMBprogressView];
 
         [demandTool DemandStatusesWithSuccess:^(NSArray *statues) {
+            if (statues.count < 10) {
+                needLoad = NO;
+            }else{
+                needLoad = YES;
+            }
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
             
@@ -728,6 +873,7 @@
         
         
     }else{
+        isSupply = YES;
         [self addMBprogressView];
         [self loadSupplyDataResoult];
 
@@ -754,14 +900,18 @@
     [leftBackView removeFromSuperview];
     NSString *currentTitle = sender.currentTitle;
     [_leftBtn setTitle:currentTitle forState:UIControlStateNormal];
-    
-   
-    
-    
 }
 
 -(void)rightSegmentBtnClick:(UIButton *)sender
 {
+    needLoad = NO;
+    isLoading = NO;
+    //判断排序方式
+    if (sender.tag == 50) {
+        isHot = YES;
+    }else{
+        isHot = NO;
+    }
     [self addMBprogressView];
     _supplyBtnPice.tag = sender.tag;
 
@@ -789,6 +939,11 @@
         [_CateSupplyArray removeAllObjects];
         [_tableView reloadData];
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+            if (statues.count < 10) {
+                needLoad = NO;
+            }else{
+                needLoad = YES;
+            }
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
             [_CateSupplyArray addObjectsFromArray:statues];
@@ -807,6 +962,11 @@
         [_tableView reloadData];
 
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+            if (statues.count < 10) {
+                needLoad = NO;
+            }else{
+                needLoad = YES;
+            }
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
                 [_CateSupplyArray addObjectsFromArray:statues];
@@ -821,18 +981,20 @@
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
 
         }];
-        
-
-
     }
-    
 }
 
 -(void)rightSegmentDemandBtnClick:(UIButton *)demand{
+    needLoad = NO;
+    isLoading = NO;
     _demandBtnTimer.tag = demand.tag;
     
     [self addMBprogressView];
-
+    if (demand.tag == 60) {
+        isHot = YES;
+    }else{
+        isHot = NO;
+    }
     demand.selected =!demand.selected;
     if (demand.selected==YES) {
         _rightBtnDemand.selected = YES;
@@ -854,6 +1016,11 @@
         [_tableView reloadData];
 
             [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+                if (statues.count <10) {
+                    needLoad = NO;
+                }else{
+                    needLoad = YES;
+                }
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
                 [_CateDemandArray addObjectsFromArray:statues];
@@ -876,6 +1043,11 @@
         [_tableView reloadData];
 
         [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+            if (statues.count < 10) {
+                needLoad = NO;
+            }else{
+                needLoad = YES;
+            }
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
                 [_CateDemandArray addObjectsFromArray:statues];
@@ -923,10 +1095,10 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (_selectedFind.tag ==11) {
-        return _CateDemandArray.count;
+        return needLoad? _CateDemandArray.count+1:_CateDemandArray.count;
         
     }else{
-        return _CateSupplyArray.count;
+        return needLoad? _CateSupplyArray.count+1:_CateSupplyArray.count;
     }
     return 0;
 }
@@ -935,79 +1107,123 @@
 {
     
     if (_selectedFind.tag ==11) {
-        static NSString *cellIndexfider =@"cell";
-        findDemandCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
-        if (!cell) {
-            cell =[[findDemandCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
-        }
-        if (_CateDemandArray.count>0) {
-
-            yyDemandModel *d =_CateDemandArray [indexPath.row];
-            cell.dateLabel.text =d.demandDate;
-            cell.demand_numLabel.text =[NSString stringWithFormat:@"求购数量:%@",d.buy_num];
-            cell.nameLabel.text =d.name;
-            cell.contentLabel.text = d.Introduction;
-            cell.read_numLabel.text = [NSString stringWithFormat:@"浏览%@次",d.read_num];
-            dataLabel.hidden = YES;
-            _tableView.hidden = NO;
-        }else{
-            dataLabel.hidden = NO;
-            _tableView.hidden = YES;
+        if (indexPath.row<_CateDemandArray.count) {
+            static NSString *cellIndexfider =@"cell";
+            findDemandCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
+            if (!cell) {
+                cell =[[findDemandCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+            }
+            if (_CateDemandArray.count>0) {
+                
+                yyDemandModel *d =_CateDemandArray [indexPath.row];
+                cell.dateLabel.text =d.demandDate;
+                cell.demand_numLabel.text =[NSString stringWithFormat:@"求购数量:%@",d.buy_num];
+                cell.nameLabel.text =d.name;
+                cell.contentLabel.text = d.Introduction;
+                cell.read_numLabel.text = [NSString stringWithFormat:@"浏览%@次",d.read_num];
+                dataLabel.hidden = YES;
+                _tableView.hidden = NO;
+            }else{
+                dataLabel.hidden = NO;
+                _tableView.hidden = YES;
+                
+            }
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,71, kWidth-20, 1)];
+            lineView.backgroundColor = HexRGB(0xd5d5d5);
+            [cell.contentView addSubview:lineView];
             
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
+        }else{
+            static NSString *cellName = @"cellName";
+            LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+            if (cell == nil) {
+                cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+            }
+            [cell.activityView startAnimating];
+            return cell;
         }
-        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,71, kWidth-20, 1)];
-        lineView.backgroundColor = HexRGB(0xd5d5d5);
-        [cell.contentView addSubview:lineView];
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-              return cell;
 
     }else{
-        
-        static NSString *cellIndexfider =@"cell1";
-        findSupplyCel *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
-        if (!cell) {
-            cell =[[findSupplyCel alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
-        }
-        
-
-        if (_CateSupplyArray.count>0) {
-
-        yySupplyModel *s =_CateSupplyArray [indexPath.row];
-
-        cell.companyLabel.text =s.company;
-        cell.nameLabel.text =s.name;
-        cell.read_numLabel.text =[NSString stringWithFormat:@"浏览%@次",s.read_num];
-        [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
-        cell.supply_numLabel.text =[NSString stringWithFormat:@"%@起批",s.min_supply_num];
-            if ([s.price isEqualToString:@"0"]) {
-                cell.priceLabel.text=@"电议";
-            }else{
-                cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
-
+        if (indexPath.row<_CateSupplyArray.count) {
+            static NSString *cellIndexfider =@"cell1";
+            findSupplyCel *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
+            if (!cell) {
+                cell =[[findSupplyCel alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
             }
-            dataLabel.hidden = YES;
-            _tableView.hidden = NO;
-        }else {
-            dataLabel.hidden = NO;
-            _tableView.hidden = YES;
+            
+            
+            if (_CateSupplyArray.count>0) {
+                
+                yySupplyModel *s =_CateSupplyArray [indexPath.row];
+                
+                cell.companyLabel.text =s.company;
+                cell.nameLabel.text =s.name;
+                cell.read_numLabel.text =[NSString stringWithFormat:@"浏览%@次",s.read_num];
+                [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
+                cell.supply_numLabel.text =[NSString stringWithFormat:@"%@起批",s.min_supply_num];
+                if ([s.price isEqualToString:@"0"]) {
+                    cell.priceLabel.text=@"电议";
+                }else{
+                    cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
+                    
+                }
+                dataLabel.hidden = YES;
+                _tableView.hidden = NO;
+            }else {
+                dataLabel.hidden = NO;
+                _tableView.hidden = YES;
+            }
+            
+            
+            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,71, kWidth-20, 1)];
+            lineView.backgroundColor = HexRGB(0xd5d5d5);
+            [cell.contentView addSubview:lineView];
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            return cell;
+        }else{
+            static NSString *cellName = @"cellName";
+            LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+            if (cell == nil) {
+                cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+            }
+            [cell.activityView startAnimating];
+            return cell;
         }
-        
-        
-        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,71, kWidth-20, 1)];
-        lineView.backgroundColor = HexRGB(0xd5d5d5);
-        [cell.contentView addSubview:lineView];
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-      return cell;
         
     }
+    return nil;
    
-   }
+}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 72 ;
+    if (isSupply) {
+        if (indexPath.row<_CateSupplyArray.count) {
+            return 72;
+        }
+    }else{
+        if (indexPath.row < _CateDemandArray.count) {
+            return 72;
+        }
+    }
+     return 40;
 }
+
+
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    NSIndexPath * indexpath=[NSIndexPath indexPathForRow:[_tableView numberOfRowsInSection:0]-1 inSection:0];
+    if ([[_tableView cellForRowAtIndexPath:indexpath] isKindOfClass:[LoadMoreCell class]]&&scrollView.contentSize.height-scrollView.contentOffset.y<=scrollView.frame.size.height+40) {
+        if (!isLoading) {
+            isLoading = YES;
+            [self loadViewStatuses];
+        }
+    }
+}
+
 
 @end
