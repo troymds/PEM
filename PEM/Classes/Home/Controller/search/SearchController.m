@@ -28,11 +28,16 @@
 #import "RemindView.h"
 #import "SearchCompanyModel.h"
 #import "SearchDenamdModel.h"
+#import "LoadMoreCell.h"
 
 
 #import "hotSearchTool.h"
 #import "YYSearchButton.h"
 #import <QuartzCore/QuartzCore.h>
+
+#define RecTableView 255
+#define ResultTableView 256
+
 @interface SearchController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UIImageView *_searchImage ;
@@ -61,6 +66,9 @@
     NSString *_currentKeyString;
     
     UIScrollView *_backScrollview;
+    
+    BOOL needLoad;//是否需要加载
+    BOOL isLoading;//是否正在加载
 }
 
 @property (nonatomic,retain) NSMutableArray *searchSupplyArray;
@@ -84,13 +92,13 @@
     _searchSupplyArray = [[NSMutableArray alloc] initWithCapacity:0];
     _searchComanyArray = [[NSMutableArray alloc] initWithCapacity:0];
     _searchDemandArray = [[NSMutableArray alloc] initWithCapacity:0];
-
-
+    
+    
     _hotSearchCompanyArray = [[NSMutableArray alloc] initWithCapacity:0];// 热门搜索
     _hotSearchDemandArray = [[NSMutableArray alloc] initWithCapacity:0];
     _hotSearchSupplyArray = [[NSMutableArray alloc] initWithCapacity:0];
-
-
+    
+    
     _selectXuanka =[[UIButton alloc]init];
     _selectedBtnImage=[[UIButton alloc]init];
     
@@ -111,27 +119,27 @@
     [self addShowNoDataView];
     [self loadHotSearchStatuses];
     
-   
     
-
+    
+    
 }
- // 热门搜索
+// 热门搜索
 #pragma mark ---加载热门搜索数据
 -(void)loadHotSearchStatuses{
     [hotSearchTool statusesWithSuccess:^(NSArray *statues) {
-       
+        
         NSDictionary *dict = [statues objectAtIndex:0];
         _hotSearchCompanyArray = [dict objectForKey:@"company"];
         _hotSearchDemandArray = [dict objectForKey:@"demand"];
         _hotSearchSupplyArray = [dict objectForKey:@"supply"];
-
-       
-
+        
+        
+        
         [self addHotSearchView];
     } failure:^(NSError *error) {
         
     }];
-
+    
 }
 -(void)addHotSearchView{
     UIImage *hotImge =[UIImage imageNamed:@"home_hot.png"];
@@ -149,7 +157,7 @@
     UIView *demandView;
     UIView *supplyView;
     UIView *companyView;
-
+    
     if (currentSelectedBtnTag ==202) {
         [supplyView removeFromSuperview];
         [demandView removeFromSuperview];
@@ -171,40 +179,40 @@
             [demandView addSubview:hotSearchDemandBtn];
             [hotSearchDemandBtn addTarget:self action:@selector(hotSearchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
             hotSearchDemandBtn.tag = i+70;
-          }
+        }
     }else if (currentSelectedBtnTag ==201){
         
-       
+        
         [supplyView removeFromSuperview];
         [demandView removeFromSuperview];
         [companyView removeFromSuperview];
-                companyView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, 150)];
+        companyView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, 150)];
         companyView.backgroundColor =[UIColor whiteColor];
         [_backScrollview addSubview:companyView];
         for (int i=0; i<_hotSearchDemandArray.count; i++) {
-       hotSearchDemandBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
-        NSString *demandStr =[_hotSearchDemandArray objectAtIndex:i];
-        [hotSearchDemandBtn setTitle:demandStr forState:UIControlStateNormal];
-        hotSearchDemandBtn.frame =CGRectMake(13+i%4*(kWidth/4-5),8+ i/4*40, 68, 30);
-        [hotSearchDemandBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
-        hotSearchDemandBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
-        
-        [hotSearchDemandBtn setBackgroundImage:[UIImage imageNamed:@"dibuhengtiao.png"] forState:UIControlStateHighlighted];
-        [companyView addSubview:hotSearchDemandBtn];
-        [hotSearchDemandBtn addTarget:self action:@selector(hotSearchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        hotSearchDemandBtn.tag = i+90;
-       }
+            hotSearchDemandBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
+            NSString *demandStr =[_hotSearchDemandArray objectAtIndex:i];
+            [hotSearchDemandBtn setTitle:demandStr forState:UIControlStateNormal];
+            hotSearchDemandBtn.frame =CGRectMake(13+i%4*(kWidth/4-5),8+ i/4*40, 68, 30);
+            [hotSearchDemandBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
+            hotSearchDemandBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+            
+            [hotSearchDemandBtn setBackgroundImage:[UIImage imageNamed:@"dibuhengtiao.png"] forState:UIControlStateHighlighted];
+            [companyView addSubview:hotSearchDemandBtn];
+            [hotSearchDemandBtn addTarget:self action:@selector(hotSearchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            hotSearchDemandBtn.tag = i+90;
+        }
     }else{
         [supplyView removeFromSuperview];
         [demandView removeFromSuperview];
         [companyView removeFromSuperview];
-      
+        
         supplyView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, 150)];
         supplyView.backgroundColor =[UIColor whiteColor];
         [_backScrollview addSubview:supplyView];
         
-
-
+        
+        
         for (int i=0; i<_hotSearchSupplyArray.count; i++) {
             hotSearchDemandBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
             NSString *demandStr =[_hotSearchSupplyArray objectAtIndex:i];
@@ -222,18 +230,18 @@
 }
 -(void)hotSearchBtnClick:(UIButton *)sender{
     
-//    [_demandArray removeAllObjects];
-//    [_supllyArray removeAllObjects];
-//    [_compangyArray removeAllObjects];
-
+    //    [_demandArray removeAllObjects];
+    //    [_supllyArray removeAllObjects];
+    //    [_compangyArray removeAllObjects];
+    
     [_resultTableView reloadData];
     
     [_recTableView reloadData];
-
+    
     _currentKeyString = sender.titleLabel.text;
-
+    
     [self searchToGo];
-
+    
     
 }
 
@@ -293,7 +301,7 @@
         
     }
     
-
+    
 }
 
 - (void)addShowNoRecordView
@@ -347,33 +355,23 @@
 
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
-{   
+{
     // 1.下拉刷新
     MJRefreshHeaderView *header = [MJRefreshHeaderView header];
     header.scrollView = _resultTableView;
     header.delegate = self;
     //[header beginRefreshing];
-    
-    // 2.上拉加载更多
-    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
-    footer.scrollView = _resultTableView;
-    footer.delegate = self;
 }
 
 #pragma mark 刷新代理方法
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-
-    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
-        // 上拉加载更多
-        [self loadUpViewStatuses:refreshView];
-    } else {
-        // 下拉刷新
+    if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
         [self loadViewStatuses:refreshView];
     }
 }
 -(void)loadViewStatuses:(MJRefreshBaseView *)refreshView{
-
+    
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     
@@ -387,11 +385,11 @@
         else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
-           
+            
         }else
         {
             [self supplyRequest];
-           
+            
             
         }
     }
@@ -430,22 +428,26 @@
 {
     if (_currentKeyString.length>0)
     {
-        
-        
         [SearchTool searchWithSupplySuccessBlock:^(NSArray *search) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
             if (search.count<=0)
             {
-                
+                needLoad = NO;
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
             {
-                
+                if (search.count == 10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
                 _resultTableView.hidden = NO;
                 noDataBgView.hidden = YES;
                 [_supllyArray addObjectsFromArray:search];
+            }
+            if (isLoading) {
+                isLoading = NO;
             }
             [self tableReloadData];
             
@@ -461,13 +463,22 @@
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count<=0)
             {
+                needLoad = NO;
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
             {
+                if (statues.count == 10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
                 _resultTableView.hidden = NO;
                 noDataBgView.hidden = YES;
                 [_supllyArray addObjectsFromArray:statues];
+            }
+            if (isLoading) {
+                isLoading = NO;
             }
             [self tableReloadData];
             
@@ -494,21 +505,28 @@
             
             if (search.count<=0)
             {
+                needLoad = NO;
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
             {
+                if (search.count == 10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
                 [_demandArray addObjectsFromArray:search];
+            }
+            if (isLoading) {
+                isLoading = NO;
             }
             [self tableReloadData];
             
         } DemandwithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%d",[_demandArray count]-0] DemandfailureBlock:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            
-            
         }];
         
     }else
@@ -518,15 +536,23 @@
             
             if (statues.count<=0)
             {
+                needLoad = NO;
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
             {
+                if (statues.count == 10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
                 [_demandArray addObjectsFromArray:statues];
             }
-            
+            if (isLoading) {
+                isLoading = NO;
+            }
             [self tableReloadData];
         } lastID:0? 0:[NSString stringWithFormat:@"%u",[_demandArray count]-0] failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -552,16 +578,24 @@
              
              if (search.count<=0)
              {
+                 needLoad = NO;
                  noDataBgView.hidden = NO;
                  _resultTableView.hidden = YES;
              }else
              {
+                 if (search.count ==10) {
+                     needLoad = YES;
+                 }else{
+                     needLoad = NO;
+                 }
                  noDataBgView.hidden = YES;
                  _resultTableView.hidden = NO;
                  
              }
              [_compangyArray addObjectsFromArray:search];
-
+             if (isLoading) {
+                 isLoading = NO;
+             }
              [self tableReloadData];
              
          } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0]
@@ -580,15 +614,23 @@
             
             if (statues.count<=0)
             {
+                needLoad = NO;
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
             {
+                if (statues.count ==10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
                 [_compangyArray addObjectsFromArray:statues];
             }
-            
+            if (isLoading) {
+                isLoading = NO;
+            }
             [self tableReloadData];
             
         } lasiID:0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0] failure:^(NSError *error) {
@@ -607,32 +649,36 @@
 {
     if (_currentKeyString.length>0)
     {
-
+        
         
         [SearchTool searchWithSupplySuccessBlock:^(NSArray *search) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+            
             if (search.count<=0)
             {
-                
+                needLoad = NO;
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
             {
-
+                if (search.count == 10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
                 _resultTableView.hidden = NO;
                 noDataBgView.hidden = YES;
                 [_supllyArray removeAllObjects];
                 [_supllyArray addObjectsFromArray:search];
             }
-           
-
+            
+            
             [self tableReloadData];
-           
+            
         } SupplywithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0]  SupplyfailureBlock:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
-             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            
+            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         }];
         
     }else
@@ -641,23 +687,29 @@
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if (statues.count<=0)
             {
+                needLoad = NO;
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
             {
+                if (statues.count == 10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
                 _resultTableView.hidden = NO;
                 noDataBgView.hidden = YES;
                 [_supllyArray removeAllObjects];
                 [_supllyArray addObjectsFromArray:statues];
             }
-          
-
+            
+            
             [self tableReloadData];
             
         } lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0] failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
+            
             
         }];
         
@@ -668,24 +720,28 @@
 }
 - (void)demandRequest
 {
-
-    
     if (_searchTextField.text.length>0)
     {
         [SearchTool searchWithDemandSuccessBlock:^(NSArray *search) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+            
             if (search.count<=0)
             {
-                noDataBgView.hidden = NO;
+                needLoad = NO;
+                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
             }else
             {
+                if (search.count == 10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
                 [_demandArray removeAllObjects];
                 [_demandArray addObjectsFromArray:search];
-
+                
             }
             
             [self tableReloadData];
@@ -693,7 +749,7 @@
         } DemandwithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%d",[_demandArray count]-0] DemandfailureBlock:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
+            
             
         }];
         
@@ -701,7 +757,7 @@
     {
         [demandTool statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+            
             if (statues.count<=0)
             {
                 noDataBgView.hidden = NO;
@@ -712,15 +768,15 @@
                 _resultTableView.hidden = NO;
                 [_demandArray removeAllObjects];
                 [_demandArray addObjectsFromArray:statues];
-
+                
             }
-           
+            
             [self tableReloadData];
         } lastID:0? 0:[NSString stringWithFormat:@"%u",[_demandArray count]-0] failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+            
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
+            
         }];
         
     }
@@ -728,69 +784,64 @@
 }
 - (void)companyRequest
 {
-    
-    
-    if (_currentKeyString.length > 0)
-    {
+    if (_currentKeyString.length > 0){
         
-        [SearchTool searchWithSuccessBlock:^(NSArray *search)
-        {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
-            
-            if (search.count<=0)
-            {
-                noDataBgView.hidden = NO;
-                _resultTableView.hidden = YES;
-            }else
-            {
-                noDataBgView.hidden = YES;
-                _resultTableView.hidden = NO;
-                [_compangyArray removeAllObjects];
-                [_compangyArray addObjectsFromArray:search];
-            }
-           
-
-            [self tableReloadData];
-
-        } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0]
+        [SearchTool searchWithSuccessBlock:^(NSArray *search){
+             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+             
+             if (search.count<=0)
+             {
+                 needLoad = NO;
+                 noDataBgView.hidden = NO;
+                 _resultTableView.hidden = YES;
+             }else{
+                 if (search.count == 10) {
+                     needLoad = YES;
+                 }else{
+                     needLoad = NO;
+                 }
+                 noDataBgView.hidden = YES;
+                 _resultTableView.hidden = NO;
+                 [_compangyArray removeAllObjects];
+                 [_compangyArray addObjectsFromArray:search];
+             }
+             
+             [self tableReloadData];
+             
+         } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0]
                               failureBlock:^(NSError *error) {
                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                                   
                                   [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
                                   
-                              }];
-    }
-    else
-    {
+                                  
+        }];
+    }else{
         [companyTool statusesWithSuccess:^(NSArray *statues) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
-            if (statues.count<=0)
-            {
+            
+            if (statues.count<=0){
                 noDataBgView.hidden = NO;
                 _resultTableView.hidden = YES;
-            }else
-            {
+            }else{
+                if (statues.count == 10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
                 noDataBgView.hidden = YES;
                 _resultTableView.hidden = NO;
                 [_compangyArray removeAllObjects];
                 [_compangyArray addObjectsFromArray:statues];
             }
-            
-
             [self tableReloadData];
             
         } lasiID:0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0] failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            
-
         }];
     }
- 
 }
 
 
@@ -798,7 +849,6 @@
 {
     [_refreshView endRefreshing];
     [_resultTableView reloadData];
-    
 }
 
 
@@ -811,7 +861,7 @@
     _resultTableView.delegate = self;
     _resultTableView.dataSource = self;
     _resultTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-
+    _resultTableView.tag = ResultTableView;
     [_resultBgView addSubview:_resultTableView];
 }
 
@@ -847,7 +897,7 @@
     _searchTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
     
-   
+    
     //    放大镜
     _searBtn =[UIButton buttonWithType:UIButtonTypeCustom];
     
@@ -918,7 +968,7 @@
     NSArray *sea =@[@"供应",@"求购",@"企业"];
     for (int segBtn=0; segBtn<3; segBtn++)
     {
-       
+        
         UIButton * sear =[UIButton buttonWithType:UIButtonTypeCustom];
         [kuangImage addSubview:sear];
         [sear setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -952,6 +1002,7 @@
     _recTableView.delegate =self;
     _recTableView.dataSource =self;
     _recTableView.bounces = NO;
+    _recTableView.tag = RecTableView;
     [_backScrollview addSubview:_recTableView];
     _backViw.backgroundColor =[UIColor redColor];
     
@@ -962,7 +1013,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // --- 》对应3个数组
-
+    
     if (self.view == _bgView)
     {
         [_demandArray removeAllObjects];
@@ -971,8 +1022,8 @@
         
         [_resultTableView reloadData];
         [_recTableView reloadData];
-
-
+        
+        
         if (currentSelectedBtnTag == 202)
         {
             if (_searchComanyArray.count > 0)
@@ -989,8 +1040,8 @@
                     }
                 }
                 [_searchComanyArray insertObject:searchResult atIndex:0];
-
-
+                
+                
             }
         }
         else if (currentSelectedBtnTag == 201)
@@ -1032,9 +1083,9 @@
             }
         }
         
-             [self searchToGo];
-
-
+        [self searchToGo];
+        
+        
     }
     
     else
@@ -1068,7 +1119,7 @@
     }
     
     
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -1103,15 +1154,15 @@
     {
         if (currentSelectedBtnTag==200)
         {
-            return [_supllyArray count];
+            return needLoad? [_supllyArray count]+1:_supllyArray.count;
             
         }
         if (currentSelectedBtnTag ==201)
         {
-            return [_demandArray count];
+            return needLoad? [_demandArray count]+1:_demandArray.count;
         }else if (currentSelectedBtnTag ==202)
         {
-            return [_compangyArray count];
+            return needLoad? [_compangyArray count]+1:_compangyArray.count;
         }
     }
     
@@ -1135,9 +1186,22 @@
         return 44;
     }else if(_searBtn.selected){
         if(currentSelectedBtnTag == 202){
-            return 80;
-        }else{
-            return 86;
+            if (indexPath.row < _compangyArray.count) {
+                return 80;
+            }else{
+                return 40;
+            }
+        }else if (currentSelectedBtnTag == 201){
+            if (indexPath.row< _demandArray.count) {
+                return 86;
+            }else{
+                return 40;
+            }
+        }else {
+            if (indexPath.row < _supllyArray.count) {
+                return 86;
+            }
+            return 40;
         }
     }
     return 90;
@@ -1146,16 +1210,14 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.view == _bgView)
-    {
+    static NSString *cellName = @"cellName";
+    if (self.view == _bgView){
         static NSString *cellID = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-        if (cell == nil)
-        {
+        if (cell == nil){
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         }
-        if (indexPath.row == 0)
-        {
+        if (indexPath.row == 0){
             history =[UIButton buttonWithType:UIButtonTypeCustom];
             history.frame = CGRectMake(0, 0, kWidth, 44);
             [history setTitleColor:HexRGB(0x3a3a3a) forState:UIControlStateNormal];
@@ -1167,228 +1229,223 @@
             history.tag = 10000;
             [cell addSubview:history];
             
-
-            for (UIView *view in [cell subviews])
-            {
+            
+            for (UIView *view in [cell subviews]){
                 
-                if (![view viewWithTag:10000])
-                {
+                if (![view viewWithTag:10000]){
+                    
                     [view removeFromSuperview];
                 }
             }
-            
-            
         }
-        else if(indexPath.row > 0)
-        {
-           
-            if (currentSelectedBtnTag ==202)
-            {
-                if (_searchComanyArray.count>0)
-                {
+        else if(indexPath.row > 0){
+            
+            if (currentSelectedBtnTag ==202){
+                if (_searchComanyArray.count>0){
                     history.hidden = NO;
                     SearchCompanyModel *resultModel =  [_searchComanyArray objectAtIndex:indexPath.row-1];
                     cell.textLabel.text = resultModel.searchKeyword;
                     cell.textLabel.textColor = HexRGB(0x666666);
-
-                }
-                else{
+                }else{
                     history.hidden =YES;
                 }
-            }else if (currentSelectedBtnTag ==201)
-            {
-                if (_searchDemandArray.count>0)
-                {
+            }else if (currentSelectedBtnTag ==201){
+                if (_searchDemandArray.count>0){
                     history.hidden = NO;
                     SearchDenamdModel *resultModel =  [_searchDemandArray objectAtIndex:indexPath.row-1];
                     cell.textLabel.text = resultModel.searchKeyword;
                     cell.textLabel.textColor = HexRGB(0x666666);
-                }
-                else{
+                }else{
                     history.hidden =YES;
                 }
-            }else
-            {
-                if (_searchSupplyArray.count>0)
-                {
+            }else{
+                if (_searchSupplyArray.count>0){
                     history.hidden = NO;
                     SearchResultModel *resultModel =  [_searchSupplyArray objectAtIndex:indexPath.row-1];
                     cell.textLabel.text = resultModel.searchKeyword;
                     cell.textLabel.textColor = HexRGB(0x666666);
-
-                }
-                else{
+                    
+                }else{
                     history.hidden =YES;
                 }
-
             }
-            
         }
         return cell;
+    }else{
         
-    }else
-    {
-        
-        if (currentSelectedBtnTag ==202 )
-        {
-            static NSString *cellIndexfider =@"Cell3";
-            companyTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
-            if (!cell) {
-                cell =[[companyTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
-            }
-            if (_compangyArray.count>0)
-            {
-                yyCompanyModel *c=_compangyArray [indexPath.row];
-                cell.nameLabel.text =c.name;
-                cell.regionLabel.text = c.region;
-                [cell.imageCompany setImageWithURL:[NSURL URLWithString:c.image] placeholderImage:[UIImage imageNamed:@"loading.png"]];
-                cell.businessLabel.text =c.business;
-                
-                CGFloat nameCompanyw =[c.name sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(195, 50)].width;
-                cell.vipType.frame = CGRectMake(80+nameCompanyw, 11, 13, 18);
-                
-                switch ([c.rank intValue]) {
-                    case -1:
-                    {
-                        cell.vipType.image = [UIImage imageNamed:@"Vip6.png"];
-                    }
-                        break;
-                    case 0:
-                    {
-                        cell.vipType.image = [UIImage imageNamed:@"Vip5.png"];
-                    }
-                        break;
-                    case 1:
-                    {
-                        cell.vipType.image = [UIImage imageNamed:@"Vip4.png"];
-                    }
-                        break;
-                    case 2:
-                    {
-                        cell.vipType.image = [UIImage imageNamed:@"Vip3.png"];
-                        
-                    }
-                        break;
-                    case 3:
-                    {
-                        cell.vipType.image = [UIImage imageNamed:@"Vip2.png"];
-                        
-                    }
-                        break;
-                    case 4:
-                    {
-                        cell.vipType.image = [UIImage imageNamed:@"Vip1.png"];
-                        
-                    }
-                        break;
-                        
-                    default:
-                        break;
+        if (currentSelectedBtnTag ==202 ){
+            if (indexPath.row<_compangyArray.count) {
+                static NSString *cellIndexfider =@"Cell3";
+                companyTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
+                if (!cell) {
+                    cell =[[companyTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
                 }
-
-                noDataBgView.hidden = YES;
-                _resultTableView.hidden = NO;
-            }else
-            {
-                noDataBgView.hidden = NO;
-                _resultTableView.hidden = YES;
-
-            }
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,79, kWidth-20, 1)];
-            lineView.backgroundColor = HexRGB(0xd5d5d5);
-            [cell.contentView addSubview:lineView];
-            
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-            return cell;
-            
-        }
-        else if(currentSelectedBtnTag == 201)
-        {
-            static NSString *cellIndexfider =@"Cell2";
-            demandTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
-            if (!cell) {
-                cell =[[demandTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
-            }
-            if (_demandArray.count>0)
-            {
-                yyDemandModel *d =_demandArray [indexPath.row];
-                cell.dateLabel.text =d.demandDate;
-                cell.IntroductionLabel.text =d.Introduction;
-                cell.nameLabel.text =d.name;
-                cell.read_numLabel.text = [NSString stringWithFormat:@"浏览%@次",d.read_num];
-                noDataBgView.hidden = YES;
-                _resultTableView.hidden = NO;
-
-            }else
-            {
-
-                noDataBgView.hidden = NO;
-                _resultTableView.hidden = YES;
-
-            }
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,85, kWidth-20, 1)];
-            lineView.backgroundColor = HexRGB(0xd5d5d5);
-            [cell.contentView addSubview:lineView];
-            
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-            return cell;
-            
-        }else
-        {
-            static NSString *cellIndexfider =@"Cell1";
-            
-            supplyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndexfider];
-            
-            if (cell == nil) {
-                cell = [[supplyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
-            }
-            
-            if (_supllyArray.count>0)
-            {
-                yySupplyModel *s =_supllyArray [indexPath.row];
-                
-                cell.companyLabel.text =s.company;
-                cell.nameLabel.text =s.name;
-                cell.read_numLabel.text =[NSString stringWithFormat:@"浏览%@次",s.read_num];
-                [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
-                cell.supply_numLabel.text =[NSString stringWithFormat:@"%@件起批",s.min_supply_num];
-                
-                
-                if ([s.price isEqualToString:@"0"]) {
-                    cell.priceLabel.text=@"电议";
+                if (_compangyArray.count>0){
+                    yyCompanyModel *c=_compangyArray [indexPath.row];
+                    cell.nameLabel.text =c.name;
+                    cell.regionLabel.text = c.region;
+                    [cell.imageCompany setImageWithURL:[NSURL URLWithString:c.image] placeholderImage:[UIImage imageNamed:@"loading.png"]];
+                    cell.businessLabel.text =c.business;
+                    
+                    CGFloat nameCompanyw =[c.name sizeWithFont:[UIFont systemFontOfSize:PxFont(18)] constrainedToSize:CGSizeMake(195, 50)].width;
+                    cell.vipType.frame = CGRectMake(80+nameCompanyw, 11, 13, 18);
+                    
+                    switch ([c.rank intValue]) {
+                        case -1:
+                        {
+                            cell.vipType.image = [UIImage imageNamed:@"Vip6.png"];
+                        }
+                            break;
+                        case 0:
+                        {
+                            cell.vipType.image = [UIImage imageNamed:@"Vip5.png"];
+                        }
+                            break;
+                        case 1:
+                        {
+                            cell.vipType.image = [UIImage imageNamed:@"Vip4.png"];
+                        }
+                            break;
+                        case 2:
+                        {
+                            cell.vipType.image = [UIImage imageNamed:@"Vip3.png"];
+                            
+                        }
+                            break;
+                        case 3:
+                        {
+                            cell.vipType.image = [UIImage imageNamed:@"Vip2.png"];
+                            
+                        }
+                            break;
+                        case 4:
+                        {
+                            cell.vipType.image = [UIImage imageNamed:@"Vip1.png"];
+                            
+                        }
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                    
+                    noDataBgView.hidden = YES;
+                    _resultTableView.hidden = NO;
                 }else{
-                    cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
+                    noDataBgView.hidden = NO;
+                    _resultTableView.hidden = YES;
                     
                 }
-                noDataBgView.hidden = YES;
-                _resultTableView.hidden = NO;
-
-
-            }else
-            {
-                noDataBgView.hidden = NO;
-                _resultTableView.hidden = YES;
-
+                UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,79, kWidth-20, 1)];
+                lineView.backgroundColor = HexRGB(0xd5d5d5);
+                [cell.contentView addSubview:lineView];
+                
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                
+                return cell;
+            }else{
+                LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+                if (cell == nil) {
+                    cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+                }
+                [cell.activityView startAnimating];
+                return cell;
             }
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
-            lineView.backgroundColor = HexRGB(0xd5d5d5);
-            [cell.contentView addSubview:lineView];
             
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-            return cell;
+        }else if(currentSelectedBtnTag == 201){
+            if (indexPath.row< _demandArray.count) {
+                static NSString *cellIndexfider =@"Cell2";
+                demandTableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:cellIndexfider];
+                if (!cell) {
+                    cell =[[demandTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+                }
+                if (_demandArray.count>0){
+                    yyDemandModel *d =_demandArray [indexPath.row];
+                    cell.dateLabel.text =d.demandDate;
+                    cell.IntroductionLabel.text =d.Introduction;
+                    cell.nameLabel.text =d.name;
+                    cell.read_numLabel.text = [NSString stringWithFormat:@"浏览%@次",d.read_num];
+                    noDataBgView.hidden = YES;
+                    _resultTableView.hidden = NO;
+                    
+                }else{
+                    
+                    noDataBgView.hidden = NO;
+                    _resultTableView.hidden = YES;
+                    
+                }
+                UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,85, kWidth-20, 1)];
+                lineView.backgroundColor = HexRGB(0xd5d5d5);
+                [cell.contentView addSubview:lineView];
+                
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                return cell;
+            }else{
+                LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+                if (cell == nil) {
+                    cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+                }
+                [cell.activityView startAnimating];
+                return cell;
+            }
+            
+        }else{
+            if (indexPath.row < _supllyArray.count) {
+                static NSString *cellIndexfider =@"Cell1";
+                
+                supplyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndexfider];
+                
+                if (cell == nil) {
+                    cell = [[supplyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIndexfider];
+                }
+                
+                if (_supllyArray.count>0){
+                    yySupplyModel *s =_supllyArray [indexPath.row];
+                    
+                    cell.companyLabel.text =s.company;
+                    cell.nameLabel.text =s.name;
+                    cell.read_numLabel.text =[NSString stringWithFormat:@"浏览%@次",s.read_num];
+                    [cell.supplyImage setImageWithURL:[NSURL URLWithString:s.image] placeholderImage:[UIImage imageNamed:@"log.png"]];
+                    cell.supply_numLabel.text =[NSString stringWithFormat:@"%@件起批",s.min_supply_num];
+                    
+                    
+                    if ([s.price isEqualToString:@"0"]) {
+                        cell.priceLabel.text=@"电议";
+                    }else{
+                        cell.priceLabel.text =[NSString stringWithFormat:@"￥%@",s.price];
+                        
+                    }
+                    noDataBgView.hidden = YES;
+                    _resultTableView.hidden = NO;
+                    
+                    
+                }else{
+                    noDataBgView.hidden = NO;
+                    _resultTableView.hidden = YES;
+                    
+                }
+                UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10,89, kWidth-20, 1)];
+                lineView.backgroundColor = HexRGB(0xd5d5d5);
+                [cell.contentView addSubview:lineView];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                return cell;
+            }else{
+                LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
+                if (cell == nil) {
+                    cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
+                }
+                [cell.activityView startAnimating];
+                return cell;
+            }
         }
-        
     }
+    return nil;
 }
 #pragma mark 6.第section组头部显示什么控件
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     
-    if (self.view == _bgView)
-    {
+    if (self.view == _bgView){
         //    清楚历史记录
         clearView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 40)];
         clearView.backgroundColor =[UIColor whiteColor];
@@ -1403,40 +1460,29 @@
         [clearBtn addTarget:self action:@selector(clearBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [clearView addSubview:clearBtn];
         
-        if (currentSelectedBtnTag == 202)
-        {
-            if (_searchComanyArray.count > 0)
-            {
+        if (currentSelectedBtnTag == 202){
+            if (_searchComanyArray.count > 0){
                 clearView.hidden = NO;
             }else{
                 clearView.hidden = YES;
             }
             
-        }else if (currentSelectedBtnTag == 201)
-        {
-            if (_searchDemandArray.count > 0)
-            {
+        }else if (currentSelectedBtnTag == 201){
+            if (_searchDemandArray.count > 0){
                 clearView.hidden = NO;
             }else{
                 clearView.hidden = YES;
             }
             
+        }else{
+            if (_searchSupplyArray.count > 0){
+                clearView.hidden = NO;
+            }else{
+                clearView.hidden = YES;
+            }
         }
-        else
-        {
-            if (_searchSupplyArray.count > 0)
-            {
-                clearView.hidden = NO;
-            }else{
-                clearView.hidden = YES;
-            }
-            
-        }
-        
         return clearView;
-        
-    }
-    else{
+    }else{
         return nil;
     }
 }
@@ -1505,7 +1551,7 @@
 -(void)bigBtnClick:(UIButton *)big
 {
     _selectBtn.selected = YES;
-
+    
     [bigBtn removeFromSuperview];
     [_backViw removeFromSuperview];
 }
@@ -1536,7 +1582,7 @@
     [self showSearchRecordLabel];
     
     [self bigBtnClick:(UIButton *)textField];
-   
+    
 }
 
 - (void)showSearchRecordLabel
@@ -1571,7 +1617,6 @@
 
 -(void)searchBtn:(UIButton *)sear
 {
-
     [_demandArray removeAllObjects];
     [_supllyArray removeAllObjects];
     [_compangyArray removeAllObjects];
@@ -1597,8 +1642,6 @@
                     }
                 }
             }
-            
-            
             SearchCompanyModel *resultModel = [[SearchCompanyModel alloc] init];
             resultModel.searchKeyword = _currentKeyString;
             if (_searchComanyArray.count == 7)
@@ -1647,8 +1690,6 @@
                     }
                 }
             }
-            
-            
             SearchResultModel *resultModel = [[SearchResultModel alloc] init];
             resultModel.searchKeyword = _currentKeyString;
             if (_searchSupplyArray.count == 7)
@@ -1658,15 +1699,9 @@
             [_searchSupplyArray insertObject:resultModel atIndex:0];
             [self saveTempSearchWordWithTag:200];
         }
-        
-        
     }
-    
     [self bigBtnClick:sear];
-
-    
     [self searchToGo];
-
 }
 
 -(void)removerThreeArray{
@@ -1675,13 +1710,13 @@
     [_demandArray removeAllObjects];
     [_supllyArray removeAllObjects];
     [_resultTableView reloadData];
-
+    
 }
 
 
 - (void)searchToGo
 {
-
+    
     self.view = _resultBgView;
     
     [_searchTextField resignFirstResponder];
@@ -1691,22 +1726,22 @@
     hud.labelText = @"加载中...";
     if (self.view == _resultBgView)
     {    [self removerThreeArray];
-
+        
         [_resultTableView reloadData];
         if (currentSelectedBtnTag == 202)
         {
             [self companyRequest];
-            }else if(currentSelectedBtnTag == 201)
+        }else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
             
         }else
         {
             [self supplyRequest];
-
+            
         }
     }
-
+    
 }
 
 - (void)saveTempSearchWordWithTag:(int)arrayTag
@@ -1727,7 +1762,7 @@
 - (void)sortSelectedBtn:(UIButton *)sender
 {
     [self loadHotSearchStatuses];
-
+    
     _selectXuanka.selected =!_selectXuanka.selected;
     if (sender.selected==YES) {
         _selectBtn.selected = NO;
@@ -1755,14 +1790,14 @@
     [_selectBtn setTitle:currentTitle forState:UIControlStateNormal];
     
     currentSelectedBtnTag = sender.tag;
-  
+    
     sender.selected =YES;
-
+    
     [self getSearchResultData];
     [_recTableView reloadData];
     [self showSearchRecordLabel];
-
-
+    
+    
 }
 
 -(void)clearBtnClick:(UIButton *)clear
@@ -1777,7 +1812,7 @@
         _searchTextField.text = nil;
         
         recordLabel.hidden = NO;
-
+        
     }else if(currentSelectedBtnTag == 201)
     {
         [_supllyArray removeAllObjects];
@@ -1788,7 +1823,7 @@
         _searchTextField.text = nil;
         
         recordLabel.hidden = NO;
-
+        
     }else
     {
         [_searchSupplyArray removeAllObjects];
@@ -1797,7 +1832,29 @@
         _searchTextField.text = nil;
         
         recordLabel.hidden = NO;
+        
+    }
+}
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([scrollView isKindOfClass:[UITableView class]]) {
+        if (scrollView.tag == ResultTableView) {
+            NSIndexPath * indexpath=[NSIndexPath indexPathForRow:[_resultTableView numberOfRowsInSection:0]-1 inSection:0];
+            if ([[_resultTableView cellForRowAtIndexPath:indexpath] isKindOfClass:[LoadMoreCell class]]&&scrollView.contentSize.height-scrollView.contentOffset.y<=scrollView.frame.size.height+40) {
+                if (!isLoading) {
+                    isLoading = YES;
+                    if (currentSelectedBtnTag == 200) {
+                        [self loadsupplyRequest];
+                    }else if(currentSelectedBtnTag == 201 ){
+                        [self loaddemandRequest];
+                    }else{
+                        [self loadcompanyRequest];
+                    }
+                }
+            }
+
+        }
     }
 }
 

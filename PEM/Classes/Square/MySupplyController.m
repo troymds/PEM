@@ -184,6 +184,15 @@
             isRefresh = NO;
             [MJHeadView endRefreshing];
         }
+        if (isLoading) {
+            isLoading = NO;
+        }
+        NSInteger count = [_tableView numberOfRowsInSection:0];
+        if (count!=_dataArray.count) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_dataArray.count inSection:0];
+            LoadMoreCell *cell = (LoadMoreCell *)[_tableView cellForRowAtIndexPath:indexPath];
+            cell.loadBtn.hidden = NO;
+        }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
@@ -239,10 +248,21 @@
         if (cell == nil) {
             cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
         }
+        [cell.activityView startAnimating];
+        [cell.loadBtn addTarget:self action:@selector(loadBtnDown:) forControlEvents:UIControlEventTouchUpInside];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     return nil;
 }
+
+- (void)loadBtnDown:(UIButton *)btn
+{
+    btn.hidden = YES;
+    isLoading = YES;
+    [self loadData];
+}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row<_dataArray.count) {
