@@ -150,7 +150,6 @@
 		04C5043E19F124FD008F36AD /* Vip4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043A19F124FD008F36AD /* Vip4@2x.png */; };
 		04C5044119F12505008F36AD /* Vip5.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043F19F12505008F36AD /* Vip5.png */; };
 		04C5044219F12505008F36AD /* Vip6.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5044019F12505008F36AD /* Vip6.png */; };
-		04C50E271A1251FE0076D62C /* ExtendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C50E261A1251FE0076D62C /* ExtendCell.m */; };
 		04D2CEC819EE46BD0016862F /* MailConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D2CEA219EE46BD0016862F /* MailConnection.framework */; };
 		04D2CEC919EE46BD0016862F /* QQConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D2CEA319EE46BD0016862F /* QQConnection.framework */; };
 		04D2CECA19EE46BD0016862F /* QZoneConnection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D2CEA419EE46BD0016862F /* QZoneConnection.framework */; };
@@ -706,8 +705,6 @@
 		04C5043A19F124FD008F36AD /* Vip4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Vip4@2x.png"; sourceTree = "<group>"; };
 		04C5043F19F12505008F36AD /* Vip5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vip5.png; sourceTree = "<group>"; };
 		04C5044019F12505008F36AD /* Vip6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vip6.png; sourceTree = "<group>"; };
-		04C50E251A1251FE0076D62C /* ExtendCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExtendCell.h; path = ../../../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Message/Controller/views/ExtendCell.h; sourceTree = "<group>"; };
-		04C50E261A1251FE0076D62C /* ExtendCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExtendCell.m; path = ../../../../../../../../tianj/Documents/EbingooApp/PEM/Classes/Message/Controller/views/ExtendCell.m; sourceTree = "<group>"; };
 		04D2CEA219EE46BD0016862F /* MailConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MailConnection.framework; sourceTree = "<group>"; };
 		04D2CEA319EE46BD0016862F /* QQConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QQConnection.framework; sourceTree = "<group>"; };
 		04D2CEA419EE46BD0016862F /* QZoneConnection.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QZoneConnection.framework; sourceTree = "<group>"; };
@@ -2230,8 +2227,6 @@
 				55CFB98619C16FCF00FF14F8 /* findDemandCell.m */,
 				04AC4A6D1A105AC800F625CD /* SelectImgCell.h */,
 				04AC4A6E1A105AC800F625CD /* SelectImgCell.m */,
-				04C50E251A1251FE0076D62C /* ExtendCell.h */,
-				04C50E261A1251FE0076D62C /* ExtendCell.m */,
 				55B60C6919CAB5FF006E438E /* phoneView.h */,
 				55B60C6A19CAB5FF006E438E /* phoneView.m */,
 				5588E22019EE06BC0095D362 /* xiangqingViewController.h */,
@@ -2969,7 +2964,6 @@
 				04AF26E519E8B17C001B29CB /* ProvinceController.m in Sources */,
 				55B5103F19F73930009F9008 /* AFHTTPClient.m in Sources */,
 				04AF269819E8B13D001B29CB /* SubTagButton.m in Sources */,
-				04C50E271A1251FE0076D62C /* ExtendCell.m in Sources */,
 				F30ADA7B1A033B8D00403963 /* DimensionalCodeViewController.m in Sources */,
 				55B8B4F719CD257700FF86AD /* supplyCOM.m in Sources */,
 				04AF265D19E8B129001B29CB /* SubscribController.m in Sources */,

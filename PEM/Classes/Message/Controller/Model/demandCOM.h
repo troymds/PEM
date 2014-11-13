@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface demandCOM : NSObject
-@property (nonatomic,copy) NSString *companyID;
+@property (nonatomic,copy) NSString *uid;
 @property (nonatomic,copy) NSString *date;
 @property (nonatomic,copy) NSString *introduction;
 @property (nonatomic,copy) NSString *read_num;

@@ -20,7 +20,7 @@
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, 40)];
         label.backgroundColor = [UIColor clearColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = @"加载更多";
+        label.text = @"正在加载...";
         [self.contentView addSubview:label];
         _activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         _activityView.frame = CGRectMake(60,0,40, 40);

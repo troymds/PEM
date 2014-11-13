@@ -52,13 +52,6 @@
 #pragma mark 集成刷新控件
 - (void)addRefreshViews
 {
-    //    _statusFrames = [NSMutableArray array];
-    
-    // 2.上拉加载更多
-//    MJFootView = [MJRefreshFooterView footer];
-//    MJFootView.scrollView = _tableView;
-//    MJFootView.delegate = self;
-    
     MJHeadView = [MJRefreshHeaderView header];
     MJHeadView.scrollView = _tableView;
     MJHeadView.delegate = self;

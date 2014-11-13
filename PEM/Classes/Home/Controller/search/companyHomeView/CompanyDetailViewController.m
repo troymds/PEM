@@ -195,12 +195,6 @@
 //    header.scrollView = _conditionTableView;
     header.delegate = self;
     [header beginRefreshing];
-    
-//    // 2.上拉加载更多
-//    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
-////    header.scrollView = _conditionTableView;
-//    
-//    footer.delegate = self;
 }
 
 #pragma mark 刷新代理方法
