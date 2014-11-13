@@ -29,6 +29,10 @@
 #import "SearchCompanyModel.h"
 #import "SearchDenamdModel.h"
 
+
+#import "hotSearchTool.h"
+#import "YYSearchButton.h"
+#import <QuartzCore/QuartzCore.h>
 @interface SearchController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 {
     UIImageView *_searchImage ;
@@ -55,6 +59,8 @@
     MJRefreshBaseView *_refreshView;
     
     NSString *_currentKeyString;
+    
+    UIScrollView *_backScrollview;
 }
 
 @property (nonatomic,retain) NSMutableArray *searchSupplyArray;
@@ -80,10 +86,13 @@
     _searchDemandArray = [[NSMutableArray alloc] initWithCapacity:0];
 
 
-    
+    _hotSearchCompanyArray = [[NSMutableArray alloc] initWithCapacity:0];// 热门搜索
+    _hotSearchDemandArray = [[NSMutableArray alloc] initWithCapacity:0];
+    _hotSearchSupplyArray = [[NSMutableArray alloc] initWithCapacity:0];
+
+
     _selectXuanka =[[UIButton alloc]init];
     _selectedBtnImage=[[UIButton alloc]init];
-    
     
     
     currentSelectedBtnTag = 200;
@@ -100,9 +109,135 @@
     
     [self addShowNoRecordView];
     [self addShowNoDataView];
+    [self loadHotSearchStatuses];
     
+   
+    
+
+}
+ // 热门搜索
+#pragma mark ---加载热门搜索数据
+-(void)loadHotSearchStatuses{
+    [hotSearchTool statusesWithSuccess:^(NSArray *statues) {
+       
+        NSDictionary *dict = [statues objectAtIndex:0];
+        _hotSearchCompanyArray = [dict objectForKey:@"company"];
+        _hotSearchDemandArray = [dict objectForKey:@"demand"];
+        _hotSearchSupplyArray = [dict objectForKey:@"supply"];
+
+       
+
+        [self addHotSearchView];
+    } failure:^(NSError *error) {
+        
+    }];
+
+}
+-(void)addHotSearchView{
+    UIImage *hotImge =[UIImage imageNamed:@"home_hot.png"];
+    UIImageView *hotSearchImage =[[UIImageView alloc]initWithFrame:CGRectMake(30, 15, hotImge.size.width, hotImge.size.height)];
+    hotSearchImage.image = hotImge;
+    [_backScrollview addSubview:hotSearchImage];
+    
+    UILabel *hotTitleLabel =[[UILabel alloc]initWithFrame:CGRectMake(60, 10, 100, 30)];
+    [_backScrollview addSubview:hotTitleLabel];
+    hotTitleLabel.text =@"热门搜索";
+    hotTitleLabel.font =[UIFont systemFontOfSize:PxFont(22)];
+    hotTitleLabel.textColor=HexRGB(0x3a3a3a);
+    
+    YYSearchButton *hotSearchDemandBtn;
+    UIView *demandView;
+    UIView *supplyView;
+    UIView *companyView;
+
+    if (currentSelectedBtnTag ==202) {
+        [supplyView removeFromSuperview];
+        [demandView removeFromSuperview];
+        [companyView removeFromSuperview];
+        
+        demandView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, 150)];
+        demandView.backgroundColor =[UIColor whiteColor];
+        [_backScrollview addSubview:demandView];
+        for (int i=0; i<_hotSearchCompanyArray.count; i++) {
+            
+            hotSearchDemandBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
+            NSString *demandStr =[_hotSearchCompanyArray objectAtIndex:i];
+            [hotSearchDemandBtn setTitle:demandStr forState:UIControlStateNormal];
+            hotSearchDemandBtn.frame =CGRectMake(13+i%4*(kWidth/4-5),8+ i/4*40, 68, 30);
+            [hotSearchDemandBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
+            hotSearchDemandBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+            
+            [hotSearchDemandBtn setBackgroundImage:[UIImage imageNamed:@"dibuhengtiao.png"] forState:UIControlStateHighlighted];
+            [demandView addSubview:hotSearchDemandBtn];
+            [hotSearchDemandBtn addTarget:self action:@selector(hotSearchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            hotSearchDemandBtn.tag = i+70;
+          }
+    }else if (currentSelectedBtnTag ==201){
+        
+       
+        [supplyView removeFromSuperview];
+        [demandView removeFromSuperview];
+        [companyView removeFromSuperview];
+                companyView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, 150)];
+        companyView.backgroundColor =[UIColor whiteColor];
+        [_backScrollview addSubview:companyView];
+        for (int i=0; i<_hotSearchDemandArray.count; i++) {
+       hotSearchDemandBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
+        NSString *demandStr =[_hotSearchDemandArray objectAtIndex:i];
+        [hotSearchDemandBtn setTitle:demandStr forState:UIControlStateNormal];
+        hotSearchDemandBtn.frame =CGRectMake(13+i%4*(kWidth/4-5),8+ i/4*40, 68, 30);
+        [hotSearchDemandBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
+        hotSearchDemandBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+        
+        [hotSearchDemandBtn setBackgroundImage:[UIImage imageNamed:@"dibuhengtiao.png"] forState:UIControlStateHighlighted];
+        [companyView addSubview:hotSearchDemandBtn];
+        [hotSearchDemandBtn addTarget:self action:@selector(hotSearchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        hotSearchDemandBtn.tag = i+90;
+       }
+    }else{
+        [supplyView removeFromSuperview];
+        [demandView removeFromSuperview];
+        [companyView removeFromSuperview];
+      
+        supplyView =[[UIView alloc]initWithFrame:CGRectMake(0, 35, kWidth, 150)];
+        supplyView.backgroundColor =[UIColor whiteColor];
+        [_backScrollview addSubview:supplyView];
+        
+
+
+        for (int i=0; i<_hotSearchSupplyArray.count; i++) {
+            hotSearchDemandBtn =[YYSearchButton buttonWithType:UIButtonTypeCustom];
+            NSString *demandStr =[_hotSearchSupplyArray objectAtIndex:i];
+            [hotSearchDemandBtn setTitle:demandStr forState:UIControlStateNormal];
+            hotSearchDemandBtn.frame =CGRectMake(13+i%4*(kWidth/4-5),8+ i/4*40, 68, 30);
+            [hotSearchDemandBtn setTitleColor:HexRGB(0x808080) forState:UIControlStateNormal];
+            hotSearchDemandBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(18)];
+            
+            [hotSearchDemandBtn setBackgroundImage:[UIImage imageNamed:@"dibuhengtiao.png"] forState:UIControlStateHighlighted];
+            [supplyView addSubview:hotSearchDemandBtn];
+            [hotSearchDemandBtn addTarget:self action:@selector(hotSearchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            hotSearchDemandBtn.tag = i+80;
+        }
+    }
+}
+-(void)hotSearchBtnClick:(UIButton *)sender{
+    
+//    [_demandArray removeAllObjects];
+//    [_supllyArray removeAllObjects];
+//    [_compangyArray removeAllObjects];
+
+    [_resultTableView reloadData];
+    
+    [_recTableView reloadData];
+
+    _currentKeyString = sender.titleLabel.text;
+
+    [self searchToGo];
+
     
 }
+
+
 
 
 - (void)getSearchResultData
@@ -166,7 +301,7 @@
     recordLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
     recordLabel.textAlignment = NSTextAlignmentCenter;
     recordLabel.backgroundColor = [UIColor clearColor];
-    recordLabel.text = @"没有历史记录！";
+    recordLabel.text = @"暂无搜索记录！";
     if (currentSelectedBtnTag ==202)
     {
         if (_searchComanyArray.count > 0)
@@ -493,7 +628,7 @@
            
 
             [self tableReloadData];
-            
+           
         } SupplywithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0]  SupplyfailureBlock:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
@@ -617,7 +752,7 @@
            
 
             [self tableReloadData];
-            
+
         } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0]
                               failureBlock:^(NSError *error) {
                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -806,12 +941,19 @@
 -(void)addTableView
 {
     _bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, kWidth, kHeight-64)];
-    _recTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 0, kWidth, _bgView.frame.size.height) style:UITableViewStylePlain];
+    _backScrollview =[[UIScrollView alloc]initWithFrame:CGRectMake(0,0, kWidth,kHeight-64)];
+    _backScrollview.showsHorizontalScrollIndicator = NO;
+    _backScrollview.showsVerticalScrollIndicator = NO;
+    _backScrollview.contentSize = CGSizeMake(kWidth, _bgView.frame.size.height+90);
+    _backScrollview.backgroundColor =[UIColor whiteColor];
+    [_bgView addSubview:_backScrollview];
+    _recTableView =[[UITableView alloc]initWithFrame:CGRectMake(0, 180, kWidth, _bgView.frame.size.height-90) style:UITableViewStylePlain];
     
     _recTableView.delegate =self;
     _recTableView.dataSource =self;
-    [_bgView addSubview:_recTableView];
-    
+    _recTableView.bounces = NO;
+    [_backScrollview addSubview:_recTableView];
+    _backViw.backgroundColor =[UIColor redColor];
     
     self.view = _bgView;
     
@@ -1249,6 +1391,8 @@
     {
         //    清楚历史记录
         clearView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 40)];
+        clearView.backgroundColor =[UIColor whiteColor];
+        
         UIButton *clearBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         clearBtn.frame =CGRectMake(30, 10, 260, 30);
         [clearBtn setTitle:@"清除历史记录" forState:UIControlStateNormal];
@@ -1330,6 +1474,11 @@
         historyLabel.text =@"搜索历史";
         historyLabel.font =[UIFont systemFontOfSize:14];
         [viewHistory addSubview:historyLabel];
+        
+        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 170)];
+        [viewHistory addSubview:lineView];
+        lineView.backgroundColor =HexRGB(0xe6e3e4);
+        
         return viewHistory;
     }
     return nil;
@@ -1547,7 +1696,6 @@
         if (currentSelectedBtnTag == 202)
         {
             [self companyRequest];
-            
             }else if(currentSelectedBtnTag == 201)
         {
             [self demandRequest];
@@ -1578,6 +1726,7 @@
 
 - (void)sortSelectedBtn:(UIButton *)sender
 {
+    [self loadHotSearchStatuses];
 
     _selectXuanka.selected =!_selectXuanka.selected;
     if (sender.selected==YES) {
@@ -1606,6 +1755,7 @@
     [_selectBtn setTitle:currentTitle forState:UIControlStateNormal];
     
     currentSelectedBtnTag = sender.tag;
+  
     sender.selected =YES;
 
     [self getSearchResultData];
