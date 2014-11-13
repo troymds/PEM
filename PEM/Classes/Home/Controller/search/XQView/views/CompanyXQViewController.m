@@ -615,8 +615,6 @@
     }
     
 }
-
-
 #pragma mark -----CompanyHomeViewDeletgare
 - (void) CompanyHomeView:(CompanyHomeView *)view
 {
@@ -632,8 +630,6 @@
         [self.navigationController pushViewController:plat animated:YES];
     }
 }
-
-
 -(void)addChooseBtn
 {
     chooseBackView =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-64-30-44, kWidth, 44)];
