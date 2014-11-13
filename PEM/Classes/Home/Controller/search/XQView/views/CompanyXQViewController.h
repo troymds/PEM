@@ -12,6 +12,20 @@
 #import "RegisterContrller.h"
 #import "FindSecretController.h"
 
+
+typedef enum
+{
+    homeType,
+    conditionType,
+    supplyAndDemandType,
+    
+}interfaceType;
+
+typedef enum {
+    supplyType,
+    demandType
+}infoType;
+
 @interface CompanyXQViewController : UIViewController<LoginViewDelegate>{
     
     UIScrollView* _companyHomeScrollView;
@@ -30,8 +44,8 @@
     UIView *companyBackView;
     
     MJRefreshHeaderView *header;
-    MJRefreshFooterView *footer;
-
+    interfaceType currentInterType;
+    infoType selectType;
 }
 @property(nonatomic ,strong)UIScrollView *BigCompanyScrollView;
 

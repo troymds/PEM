@@ -51,7 +51,9 @@
     NSMutableArray *_conditionArray;
     MJRefreshBaseView *_refreshView;
     UILabel *dataLabel;
-    BOOL needLoad;//是否需要加载
+    BOOL compNeedLoad; //企业动态需要加载
+    BOOL needLoad;//供求信息是否需要加载
+    BOOL compIsLoading;  //企业动态是否正在加载
     BOOL isLoading;//是否正在加载
 }
 
@@ -110,10 +112,6 @@
     // 1.下拉刷新
     header = [MJRefreshHeaderView header];
     header.delegate = self;
-    
-    // 2.上拉加载更多
-//    footer = [MJRefreshFooterView footer];
-//    footer.delegate = self;
 }
 
 
@@ -123,13 +121,6 @@
     if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
         [self loadViewStatuce:refreshView];
     }
-//    if ([refreshView isKindOfClass:[MJRefreshFooterView class]])
-//    {
-//        // 上拉加载更多
-//        [self loadViewStatuce:refreshView];
-//    } else {
-//        // 下拉刷新
-//        [self loadViewStatuce:refreshView];
 }
 
 -(void)loadViewStatusesHome
@@ -215,24 +206,27 @@
         {
             if (_chooseSelected.tag == 30)
             {
+                if (isLoading) {
+                    isLoading = NO;
+                }
                 [self supplyRequest];
                 
             }else
             {
+                if (isLoading) {
+                    isLoading = NO;
+                }
                 [self demandRequest];
-               
             }
-            
-            
         }
         else if(_selectedBtn.tag == 21)
         {
+            if (compIsLoading) {
+                compIsLoading = NO;
+            }
             [self companyRequest];
-            
         }
     }
-    
-    
     _refreshView = refreshLoading;
 }
 - (void)addShowNoDataView
@@ -249,7 +243,6 @@
 
 - (void)supplyRequest
 {
-   
     //供求
     [supplyTool CompanyStatusesWithSuccesscategory:^(NSArray *statues) {
         
@@ -281,14 +274,10 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
     }];
-    
-    
 }
 - (void)demandRequest
 {
-    
     [demandTool DemandCompanyStatusesWithSuccess:^(NSArray *statues) {
         if (statues.count > 0) {
             if (statues.count == 10) {
@@ -310,7 +299,6 @@
         if (isLoading) {
             isLoading = NO;
         }
-
         [self tableReloadData];
     } DemandCompanyFailure:^(NSError *error) {
         
@@ -327,12 +315,12 @@
 
         if (statues.count > 0) {
             if (statues.count == 10) {
-                needLoad = YES;
+                compNeedLoad = YES;
             }
             _conditionTableView.hidden = NO;
             dataLabel.hidden = YES;
         }else if(statues.count==0){
-            needLoad = NO;
+            compNeedLoad = NO;
             dataLabel.hidden = NO;
             _conditionTableView.hidden = YES;
             
@@ -345,8 +333,8 @@
         }
         [_companyNEWArray addObjectsFromArray:statues];
         
-        if (isLoading) {
-            isLoading = NO;
+        if (compIsLoading) {
+            compIsLoading = NO;
         }
         [self tableReloadData1];
         //[_conditionTableView reloadData];
@@ -358,6 +346,105 @@
     
     
 }
+//企业动态加载更多
+- (void)companyMoreRequest
+{
+    NSString *lastId = [NSString stringWithFormat:@"%d",[_companyNEWArray count]];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:companyID,@"company_id" ,@"10",@"pagesize",lastId,@"last_id",nil];
+
+    [HttpTool postWithPath:@"getCompanyNewsList" params:dic success:^(id JSON) {
+        NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *array =d[@"response"];
+        if (d[@"response"]) {
+            if ([array isKindOfClass:[NSNull class]]){
+                compNeedLoad = NO;
+            }
+            else{
+                int count = 0 ;
+                for (NSDictionary *dict in array) {
+                    comContent   *s =[[comContent alloc] initWithDictionaryForComapny:dict];
+                    [_companyNEWArray addObject:s];
+                    count++;
+                }
+                if (count == 10) {
+                    compNeedLoad = YES;
+                }else{
+                    compNeedLoad = NO;
+                }
+            }
+        }
+    } failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+        NSLog(@"%@",error);
+    }];
+}
+//供应信息加载更多
+- (void)supplyMoreRequest
+{
+    NSString *lastId = [NSString stringWithFormat:@"%d",[_companyDemandArray count]];
+    NSDictionary *dicid = [NSDictionary dictionaryWithObjectsAndKeys:companyID,@"company_id", nil];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicid options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *condition = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",lastId,@"lastid",condition,@"condition", nil];
+    [HttpTool postWithPath:@"getSupplyInfoList" params:dic success:^(id JSON) {
+        NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *array =d[@"response"];
+        if (array) {
+            if ([array isKindOfClass:[NSNull class]]){
+                needLoad = NO;
+            }
+            else{
+                int count = 0;
+                for (NSDictionary *dict in array) {
+                    supplyCOM *s =[[supplyCOM alloc] initWithDictonary:dict];
+                    [_companySupplyArray addObject:s];
+                    count++;
+                }
+                if (count == 10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
+            }
+            [_supplyANDdemandTableView reloadData];
+        }
+    } failure:^(NSError *error) {
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
+}
+//求购信息加载更多
+- (void)demandMoreRequst
+{
+    NSString *lastID = [NSString stringWithFormat:@"%d",_companyNEWArray.count];
+    NSDictionary *dicid = [NSDictionary dictionaryWithObjectsAndKeys:companyID,@"company_id", nil];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicid options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *condition = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"10",@"pagesize",lastID,@"lastid",condition,@"condition", nil];
+    [HttpTool postWithPath:@"getDemandInfoList" params:dic success:^(id JSON) {
+        NSDictionary *d = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSDictionary *array =d[@"response"];
+        if (array) {
+            if ([array isKindOfClass:[NSNull class]]){
+                needLoad = NO;
+            }else{
+                int i = 0;
+                for (NSDictionary *dict in array) {
+                    demandCOM *s =[[demandCOM alloc] initWithDictonary:dict];
+                    [_companyDemandArray addObject:s];
+                    i++;
+                }
+                if (i == 10) {
+                    needLoad = YES;
+                }else{
+                    needLoad = NO;
+                }
+            }
+            [_supplyANDdemandTableView reloadData];
+        }
+    } failure:^(NSError *error) {
+    }];
+}
+
 
 #pragma mark背景scrollview
 -(void)addBigCompanyScrollView
@@ -431,20 +518,20 @@
                     isLoading = YES;
                     if (_chooseSelected.tag == 30)
                     {
-                        [self supplyRequest];
+                        [self supplyMoreRequest];
                         
                     }else
                     {
-                        [self demandRequest];
+                        [self demandMoreRequst];
                     }
                 }
             }
         }else{
             NSIndexPath * indexpath=[NSIndexPath indexPathForRow:[_supplyANDdemandTableView numberOfRowsInSection:0]-1 inSection:0];
             if ([[_supplyANDdemandTableView cellForRowAtIndexPath:indexpath] isKindOfClass:[LoadMoreCell class]]&&scrollView.contentSize.height-scrollView.contentOffset.y<=scrollView.frame.size.height+40) {
-                if (!isLoading) {
-                    isLoading = YES;
-                    [self companyRequest];
+                if (!compIsLoading) {
+                    compIsLoading = YES;
+                    [self companyMoreRequest];
                 }
             }
 
@@ -483,7 +570,6 @@
         else if (scrollView.contentOffset.x == kWidth)
         {
             header.scrollView = _conditionTableView;
-            footer.scrollView = _conditionTableView;
             [self companyRequest];
             for (UIView *subView in companyBackView.subviews) {
                 if ([subView isKindOfClass:[UIButton class]]) {
@@ -521,8 +607,6 @@
                     }
                 }
             }
-            
-            
         }
 
     }else
@@ -552,7 +636,6 @@
 
 -(void)addChooseBtn
 {
-    
     chooseBackView =[[UIView alloc]initWithFrame:CGRectMake(0, kHeight-64-30-44, kWidth, 44)];
     chooseBackView.backgroundColor =[UIColor whiteColor];
     [suplyANDdemandView addSubview:chooseBackView];
@@ -581,8 +664,6 @@
             _chooseSelected = chooseBtn;
         }
     }
-    
-    
 }
 
 #pragma mark 两个个button
@@ -682,15 +763,13 @@
     
     if (company.tag == 20)
     {
-        needLoad = NO;
-        isLoading = NO;
         dataLabel.hidden = YES;
         [_BigCompanyScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     }
     else if(company.tag ==21)
     {
-        needLoad = NO;
-        isLoading = NO;
+        compNeedLoad = NO;
+        compIsLoading = NO;
         header.scrollView = _conditionTableView;
         header.scrollView = _conditionTableView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth, 0) animated:YES];
@@ -701,7 +780,6 @@
         needLoad = NO;
         isLoading = NO;
         header.scrollView = _supplyANDdemandTableView;
-        footer.scrollView = _supplyANDdemandTableView;
         [_BigCompanyScrollView setContentOffset:CGPointMake(kWidth*2, 0) animated:YES];
         if (_chooseSelected.tag == 31)
         {
@@ -742,7 +820,7 @@
         {
             qiugouXQ *qig =[[qiugouXQ alloc]init];
             demandCOM *demid =[_companyDemandArray objectAtIndex:indexPath.row];
-            qig.demandIndex =demid.companyID;
+            qig.demandIndex =demid.uid;
             [self.navigationController pushViewController:qig animated:YES];
             
         }else

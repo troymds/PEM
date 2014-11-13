@@ -144,11 +144,6 @@
     MJRefreshHeaderView *header = [MJRefreshHeaderView header];
     header.scrollView = _tableView;
     header.delegate = self;
-
-//    // 2.上拉加载更多
-//    MJRefreshFooterView *footer = [MJRefreshFooterView footer];
-//    footer.scrollView = _tableView;
-//    footer.delegate = self;
 }
 
 #pragma mark 刷新代理方法
@@ -157,16 +152,6 @@
     if ([refreshView isKindOfClass:[MJRefreshHeaderView class]]) {
         [self loadViewDownStatuses:refreshView];
     }
-//        // 下拉刷新
-//    if ([refreshView isKindOfClass:[MJRefreshFooterView class]]) {
-//        // 上拉加载更多
-//        [self loadViewStatuses:refreshView];
-//    } else {
-//        // 下拉刷新
-//        [self loadViewDownStatuses:refreshView];
-//    }
-//    
-//    
 }
 
 
@@ -181,125 +166,141 @@
     [self.view addSubview:dataLabel];
     
     
-    }
+}
+
  // 下拉刷新
 -(void)loadViewDownStatuses:(MJRefreshBaseView *)refreshView{
-    
-    
-
-    if (_supplyBtnPice.tag==50) {
-        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            if (statues.count > 0) {
-                dataLabel.hidden = YES;
-                _tableView.hidden = NO;
-                [_CateSupplyArray removeAllObjects];
+    //刷新的是否是供应信息
+    if (isSupply) {
+        //排序方式是否是按浏览量排序
+        if (isHot) {
+            [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+                if (isLoading) {
+                    isLoading = NO;
+                }
+                if (statues.count > 0) {
+                    if (statues.count == 10) {
+                        needLoad = YES;
+                    }else{
+                        needLoad = NO;
+                    }
+                    dataLabel.hidden = YES;
+                    _tableView.hidden = NO;
+                    [_CateSupplyArray removeAllObjects];
+                    
+                    [_CateSupplyArray addObjectsFromArray:statues];
+                }else{
+                    if (statues.count==0){
+                        needLoad = NO;
+                        [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                    }
+                }
+                [_tableView reloadData];
+                [refreshView endRefreshing];
                 
-                [_CateSupplyArray addObjectsFromArray:statues];
-            }else
-            {if (statues.count==0){
+            }cateId:cateIndex supplyHot:@"hot" lastID:@"0" CategoryFailure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }else{
+            [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+                if (isLoading) {
+                    isLoading = NO;
+                }
+                if (statues.count > 0) {
+                    if (statues.count == 10) {
+                        needLoad = YES;
+                    }else{
+                        needLoad = NO;
+                    }
+                    dataLabel.hidden = YES;
+                    _tableView.hidden = NO;
+                    [_CateSupplyArray removeAllObjects];
+                    [_CateSupplyArray addObjectsFromArray:statues];
+                }else{
+                    if (statues.count==0){
+                        needLoad = NO;
+                        [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                    }
+                }
+                [_tableView reloadData];
+                [refreshView endRefreshing];
+            }cateId:cateIndex supplyHot:@"price" lastID:@"0" CategoryFailure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-            }
-            }
-           
-            [_tableView reloadData];
-            [refreshView endRefreshing];
-            
-        }cateId:cateIndex supplyHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            
-        }];
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }
     }else{
-
-        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            
-            if (statues.count > 0) {
-                dataLabel.hidden = YES;
-                _tableView.hidden = NO;
-                [_CateSupplyArray removeAllObjects];
+        if (isHot) {
+            [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+                if (isLoading) {
+                    isLoading = NO;
+                }
+                if (statues.count > 0) {
+                    if (statues.count == 10) {
+                        needLoad = YES;
+                    }else{
+                        needLoad = NO;
+                    }
+                    dataLabel.hidden = YES;
+                    _tableView.hidden = NO;
+                    if (statues.count>9) {
+                        [_CateDemandArray removeAllObjects];
+                        
+                    }
+                }else{
+                    if (statues.count==0){
+                        needLoad = NO;
+                        [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                    }
+                }
+                [_CateDemandArray addObjectsFromArray:statues];
                 
-                [_CateSupplyArray addObjectsFromArray:statues];
-            }else
-            {if (statues.count==0){
-               
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-            }
-            }
-            [_tableView reloadData];
-            [refreshView endRefreshing];
-        }cateId:cateIndex supplyHot:@"price" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            
-            
-        }];
-        
-    }
-   
-    if (_selectedFind.tag ==11) {
-    
-    
-    if (_demandBtnTimer.tag ==60) {
-        
-        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            if (statues.count > 0) {
-                dataLabel.hidden = YES;
-                _tableView.hidden = NO;
+                [_tableView reloadData];
+                [refreshView endRefreshing];
+            }cateId:cateIndex demandHot:@"hot" lastID:@"0" CategoryFailure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+                
+                
+            }];
+        }else{
+            [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
+                if (isLoading) {
+                    isLoading = NO;
+                }
+
+                if (statues.count > 0) {
+                    if (statues.count == 10) {
+                        needLoad = YES;
+                    }else{
+                        needLoad = NO;
+                    }
+                    dataLabel.hidden = YES;
+                    _tableView.hidden = NO;
+                }else{
+                    needLoad = NO;
+                }
                 if (statues.count>9) {
                     [_CateDemandArray removeAllObjects];
                     
                 }
-            }else
-            {if (statues.count==0){
                 
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-            }
-            }
-            [_CateDemandArray addObjectsFromArray:statues];
-
-            [_tableView reloadData];
-            [refreshView endRefreshing];
-        }cateId:cateIndex demandHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            
-            
-        }];
-        
-    }else{
-        
-        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            if (statues.count > 0) {
-                dataLabel.hidden = YES;
-                _tableView.hidden = NO;
-
-                        }
-            if (statues.count>9) {
-            [_CateDemandArray removeAllObjects];
-
-            }
-            
-            [_CateDemandArray addObjectsFromArray:statues];
-
-            [_tableView reloadData];
-
-            [refreshView endRefreshing];
-            
-            
-            
-        }cateId:cateIndex demandHot:@"time" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
-            
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            
-            
-        }];
-    }
+                [_CateDemandArray addObjectsFromArray:statues];
+                
+                [_tableView reloadData];
+                
+                [refreshView endRefreshing];
+                
+            }cateId:cateIndex demandHot:@"time" lastID:@"0" CategoryFailure:^(NSError *error) {
+                
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                
+                [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+            }];
+        }
     }
 }
 
@@ -316,11 +317,11 @@
                     dataLabel.hidden = YES;
                     _tableView.hidden = NO;
                     
-                }else
-                {if (statues.count==0){
-                    needLoad = NO;
-                    [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-                }
+                }else{
+                    if (statues.count==0){
+                        needLoad = NO;
+                        [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                    }
                 }
                 if (isLoading) {
                     isLoading = NO;
@@ -345,12 +346,11 @@
                     }
                     dataLabel.hidden = YES;
                     _tableView.hidden = NO;
-                }else
-                {if (statues.count==0){
-                    needLoad = NO;
-                    
-                    [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-                }
+                }else{
+                    if (statues.count==0){
+                        needLoad = NO;
+                        [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
+                    }
                 }
                 if (isLoading) {
                     isLoading = NO;
@@ -412,141 +412,15 @@
                 
                 [_CateDemandArray addObjectsFromArray:statues];
                 [_tableView reloadData];
-                
-                
-                
+        
             }cateId:cateIndex demandHot:@"time" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
                 
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 
                 [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-                
-                
             }];
         }
     }
-
-    
-    
- /*
-    if (_supplyBtnPice.tag==50) {
-        [_tableView reloadData];
-        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            if (statues.count > 0) {
-                dataLabel.hidden = YES;
-                _tableView.hidden = NO;
-                
-            }else
-            {if (statues.count==0){
-                
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-            }
-            }
-            if (isLoading) {
-                isLoading = NO;
-            }
-
-            [_CateSupplyArray addObjectsFromArray:statues];
-            [_tableView reloadData];
-
-        }cateId:cateIndex supplyHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
-        }];
-    }else{
-        
-        [_tableView reloadData];
-        
-        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            if (statues.count > 0) {
-                dataLabel.hidden = YES;
-                _tableView.hidden = NO;
-            }else
-            {if (statues.count==0){
-                
-                
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-            }
-            }
-            if (isLoading) {
-                isLoading = NO;
-            }
-
-            [_CateSupplyArray addObjectsFromArray:statues];
-            [_tableView reloadData];
-            
-        }cateId:cateIndex supplyHot:@"price" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateSupplyArray count]-0] CategoryFailure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
-            
-        }];
-
-    }
-    if (_demandBtnTimer.tag ==60) {
-        
-        [_tableView reloadData];
-        
-        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            if (statues.count > 0) {
-                dataLabel.hidden = YES;
-                _tableView.hidden = NO;
-
-            }else
-            {if (statues.count==0){
-                
-                [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
-            }
-            }
-            if (isLoading) {
-                isLoading = NO;
-            }
-
-            [_CateDemandArray addObjectsFromArray:statues];
-            
-            [_tableView reloadData];
-            
-            
-            
-        }cateId:cateIndex demandHot:@"hot" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
-            
-        }];
-        
-    }else{
-        
-        [_tableView reloadData];
-        
-        [hotOrderMoedl CategoryStatusesWithSuccesscategory:^(NSArray *statues) {
-            if (statues.count > 0) {
-                dataLabel.hidden = YES;
-                _tableView.hidden = NO;
-
-            }
-            if (isLoading) {
-                isLoading = NO;
-            }
-
-            [_CateDemandArray addObjectsFromArray:statues];
-            [_tableView reloadData];
-
-            
-            
-        }cateId:cateIndex demandHot:@"time" lastID:0?0:[NSString stringWithFormat:@"%u",[_CateDemandArray count]-0] CategoryFailure:^(NSError *error) {
-            
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-            [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-
-            
-        }];
-     }*/
 }
 
 -(void)addLeftSegment
@@ -675,7 +549,6 @@
 
     
 }
-
 
 
 -(void)rightSegmentDemand{

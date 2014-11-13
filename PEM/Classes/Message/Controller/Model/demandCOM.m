@@ -9,10 +9,10 @@
 #import "demandCOM.h"
 
 @implementation demandCOM
-@synthesize date,companyID,name,read_num,introduction,buy_num;
+@synthesize date,uid,name,read_num,introduction,buy_num;
 - (id)initWithDictonary:(NSDictionary *)dic{
     if (self = [super init]) {
-        self.companyID =dic[@"id"];
+        self.uid =dic[@"id"];
         self. date = [dic objectForKey:@"date"];
         self. name = [dic objectForKey:@"name"];
         self.read_num = [dic objectForKey:@"read_num"];

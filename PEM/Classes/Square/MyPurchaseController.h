@@ -16,7 +16,6 @@
     UILongPressGestureRecognizer *longGesture;
     NSIndexPath *delIndex;
     MJRefreshHeaderView *MJHeadView;
-    MJRefreshFooterView *MJFootView;
     UIView *remindView;
 
 }

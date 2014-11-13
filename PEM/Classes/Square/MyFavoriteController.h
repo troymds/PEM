@@ -13,6 +13,5 @@
 @interface MyFavoriteController : BaseController<MJRefreshBaseViewDelegate,ReloadDataDelegate>
 {
     MJRefreshHeaderView *MJHeadView;
-    MJRefreshFooterView *MJFootView;
 }
 @end
