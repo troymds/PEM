@@ -229,6 +229,13 @@
     }
 }
 -(void)hotSearchBtnClick:(UIButton *)sender{
+    [_supllyArray removeAllObjects];
+    [_demandArray removeAllObjects];
+    [_compangyArray removeAllObjects];
+    [_searchSupplyArray removeAllObjects];
+    [_searchDemandArray removeAllObjects];
+    [_searchComanyArray removeAllObjects];
+    
     
     //    [_demandArray removeAllObjects];
     //    [_supllyArray removeAllObjects];
@@ -604,7 +611,6 @@
                                   
                                   [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
                                   
-                                  
                               }];
     }
     else
@@ -880,7 +886,6 @@
     [_selectBtn setTitle:@"供应" forState:UIControlStateNormal];
     [_selectBtn setTitleColor:HexRGB(0x666666) forState:UIControlStateNormal];
     [_selectBtn setImage:[UIImage imageNamed:@"nav_under.png"] forState:UIControlStateSelected];
-    
     [_selectBtn setImage:[UIImage imageNamed:@"nav_under_btnselected.png"] forState:UIControlStateNormal];
     _selectBtn.selected = YES;
     _selectBtn.titleLabel.font =[UIFont systemFontOfSize:PxFont(20)];
@@ -891,7 +896,7 @@
     _searchTextField.frame =CGRectMake(63, 0, 145, 30);
     [_searchImage addSubview:_searchTextField];
     [_selectBtn addTarget:self action:@selector(xuankaBtn:) forControlEvents:UIControlEventTouchUpInside];
-    
+//    搜索框
     _searchTextField.delegate = self;
     _searchTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     _searchTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -900,8 +905,6 @@
     
     //    放大镜
     _searBtn =[UIButton buttonWithType:UIButtonTypeCustom];
-    
-    
     _searBtn.bounds = CGRectMake(0, 0, 23, 23);
     [_searBtn setImage:[UIImage imageNamed:@"nav_search_btn.png"] forState:UIControlStateNormal];
     
@@ -1228,6 +1231,10 @@
             [history setImage:[UIImage imageNamed:@"home_history.png"] forState:UIControlStateNormal];
             history.tag = 10000;
             [cell addSubview:history];
+            lineView = [[UIView alloc] initWithFrame:CGRectMake(10, 44, kWidth-20, 1)];
+            [cell addSubview:lineView];
+            lineView.tag = history.tag;
+            lineView.backgroundColor =HexRGB(0xe6e3e4);
             
             
             for (UIView *view in [cell subviews]){
@@ -1243,33 +1250,48 @@
             if (currentSelectedBtnTag ==202){
                 if (_searchComanyArray.count>0){
                     history.hidden = NO;
+                    lineView.hidden = NO;
                     SearchCompanyModel *resultModel =  [_searchComanyArray objectAtIndex:indexPath.row-1];
                     cell.textLabel.text = resultModel.searchKeyword;
                     cell.textLabel.textColor = HexRGB(0x666666);
                 }else{
                     history.hidden =YES;
+                    lineView.hidden = YES;
+
                 }
             }else if (currentSelectedBtnTag ==201){
                 if (_searchDemandArray.count>0){
                     history.hidden = NO;
+                    lineView.hidden = NO;
+
                     SearchDenamdModel *resultModel =  [_searchDemandArray objectAtIndex:indexPath.row-1];
                     cell.textLabel.text = resultModel.searchKeyword;
                     cell.textLabel.textColor = HexRGB(0x666666);
                 }else{
                     history.hidden =YES;
+                    lineView.hidden = YES;
+
                 }
             }else{
                 if (_searchSupplyArray.count>0){
                     history.hidden = NO;
+                    lineView.hidden = NO;
+
                     SearchResultModel *resultModel =  [_searchSupplyArray objectAtIndex:indexPath.row-1];
                     cell.textLabel.text = resultModel.searchKeyword;
                     cell.textLabel.textColor = HexRGB(0x666666);
                     
                 }else{
                     history.hidden =YES;
+                    lineView.hidden = YES;
+
                 }
             }
         }
+        UIView *cellLine = [[UIView alloc] initWithFrame:CGRectMake(10, 44, kWidth - 20, 1)];
+        cellLine.backgroundColor = HexRGB(0xd5d5d5);
+        [cell.contentView addSubview:cellLine];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }else{
         
@@ -1449,7 +1471,10 @@
         //    清楚历史记录
         clearView =[[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 40)];
         clearView.backgroundColor =[UIColor whiteColor];
-        
+       UIView * lineView = [[UIView alloc] initWithFrame:CGRectMake(10, 1, kWidth-20, 1)];
+        [clearView addSubview:lineView];
+        lineView.backgroundColor = HexRGB(0xd5d5d5);
+
         UIButton *clearBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         clearBtn.frame =CGRectMake(30, 10, 260, 30);
         [clearBtn setTitle:@"清除历史记录" forState:UIControlStateNormal];
@@ -1521,9 +1546,7 @@
         historyLabel.font =[UIFont systemFontOfSize:14];
         [viewHistory addSubview:historyLabel];
         
-        UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 170)];
-        [viewHistory addSubview:lineView];
-        lineView.backgroundColor =HexRGB(0xe6e3e4);
+        
         
         return viewHistory;
     }
