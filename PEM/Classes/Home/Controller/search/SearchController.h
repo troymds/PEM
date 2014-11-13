@@ -16,11 +16,20 @@
     UIView *clearView;
     UIButton *bigBtn ;
     UIButton *history;
+    
+    UILabel *historyBtn;
+    UIImageView *historyImage;
 
     int currentSelectedBtnTag;
 }
 @property(nonatomic,strong)NSMutableArray *supllyArray;
 @property(nonatomic,strong)NSMutableArray *demandArray;
 @property(nonatomic,strong)NSMutableArray *compangyArray;
+
+@property(nonatomic,strong)NSMutableArray *hotSearchDemandArray;
+@property(nonatomic,strong)NSMutableArray *hotSearchSupplyArray;
+@property(nonatomic,strong)NSMutableArray *hotSearchCompanyArray;
+
+
 
 @end
