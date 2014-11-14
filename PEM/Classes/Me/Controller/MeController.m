@@ -42,6 +42,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     if (![SystemConfig sharedInstance].isUserLogin){
         LoginView *loginView = [[LoginView alloc] init];
         loginView.delegate = self;

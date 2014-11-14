@@ -36,6 +36,9 @@
 #import "EplatFormController.h"
 #import "LoadMoreCell.h"
 
+#define conditonType 9000
+#define supplyAndDemandType 9001
+
 #define KHEIGHT_COMPANY  12
 
 @interface CompanyXQViewController ()<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,CompanyHomeViewDeletgare,UIScrollViewDelegate>
@@ -372,8 +375,19 @@
                     compNeedLoad = NO;
                 }
             }
+            [_conditionTableView reloadData];
         }
     } failure:^(NSError *error) {
+        if (compIsLoading) {
+            compIsLoading = NO;
+        }
+        NSInteger count = [_conditionTableView numberOfRowsInSection:0];
+        if (count!=_companyNEWArray.count) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_companyNEWArray.count inSection:0];
+            LoadMoreCell *cell = (LoadMoreCell *)[_conditionTableView cellForRowAtIndexPath:indexPath];
+            cell.loadBtn.hidden = NO;
+        }
+
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         NSLog(@"%@",error);
     }];
@@ -409,6 +423,16 @@
             [_supplyANDdemandTableView reloadData];
         }
     } failure:^(NSError *error) {
+        if (isLoading) {
+            isLoading = NO;
+        }
+        NSInteger count = [_conditionTableView numberOfRowsInSection:0];
+        if (count!=_companySupplyArray.count) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_companySupplyArray.count inSection:0];
+            LoadMoreCell *cell = (LoadMoreCell *)[_supplyANDdemandTableView cellForRowAtIndexPath:indexPath];
+            cell.loadBtn.hidden = NO;
+        }
+
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
     }];
 }
@@ -442,6 +466,15 @@
             [_supplyANDdemandTableView reloadData];
         }
     } failure:^(NSError *error) {
+        if (isLoading) {
+            isLoading = NO;
+        }
+        NSInteger count = [_conditionTableView numberOfRowsInSection:0];
+        if (count!=_companyDemandArray.count) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_companyDemandArray.count inSection:0];
+            LoadMoreCell *cell = (LoadMoreCell *)[_supplyANDdemandTableView cellForRowAtIndexPath:indexPath];
+            cell.loadBtn.hidden = NO;
+        }
     }];
 }
 
@@ -874,7 +907,7 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    static NSString *cellName = @"cellName";
     if(_selectedBtn.tag==22){
         if(_chooseSelected.tag==31){
             if (indexPath.row<_companyDemandArray.count){
@@ -895,12 +928,14 @@
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 return cell;
             }else{
-                static NSString *cellName = @"cellName";
                 LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
                 if (cell == nil) {
                     cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
                 }
                 [cell.activityView startAnimating];
+                cell.loadBtn.tag = supplyAndDemandType;
+                [cell.loadBtn addTarget:self action:@selector(loadBtnDown:) forControlEvents:UIControlEventTouchUpInside];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 return cell;
             }
         }else{
@@ -925,12 +960,14 @@
                 supplyCell.selectionStyle = UITableViewCellSelectionStyleNone;
                 return supplyCell;
             }else{
-                static NSString *cellName = @"cellName";
                 LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
                 if (cell == nil) {
                     cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
                 }
                 [cell.activityView startAnimating];
+                cell.loadBtn.tag = supplyAndDemandType;
+                [cell.loadBtn addTarget:self action:@selector(loadBtnDown:) forControlEvents:UIControlEventTouchUpInside];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 return cell;
             }
             
@@ -961,16 +998,37 @@
                 return cell;
             }
         }else{
-            static NSString *cellName = @"cellName";
             LoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:cellName];
             if (cell == nil) {
                 cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
             }
             [cell.activityView startAnimating];
+            cell.loadBtn.tag = conditonType;
+            [cell.loadBtn addTarget:self action:@selector(loadBtnDown:) forControlEvents:UIControlEventTouchUpInside];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
         }
     }
     return nil;
+}
+
+- (void)loadBtnDown:(UIButton*)btn
+{
+    btn.hidden = YES;
+    if (btn.tag == conditonType) {
+        compIsLoading = YES;
+        [self companyMoreRequest];
+    }else{
+        isLoading = YES;
+        if (_chooseSelected.tag == 30)
+        {
+            [self supplyMoreRequest];
+            
+        }else
+        {
+            [self demandMoreRequst];
+        }
+    }
 }
 
 

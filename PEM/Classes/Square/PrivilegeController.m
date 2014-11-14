@@ -29,6 +29,7 @@
 
 
 - (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self addButton];
     [self addRightView];
     if (![SystemConfig sharedInstance].isUserLogin) {
