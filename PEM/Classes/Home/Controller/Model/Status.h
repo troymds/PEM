@@ -11,5 +11,6 @@
 @property (nonatomic, retain)NSArray        *hotDemandArray;
 @property (nonatomic, retain)NSArray        *hotSupplyArray;
 @property (nonatomic, retain)NSDictionary   *todayNumDictionary;
+@property(nonatomic,retain)NSDictionary *activeArray;
 - (id)initWithDict:(NSDictionary *)dict;
 @end

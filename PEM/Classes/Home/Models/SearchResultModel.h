@@ -9,8 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface SearchResultModel : NSObject<NSCopying>
-//{
-//    NSString *_searchKeyword;
-//}
 @property (nonatomic, copy) NSString *searchKeyword;
 @end

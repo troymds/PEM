@@ -82,7 +82,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor =[UIColor whiteColor];
+    
+   
     
     _supllyArray = [[NSMutableArray array]init];
     _demandArray = [[NSMutableArray array]init];
@@ -105,9 +106,7 @@
     
     currentSelectedBtnTag = 200;
     
-    [self getSearchResultData];
-    
-    
+    [self getSearchResultData];     //保存历史记录
     [self addbutton];
     [self addTableView];            // 搜索记录表
     
@@ -115,12 +114,10 @@
     // 2.集成刷新控件
     [self addRefreshViews];
     
-    [self addShowNoRecordView];
-    [self addShowNoDataView];
-    [self loadHotSearchStatuses];
-    
-    
-    
+    [self addShowNoRecordView];     //无数据
+    [self addShowNoDataView];       //无记录
+    [self loadHotSearchStatuses];   //热门搜索加载数据
+        
     
 }
 // 热门搜索
@@ -236,16 +233,11 @@
     [_searchDemandArray removeAllObjects];
     [_searchComanyArray removeAllObjects];
     
-    
-    //    [_demandArray removeAllObjects];
-    //    [_supllyArray removeAllObjects];
-    //    [_compangyArray removeAllObjects];
-    
     [_resultTableView reloadData];
-    
     [_recTableView reloadData];
     
     _currentKeyString = sender.titleLabel.text;
+    _searchTextField.text =_currentKeyString;
     
     [self searchToGo];
     
@@ -1608,7 +1600,7 @@
         lin.backgroundColor =HexRGB(0xe6e3e4);
         
         UILabel *idLabel =[[UILabel alloc]initWithFrame:CGRectMake(15, 0, 290, 44)];
-        idLabel.text =[NSString stringWithFormat:@"关键词: %@",_searchTextField.text];
+        idLabel.text =[NSString stringWithFormat:@"关键词: %@",_currentKeyString];
         idLabel.font =[UIFont systemFontOfSize:PxFont(22)];
         idLabel.textColor=HexRGB(0x808080);
         [viewForHeader addSubview:idLabel];
