@@ -243,6 +243,7 @@
     [_recTableView reloadData];
     
     _currentKeyString = sender.titleLabel.text;
+    _searchTextField.text = _currentKeyString;
     
     [self searchToGo];
     
