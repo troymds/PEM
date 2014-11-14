@@ -3,7 +3,7 @@
 #import "Status.h"
 
 @implementation Status
-@synthesize adsArray,hotCategoryArray,hotDemandArray,hotSupplyArray,todayNumDictionary ;
+@synthesize adsArray,hotCategoryArray,hotDemandArray,hotSupplyArray,todayNumDictionary,activeArray ;
 
 
 - (id)initWithDict:(NSDictionary *)dict
@@ -17,6 +17,8 @@
         hotDemandArray = dict[@"hot_demand"];
         hotSupplyArray = dict[@"hot_supply"];
         todayNumDictionary = dict[@"today_num"];
+        todayNumDictionary = dict[@"today_num"];
+        activeArray = dict[@"active"];
         
     }
     return self;

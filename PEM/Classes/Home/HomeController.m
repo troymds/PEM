@@ -8,7 +8,7 @@
 
 #import "HomeController.h"
 #import "UIBarButtonItem+MJ.h"
-#import "AFNetworking.h"
+//#import "AFNetworking.h"
 #import "SearchController.h"
 #import "xiangqingViewController.h"
 #import "qiugouXQ.h"
@@ -20,17 +20,18 @@
 #import "HotDemandModel.h"
 #import "adsModel.h"
 #import "findViewController.h"
-#import "UIImageView+WebCache.h"
+//#import "UIImageView+WebCache.h"
 #import "labelColor.h"
-#import "supplyTool.h"
+//#import "supplyTool.h"
 #import "CompanyXQViewController.h"
 #import "MessageController.h"
 #import "bannerWebView.h"
-#import "SDWebImageManager.h"
+//#import "SDWebImageManager.h"
 #import "ZBarSDK.h"
 #import "DimensionalCodeViewController.h"
 #import "RemindView.h"
 
+#define SubjectHeight 190
 #define khotImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"hotImage.data"]
 #define ktadyNumFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"tadyNum.data"]
 #define khotSupplyFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"hotSupply.data"]
@@ -48,6 +49,7 @@
     NSMutableArray *_hotDemandArray;//热门求购
     NSMutableArray *_hotSupplyArray;//热门供应
     
+    NSString *contentUrl;
     
     int currentTag;
     
@@ -59,14 +61,12 @@
 
 @implementation HomeController
 @synthesize scrollView, slideImages;
-@synthesize text;
-@synthesize pageControl;
 @synthesize adsImage;
 @synthesize hotImageArray = _hotImageArray;
 @synthesize tadyNumArray=_tadyNumArray;
 @synthesize hotDemandArray=_hotDemandArray;
 @synthesize hotSupplyArray=_hotSupplyArray;
-
+@synthesize activetArray =_activetArray;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -80,14 +80,11 @@
     self.navigationItem.titleView =_searchImage;
     [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateNormal];
     [_searchImage setImage:[UIImage imageNamed:@"nav_searchhome.png"] forState:UIControlStateHighlighted];
-
-
     [_searchImage addTarget:self action:@selector(searchBarBtn) forControlEvents:UIControlEventTouchUpInside];
     
-        
     
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_code.png" highlightedSearch:@"vav_code_pre.png" target:(self) action:@selector(zbarSdk:)];
-      self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:@selector(lo)];
+      self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithSearch:@"nav_logo.png" highlightedSearch:@"nav_logo.png" target:(self) action:nil];
     self.view.userInteractionEnabled = YES;
     
     
@@ -99,9 +96,14 @@
     self.hotImageArray = [[NSMutableArray alloc] initWithCapacity:0];
     self.tadyNumArray =[[NSMutableArray alloc]initWithCapacity:0];
     self.hotDemandArray =[[NSMutableArray alloc]initWithCapacity:0];
-    
     self.hotSupplyArray =[[NSMutableArray alloc]initWithCapacity:0];
     
+    self.activetArray =[[NSMutableArray alloc]initWithCapacity:0];
+    
+    
+    self.lefttimage =[NSString alloc];
+    self.rightimage =[NSString alloc];
+    self.bottomimage =[NSString alloc];
     
     // 离线数据
     self.adsImageOff = [NSMutableArray array];
@@ -115,14 +117,13 @@
     
     currentTag = 0;
     
+//    [self addSubject];//专题活动
     
     
     
     
 }
--(void)lo{
-    
-}
+
 -(void)zbarSdk:(UIButton *)sdk{
     _reader = [ZBarReaderViewController new];
     _reader.readerDelegate = self;
@@ -172,7 +173,23 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
         Status *statusModel = [statues objectAtIndex:0];
+        NSString *dictleft =[[statusModel.activeArray objectForKey:@"left" ]objectForKey:@"image"];
+        _lefttimage =dictleft;
+        NSString *dictBottom =[[statusModel.activeArray objectForKey:@"bottom"]objectForKey:@"image"];
+        _bottomimage =dictBottom;
+
+        NSString *dictRight =[[statusModel.activeArray objectForKey:@"right"]objectForKey:@"image"];
+        _rightimage =dictRight;
         
+        NSString *rigthType =[[statusModel.activeArray objectForKey:@"right"]objectForKey:@"content"];
+        contentUrl = [NSString alloc];
+        contentUrl = rigthType;
+       
+
+        [self addleftActiveImage:_lefttimage];
+        [self addbottomActiveImage:_bottomimage];
+        [self addrightActiveImage:_rightimage];
+
         for (NSDictionary *dict in statusModel.hotCategoryArray)
         {
             HotCategoryModel *hotModel = [[HotCategoryModel alloc] initWithDictionaryForHotCate:dict];
@@ -293,8 +310,7 @@
 // 选中第几个图片
 - (void)cycleBannerView:(KDCycleBannerView *)bannerView didSelectedAtIndex:(NSUInteger)index{
     adsModel *model;
-    if (_adsImageOff.count > 0) { //判断是否离线,还有待改进
-        //        model = _adsImageOff[index];
+    if (_adsImageOff.count > 0) {
         [RemindView showViewWithTitle:@"没有网络" location:MIDDLE];
         return;
     }else
@@ -332,7 +348,7 @@
 -(void)addBackScrollView
 {
     _backScrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, self.view.frame.size.height-44)];
-    _backScrollView.contentSize = CGSizeMake(kWidth,960);
+    _backScrollView.contentSize = CGSizeMake(kWidth,SubjectHeight+960);
     _backScrollView.userInteractionEnabled=YES;
     _backScrollView.bounces = NO;
     _backScrollView.backgroundColor =HexRGB(0xffffff);
@@ -352,46 +368,91 @@
     _backScrollView.showsVerticalScrollIndicator = NO;
     _backScrollView.showsHorizontalScrollIndicator = NO;
     
-    for (int l=0; l<7; l++) {
+    for (int l=0; l<11; l++) {
         UIView *lin =[[UIView alloc]init];
         lin.backgroundColor =HexRGB(0xe6e3e4);
         [_backScrollView addSubview:lin];
         if (l==0) {
-            lin.frame = CGRectMake(10, 144+l%3, 300, 1);
+            lin.frame = CGRectMake(10, 144+l%3, kWidth-20, 1);
         }
         if (l==1) {
-            lin.frame = CGRectMake(10, 310+l%3, 300, 1);
+            lin.frame = CGRectMake(10, 310+l%3, kWidth-20, 1);
         }
         if (l==2) {
-            lin.frame = CGRectMake(10, 336+l%3, 300, 1);
+            lin.frame = CGRectMake(10, SubjectHeight+336+l%3, kWidth-20, 1);
         }
         if (l==3) {
-            lin.frame = CGRectMake(10, 530+l%3, 300, 1);
+            lin.frame = CGRectMake(10, SubjectHeight+530+l%3, kWidth-20, 1);
         }
         if (l==4) {
-            lin.frame = CGRectMake(10, 600+l%3, 300, 1);
+            lin.frame = CGRectMake(10, SubjectHeight+600+l%3, kWidth-20, 1);
         }
         if (l==5) {
-            lin.frame = CGRectMake(10, 628+l%3, 300, 1);
+            lin.frame = CGRectMake(10, SubjectHeight+628+l%3, kWidth-20, 1);
             
         }
         if (l==6) {
-            lin.frame = CGRectMake(10, 823+l%3, 300, 1);
+            lin.frame = CGRectMake(10, SubjectHeight+823+l%3, kWidth-20, 1);
         }
+        if (l==7) {
+            lin.frame = CGRectMake(10, 338+l%3, 300, 1);
+
+        }if (l==8) {
+            lin.frame = CGRectMake(10, SubjectHeight+307+l%3, kWidth-20, 1);
+
+        }if (l==9) {
+            lin.frame =  CGRectMake(10, 410+l%3, kWidth-20, 1);
+        }if (l==10) {
+            lin.frame =  CGRectMake(10, 417+l%3, kWidth-20, 1);
+        }
+        for (int w =0; w<3; w++) {
+            UIView *lin =[[UIView alloc]init];
+            lin.backgroundColor =HexRGB(0xe6e3e4);
+            [_backScrollView addSubview:lin];
+            
+            if (w==0) {
+                lin.frame = CGRectMake(10+w%3, 340, 1, 70);
+            }if (w==1) {
+                lin.frame = CGRectMake(10+w%3*300, 339, 1, 72);
+            }if (w==2) {
+                lin.frame = CGRectMake(10+w%3+172, 340, 1, 70);
+            }
+            
+        }
+       
+    }
+    
+    
+    
+    for (int t=0; t<4; t++) {
+        UIImageView *hotTitle =[[UIImageView alloc]initWithFrame:CGRectMake(18, 122+t%4*(15+180), 70, 17)];
+        hotTitle.image =[UIImage imageNamed:[NSString stringWithFormat:@"title%d",t+1]];
+        [_backScrollView addSubview:hotTitle];
+        if (t==2) {
+            hotTitle.frame =CGRectMake(18, 122+t%3*(12+180), 70, 17);
+        }
+        else if (t==3){
+            hotTitle.frame= CGRectMake(18, 210+t%4*(15+180), 76, 16);
+        }
+                
     }
 }
 
 - (void)addtitletodayOff
 {
-    for (int t=0; t<3; t++) {
-        UIImageView *hotTitle =[[UIImageView alloc]initWithFrame:CGRectMake(18, 122+t%3*(15+180), 70, 17)];
+    for (int t=0; t<4; t++) {
+        UIImageView *hotTitle =[[UIImageView alloc]initWithFrame:CGRectMake(18, 122+t%4*(15+180), 70, 17)];
         hotTitle.image =[UIImage imageNamed:[NSString stringWithFormat:@"title%d",t+1]];
         [_backScrollView addSubview:hotTitle];
         if (t==2) {
-            hotTitle.frame = CGRectMake(10, 260+t%3*(20+154), 80, 17);
+            hotTitle.frame =CGRectMake(18, 122+t%3*(12+180), 70, 17);
+        }
+        else if (t==3){
+            hotTitle.frame= CGRectMake(18, 210+t%4*(15+180), 76, 16);
         }
         
     }
+
     int init_x = 100;
     int init_y = 116;
     int viewWidth_f = 210;
@@ -416,22 +477,11 @@
     [_backScrollView addSubview:showLable];
 }
 
-
-
-
 //三个标题
 -(void)addtitleTodyBtn:(NSMutableArray *)tody
 {
     
-    for (int t=0; t<3; t++) {
-        UIImageView *hotTitle =[[UIImageView alloc]initWithFrame:CGRectMake(18, 122+t%3*(15+180), 70, 17)];
-        hotTitle.image =[UIImage imageNamed:[NSString stringWithFormat:@"title%d",t+1]];
-        [_backScrollView addSubview:hotTitle];
-        if (t==2) {
-            hotTitle.frame = CGRectMake(10, 260+t%3*(20+154), 80, 17);
-        }
-        
-    }
+   
     TodayNumModel *todayNum =[tody objectAtIndex:0];
     
     int init_x = 100;
@@ -456,9 +506,6 @@
     
     
 }
-
-
-
 
 #pragma mark 添七个按钮
 -(void)addCategorybutton:(NSMutableArray *)btnImgArray
@@ -578,10 +625,63 @@
     catClickFlage = true;
     
 }
+
+
+
+#pragma mark ---添加专题
+-(void)addleftActiveImage:(NSString *)image {
+    UIImageView *leftImage =[[UIImageView alloc]initWithFrame:CGRectMake(11, 340, 173, 70)];
+    leftImage.userInteractionEnabled=YES;
+    [_backScrollView addSubview:leftImage];
+    [leftImage setImageWithURL:[NSURL URLWithString:image] placeholderImage:[UIImage imageNamed:@"load_big.png"]];
+
+    UITapGestureRecognizer *activeTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(lefttapGestureRecognizer:)];
+    [leftImage addGestureRecognizer:activeTap];
+}
+-(void)addrightActiveImage:(NSString *)image {
+    UIImageView *rightImage =[[UIImageView alloc]initWithFrame:CGRectMake(185, 340, 125, 70)];
+    rightImage.userInteractionEnabled = YES;
+    [_backScrollView addSubview:rightImage];
+    [rightImage setImageWithURL:[NSURL URLWithString:image] placeholderImage:[UIImage imageNamed:@"load_big.png"]];
+    
+    UITapGestureRecognizer *activeTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(righttapGestureRecognizer:)];
+    [rightImage addGestureRecognizer:activeTap];
+}
+-(void)addbottomActiveImage:(NSString *)image {
+    UIImageView *bottomImage =[[UIImageView alloc]initWithFrame:CGRectMake(11, 420, kWidth-20, 70)];
+    bottomImage.userInteractionEnabled = YES;
+    [_backScrollView addSubview:bottomImage];
+    [bottomImage setImageWithURL:[NSURL URLWithString:image] placeholderImage:[UIImage imageNamed:@"load_big.png"]];
+    
+    UITapGestureRecognizer *activeTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(bottomtapGestureRecognizer:)];
+    [bottomImage addGestureRecognizer:activeTap];
+}
+
+-(void)lefttapGestureRecognizer:(UITapGestureRecognizer *)img leftType:(NSString *)type leftContent:(NSString *)content{
+    
+    bannerWebView *activeVC =[[bannerWebView alloc]init];
+    activeVC.bannerWebid = contentUrl;
+    [self.navigationController pushViewController:activeVC animated:YES];
+}
+-(void)righttapGestureRecognizer:(UITapGestureRecognizer *)img{
+    
+    bannerWebView *activeVC =[[bannerWebView alloc]init];
+    activeVC.bannerWebid = contentUrl;
+    [self.navigationController pushViewController:activeVC animated:YES];
+}
+
+-(void)bottomtapGestureRecognizer:(UITapGestureRecognizer *)img{
+    
+    bannerWebView *activeVC =[[bannerWebView alloc]init];
+    activeVC.bannerWebid = contentUrl;
+    [self.navigationController pushViewController:activeVC animated:YES];
+}
+
+
 #pragma mark 添加三条广告
 -(void)addHot:(NSMutableArray *)hotDemand hotSupply:(NSMutableArray *)supply
 {
-    for (int s=0; s<3; s++) {
+        for (int s=0; s<3; s++) {
         //广告图片 热门求购
         HotSupplyModel *supplyArr =[supply objectAtIndex:s];
         
@@ -597,13 +697,13 @@
         suBigBtn.tag =300+s;
         
         sadImage.userInteractionEnabled = YES;
-        sadImage.frame =CGRectMake(225, 393+s%3*(10+61), 85, 61);
-        suBigBtn.frame =CGRectMake(0, 394+s%3*(10+61), kWidth, 61);
+        sadImage.frame =CGRectMake(225, SubjectHeight+393+s%3*(10+61), 85, 61);
+        suBigBtn.frame =CGRectMake(0, SubjectHeight+394+s%3*(10+61), kWidth, 61);
         
         if (s ==0)
         {
-            sadImage.frame =CGRectMake(10, 339+s%3*(5), 300, 118);
-            suBigBtn.frame=CGRectMake(0, 0, 300, 118);
+            sadImage.frame =CGRectMake(10, SubjectHeight+339+s%3*(5), kWidth-20, 118);
+            suBigBtn.frame=CGRectMake(0, 0, SubjectHeight+kWidth-20, 118);
             [sadImage addSubview:suBigBtn];
             
             [sadImage setImageWithURL:[NSURL URLWithString:supplyArr.image] placeholderImage:[UIImage imageNamed:@"load_big.png"] options:(SDWebImageLowPriority||SDWebImageRetryFailed)];
@@ -615,7 +715,7 @@
         UILabel *TitleLabel=[[UILabel alloc]init ];
         TitleLabel.backgroundColor =[UIColor clearColor];
         TitleLabel.text =supplyArr.title;
-        TitleLabel.frame =CGRectMake(20, 388+s%3*(10+61), 250, 40);
+        TitleLabel.frame =CGRectMake(20, SubjectHeight+388+s%3*(10+61), 250, 40);
         [_backScrollView addSubview:TitleLabel];
         if (s==0)
         {
@@ -625,7 +725,7 @@
         TitleLabel.font =[UIFont systemFontOfSize:PxFont(22)];
         TitleLabel.textColor=HexRGB(0x3a3a3a);
         //小标题
-        UILabel *SubTitle =[[UILabel alloc]initWithFrame:CGRectMake(20, 422+s%3*(10+61), 250, 30)];
+        UILabel *SubTitle =[[UILabel alloc]initWithFrame:CGRectMake(20, SubjectHeight+422+s%3*(10+61), 250, 30)];
         SubTitle.backgroundColor =[UIColor clearColor];
         if (s==0) {
             SubTitle.frame =CGRectMake(0, 0, 0, 0);
@@ -634,9 +734,6 @@
         SubTitle.text = supplyArr.sub_title;
         SubTitle.font =[UIFont systemFontOfSize:PxFont(18)];
         SubTitle.textColor=HexRGB(0x666666);
-        
-        
-        
     }
     
     for (int d=0; d<3; d++) {
@@ -648,14 +745,14 @@
         adImage.userInteractionEnabled = YES;
         UIButton *deBigBtn =[UIButton buttonWithType:UIButtonTypeCustom];
         
-        deBigBtn.frame =CGRectMake(0, 690+d%3*(10+61), kWidth, 61);
+        deBigBtn.frame =CGRectMake(0,SubjectHeight+ 690+d%3*(10+61), kWidth, 61);
         [_backScrollView addSubview:deBigBtn];
         [deBigBtn addTarget:self action:@selector(demandBtn:) forControlEvents:UIControlEventTouchUpInside];
         deBigBtn.tag = 200+d;
-        adImage.frame =CGRectMake(225, 687+d%3*(10+61), 85, 61);
+        adImage.frame =CGRectMake(225, SubjectHeight+687+d%3*(10+61), 85, 61);
         if (d ==0) {
-            adImage.frame =CGRectMake(10, 631+d%3*(10+61), 300, 118);
-            deBigBtn.frame =CGRectMake(0, 0, 300, 118);
+            adImage.frame =CGRectMake(10, SubjectHeight+631+d%3*(10+61), kWidth-20, 118);
+            deBigBtn.frame =CGRectMake(0, 0, SubjectHeight+kWidth-20, 118);
             [adImage addSubview:deBigBtn];
         }
         [adImage setImageWithURL:[NSURL URLWithString:demandArr.image] placeholderImage:[UIImage imageNamed:@"load_big.png"]];
@@ -666,7 +763,7 @@
         UILabel *dTitleLabel=[[UILabel alloc]init ];
         dTitleLabel.backgroundColor =[UIColor clearColor];
         dTitleLabel.text =demandArr.title;
-        dTitleLabel.frame =CGRectMake(20, 680+d%3*(10+61), 250, 40);
+        dTitleLabel.frame =CGRectMake(20, SubjectHeight+680+d%3*(10+61), 250, 40);
         dTitleLabel.font =[UIFont systemFontOfSize:PxFont(22)];
         dTitleLabel.textColor=HexRGB(0x3a3a3a);
         
@@ -676,7 +773,7 @@
         }
         dTitleLabel.backgroundColor =[UIColor clearColor];
         //小标题
-        UILabel *SubTitle =[[UILabel alloc]initWithFrame:CGRectMake(20, 710+d%3*(10+61), 250, 30)];
+        UILabel *SubTitle =[[UILabel alloc]initWithFrame:CGRectMake(20, SubjectHeight+710+d%3*(10+61), 250, 30)];
         SubTitle.backgroundColor =[UIColor clearColor];
         if (d==0) {
             SubTitle.frame =CGRectMake(0, 0, 0, 0);
@@ -688,6 +785,8 @@
         
         
     }
+    
+    
     
     
 }

@@ -25,11 +25,15 @@
 @property(nonatomic,strong)NSMutableArray *hotDemandArray;//热门求购
 @property(nonatomic,strong)NSMutableArray *hotSupplyArray;//热门供应
 
+@property(nonatomic ,strong)NSMutableArray *activetArray;//专题活动
+
+@property(nonatomic ,strong)NSString *bottomimage;//专题活动
+@property(nonatomic ,strong)NSString *lefttimage;//专题活动
+@property(nonatomic ,strong)NSString *rightimage;//专题活动
+
 
 @property (strong,nonatomic)UIScrollView *scrollView;
 @property (strong,nonatomic)NSMutableArray *slideImages;
-@property (strong,nonatomic)UIPageControl *pageControl;
-@property (strong, nonatomic)UITextField *text;
 @property(nonatomic,strong)NSMutableArray *adsImage;
 
 //离线数据
