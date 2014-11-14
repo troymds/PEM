@@ -1213,6 +1213,7 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UIView *lineView;
     static NSString *cellName = @"cellName";
     if (self.view == _bgView){
         static NSString *cellID = @"Cell";
