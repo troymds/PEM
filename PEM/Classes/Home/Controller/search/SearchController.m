@@ -451,6 +451,16 @@
             [self tableReloadData];
             
         } SupplywithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0]  SupplyfailureBlock:^(NSError *error) {
+            if (isLoading) {
+                isLoading = NO;
+            }
+            NSInteger count = [_resultTableView numberOfRowsInSection:0];
+            if (count!=_supllyArray.count) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_supllyArray.count inSection:0];
+                LoadMoreCell *cell = (LoadMoreCell *)[_resultTableView cellForRowAtIndexPath:indexPath];
+                cell.loadBtn.hidden = NO;
+            }
+
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
@@ -482,6 +492,17 @@
             [self tableReloadData];
             
         } lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0] failure:^(NSError *error) {
+            
+            if (isLoading) {
+                isLoading = NO;
+            }
+            NSInteger count = [_resultTableView numberOfRowsInSection:0];
+            if (count!=_supllyArray.count) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_supllyArray.count inSection:0];
+                LoadMoreCell *cell = (LoadMoreCell *)[_resultTableView cellForRowAtIndexPath:indexPath];
+                cell.loadBtn.hidden = NO;
+            }
+
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
             
@@ -524,6 +545,16 @@
             [self tableReloadData];
             
         } DemandwithKeywords:_currentKeyString lastID:0? 0:[NSString stringWithFormat:@"%d",[_demandArray count]-0] DemandfailureBlock:^(NSError *error) {
+            if (isLoading) {
+                isLoading = NO;
+            }
+            NSInteger count = [_resultTableView numberOfRowsInSection:0];
+            if (count!=_supllyArray.count) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_demandArray.count inSection:0];
+                LoadMoreCell *cell = (LoadMoreCell *)[_resultTableView cellForRowAtIndexPath:indexPath];
+                cell.loadBtn.hidden = NO;
+            }
+
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
         }];
@@ -554,6 +585,16 @@
             }
             [self tableReloadData];
         } lastID:0? 0:[NSString stringWithFormat:@"%u",[_demandArray count]-0] failure:^(NSError *error) {
+            if (isLoading) {
+                isLoading = NO;
+            }
+            NSInteger count = [_resultTableView numberOfRowsInSection:0];
+            if (count!=_supllyArray.count) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_demandArray.count inSection:0];
+                LoadMoreCell *cell = (LoadMoreCell *)[_resultTableView cellForRowAtIndexPath:indexPath];
+                cell.loadBtn.hidden = NO;
+            }
+
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
@@ -599,6 +640,16 @@
              
          } withKeywords:_currentKeyString lastID: 0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0]
                               failureBlock:^(NSError *error) {
+                                  if (isLoading) {
+                                      isLoading = NO;
+                                  }
+                                  NSInteger count = [_resultTableView numberOfRowsInSection:0];
+                                  if (count!=_supllyArray.count) {
+                                      NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_compangyArray.count inSection:0];
+                                      LoadMoreCell *cell = (LoadMoreCell *)[_resultTableView cellForRowAtIndexPath:indexPath];
+                                      cell.loadBtn.hidden = NO;
+                                  }
+
                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                                   
                                   [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
@@ -632,6 +683,15 @@
             [self tableReloadData];
             
         } lasiID:0? 0:[NSString stringWithFormat:@"%u",[_compangyArray count]-0] failure:^(NSError *error) {
+            if (isLoading) {
+                isLoading = NO;
+            }
+            NSInteger count = [_resultTableView numberOfRowsInSection:0];
+            if (count!=_supllyArray.count) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_compangyArray.count inSection:0];
+                LoadMoreCell *cell = (LoadMoreCell *)[_resultTableView cellForRowAtIndexPath:indexPath];
+                cell.loadBtn.hidden = NO;
+            }
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
@@ -707,7 +767,6 @@
         } lastID:0? 0:[NSString stringWithFormat:@"%u",[_supllyArray count]-0] failure:^(NSError *error) {
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
-            
             
         }];
         
@@ -999,6 +1058,8 @@
     _recTableView.bounces = NO;
     _recTableView.tag = RecTableView;
     [_backScrollview addSubview:_recTableView];
+    _recTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _recTableView.separatorColor = [UIColor clearColor];
     _backViw.backgroundColor =[UIColor redColor];
     
     self.view = _bgView;
@@ -1364,6 +1425,8 @@
                     cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
                 }
                 [cell.activityView startAnimating];
+                [cell.loadBtn addTarget:self action:@selector(loadBtnDown:) forControlEvents:UIControlEventTouchUpInside];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 return cell;
             }
             
@@ -1401,6 +1464,8 @@
                     cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
                 }
                 [cell.activityView startAnimating];
+                [cell.loadBtn addTarget:self action:@selector(loadBtnDown:) forControlEvents:UIControlEventTouchUpInside];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 return cell;
             }
             
@@ -1450,12 +1515,29 @@
                     cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
                 }
                 [cell.activityView startAnimating];
+                [cell.loadBtn addTarget:self action:@selector(loadBtnDown:) forControlEvents:UIControlEventTouchUpInside];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 return cell;
             }
         }
     }
     return nil;
 }
+
+- (void)loadBtnDown:(UIButton *)btn
+{
+    btn.hidden = YES;
+    isLoading = YES;
+    if (currentSelectedBtnTag == 200) {
+        [self loadsupplyRequest];
+    }else if(currentSelectedBtnTag == 201 ){
+        [self loaddemandRequest];
+    }else{
+        [self loadcompanyRequest];
+    }
+}
+
+
 #pragma mark 6.第section组头部显示什么控件
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
