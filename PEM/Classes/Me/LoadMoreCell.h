@@ -10,4 +10,5 @@
 
 @interface LoadMoreCell : UITableViewCell
 @property (nonatomic,strong) UIActivityIndicatorView *activityView;
+@property (nonatomic,strong) UIButton *loadBtn;
 @end

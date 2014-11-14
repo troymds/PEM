@@ -71,7 +71,6 @@
     if ([[_tableView cellForRowAtIndexPath:indexpath] isKindOfClass:[LoadMoreCell class]]&&scrollView.contentSize.height-scrollView.contentOffset.y<=scrollView.frame.size.height+40) {
         if (!isLoading) {
             isLoading = YES;
-//            isLoad = YES;
             [self loadData];
         }
     }
@@ -131,9 +130,6 @@
                     
                 }
             }
-//            if (isLoad) {
-//                isLoad = NO;
-//            }
             if (isLoading) {
                 isLoading = NO;
             }
@@ -147,6 +143,15 @@
         if (isRefresh) {
             isRefresh = NO;
             [MJHeadView endRefreshing];
+        }
+        if (isLoading) {
+            isLoading = NO;
+        }
+        NSInteger count = [_tableView numberOfRowsInSection:0];
+        if (count!=_dataArray.count) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_dataArray.count inSection:0];
+            LoadMoreCell *cell = (LoadMoreCell *)[_tableView cellForRowAtIndexPath:indexPath];
+            cell.loadBtn.hidden = NO;
         }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
@@ -187,9 +192,19 @@
         if (cell == nil) {
             cell = [[LoadMoreCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellName];
         }
+        [cell.activityView startAnimating];
+        [cell.loadBtn addTarget:self action:@selector(loadBtnDown:) forControlEvents:UIControlEventTouchUpInside];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     return nil;
+}
+
+- (void)loadBtnDown:(UIButton *)btn
+{
+    btn.hidden = YES;
+    isLoading = YES;
+    [self loadData];
 }
 
 
@@ -202,11 +217,13 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    MyFavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
-    xiangqingViewController *detailVC = [[xiangqingViewController alloc] init];
-    detailVC.delegate = self;
-    detailVC.supplyIndex = item.info_id;
-    [self.navigationController pushViewController:detailVC animated:YES];
+    if (indexPath.row < _dataArray.count) {
+        MyFavoriteItem *item = [_dataArray objectAtIndex:indexPath.row];
+        xiangqingViewController *detailVC = [[xiangqingViewController alloc] init];
+        detailVC.delegate = self;
+        detailVC.supplyIndex = item.info_id;
+        [self.navigationController pushViewController:detailVC animated:YES];
+    }
 }
 
 
