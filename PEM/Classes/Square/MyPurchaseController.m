@@ -146,6 +146,10 @@
                 }
                 [_tableView reloadData];
             }else{
+                if (needLoad) {
+                    needLoad = NO;
+                    [_tableView reloadData];
+                }
                 if (_dataArray.count ==0) {
                     remindView.hidden = NO;
                 }else{
@@ -187,6 +191,10 @@
     [self.navigationController pushViewController:dc animated:YES];
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return needLoad?[_dataArray count]+1:[_dataArray count];
+}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{

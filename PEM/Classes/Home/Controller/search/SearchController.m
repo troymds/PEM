@@ -66,6 +66,7 @@
     NSString *_currentKeyString;
     
     UIScrollView *_backScrollview;
+    UIWebView *_webView;
     
     BOOL needLoad;//是否需要加载
     BOOL isLoading;//是否正在加载
@@ -117,7 +118,7 @@
     [self addShowNoRecordView];     //无数据
     [self addShowNoDataView];       //无记录
     [self loadHotSearchStatuses];   //热门搜索加载数据
-        
+    [self addWebView];
     
 }
 // 热门搜索
@@ -138,6 +139,13 @@
     }];
     
 }
+
+- (void)addWebView
+{
+    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
+}
+
+
 -(void)addHotSearchView{
     UIImage *hotImge =[UIImage imageNamed:@"home_hot.png"];
     UIImageView *hotSearchImage =[[UIImageView alloc]initWithFrame:CGRectMake(30, 15, hotImge.size.width, hotImge.size.height)];
@@ -1725,7 +1733,9 @@
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (_currentKeyString.length>0)
     {
-        
+        if (_currentKeyString.length>1&&[_currentKeyString characterAtIndex:0] == '@') {
+            
+        }
         // 如果有重复关键字，保留最新的。
         if (currentSelectedBtnTag == 202)
         {

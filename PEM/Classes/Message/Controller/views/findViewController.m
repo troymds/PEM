@@ -191,7 +191,9 @@
                     [_CateSupplyArray addObjectsFromArray:statues];
                 }else{
                     if (statues.count==0){
-                        needLoad = NO;
+                        if (needLoad) {
+                            needLoad = NO;
+                        }
                         [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
                     }
                 }
@@ -219,7 +221,9 @@
                     [_CateSupplyArray addObjectsFromArray:statues];
                 }else{
                     if (statues.count==0){
-                        needLoad = NO;
+                        if (needLoad) {
+                            needLoad = NO;
+                        }
                         [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
                     }
                 }
@@ -251,7 +255,9 @@
                     }
                 }else{
                     if (statues.count==0){
-                        needLoad = NO;
+                        if(needLoad){
+                            needLoad = NO;
+                        }
                         [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
                     }
                 }
@@ -281,7 +287,9 @@
                     dataLabel.hidden = YES;
                     _tableView.hidden = NO;
                 }else{
-                    needLoad = NO;
+                    if (needLoad) {
+                        needLoad = NO;
+                    }
                 }
                 if (statues.count>9) {
                     [_CateDemandArray removeAllObjects];
@@ -313,12 +321,17 @@
                 if (statues.count > 0) {
                     if (statues.count==10) {
                         needLoad = YES;
+                    }else{
+                        needLoad = NO;
                     }
                     dataLabel.hidden = YES;
                     _tableView.hidden = NO;
                     
                 }else{
                     if (statues.count==0){
+                        if (needLoad) {
+                            needLoad = NO;
+                        }
                         needLoad = NO;
                         [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
                     }
@@ -353,12 +366,16 @@
                 if (statues.count > 0) {
                     if (statues.count == 10) {
                         needLoad = YES;
+                    }else{
+                        needLoad = NO;
                     }
                     dataLabel.hidden = YES;
                     _tableView.hidden = NO;
                 }else{
                     if (statues.count==0){
-                        needLoad = NO;
+                        if (needLoad) {
+                            needLoad = NO;
+                        }
                         [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
                     }
                 }
@@ -394,13 +411,17 @@
                 if (statues.count > 0) {
                     if (statues.count == 10) {
                         needLoad = YES;
+                    }else{
+                        needLoad = NO;
                     }
                     dataLabel.hidden = YES;
                     _tableView.hidden = NO;
                     
                 }else{
                     if (statues.count==0){
-                        needLoad = NO;
+                        if (needLoad) {
+                            needLoad = NO;
+                        }
                         [RemindView showViewWithTitle:@"数据已全部加载完毕" location:BELLOW];
                     }
                 }
@@ -429,6 +450,8 @@
                 if (statues.count > 0) {
                     if (statues.count == 10) {
                         needLoad = YES;
+                    }else{
+                        needLoad = NO;
                     }
                     dataLabel.hidden = YES;
                     _tableView.hidden = NO;

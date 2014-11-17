@@ -114,7 +114,10 @@
                 }
                 [_tableView reloadData];
             }else{
-                needLoad = NO;
+                if (needLoad) {
+                    needLoad = NO;
+                    [_tableView reloadData];
+                }
                 if (_dataArray.count ==0){
                     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
                     view.backgroundColor = HexRGB(0xffffff);

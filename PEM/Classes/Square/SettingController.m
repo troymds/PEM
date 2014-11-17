@@ -182,12 +182,16 @@
                     NSString *version = [NSBundle mainBundle].infoDictionary[key];
                     NSString *current = [dic objectForKey:@"version"];
                     if ([current isEqualToString:version]) {
-                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"版本更新" message:@"您当前已是最新版本" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
-                        alertView.tag = 1000;
+                        ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:@"当前已是最新版本!" delegate:self cancleButton:@"我知道了" otherButton:nil, nil];
+                        alertView.tag =1000;
                         [alertView show];
-                    }else{
+                     }else{
                         _url = [dic objectForKey:@"url"];
-                        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"检测到新版本" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"立即升级", nil];
+                        NSString *message = [dic objectForKey:@"msg"];
+                        if ([message isKindOfClass:[NSNull class]]||message.length==0) {
+                            message = @"检测到新版本!";
+                        }
+                         ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"版本更新" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即更新", nil];
                         alertView.tag = 1001;
                         [alertView show];
                     }
@@ -228,7 +232,8 @@
         case LOGINBACK_TYPE:
         {
             ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:@"确定退出登录?" delegate:self cancleButton:@"取消" otherButton:@"确定", nil];
-            [alertView show];
+            alertView.tag = 1002;
+            [alertView show];            
         }
             break;
         default:
@@ -239,19 +244,25 @@
 #pragma mark -proAlertView_delegate
 -(void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index
 {
-    if (index==1) {
-        [SystemConfig sharedInstance].isUserLogin = NO;
-        [SystemConfig sharedInstance].company_id = nil;
-        [SystemConfig sharedInstance].viptype = nil;
-        [SystemConfig sharedInstance].companyInfo = nil;
-        [SystemConfig sharedInstance].vipInfo = nil;
-        
-        LoginController *login = [[LoginController alloc] init];
-        NSArray *arr = self.navigationController.viewControllers;
-        NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
-        [array insertObject:login atIndex:1];
-        self.navigationController.viewControllers = array;
-        [self.navigationController popViewControllerAnimated:YES];
+    if (alertView.tag == 1002) {
+        if (index==1) {
+            [SystemConfig sharedInstance].isUserLogin = NO;
+            [SystemConfig sharedInstance].company_id = nil;
+            [SystemConfig sharedInstance].viptype = nil;
+            [SystemConfig sharedInstance].companyInfo = nil;
+            [SystemConfig sharedInstance].vipInfo = nil;
+            
+            LoginController *login = [[LoginController alloc] init];
+            NSArray *arr = self.navigationController.viewControllers;
+            NSMutableArray *array = [[NSMutableArray alloc] initWithArray:arr];
+            [array insertObject:login atIndex:1];
+            self.navigationController.viewControllers = array;
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }else if(alertView.tag == 1001){
+        if (index == 1) {
+            openURL(_url);
+        }
     }
 }
 

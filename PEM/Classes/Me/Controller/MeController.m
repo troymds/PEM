@@ -194,7 +194,7 @@
         if (vipType <= 0 ) {
             if ([SystemConfig sharedInstance].vipInfo) {
                 int supply_num = [[SystemConfig sharedInstance].vipInfo.supply_num intValue];
-                NSLog(@"%d",supply_num);
+                NSLog(@"supply_num:%d",supply_num);
                 if (supply_num>=10) {
                     NSString *message = @"您好,您的发布供应次数已用完,要想发布更多,请选择立即升级";
                     ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级", nil];

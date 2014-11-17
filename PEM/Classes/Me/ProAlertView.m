@@ -128,7 +128,7 @@
             default:{
                 for(int i = 0;i < otherButtons.count;i++){
                     UIButton *btn = [CustomButton buttonWithType:UIButtonTypeCustom];
-                    [btn setTitle:otherButtonTitles forState:UIControlStateNormal];
+                    [btn setTitle:[otherButtons objectAtIndex:i] forState:UIControlStateNormal];
                     [btn setTitleColor:HexRGB(0x000000) forState:UIControlStateNormal];
                     [btn setBackgroundImage:[UIImage imageNamed:@"action_btn.png"] forState:UIControlStateHighlighted];
                     btn.tag = i+1;
@@ -137,7 +137,7 @@
                     [self addSubview:btn];
                 }
                 UIButton *cancelBtn = [CustomButton buttonWithType:UIButtonTypeCustom];
-                [cancelBtn setTitle:otherButtonTitles forState:UIControlStateNormal];
+                [cancelBtn setTitle:cancelButtonTitle?cancelButtonTitle:otherButtonTitles forState:UIControlStateNormal];
                 [cancelBtn setTitleColor:HexRGB(0x000000) forState:UIControlStateNormal];
                 [cancelBtn setBackgroundImage:[UIImage imageNamed:@"action_btn.png"] forState:UIControlStateHighlighted];
                 cancelBtn.tag = 0;
@@ -170,21 +170,16 @@
         [self setupFrame];
         self.center = secondWindow.center;
     } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.13 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [UIView animateWithDuration:0.1 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
             self.center = secondWindow.center;
             bgView.alpha = 0.4;
-            [self roate:orientation sacle:1.2];
+            [self roate:orientation sacle:1.1];
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.09f delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [UIView animateWithDuration:0.1f delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
                 self.center = secondWindow.center;
-                [self roate:orientation sacle:0.9];
+                [self roate:orientation sacle:1.0];
             } completion:^(BOOL finished) {
-                [UIView animateWithDuration:.05f delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-                    self.center = secondWindow.center;
-                    [self roate:orientation sacle:1.0];
-                } completion:^(BOOL finished) {
-                    
-                }];
+                
             }];
         }];
     }];
@@ -281,7 +276,7 @@
 - (void)dismiss
 {
     UIInterfaceOrientation oritention = [[UIApplication sharedApplication] statusBarOrientation];
-    [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.15f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         [self roate:oritention sacle:0.0001];
         bgView.alpha = 0;
     } completion:^(BOOL finished) {

@@ -163,7 +163,10 @@
                 }
                 [_tableView reloadData];
             }else{
-                needLoad = NO;
+                if (needLoad) {
+                    needLoad = NO;
+                    [_tableView reloadData];
+                }
                 //返回数据为空且数组中没有数据 该界面无数据
                 if (_dataArray.count == 0) {
                     remindView.hidden = NO;
@@ -266,6 +269,12 @@
     isLoading = YES;
     [self loadData];
 }
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return needLoad?[_dataArray count]+1:[_dataArray count];
+}
+
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
