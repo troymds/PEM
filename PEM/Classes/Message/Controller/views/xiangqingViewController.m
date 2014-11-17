@@ -606,8 +606,8 @@
         [loginView showView];
     }else{
         XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
-        ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:xqModel.contacts withMessage:[NSString stringWithFormat:@"拨打%@？",xqModel.phone_num] delegate:self cancleButton:@"取消" otherButton:@"确定"];
-        [alertView showView];
+        ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:xqModel.contacts withMessage:[NSString stringWithFormat:@"拨打%@？",xqModel.phone_num] delegate:self cancleButton:@"取消" otherButton:@"确定", nil];
+        [alertView show];
    }
 }
 
@@ -615,7 +615,7 @@
 #pragma mark ----proAlertView_delegate
 - (void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index
 {
-    if (index == 0) {
+    if (index == 1) {
         XQgetInfoDetailModel *xqModel =[[XQArray objectAtIndex:0]objectAtIndex:0];
         [phoneView callPhoneNumber:xqModel.phone_num call:^(NSTimeInterval duration) {
             NSLog(@"User made a call of %.1f seconds", duration);

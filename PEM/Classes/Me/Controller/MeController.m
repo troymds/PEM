@@ -197,9 +197,9 @@
                 NSLog(@"%d",supply_num);
                 if (supply_num>=10) {
                     NSString *message = @"您好,您的发布供应次数已用完,要想发布更多,请选择立即升级";
-                    ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                    ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级", nil];
                     alertView.tag = 1003;
-                    [alertView showView];
+                    [alertView show];
                 }
             }
         }
@@ -400,9 +400,9 @@
         case 3003:
         {
             if ([[SystemConfig sharedInstance].viptype isEqualToString:@"0"]) {
-                _upTDView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:@"尊敬的体验会员,您没有权限上传全景图片\n1.普通会员及以上会员可单独购买上传次数\n2.金牌会员赠送1次\n3.铂金会员赠送5次" delegate:self cancleButton:@"取 消" otherButton:@"立即升级"];
+                _upTDView = [[ProAlertView alloc] initWithTitle:@"尊敬的体验会员" withMessage:@"您上传全景图片次数不足\n1.普通及以上会员可购买上传次数\n2.金牌会员赠送1次\n3.铂金会员赠送5次" delegate:self cancleButton:@"取 消" otherButton:@"立即升级", nil];
                 _upTDView.tag =1000;
-                [_upTDView showView];
+                [_upTDView show];
             }else{
                 int display_3d_num = [[SystemConfig sharedInstance].vipInfo.display_3d_num intValue];
                 if (display_3d_num <= 0) {
@@ -490,10 +490,11 @@
                     if (data == 0) {
                         //不能发布信息
                         NSString *message = [[result objectForKey:@"response"] objectForKey:@"msg"];
-                        ProAlertView *actionView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
+                        ProAlertView *actionView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:message delegate:self cancleButton:@"取消" otherButton:@"立即升级", nil];
                         actionView.tag = 1001;
-                        [actionView showView];
+                        [actionView show];
                     }else{
+                        //发布供应信息
                         [self updateSupplyData];
                     }
                 }else{
@@ -922,7 +923,7 @@
 - (void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index
 {
     if (alertView.tag!=1001) {
-        if (index == 0) {
+        if (index == 1) {
             PrivilegeController *priVC = [[PrivilegeController alloc] init];
             [self.navigationController pushViewController:priVC animated:YES];
         }

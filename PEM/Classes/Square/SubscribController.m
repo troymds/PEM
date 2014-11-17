@@ -373,8 +373,8 @@
                     addField.text = @"";
                 }
             }else{
-                ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签,升级后可订阅更多标签",_maxNum] delegate:self cancleButton:@"取消" otherButton:@"立即升级"];
-                [alertView showView];
+                ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:[NSString stringWithFormat:@"您好,您目前最多只能订阅%ld个标签,升级后可订阅更多标签",_maxNum] delegate:self cancleButton:@"取消" otherButton:@"立即升级", nil];
+                [alertView show];
             }
         }
     }
@@ -434,7 +434,7 @@
 
 - (void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index
 {
-    if (index == 0) {
+    if (index == 1) {
         PrivilegeController *pri = [[PrivilegeController alloc] init];
         [self.navigationController pushViewController:pri animated:YES];
     }

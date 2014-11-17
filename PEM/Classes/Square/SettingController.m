@@ -227,9 +227,8 @@
             break;
         case LOGINBACK_TYPE:
         {
-            ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:@"确定退出登录?" delegate:self cancleButton:@"取消" otherButton:@"确定"];
-            [alertView showView];
-            
+            ProAlertView *alertView = [[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:@"确定退出登录?" delegate:self cancleButton:@"取消" otherButton:@"确定", nil];
+            [alertView show];
         }
             break;
         default:
@@ -240,7 +239,7 @@
 #pragma mark -proAlertView_delegate
 -(void)proAclertView:(ProAlertView *)alertView clickButtonAtIndex:(NSInteger)index
 {
-    if (index==0) {
+    if (index==1) {
         [SystemConfig sharedInstance].isUserLogin = NO;
         [SystemConfig sharedInstance].company_id = nil;
         [SystemConfig sharedInstance].viptype = nil;

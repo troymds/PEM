@@ -166,6 +166,7 @@
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:company_id,@"company_id",nil];
     [HttpTool postWithPath:@"getCompanyVipInfo" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",result);
         NSDictionary *dic = [result objectForKey:@"response"];
         if (dic) {
             if (!isNull(result, @"response")) {

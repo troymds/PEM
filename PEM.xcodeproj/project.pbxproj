@@ -51,6 +51,7 @@
 		04AADCEA19EB723900801D2B /* VipInfoItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AADCE919EB723900801D2B /* VipInfoItem.m */; };
 		04AADCFE19EBCF1700801D2B /* vip_0_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AADCF919EBCF1700801D2B /* vip_0_info@2x.png */; };
 		04AADD0419EBD2AE00801D2B /* vip_visitor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AADD0319EBD2AE00801D2B /* vip_visitor@2x.png */; };
+		04AAF7CE1A19B97A009FEE2E /* CustomButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AAF7CD1A19B97A009FEE2E /* CustomButton.m */; };
 		04AB63111A12F5B30016D859 /* LoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AB63101A12F5B30016D859 /* LoadMoreCell.m */; };
 		04AC10CA1A0C6CFD00B5C4D7 /* E_plat_pre@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AC10C81A0C6CFD00B5C4D7 /* E_plat_pre@2x.png */; };
 		04AC10CB1A0C6CFD00B5C4D7 /* E_plat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04AC10C91A0C6CFD00B5C4D7 /* E_plat@2x.png */; };
@@ -524,6 +525,8 @@
 		04AADCE919EB723900801D2B /* VipInfoItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VipInfoItem.m; sourceTree = "<group>"; };
 		04AADCF919EBCF1700801D2B /* vip_0_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip_0_info@2x.png"; sourceTree = "<group>"; };
 		04AADD0319EBD2AE00801D2B /* vip_visitor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip_visitor@2x.png"; sourceTree = "<group>"; };
+		04AAF7CC1A19B97A009FEE2E /* CustomButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomButton.h; sourceTree = "<group>"; };
+		04AAF7CD1A19B97A009FEE2E /* CustomButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomButton.m; sourceTree = "<group>"; };
 		04AB4F7B19EE202C006F2893 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		04AB630F1A12F5B30016D859 /* LoadMoreCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadMoreCell.h; sourceTree = "<group>"; };
 		04AB63101A12F5B30016D859 /* LoadMoreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadMoreCell.m; sourceTree = "<group>"; };
@@ -1397,6 +1400,8 @@
 				04AF26C119E8B15E001B29CB /* TagButton.m */,
 				04AF26C219E8B15E001B29CB /* ProAlertView.h */,
 				04AF26C319E8B15E001B29CB /* ProAlertView.m */,
+				04AAF7CC1A19B97A009FEE2E /* CustomButton.h */,
+				04AAF7CD1A19B97A009FEE2E /* CustomButton.m */,
 				04B1D23F1A0B4FD500929A59 /* CategoryView.h */,
 				04B1D2401A0B4FD500929A59 /* CategoryView.m */,
 				04AF26C419E8B15E001B29CB /* PublishViewDelegate.h */,
@@ -3125,6 +3130,7 @@
 				55B5104019F73930009F9008 /* AFHTTPRequestOperation.m in Sources */,
 				04AF26AE19E8B150001B29CB /* HotTagItem.m in Sources */,
 				04AF261819E8B0F9001B29CB /* CompanyInfoItem.m in Sources */,
+				04AAF7CE1A19B97A009FEE2E /* CustomButton.m in Sources */,
 				55D8976C19AC76E0001EAF9F /* MessageController.m in Sources */,
 				55B5D352199AED8D002A9750 /* NewfeatureController.m in Sources */,
 				04AB63111A12F5B30016D859 /* LoadMoreCell.m in Sources */,

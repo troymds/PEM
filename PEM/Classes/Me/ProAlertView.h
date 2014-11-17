@@ -20,9 +20,14 @@
 @interface ProAlertView : UIView
 
 @property (nonatomic,weak) id <ProAlertViewDelegate> delegate;
+@property (nonatomic,copy) NSString *title;
+@property (nonatomic,copy) NSString *message;
 
-- (id)initWithTitle:(NSString *)title withMessage:(NSString *)message delegate:(id)delegate cancleButton:(NSString *)cancelButton otherButton:(NSString *)otherButton;
+- (id)initWithTitle:(NSString *)title withMessage:(NSString *)message delegate:(id)delegate cancleButton:(NSString *)cancelButtonTitle otherButton:(NSString *)otherButtonTitles, ... NS_REQUIRES_NIL_TERMINATION;
 
-- (void)showView;
+
+//- (id)initWithTitle:(NSString *)title withMessage:(NSString *)message delegate:(id)delegate cancleButton:(NSString *)cancelButton otherButton:(NSString *)otherButton;
+
+- (void)show;
 
 @end

@@ -180,17 +180,21 @@
             }
         }
     } failure:^(NSError *error){
+        //当前为刷新的话 结束刷新动画
         if (isRefresh) {
             isRefresh = NO;
             [MJHeadView endRefreshing];
         }
+        //加载失败后的处理
         if (isLoading) {
             isLoading = NO;
         }
+        //判断列表最后一行是否为加载行
         NSInteger count = [_tableView numberOfRowsInSection:0];
         if (count!=_dataArray.count) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_dataArray.count inSection:0];
             LoadMoreCell *cell = (LoadMoreCell *)[_tableView cellForRowAtIndexPath:indexPath];
+            //改变加载行的状态 显示重新加载按钮
             cell.loadBtn.hidden = NO;
         }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

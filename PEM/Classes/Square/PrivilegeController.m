@@ -11,8 +11,9 @@
 #import "HttpTool.h"
 #import "RegisterContrller.h"
 #import "SystemConfig.h"
+#import "ProAlertView.h"
 
-@interface PrivilegeController ()
+@interface PrivilegeController ()<ProAlertViewDelegate>
 
 @end
 
@@ -98,14 +99,18 @@
         [self.navigationController pushViewController:rc animated:YES];
     }else{
         NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:[SystemConfig sharedInstance].company_id,@"company_id",updateType,@"apply_type", nil];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.labelText = @"申请中...";
         [HttpTool postWithPath:@"applyVip" params:params success:^(id JSON) {
         NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             if ([result objectForKey:@"response"]) {
                 if ([[[result objectForKey:@"response"] objectForKey:@"code"] intValue] ==100) {
                     [self showRemindView];
                 }
             }
     } failure:^(NSError *error) {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         NSLog(@"%@",error);
     }];
  
@@ -393,7 +398,7 @@
 
 
 - (void)showRemindView{
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"我们已收到您的请求,会尽快安排人员与您联系,请您耐心等候" delegate:self cancelButtonTitle:@"我知道了" otherButtonTitles:nil, nil];
+    ProAlertView *alertView =[[ProAlertView alloc] initWithTitle:@"温馨提示" withMessage:@"我们已收到您的请求,会尽快安排人员与您联系,请您耐心等候" delegate:self cancleButton:@"我知道了" otherButton:nil, nil];
     [alertView show];
 }
 
