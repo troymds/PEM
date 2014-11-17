@@ -25,11 +25,9 @@
 @property(nonatomic,strong)NSMutableArray *hotDemandArray;//热门求购
 @property(nonatomic,strong)NSMutableArray *hotSupplyArray;//热门供应
 
-@property(nonatomic ,strong)NSMutableArray *activetArray;//专题活动
+@property(nonatomic ,strong)NSDictionary *activetArray;//专题活动
 
-@property(nonatomic ,strong)NSString *bottomimage;//专题活动
-@property(nonatomic ,strong)NSString *lefttimage;//专题活动
-@property(nonatomic ,strong)NSString *rightimage;//专题活动
+
 
 
 @property (strong,nonatomic)UIScrollView *scrollView;
@@ -42,5 +40,11 @@
 @property(nonatomic,strong)NSMutableArray *hotDemandArrayOff;//热门求购
 @property(nonatomic,strong)NSMutableArray *hotSupplyArrayOff;//热门供应
 @property(nonatomic,strong)NSMutableArray *adsImageOff;
+@property(nonatomic,strong)NSMutableArray *leftActiveImageOff;//专题活动
+@property(nonatomic,strong)NSMutableArray *rightActiveImageOff;//专题活动
+@property(nonatomic,strong)NSMutableArray *bottomActiveleftImageOff;//专题活动
+
+
+
 
 @end
