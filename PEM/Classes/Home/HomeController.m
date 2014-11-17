@@ -30,7 +30,7 @@
 #import "ZBarSDK.h"
 #import "DimensionalCodeViewController.h"
 #import "RemindView.h"
-
+#import "activeModel.h"
 #define SubjectHeight 190
 #define khotImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"hotImage.data"]
 #define ktadyNumFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"tadyNum.data"]
@@ -55,6 +55,8 @@
     
     NSString *curStr;
     ZBarReaderViewController *_reader;
+    
+    activeModel *_activeModel;
 }
 @property (nonatomic, strong)NSString * zbarUl;
 @end
@@ -66,7 +68,6 @@
 @synthesize tadyNumArray=_tadyNumArray;
 @synthesize hotDemandArray=_hotDemandArray;
 @synthesize hotSupplyArray=_hotSupplyArray;
-@synthesize activetArray =_activetArray;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -98,12 +99,10 @@
     self.hotDemandArray =[[NSMutableArray alloc]initWithCapacity:0];
     self.hotSupplyArray =[[NSMutableArray alloc]initWithCapacity:0];
     
-    self.activetArray =[[NSMutableArray alloc]initWithCapacity:0];
     
     
-    self.lefttimage =[NSString alloc];
-    self.rightimage =[NSString alloc];
-    self.bottomimage =[NSString alloc];
+    _activeModel =[activeModel alloc];
+    self.activetArray =[NSDictionary alloc];
     
     // 离线数据
     self.adsImageOff = [NSMutableArray array];
@@ -144,13 +143,12 @@
 - (void) imagePickerController: (UIImagePickerController*) readerv
  didFinishPickingMediaWithInfo: (NSDictionary*) info
 {
-    //    [self performSelectorOnMainThread:@selector(dismissPicker) withObject:nil waitUntilDone:YES];
-    // ADD: get the decode results
+   
     id<NSFastEnumeration> results =
     [info objectForKey: ZBarReaderControllerResults];
     ZBarSymbol *symbol = nil;
     for(symbol in results)
-        // EXAMPLE: just grab the first barcode
+       
         break;
     self.zbarUl = symbol.data;
     
@@ -173,22 +171,30 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 
         Status *statusModel = [statues objectAtIndex:0];
-        NSString *dictleft =[[statusModel.activeArray objectForKey:@"left" ]objectForKey:@"image"];
-        _lefttimage =dictleft;
-        NSString *dictBottom =[[statusModel.activeArray objectForKey:@"bottom"]objectForKey:@"image"];
-        _bottomimage =dictBottom;
-
-        NSString *dictRight =[[statusModel.activeArray objectForKey:@"right"]objectForKey:@"image"];
-        _rightimage =dictRight;
+        NSString *dictleftimage =[[statusModel.activeArray objectForKey:@"left" ]objectForKey:@"image"];
+        NSString *dictleftcontent =[[statusModel.activeArray objectForKey:@"left" ]objectForKey:@"content"];
+        NSString *dictlefttype =[[statusModel.activeArray objectForKey:@"left" ]objectForKey:@"type"];
+        _activeModel.leftActiveImgage =dictleftimage;
+        _activeModel.leftActiveType =dictlefttype;
+        _activeModel.leftActiveContent =dictleftcontent;
         
-        NSString *rigthType =[[statusModel.activeArray objectForKey:@"right"]objectForKey:@"content"];
-        contentUrl = [NSString alloc];
-        contentUrl = rigthType;
-       
+        NSString *dictBottomImage =[[statusModel.activeArray objectForKey:@"bottom"]objectForKey:@"image"];
+        NSString *dictBottomContent =[[statusModel.activeArray objectForKey:@"bottom"]objectForKey:@"content"];
+        NSString *dictBottomType =[[statusModel.activeArray objectForKey:@"bottom"]objectForKey:@"type"];
+        _activeModel.bottomActiveImgage=dictBottomImage;
+        _activeModel.bottomActiveContent=dictBottomContent;
+        _activeModel.bottomActiveType=dictBottomType;
 
-        [self addleftActiveImage:_lefttimage];
-        [self addbottomActiveImage:_bottomimage];
-        [self addrightActiveImage:_rightimage];
+        NSString *dictRightImage =[[statusModel.activeArray objectForKey:@"right"]objectForKey:@"image"];
+        NSString *dictRightContent =[[statusModel.activeArray objectForKey:@"right"]objectForKey:@"content"];
+        NSString *dictRightType =[[statusModel.activeArray objectForKey:@"right"]objectForKey:@"type"];
+        _activeModel.rightActiveImgage =dictRightImage;
+        _activeModel.rightActiveContent =dictRightContent;
+        _activeModel.rightActiveType =dictRightType;
+
+        [self addleftActiveImage:_activeModel.leftActiveImgage];
+        [self addbottomActiveImage:_activeModel.bottomActiveImgage];
+        [self addrightActiveImage:_activeModel.rightActiveImgage];
 
         for (NSDictionary *dict in statusModel.hotCategoryArray)
         {
@@ -657,24 +663,88 @@
     [bottomImage addGestureRecognizer:activeTap];
 }
 
--(void)lefttapGestureRecognizer:(UITapGestureRecognizer *)img leftType:(NSString *)type leftContent:(NSString *)content{
+-(void)lefttapGestureRecognizer:(UITapGestureRecognizer *)img
+{
+    if ([_activeModel.leftActiveType isEqualToString:@"1"]) {
+        xiangqingViewController *xiq =[[xiangqingViewController alloc]init];
+        xiq.supplyIndex = _activeModel.leftActiveContent;
+        [self.navigationController pushViewController:xiq animated:YES];
+        
+    }else if([_activeModel.leftActiveType isEqualToString:@"2"]){
+        qiugouXQ *detailVC = [[qiugouXQ alloc] init];
+        detailVC.demandIndex = _activeModel.leftActiveContent;
+        [self.navigationController pushViewController:detailVC animated:YES];
+    }
+    else if([_activeModel.leftActiveType isEqualToString:@"3"]){
+        CompanyXQViewController *comXQ   =[[CompanyXQViewController alloc]init];
+        
+        comXQ.companyID=_activeModel.leftActiveContent;
+        [self.navigationController pushViewController:comXQ animated:YES];
+    }
+    else{
+        
+        bannerWebView *bannerView =[[bannerWebView alloc]init];
+        bannerView.bannerWebid =_activeModel.leftActiveContent;
+        [self.navigationController pushViewController:bannerView animated:YES];
+        
+    }
+
     
-    bannerWebView *activeVC =[[bannerWebView alloc]init];
-    activeVC.bannerWebid = contentUrl;
-    [self.navigationController pushViewController:activeVC animated:YES];
 }
 -(void)righttapGestureRecognizer:(UITapGestureRecognizer *)img{
     
-    bannerWebView *activeVC =[[bannerWebView alloc]init];
-    activeVC.bannerWebid = contentUrl;
-    [self.navigationController pushViewController:activeVC animated:YES];
+    if ([_activeModel.rightActiveType isEqualToString:@"1"]) {
+        xiangqingViewController *xiq =[[xiangqingViewController alloc]init];
+        xiq.supplyIndex = _activeModel.rightActiveContent;
+        [self.navigationController pushViewController:xiq animated:YES];
+        
+    }else if([_activeModel.rightActiveType isEqualToString:@"2"]){
+        qiugouXQ *detailVC = [[qiugouXQ alloc] init];
+        detailVC.demandIndex = _activeModel.rightActiveContent;
+        [self.navigationController pushViewController:detailVC animated:YES];
+    }
+    else if([_activeModel.rightActiveType isEqualToString:@"3"]){
+        CompanyXQViewController *comXQ   =[[CompanyXQViewController alloc]init];
+        
+        comXQ.companyID=_activeModel.rightActiveContent;
+        [self.navigationController pushViewController:comXQ animated:YES];
+    }
+    else{
+        
+        bannerWebView *bannerView =[[bannerWebView alloc]init];
+        bannerView.bannerWebid =_activeModel.rightActiveContent;
+        [self.navigationController pushViewController:bannerView animated:YES];
+        
+    }
+
 }
 
 -(void)bottomtapGestureRecognizer:(UITapGestureRecognizer *)img{
     
-    bannerWebView *activeVC =[[bannerWebView alloc]init];
-    activeVC.bannerWebid = contentUrl;
-    [self.navigationController pushViewController:activeVC animated:YES];
+    if ([_activeModel.bottomActiveType isEqualToString:@"1"]) {
+        xiangqingViewController *xiq =[[xiangqingViewController alloc]init];
+        xiq.supplyIndex = _activeModel.bottomActiveContent;
+        [self.navigationController pushViewController:xiq animated:YES];
+        
+    }else if([_activeModel.bottomActiveType isEqualToString:@"2"]){
+        qiugouXQ *detailVC = [[qiugouXQ alloc] init];
+        detailVC.demandIndex = _activeModel.bottomActiveContent;
+        [self.navigationController pushViewController:detailVC animated:YES];
+    }
+    else if([_activeModel.bottomActiveType isEqualToString:@"3"]){
+        CompanyXQViewController *comXQ   =[[CompanyXQViewController alloc]init];
+        
+        comXQ.companyID=_activeModel.bottomActiveContent;
+        [self.navigationController pushViewController:comXQ animated:YES];
+    }
+    else{
+        
+        bannerWebView *bannerView =[[bannerWebView alloc]init];
+        bannerView.bannerWebid =_activeModel.bottomActiveContent;
+        [self.navigationController pushViewController:bannerView animated:YES];
+        
+    }
+
 }
 
 
