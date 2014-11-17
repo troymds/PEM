@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface activeModel : NSObject
+@interface activeModel : NSObject<NSCoding>
 @property(nonatomic,copy)NSString *leftActiveImgage;
 @property(nonatomic,copy)NSString *rightActiveImgage;
 @property(nonatomic,copy)NSString *bottomActiveImgage;

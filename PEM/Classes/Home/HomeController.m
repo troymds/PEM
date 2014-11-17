@@ -37,6 +37,10 @@
 #define khotSupplyFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"hotSupply.data"]
 #define khotDemandFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"hotDemand.data"]
 #define kadsImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"adsImage.data"]
+#define kLeftActiveImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"leftActive.data"]
+#define kRightActiveImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"rightActive.data"]
+#define kBobbomActiveImageFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"bottomActive.data"]
+
 
 @interface HomeController ()<UIScrollViewDelegate,SDWebImageManagerDelegate,ZBarReaderDelegate>
 {
@@ -110,7 +114,10 @@
     self.tadyNumArrayOff = [NSMutableArray array];
     self.hotDemandArrayOff = [NSMutableArray array];
     self.hotSupplyArrayOff = [NSMutableArray array];
-    
+    self.leftActiveImageOff = [NSMutableArray array];
+    self.rightActiveImageOff = [NSMutableArray array];
+    self.bottomActiveleftImageOff = [NSMutableArray array];
+
     [self addBackScrollView];//    背景
     [self loadNewData];
     
@@ -196,6 +203,10 @@
         [self addbottomActiveImage:_activeModel.bottomActiveImgage];
         [self addrightActiveImage:_activeModel.rightActiveImgage];
 
+        [NSKeyedArchiver archiveRootObject:_activeModel.leftActiveImgage toFile:kLeftActiveImageFilePath];
+        [NSKeyedArchiver archiveRootObject:_activeModel.rightActiveImgage toFile:kRightActiveImageFilePath];
+        [NSKeyedArchiver archiveRootObject:_activeModel.bottomActiveImgage toFile:kBobbomActiveImageFilePath];
+
         for (NSDictionary *dict in statusModel.hotCategoryArray)
         {
             HotCategoryModel *hotModel = [[HotCategoryModel alloc] initWithDictionaryForHotCate:dict];
@@ -259,7 +270,12 @@
         self.hotImageArrayOff = [NSKeyedUnarchiver unarchiveObjectWithFile:khotImageFilePath];
         self.hotDemandArrayOff = [NSKeyedUnarchiver unarchiveObjectWithFile:khotDemandFilePath];
         self.hotSupplyArrayOff = [NSKeyedUnarchiver unarchiveObjectWithFile:khotSupplyFilePath];
-        
+        self.leftActiveImageOff = [NSKeyedUnarchiver unarchiveObjectWithFile:kLeftActiveImageFilePath];
+        self.rightActiveImageOff = [NSKeyedUnarchiver unarchiveObjectWithFile:kRightActiveImageFilePath];
+        self.bottomActiveleftImageOff = [NSKeyedUnarchiver unarchiveObjectWithFile:kBobbomActiveImageFilePath];
+        [self addleftActiveImage:(NSString *)_leftActiveImageOff];
+        [self addrightActiveImage:(NSString *)_rightActiveImageOff];
+        [self addbottomActiveImage:(NSString *)_bottomActiveleftImageOff];
         [self addADSimageBtn:_adsImageOff];
         [self initBannerView];
         
@@ -373,7 +389,7 @@
     
     _backScrollView.showsVerticalScrollIndicator = NO;
     _backScrollView.showsHorizontalScrollIndicator = NO;
-    
+    [self addactiveImageOff];
     for (int l=0; l<11; l++) {
         UIView *lin =[[UIView alloc]init];
         lin.backgroundColor =HexRGB(0xe6e3e4);
@@ -632,13 +648,29 @@
     
 }
 
-
+-(void)addactiveImageOff{
+    for (int i=0; i<3; i++) {
+        UIImageView *leftImage =[[UIImageView alloc]init];;
+        if (i==0) {
+            leftImage.frame =CGRectMake(11, 340, 173, 70);
+        }if (i==1) {
+            leftImage.frame=CGRectMake(185, 340, 125, 70);
+        }if (i==2) {
+            leftImage.frame=CGRectMake(11, 420, kWidth-20, 70);
+        }
+        leftImage.userInteractionEnabled=YES;
+        [_backScrollView addSubview:leftImage];
+        leftImage.image =[UIImage imageNamed:@"load_big.png"];
+    }
+   
+}
 
 #pragma mark ---添加专题
 -(void)addleftActiveImage:(NSString *)image {
     UIImageView *leftImage =[[UIImageView alloc]initWithFrame:CGRectMake(11, 340, 173, 70)];
     leftImage.userInteractionEnabled=YES;
     [_backScrollView addSubview:leftImage];
+    leftImage.image =[UIImage imageNamed:@"load_big.png"];
     [leftImage setImageWithURL:[NSURL URLWithString:image] placeholderImage:[UIImage imageNamed:@"load_big.png"]];
 
     UITapGestureRecognizer *activeTap =[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(lefttapGestureRecognizer:)];
@@ -665,6 +697,10 @@
 
 -(void)lefttapGestureRecognizer:(UITapGestureRecognizer *)img
 {
+    if (_hotSupplyArrayOff.count > 0) {
+        [RemindView showViewWithTitle:@"没有网络" location:MIDDLE];
+        return;
+    }
     if ([_activeModel.leftActiveType isEqualToString:@"1"]) {
         xiangqingViewController *xiq =[[xiangqingViewController alloc]init];
         xiq.supplyIndex = _activeModel.leftActiveContent;
@@ -692,7 +728,11 @@
     
 }
 -(void)righttapGestureRecognizer:(UITapGestureRecognizer *)img{
-    
+    if (_hotSupplyArrayOff.count > 0) {
+        [RemindView showViewWithTitle:@"没有网络" location:MIDDLE];
+        return;
+    }
+
     if ([_activeModel.rightActiveType isEqualToString:@"1"]) {
         xiangqingViewController *xiq =[[xiangqingViewController alloc]init];
         xiq.supplyIndex = _activeModel.rightActiveContent;
@@ -720,7 +760,11 @@
 }
 
 -(void)bottomtapGestureRecognizer:(UITapGestureRecognizer *)img{
-    
+    if (_hotSupplyArrayOff.count > 0) {
+        [RemindView showViewWithTitle:@"没有网络" location:MIDDLE];
+        return;
+    }
+
     if ([_activeModel.bottomActiveType isEqualToString:@"1"]) {
         xiangqingViewController *xiq =[[xiangqingViewController alloc]init];
         xiq.supplyIndex = _activeModel.bottomActiveContent;

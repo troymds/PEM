@@ -40,5 +40,11 @@
 @property(nonatomic,strong)NSMutableArray *hotDemandArrayOff;//热门求购
 @property(nonatomic,strong)NSMutableArray *hotSupplyArrayOff;//热门供应
 @property(nonatomic,strong)NSMutableArray *adsImageOff;
+@property(nonatomic,strong)NSMutableArray *leftActiveImageOff;//专题活动
+@property(nonatomic,strong)NSMutableArray *rightActiveImageOff;//专题活动
+@property(nonatomic,strong)NSMutableArray *bottomActiveleftImageOff;//专题活动
+
+
+
 
 @end
