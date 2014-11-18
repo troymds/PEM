@@ -143,6 +143,7 @@
 		04B1D2011A0B0A6000929A59 /* CategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1D2001A0B0A6000929A59 /* CategoryCell.m */; };
 		04B1D2411A0B4FD500929A59 /* CategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B1D2401A0B4FD500929A59 /* CategoryView.m */; };
 		04B1D2431A0B5EF600929A59 /* Cell_Selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04B1D2421A0B5EF600929A59 /* Cell_Selected@2x.png */; };
+		04B68C981A1ADD96002A35AF /* DirectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B68C971A1ADD96002A35AF /* DirectViewController.m */; };
 		04BC99041A121119003DD369 /* SecondCateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BC99031A121119003DD369 /* SecondCateView.m */; };
 		04C5043619F0A3C8008F36AD /* provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043519F0A3C8008F36AD /* provinces.plist */; };
 		04C5043B19F124FD008F36AD /* Vip1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04C5043719F124FD008F36AD /* Vip1@2x.png */; };
@@ -703,6 +704,8 @@
 		04B5F01D19ECAA4300CE68A4 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		04B5F01F19ECAA5500CE68A4 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		04B5F02119ECAAF000CE68A4 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		04B68C961A1ADD96002A35AF /* DirectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectViewController.h; sourceTree = "<group>"; };
+		04B68C971A1ADD96002A35AF /* DirectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectViewController.m; sourceTree = "<group>"; };
 		04BC99021A121119003DD369 /* SecondCateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondCateView.h; sourceTree = "<group>"; };
 		04BC99031A121119003DD369 /* SecondCateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondCateView.m; sourceTree = "<group>"; };
 		04C5043519F0A3C8008F36AD /* provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = provinces.plist; sourceTree = "<group>"; };
@@ -1813,6 +1816,8 @@
 			children = (
 				55A4DDC01A14510F0030D937 /* SearchController.h */,
 				553E5DE31A1588920028B4BB /* SearchController.m */,
+				04B68C961A1ADD96002A35AF /* DirectViewController.h */,
+				04B68C971A1ADD96002A35AF /* DirectViewController.m */,
 				F30ADA821A033D5800403963 /* companyHomeView */,
 				55E6CCFA19BEB366007C85BB /* XQView */,
 				550A2EF419B5B27400331F5E /* YYTool */,
@@ -3144,6 +3149,7 @@
 				557BABA519F6584500A8EA4E /* Loading.m in Sources */,
 				55D8975719AC62DA001EAF9F /* UIImage+MultiFormat.m in Sources */,
 				55C10D5719CBF55C002498DD /* comContent.m in Sources */,
+				04B68C981A1ADD96002A35AF /* DirectViewController.m in Sources */,
 				04AF26B019E8B150001B29CB /* DemandDetailItem.m in Sources */,
 				04AF265819E8B129001B29CB /* MySupplyController.m in Sources */,
 				55D8975419AC62DA001EAF9F /* SDWebImagePrefetcher.m in Sources */,

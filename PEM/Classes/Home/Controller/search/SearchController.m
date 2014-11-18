@@ -29,6 +29,7 @@
 #import "SearchCompanyModel.h"
 #import "SearchDenamdModel.h"
 #import "LoadMoreCell.h"
+#import "DirectViewController.h"
 
 
 #import "hotSearchTool.h"
@@ -66,7 +67,6 @@
     NSString *_currentKeyString;
     
     UIScrollView *_backScrollview;
-    UIWebView *_webView;
     
     BOOL needLoad;//是否需要加载
     BOOL isLoading;//是否正在加载
@@ -118,7 +118,6 @@
     [self addShowNoRecordView];     //无数据
     [self addShowNoDataView];       //无记录
     [self loadHotSearchStatuses];   //热门搜索加载数据
-    [self addWebView];
     
 }
 // 热门搜索
@@ -139,12 +138,6 @@
     }];
     
 }
-
-- (void)addWebView
-{
-    _webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight-64)];
-}
-
 
 -(void)addHotSearchView{
     UIImage *hotImge =[UIImage imageNamed:@"home_hot.png"];
@@ -1733,83 +1726,87 @@
     _currentKeyString = [_searchTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (_currentKeyString.length>0)
     {
+        //判断是否是@直达搜索
         if (_currentKeyString.length>1&&[_currentKeyString characterAtIndex:0] == '@') {
-            
-        }
-        // 如果有重复关键字，保留最新的。
-        if (currentSelectedBtnTag == 202)
-        {
-            if (_searchComanyArray.count>0)
+            NSString *keyWords = [_currentKeyString substringFromIndex:1];
+            //搜索直达号
+            [self searchDirectKeyWorks:keyWords];
+        }else{
+            // 如果有重复关键字，保留最新的。
+            if (currentSelectedBtnTag == 202)
             {
-                for (int i = 0;i<_searchComanyArray.count;i++)
+                if (_searchComanyArray.count>0)
                 {
-                    SearchCompanyModel *resultMod = [_searchComanyArray objectAtIndex:i];
-                    if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                    for (int i = 0;i<_searchComanyArray.count;i++)
                     {
-                        [_searchComanyArray removeObjectAtIndex:i];
+                        SearchCompanyModel *resultMod = [_searchComanyArray objectAtIndex:i];
+                        if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                        {
+                            [_searchComanyArray removeObjectAtIndex:i];
+                        }
                     }
                 }
-            }
-            SearchCompanyModel *resultModel = [[SearchCompanyModel alloc] init];
-            resultModel.searchKeyword = _currentKeyString;
-            if (_searchComanyArray.count == 7)
-            {
-                [_searchComanyArray removeLastObject];
-            }
-            [_searchComanyArray insertObject:resultModel atIndex:0];
-            [self saveTempSearchWordWithTag:202];
-            
-        }
-        else if (currentSelectedBtnTag == 201)
-        {
-            if (_searchDemandArray.count>0)
-            {
-                for (int i = 0;i<_searchDemandArray.count;i++)
+                SearchCompanyModel *resultModel = [[SearchCompanyModel alloc] init];
+                resultModel.searchKeyword = _currentKeyString;
+                if (_searchComanyArray.count == 7)
                 {
-                    SearchDenamdModel *resultMod = [_searchDemandArray objectAtIndex:i];
-                    if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                    [_searchComanyArray removeLastObject];
+                }
+                [_searchComanyArray insertObject:resultModel atIndex:0];
+                [self saveTempSearchWordWithTag:202];
+                
+            }
+            else if (currentSelectedBtnTag == 201)
+            {
+                if (_searchDemandArray.count>0)
+                {
+                    for (int i = 0;i<_searchDemandArray.count;i++)
                     {
-                        [_searchDemandArray removeObjectAtIndex:i];
+                        SearchDenamdModel *resultMod = [_searchDemandArray objectAtIndex:i];
+                        if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                        {
+                            [_searchDemandArray removeObjectAtIndex:i];
+                        }
                     }
                 }
-            }
-            
-            
-            SearchDenamdModel *resultModel = [[SearchDenamdModel alloc] init];
-            resultModel.searchKeyword = _currentKeyString;
-            if (_searchDemandArray.count == 7)
-            {
-                [_searchDemandArray removeLastObject];
-            }
-            [_searchDemandArray insertObject:resultModel atIndex:0];
-            [self saveTempSearchWordWithTag:201];
-            
-        }
-        else
-        {
-            if (_searchSupplyArray.count>0)
-            {
-                for (int i = 0;i<_searchSupplyArray.count;i++)
+                
+                
+                SearchDenamdModel *resultModel = [[SearchDenamdModel alloc] init];
+                resultModel.searchKeyword = _currentKeyString;
+                if (_searchDemandArray.count == 7)
                 {
-                    SearchResultModel *resultMod = [_searchSupplyArray objectAtIndex:i];
-                    if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                    [_searchDemandArray removeLastObject];
+                }
+                [_searchDemandArray insertObject:resultModel atIndex:0];
+                [self saveTempSearchWordWithTag:201];
+                
+            }
+            else
+            {
+                if (_searchSupplyArray.count>0)
+                {
+                    for (int i = 0;i<_searchSupplyArray.count;i++)
                     {
-                        [_searchSupplyArray removeObjectAtIndex:i];
+                        SearchResultModel *resultMod = [_searchSupplyArray objectAtIndex:i];
+                        if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                        {
+                            [_searchSupplyArray removeObjectAtIndex:i];
+                        }
                     }
                 }
+                SearchResultModel *resultModel = [[SearchResultModel alloc] init];
+                resultModel.searchKeyword = _currentKeyString;
+                if (_searchSupplyArray.count == 7)
+                {
+                    [_searchSupplyArray removeLastObject];
+                }
+                [_searchSupplyArray insertObject:resultModel atIndex:0];
+                [self saveTempSearchWordWithTag:200];
             }
-            SearchResultModel *resultModel = [[SearchResultModel alloc] init];
-            resultModel.searchKeyword = _currentKeyString;
-            if (_searchSupplyArray.count == 7)
-            {
-                [_searchSupplyArray removeLastObject];
-            }
-            [_searchSupplyArray insertObject:resultModel atIndex:0];
-            [self saveTempSearchWordWithTag:200];
+            [self searchToGo];
         }
     }
     [self bigBtnClick:sear];
-    [self searchToGo];
 }
 
 -(void)removerThreeArray{
@@ -1819,6 +1816,45 @@
     [_supllyArray removeAllObjects];
     [_resultTableView reloadData];
     
+}
+
+
+//搜索直达号
+- (void)searchDirectKeyWorks:(NSString *)keyWords
+{
+    NSDictionary *param = [NSDictionary dictionaryWithObjectsAndKeys:keyWords,@"keywords", nil];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"加载中...";
+    [HttpTool postWithPath:@"atCompany" params:param success:^(id JSON) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:JSON options:NSJSONReadingMutableContainers error:nil];
+        if (result) {
+            NSDictionary *dic = [result objectForKey:@"response"];
+            int code = [[dic objectForKey:@"code"] intValue];
+            NSString *data = [dic objectForKey:@"data"];
+            //判断是否有该直达号
+            if (code == 100) {
+                if (data&&data.length!=0) {
+                    [self loadWebView:data withKeyWord:keyWords];
+                }
+            }else{
+                //没有直达号 正常搜索
+                [self searchToGo];
+            }
+        }
+    } failure:^(NSError *error) {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [RemindView showViewWithTitle:@"网络错误" location:MIDDLE];
+    }];
+}
+
+//加载直达webview
+- (void)loadWebView:(NSString *)urlStr withKeyWord:(NSString *)keyWords
+{
+    DirectViewController *dvc = [[DirectViewController alloc] init];
+    dvc.urlStr = urlStr;
+    dvc.title = keyWords;
+    [self.navigationController pushViewController:dvc animated:YES];
 }
 
 
