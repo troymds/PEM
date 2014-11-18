@@ -22,7 +22,7 @@
 //#import "ExtendCell.h"
 //#import "CompanyDetailViewController.h"
 #import "DimensionalCodeViewController.h"
-#define kFilePath [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"message.data"]
+#define kFilePath [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"message.data"]
 
 @interface MessageController ()<ZBarReaderDelegate>
 {

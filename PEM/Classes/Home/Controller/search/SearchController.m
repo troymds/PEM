@@ -1139,8 +1139,12 @@
                 [_searchSupplyArray insertObject:searchResult atIndex:0];
             }
         }
-        
-        [self searchToGo];
+        if (_currentKeyString.length>1&&[_currentKeyString characterAtIndex:0] == '@') {
+            NSString *keyWord = [_currentKeyString substringFromIndex:1];
+            [self searchDirectKeyWorks:keyWord];
+        }else{
+            [self searchToGo];
+        }
         
         
     }
@@ -1716,6 +1720,7 @@
 
 -(void)searchBtn:(UIButton *)sear
 {
+    [_searchTextField resignFirstResponder];
     [_demandArray removeAllObjects];
     [_supllyArray removeAllObjects];
     [_compangyArray removeAllObjects];
@@ -1730,6 +1735,83 @@
         if (_currentKeyString.length>1&&[_currentKeyString characterAtIndex:0] == '@') {
             NSString *keyWords = [_currentKeyString substringFromIndex:1];
             //搜索直达号
+            switch (currentSelectedBtnTag) {
+                case 200:
+                {
+                    if (_searchSupplyArray.count>0)
+                    {
+                        for (int i = 0;i<_searchSupplyArray.count;i++)
+                        {
+                            SearchResultModel *resultMod = [_searchSupplyArray objectAtIndex:i];
+                            if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                            {
+                                [_searchSupplyArray removeObjectAtIndex:i];
+                            }
+                        }
+                    }
+                    SearchResultModel *resultModel = [[SearchResultModel alloc] init];
+                    resultModel.searchKeyword = _currentKeyString;
+                    if (_searchSupplyArray.count == 7)
+                    {
+                        [_searchSupplyArray removeLastObject];
+                    }
+                    [_searchSupplyArray insertObject:resultModel atIndex:0];
+                    [self saveTempSearchWordWithTag:200];
+                }
+                    break;
+                case 201:
+                {
+                    if (_searchDemandArray.count>0)
+                    {
+                        for (int i = 0;i<_searchDemandArray.count;i++)
+                        {
+                            SearchDenamdModel *resultMod = [_searchDemandArray objectAtIndex:i];
+                            if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                            {
+                                [_searchDemandArray removeObjectAtIndex:i];
+                            }
+                        }
+                    }
+                    SearchDenamdModel *resultModel = [[SearchDenamdModel alloc] init];
+                    resultModel.searchKeyword = _currentKeyString;
+                    if (_searchDemandArray.count == 7)
+                    {
+                        [_searchDemandArray removeLastObject];
+                    }
+                    [_searchDemandArray insertObject:resultModel atIndex:0];
+                    [self saveTempSearchWordWithTag:201];
+
+                }
+                    break;
+                case 202:
+                {
+                    if (_searchComanyArray.count>0)
+                    {
+                        for (int i = 0;i<_searchComanyArray.count;i++)
+                        {
+                            SearchCompanyModel *resultMod = [_searchComanyArray objectAtIndex:i];
+                            if ([resultMod.searchKeyword isEqualToString:_currentKeyString])
+                            {
+                                [_searchComanyArray removeObjectAtIndex:i];
+                            }
+                        }
+                    }
+                    SearchCompanyModel *resultModel = [[SearchCompanyModel alloc] init];
+                    resultModel.searchKeyword = _currentKeyString;
+                    if (_searchComanyArray.count == 7)
+                    {
+                        [_searchComanyArray removeLastObject];
+                    }
+                    [_searchComanyArray insertObject:resultModel atIndex:0];
+                    [self saveTempSearchWordWithTag:202];
+                }
+                    break;
+
+                default:
+                    break;
+            }
+            [self saveTempSearchWordWithTag:currentSelectedBtnTag];
+            
             [self searchDirectKeyWorks:keyWords];
         }else{
             // 如果有重复关键字，保留最新的。
