@@ -12,6 +12,6 @@
 
 @optional
 
-- (void)changeController;
+- (void)changeControllerFrom:(NSInteger)from to:(NSInteger)to;
 
 @end

@@ -136,9 +136,9 @@
 }
 
 -(void)logoImage{
-    [UIApplication sharedApplication].statusBarHidden =NO;
-    self.view.window.rootViewController =[[MainController alloc]init];
-
+    if ([self.delegate respondsToSelector:@selector(changeControllerFrom:to:)]) {
+        [self.delegate changeControllerFrom:1 to:0];
+    }
 }
 #pragma mark 加载微博数据
 - (void)loadNewData

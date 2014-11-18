@@ -221,8 +221,8 @@
 //点击登陆框周围跳转到首页
 - (void)tapDown
 {
-    if ([self.delegate respondsToSelector:@selector(changeController)]) {
-        [self.delegate changeController];
+    if ([self.delegate respondsToSelector:@selector(changeControllerFrom:to:)]) {
+        [self.delegate changeControllerFrom:2 to:0];
     }
 }
 

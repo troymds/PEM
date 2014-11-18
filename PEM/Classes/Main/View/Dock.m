@@ -46,13 +46,13 @@
 }
 
 
-- (void)changeItem
+- (void)changeItemFrom:(NSInteger)from to:(NSInteger)to
 {
     _selectedItem.selected = NO;
     for (UIView *subView in self.subviews) {
         if ([subView isKindOfClass:[DockItem class]]) {
             DockItem *item = (DockItem *)subView;
-            if (item.tag == 0) {
+            if (item.tag == to) {
                 item.selected = YES;
                 _selectedItem = item;
                 _selectedIndex = _selectedItem.tag;
@@ -60,7 +60,6 @@
         }
     }
 }
-
 
 #pragma mark 监听item点击
 - (void)itemClick:(DockItem *)item

@@ -12,6 +12,6 @@
 
 @optional
 
-- (void)changeItem;
+- (void)changeItemFrom:(NSInteger)from to:(NSInteger)to;
 
 @end

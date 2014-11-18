@@ -43,6 +43,7 @@
     
     //    // 2.消息
     MessageController *msg = [[MessageController alloc] init];
+    msg.delegate = self;
         WBNavigationController *nav2 = [[WBNavigationController alloc] initWithRootViewController:msg];
         nav2.delegate = self;
     [self addChildViewController:nav2];
@@ -98,23 +99,6 @@
         viewController.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithIcon:@"nav_return.png" highlightedIcon:@"nav_return_pre.png" target:self action:@selector(backItem)];
         
     }
-}
-
-- (void)changeViewController
-{
-    // 0.移除旧控制器的view
-    UIViewController *oldVc = self.childViewControllers[2];
-    [oldVc.view removeFromSuperview];
-    
-    // 1.取出即将显示的控制器
-    UIViewController *newVc = self.childViewControllers[0];
-    CGFloat width = self.view.frame.size.width;
-    CGFloat height = self.view.frame.size.height - kDockHeight;
-    newVc.view.frame = CGRectMake(0, 0, width, height);
-    
-    // 2.添加新控制器的view到MainController上面
-    [self.view addSubview:newVc.view];
-    
 }
 
 - (void)backItem
